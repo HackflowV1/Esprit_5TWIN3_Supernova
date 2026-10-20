@@ -1,0 +1,13 @@
+{% extends "base.html" %}
+
+{% block title %}HackFlow — Environnement de développement{% endblock %}
+
+{% block content %}
+<div style="font-family: system-ui, sans-serif; max-width: 600px; margin: 80px auto; padding: 40px; border: 1px solid #ddd; border-radius: 8px; text-align: center;">
+    <h1>HackFlow</h1>
+    <p>Django {{ django_version }} — Environnement de développement initialisé.</p>
+    <hr style="margin: 20px 0;">
+    <p style="color: #666; font-size: 0.9em;">Socle technique opérationnel — Aucune logique métier présente.</p>
+    <p><a href="/admin/">Interface d'administration</a></p>
+</div>
+{% endblock %}
