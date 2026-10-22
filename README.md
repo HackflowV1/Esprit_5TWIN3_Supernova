@@ -1,160 +1,89 @@
-# Esprit_5TWIN3_Supernova
+# HackFlow — USER + M1
 
-## HackFlow — Plateforme web de gestion des hackathons étudiants
+Monolithe Django 5.2 (MVT), Templates, ModelForms, vues génériques et PostgreSQL.
+Le modèle original `accounts.User(AbstractUser)` et sa migration initiale sont conservés.
 
-Projet HackFlow développé dans le cadre du cours 5TWIN3 à ESPRIT.  
-HackFlow est une plateforme web permettant la gestion complète des hackathons étudiants.
+## Démarrage local
 
----
+Dans le dépôt existant, avec Python 3.11+ et `uv` :
 
-## Contexte général
-
-Ce repository contient le socle technique du projet HackFlow, une application web Django destinée à la gestion des hackathons étudiants à ESPRIT. Le développement des modules fonctionnels interviendra dans les phases suivantes.
-
-**État actuel : socle technique uniquement.** Aucune logique métier n'est présente.
-
----
-
-## Stack technique
-
-| Composant | Technologie | Version |
-|-----------|-------------|---------|
-| Backend | Python | 3.13+ |
-| Framework | Django (MVT) | 5.2 |
-| Base de données | SQLite | (développement local) |
-| ORM | Django ORM | natif |
-| Frontend | Django Templates + HTML/CSS/JS | natif |
-| Authentification | Django Authentication + Admin | natif |
-| Gestion dépendances | uv | 0.13+ |
-| Variables d'environnement | python-dotenv | 1.0+ |
-| IA (préparation) | Google Generative AI SDK | 0.8+ |
-
----
-
-## Prérequis
-
-- Python 3.11 ou supérieur
-- [uv](https://docs.astral.sh/uv/) installé globalement
-- Git
-
----
-
-## Configuration
-
-### 1. Cloner le repository
-
-```bash
-git clone https://github.com/HackflowV1/Esprit_5TWIN3_Supernova.git
-cd Esprit_5TWIN3_Supernova
+```powershell
+uv sync --locked
+Copy-Item .env.example .env  # seulement si .env n’existe pas
 ```
 
-### 2. Créer l'environnement virtuel
+Configurer `.env` avec les secrets locaux, sans les versionner :
 
-```bash
-uv venv .venv
-```
-
-### 3. Installer les dépendances
-
-```bash
-uv pip install -r pyproject.toml
-```
-
-Ou depuis le lock file :
-
-```bash
-uv sync
-```
-
-### 4. Configurer les variables d'environnement
-
-```bash
-cp .env.example .env
-```
-
-Éditer `.env` et renseigner les valeurs :
-
-```env
-DJANGO_SECRET_KEY=your-secret-key-here
+```dotenv
+DJANGO_SECRET_KEY=REPLACE_WITH_LOCAL_SECRET
 DJANGO_DEBUG=True
 DJANGO_ALLOWED_HOSTS=127.0.0.1,localhost
-GOOGLE_API_KEY=your-google-api-key-here
+DATABASE_URL=postgresql://postgres:LOCAL_PASSWORD@127.0.0.1:5432/hackflow_db
 ```
 
-### 5. Appliquer les migrations
+Créer exclusivement `hackflow_db` dans PostgreSQL local si elle n’existe pas.
+Les caractères spéciaux du mot de passe doivent être encodés dans l’URL.
+La configuration refuse les autres noms de bases, les hôtes distants, les autres ports,
+les options d’URL et SQLite. Aucune connexion aux données d’un autre projet n’est requise.
 
-```bash
-uv run python manage.py migrate
-```
-
----
-
-## Démarrage
-
-```bash
+```powershell
+uv run python manage.py check_database
+if ($LASTEXITCODE -eq 0) { uv run python manage.py migrate }
+uv run python manage.py check
+uv run python manage.py makemigrations --check --dry-run
+uv run python manage.py test --keepdb
 uv run python manage.py runserver
 ```
 
-L'application est accessible à : http://127.0.0.1:8000/  
-Interface d'administration : http://127.0.0.1:8000/admin/
+Les tests utilisent exclusivement `test_hackflow_db`, séparée de `hackflow_db`.
+Le compte PostgreSQL doit pouvoir créer cette base. `--keepdb` la conserve pour les
+prochaines exécutions. Réserver ce nom à la suite HackFlow : les tests transactionnels
+nettoient leurs propres tables. Ne jamais fournir une autre base au runner.
+Vérifier `check_database` immédiatement avant chaque migration.
 
----
+Application : <http://127.0.0.1:8000/>. Administration : <http://127.0.0.1:8000/admin/>.
+Les réglages par défaut servent au développement local ; un déploiement nécessite
+HTTPS, `DEBUG=False`, un vrai secret, les cookies sécurisés et la configuration des médias.
 
-## Structure des dossiers
+## Première utilisation
 
-```
-D:\DJANGO\
-│
-├── config/              # Configuration Django (settings, urls, wsgi, asgi)
-├── core/                # App principale — page d'accueil technique
-├── accounts/            # Infrastructure d'authentification — modèle User personnalisé
-├── templates/           # Templates HTML Django
-│   ├── base.html
-│   └── core/
-│       └── home.html
-├── static/              # Fichiers statiques (CSS, JS, images)
-│   ├── css/
-│   ├── js/
-│   └── images/
-├── media/               # Fichiers uploadés (non versionnés)
-├── .venv/               # Environnement virtuel Python (non versionné)
-├── .env                 # Variables d'environnement locales (non versionné)
-├── .env.example         # Template des variables d'environnement
-├── .gitignore
-├── manage.py
-├── pyproject.toml       # Déclaration du projet et des dépendances
-├── uv.lock              # Lock file reproductible
-└── README.md
-```
+Créer un superutilisateur technique avec `uv run python manage.py createsuperuser`.
+Un utilisateur peut ensuite s’inscrire sans aucun rôle ni accès organisateur.
+Le superutilisateur attribue la permission **accounts / Peut créer un hackathon**
+aux personnes autorisées. La création de l’événement leur attribue transactionnellement
+le rôle ORGANIZER dans cette édition. Les formulaires publics ne peuvent accorder
+ni `is_staff`, ni `is_superuser`, ni des permissions globales.
 
----
+Depuis le pilotage : créer un track, un challenge, le valider puis le publier,
+et configurer les phases Inscriptions, Développement, Soumissions et Évaluations.
+Publier ensuite le hackathon. Les phases Constitution des équipes et Résultats sont
+également disponibles. Un événement incomplet ne peut pas être publié.
 
-## Variables d'environnement
+Le superutilisateur gère le référentiel Skill et les SponsorMembership.
+Pour proposer un challenge sponsorisé, un compte doit cumuler une appartenance active
+à l’organisation (avec droit de proposition), le rôle SPONSOR_REPRESENTATIVE dans
+l’événement et un partenariat confirmé. L’organisateur valide puis publie la proposition.
 
-| Variable | Description | Obligatoire |
-|----------|-------------|-------------|
-| `DJANGO_SECRET_KEY` | Clé secrète Django | Oui |
-| `DJANGO_DEBUG` | Mode debug (`True`/`False`) | Oui |
-| `DJANGO_ALLOWED_HOSTS` | Hôtes autorisés (séparés par virgule) | Oui |
-| `GOOGLE_API_KEY` | Clé API Google Gemini (intégration future) | Non |
+## Fonctionnalités
 
----
+- USER : inscription, sessions, profil, avatar contrôlé, changement du mot de passe,
+  compétences de niveau 1–5, rôles contextualisés et historique d’affectation.
+- M1 : événements, recherche et filtres, calendrier, tracks, challenges,
+  organisations sponsors, partenariats et workflow de validation.
+- Cycle : brouillon → publié → en cours → terminé → archivé ; un événement publié
+  dont la date de fin est passée peut aussi être terminé directement.
+- Control Tower : compteurs issus de la base, échéances, phases et alertes de configuration.
+- Historique paginé, archive avec indicateurs figés et comparaison de deux éditions.
+- Administration réservée au superutilisateur technique, avec recherches, filtres,
+  inlines et actions de publication/archivage réutilisant les règles métier.
 
-## Vérification Django
+Les domaines M2, M3, M4, M5 et les moteurs IA ne sont pas implémentés dans cette livraison.
+Leurs données apparaissent comme indisponibles tant que leurs fournisseurs ne sont pas connectés.
 
-```bash
-uv run python manage.py check
-uv run python manage.py showmigrations
-```
+## Intégration et validation
 
----
-
-## État actuel
-
-✅ Socle technique Django 5.2 initialisé  
-✅ Modèle User personnalisé (`accounts.User`)  
-✅ Authentification et Admin Django configurés  
-✅ SQLite configuré  
-✅ Templates et fichiers statiques configurés  
-✅ Variables d'environnement préparées (dont IA)  
-⏳ Modules métier HackFlow — à développer dans les phases suivantes
+Voir [les contrats USER + M1](docs/USER_M1.md) pour les relations, permissions,
+services, fournisseurs d’indicateurs/alertes et choix de conception.
+Les tests couvrent les parcours, les refus, les échéances exactes, les contraintes SQL,
+le CSRF, les uploads, l’administration et deux scénarios PostgreSQL concurrents.
+Les mots de passe présents dans les tests sont exclusivement des valeurs fictives de fixtures.
