@@ -1,0 +1,3 @@
+{% extends 'base.html' %}{% block content %}<h1>Historique · {{ event }}</h1><a href="{% url 'hackathons:manage' event.slug %}">Retour au pilotage</a>
+{% for entry in entries %}<details class="panel"><summary>{{ entry.timestamp }} · {{ entry.actor }} · {{ entry.action }} · {{ entry.target }}</summary><pre>{{ entry.details }}</pre></details>{% empty %}<p>Aucune opération.</p>{% endfor %}
+{% if page_obj.has_previous %}<a href="?page={{ page_obj.previous_page_number }}">Précédent</a>{% endif %} Page {{ page_obj.number }} / {{ paginator.num_pages }} {% if page_obj.has_next %}<a href="?page={{ page_obj.next_page_number }}">Suivant</a>{% endif %}{% endblock %}

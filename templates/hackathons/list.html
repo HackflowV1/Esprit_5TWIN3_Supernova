@@ -1,0 +1,10 @@
+{% extends 'base.html' %}{% block content %}
+<p class="eyebrow">Explorer · Construire · Innover</p><h1>Les hackathons</h1>
+{% if can_create %}<p><a class="button" href="{% url 'hackathons:create' %}">Créer un hackathon</a></p>{% endif %}
+<form method="get" class="filters"><label>Recherche<input name="q" value="{{ request.GET.q }}" placeholder="Titre, lieu, description"></label>
+<label>Statut<select name="status"><option value="">Tous les statuts</option>{% for value,label in statuses %}<option value="{{ value }}" {% if request.GET.status == value %}selected{% endif %}>{{ label }}</option>{% endfor %}</select></label>
+<label>Format<select name="format"><option value="">Tous les formats</option>{% for value,label in formats %}<option value="{{ value }}" {% if request.GET.format == value %}selected{% endif %}>{{ label }}</option>{% endfor %}</select></label><button>Rechercher</button></form>
+<div class="grid">{% for event in events %}<article class="panel"><span class="badge">{{ event.get_status_display }}</span><h2><a href="{{ event.get_absolute_url }}">{{ event }}</a></h2>
+<p>{{ event.description|truncatewords:30 }}</p><p>{{ event.start_date|date:'d/m/Y H:i' }} · {{ event.get_format_display }}</p><p>{{ event.location }}</p></article>{% empty %}<p>Aucun hackathon correspondant.</p>{% endfor %}</div>
+{% if is_paginated %}<nav aria-label="Pagination">{% if page_obj.has_previous %}<a href="?q={{ request.GET.q|urlencode }}&status={{ request.GET.status|urlencode }}&format={{ request.GET.format|urlencode }}&page={{ page_obj.previous_page_number }}">Précédent</a>{% endif %} Page {{ page_obj.number }} / {{ paginator.num_pages }} {% if page_obj.has_next %}<a href="?q={{ request.GET.q|urlencode }}&status={{ request.GET.status|urlencode }}&format={{ request.GET.format|urlencode }}&page={{ page_obj.next_page_number }}">Suivant</a>{% endif %}</nav>{% endif %}
+{% endblock %}

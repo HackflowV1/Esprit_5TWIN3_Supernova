@@ -1,0 +1,11 @@
+{% extends 'base.html' %}{% block content %}<p class="eyebrow">Pilotage des éditions</p><h1>Control Tower</h1><p>{{ active_count }} hackathon(s) actif(s) dans votre périmètre.</p>
+<p><a href="{% url 'hackathons:compare' %}">Comparer deux éditions</a></p>
+{% for row in rows %}<section class="panel"><span class="badge">{{ row.event.get_status_display }}</span><h2><a href="{% url 'hackathons:manage' row.event.slug %}">{{ row.event }}</a></h2>
+{% if row.event.status == 'ARCHIVED' %}<p>Indicateurs figés le {{ row.event.archived_at }}.</p>{% endif %}
+{% include 'hackathons/metrics.html' with metrics=row.metrics %}
+<h3>Phases en cours</h3>{% for phase in row.current_phases %}<p>{{ phase }} · fin {{ phase.end }}</p>{% empty %}<p>Aucune phase en cours.</p>{% endfor %}
+<h3>Échéances à 7 jours</h3>{% for phase in row.deadlines %}<p>{{ phase }} · {{ phase.end }}</p>{% empty %}<p>Aucune échéance proche.</p>{% endfor %}
+<h3>Alertes de configuration</h3>{% for error in row.errors %}<p class="warning">{{ error }}</p>{% empty %}<p>Aucune anomalie de configuration détectée.</p>{% endfor %}
+<h3>Alertes transversales / IA</h3>{% if row.alerts.available %}{% for item in row.alerts.items %}<p class="{{ item.severity }}">{{ item.code }} · {{ item.message }}</p>{% empty %}<p>Aucune alerte fournie.</p>{% endfor %}{% else %}<p>{{ row.alerts.error|default:'Fournisseur non connecté.' }}</p>{% endif %}
+</section>{% empty %}<p>Aucun hackathon à piloter. Une autorisation de création ou un rôle organisateur est nécessaire.</p>{% endfor %}
+{% endblock %}
