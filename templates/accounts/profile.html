@@ -1,0 +1,11 @@
+{% extends 'base.html' %}{% block content %}
+<h1>Mon profil · {{ user.username }}</h1>
+<div class="actions"><a href="{% url 'accounts:profile-edit' %}">Modifier le profil</a><a href="{% url 'accounts:password' %}">Changer le mot de passe</a><a href="{% url 'accounts:skill-add' %}">Ajouter une compétence</a></div>
+<section class="panel"><h2>{{ user.get_full_name|default:user.username }}</h2><p>{{ user.email }} · {{ profile.university }}</p>
+{% if profile.avatar %}<img class="avatar" src="{{ profile.avatar.url }}" alt="Mon avatar">{% endif %}
+<p>{{ profile.biography|linebreaksbr }}</p><p>{{ profile.interests }}</p></section>
+<section class="panel"><h2>Mes compétences</h2>{% for item in skills %}<p>{{ item }} · {{ item.experience }}
+<a href="{% url 'accounts:skill-edit' item.pk %}">Modifier</a> <a href="{% url 'accounts:skill-delete' item.pk %}">Retirer</a></p>{% empty %}<p>Aucune compétence déclarée. Le référentiel est géré dans l’administration.</p>{% endfor %}</section>
+<section class="panel"><h2>Mes rôles par hackathon</h2>{% for item in assignments %}<p>{{ item.hackathon }} : {{ item.get_role_display }} · {{ item.get_status_display }}</p>{% empty %}<p>Votre compte n’est affecté à aucun hackathon.</p>{% endfor %}
+<h2>Organisations représentées</h2>{% for item in memberships %}<p>{{ item.organization }} · {{ item.get_status_display }}</p>{% empty %}<p>Aucune organisation.</p>{% endfor %}</section>
+{% endblock %}

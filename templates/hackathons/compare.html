@@ -1,0 +1,5 @@
+{% extends 'base.html' %}{% block content %}<h1>Comparer les éditions</h1><form method="get" class="filters">
+<label>Première édition<select name="left" required><option value="">Choisir</option>{% for item in events %}<option value="{{ item.pk }}">{{ item }}</option>{% endfor %}</select></label>
+<label>Deuxième édition<select name="right" required><option value="">Choisir</option>{% for item in events %}<option value="{{ item.pk }}">{{ item }}</option>{% endfor %}</select></label><button>Comparer</button></form>
+<div class="grid">{% for row in rows %}<section class="panel"><h2>{{ row.event }}</h2><p>{{ row.event.start_date }} · {{ row.event.get_status_display }}</p><p>Capacité : {{ row.event.capacity }} · Équipes : {{ row.event.min_team_size }}–{{ row.event.max_team_size }}</p>{% include 'hackathons/metrics.html' with metrics=row.metrics %}</section>{% endfor %}</div>
+{% endblock %}

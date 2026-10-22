@@ -1,9 +1,10 @@
 """
 Django settings for HackFlow project.
-Configured for local development with SQLite.
+Configured for isolated HackFlow PostgreSQL development.
 """
 
 import os
+from .database import database_config
 from pathlib import Path
 from dotenv import load_dotenv
 
@@ -33,6 +34,7 @@ INSTALLED_APPS = [
     # HackFlow apps
     'accounts',
     'core',
+    'hackathons',
 ]
 
 MIDDLEWARE = [
@@ -66,16 +68,14 @@ TEMPLATES = [
 WSGI_APPLICATION = 'config.wsgi.application'
 
 
-# Database — SQLite for local development
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
-    }
-}
+# Fail closed: no migration, test or server may target another project's database.
+DATABASES = {'default': database_config(os.environ.get('DATABASE_URL', 'postgresql://postgres@127.0.0.1:5432/hackflow_db'))}
 
 # Custom user model
 AUTH_USER_MODEL = 'accounts.User'
+LOGIN_URL = 'accounts:login'
+LOGIN_REDIRECT_URL = 'accounts:profile'
+LOGOUT_REDIRECT_URL = 'hackathons:list'
 
 # Password validation
 AUTH_PASSWORD_VALIDATORS = [

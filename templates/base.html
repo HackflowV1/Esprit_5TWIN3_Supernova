@@ -7,12 +7,22 @@
     <meta name="description" content="HackFlow — Plateforme web de gestion des hackathons étudiants">
     {% load static %}
     <link rel="stylesheet" href="{% static 'css/base.css' %}">
+    <link rel="icon" href="data:,">
     {% block extra_css %}{% endblock %}
 </head>
 <body>
+    <header><a class="brand" href="{% url 'hackathons:list' %}">HackFlow</a><nav aria-label="Navigation principale">
+        <a href="{% url 'hackathons:list' %}">Hackathons</a>
+        {% if user.is_authenticated %}
+        <a href="{% url 'hackathons:dashboard' %}">Control Tower</a><a href="{% url 'accounts:profile' %}">Mon profil</a>
+        <form method="post" action="{% url 'accounts:logout' %}">{% csrf_token %}<button>Déconnexion</button></form>
+        {% else %}<a href="{% url 'accounts:login' %}">Connexion</a><a href="{% url 'accounts:signup' %}">Inscription</a>{% endif %}
+    </nav></header>
     <main>
+        {% for message in messages %}<div class="message {{ message.tags }}" role="status">{{ message }}</div>{% endfor %}
         {% block content %}{% endblock %}
     </main>
+    <footer>HackFlow · Hackathons étudiants · USER & M1</footer>
     <script src="{% static 'js/base.js' %}"></script>
     {% block extra_js %}{% endblock %}
 </body>
