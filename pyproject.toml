@@ -9,6 +9,7 @@ dependencies = [
     "requests>=2.32.0",
     "Pillow>=10.4.0",
     "google-generativeai>=0.8.0",
+    "psycopg[binary]>=3.2,<4",
 ]
 
 [tool.uv]
