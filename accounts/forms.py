@@ -1,3 +1,4 @@
+from django.utils.translation import gettext_lazy as _
 from django import forms
 from django.contrib.auth.forms import UserCreationForm
 from django.db import transaction
@@ -18,12 +19,12 @@ class SignupForm(UserCreationForm):
         # Rules are reported by the server under each field after submission; validators are unchanged.
         for name in ('username', 'password1', 'password2'):
             self.fields[name].help_text = ''
-        self.fields['password1'].widget.attrs['placeholder'] = '8 caractères minimum'
+        self.fields['password1'].widget.attrs['placeholder'] = _('8 caractères minimum')
 
     def clean_email(self):
         email = self.cleaned_data['email'].strip().lower()
         if User.objects.filter(email__iexact=email).exists():
-            raise forms.ValidationError('Cet email est déjà utilisé.')
+            raise forms.ValidationError(_('Cet email est déjà utilisé.'))
         return email
 
     @transaction.atomic
@@ -35,14 +36,14 @@ class SignupForm(UserCreationForm):
 
 
 class ProfileForm(forms.ModelForm):
-    first_name = forms.CharField(label='Prénom', max_length=150, required=False)
-    last_name = forms.CharField(label='Nom', max_length=150, required=False)
+    first_name = forms.CharField(label=_('Prénom'), max_length=150, required=False)
+    last_name = forms.CharField(label=_('Nom'), max_length=150, required=False)
     email = forms.EmailField()
 
     class Meta:
         model = Profile
         fields = ('first_name', 'last_name', 'email', 'biography', 'university', 'interests', 'avatar')
-        labels = {'biography': 'Biographie', 'university': 'Établissement / université', 'interests': 'Centres d’intérêt'}
+        labels = {'biography': _('Biographie'), 'university': _('Établissement / université'), 'interests': _('Centres d’intérêt'), 'avatar': _('Photo de profil')}
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
@@ -52,7 +53,7 @@ class ProfileForm(forms.ModelForm):
     def clean_email(self):
         email = self.cleaned_data['email'].strip().lower()
         if User.objects.filter(email__iexact=email).exclude(pk=self.instance.user_id).exists():
-            raise forms.ValidationError('Cet email est déjà utilisé.')
+            raise forms.ValidationError(_('Cet email est déjà utilisé.'))
         return email
 
     @transaction.atomic
@@ -71,10 +72,10 @@ class UserSkillForm(forms.ModelForm):
     class Meta:
         model = UserSkill
         fields = ('skill', 'level', 'experience')
-        labels = {'skill': 'Compétence', 'level': 'Niveau (1–5)', 'experience': 'Expérience'}
+        labels = {'skill': _('Compétence'), 'level': _('Niveau (1–5)'), 'experience': _('Expérience')}
 
 
 class RoleForm(forms.Form):
-    user = forms.ModelChoiceField(label='Utilisateur', queryset=User.objects.filter(is_active=True))
-    role = forms.ChoiceField(label='Rôle', choices=Role.choices)
-    status = forms.ChoiceField(label='Statut', choices=AssignmentStatus.choices)
+    user = forms.ModelChoiceField(label=_('Utilisateur'), queryset=User.objects.filter(is_active=True))
+    role = forms.ChoiceField(label=_('Rôle'), choices=Role.choices)
+    status = forms.ChoiceField(label=_('Statut'), choices=AssignmentStatus.choices)

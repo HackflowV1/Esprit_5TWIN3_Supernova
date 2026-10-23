@@ -1,7 +1,7 @@
-{% extends 'base.html' %}
-{% block title %}Page introuvable — HackFlow{% endblock %}
+{% extends 'base.html' %}{% load i18n ui %}
+{% block title %}{% translate 'Page introuvable — HackFlow' %}{% endblock %}
 {% block content %}
-<section class="error-page"><p class="error-code gradient-text" aria-hidden="true">404</p><h1>Page introuvable</h1>
-<p class="lead">Cette ressource est indisponible ou privée.</p>
-<div class="actions" style="justify-content:center"><a class="button" href="{% url 'hackathons:list' %}">Retour aux hackathons</a></div></section>
+<section class="error-page"><p class="error-code " aria-hidden="true">404</p><h1>{% translate 'Page introuvable' %}</h1>
+<p class="lead">{% translate 'Cette ressource est indisponible ou privée.' %}</p>
+<div class="actions" style="justify-content:center"><a class="button" href="{% url 'hackathons:list' %}">{% translate 'Retour aux hackathons' %}</a></div></section>
 {% endblock %}

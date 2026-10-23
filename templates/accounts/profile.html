@@ -1,37 +1,36 @@
-{% extends 'base.html' %}
-{% block title %}Mon profil — HackFlow{% endblock %}
+{% extends 'base.html' %}{% load i18n ui %}
+{% block title %}{% translate 'Mon profil — HackFlow' %}{% endblock %}
 {% block content %}
 <header class="page-head">
-    <p class="eyebrow">Mon espace</p>
-    <h1>Mon profil · {{ user.username }}</h1>
-    <div class="actions"><a class="button small" href="{% url 'accounts:profile-edit' %}">Modifier le profil</a><a class="button small secondary" href="{% url 'accounts:password' %}">Changer le mot de passe</a><a class="button small secondary" href="{% url 'accounts:skill-add' %}">Ajouter une compétence</a></div>
+    <h1>{% translate 'Mon profil ·' %} {{ user.username }}</h1>
+    <div class="actions"><a class="button small" href="{% url 'accounts:profile-edit' %}">{% icon 'edit' %}{% translate 'Modifier le profil' %}</a><a class="button small secondary" href="{% url 'accounts:password' %}">{% translate 'Changer le mot de passe' %}</a><a class="button small secondary" href="{% url 'accounts:skill-add' %}">{% icon 'add' %}{% translate 'Ajouter une compétence' %}</a></div>
 </header>
 <section class="panel" aria-labelledby="identity-title">
     <div class="profile-head">
-        {% if profile.avatar %}<img class="avatar" src="{{ profile.avatar.url }}" alt="Photo de profil de {{ user.username }}">{% else %}<span class="avatar-fallback" aria-hidden="true">{{ user.username|slice:':1'|upper }}</span>{% endif %}
+        {% if profile.avatar %}<img class="avatar" src="{{ profile.avatar.url }}" alt="{% blocktranslate with v0=user.username %}Photo de profil de {{ v0 }}{% endblocktranslate %}">{% else %}<span class="avatar-fallback" aria-hidden="true">{{ user.username|slice:':1'|upper }}</span>{% endif %}
         <div>
             <h2 id="identity-title" style="margin:0">{{ user.get_full_name|default:user.username }}</h2>
             <p class="muted" style="margin:2px 0">{{ user.email }}{% if profile.university %} · {{ profile.university }}{% endif %}</p>
         </div>
     </div>
     {% if profile.biography %}<p>{{ profile.biography|linebreaksbr }}</p>{% endif %}
-    {% if profile.interests %}<p><strong>Centres d’intérêt :</strong> {{ profile.interests }}</p>{% endif %}
+    {% if profile.interests %}<p><strong>{% translate 'Centres d’intérêt :' %}</strong> {{ profile.interests }}</p>{% endif %}
 </section>
 <div class="manage-grid">
-<section class="panel" aria-labelledby="skills-title"><h2 id="skills-title">Mes compétences</h2>
+<section class="panel" aria-labelledby="skills-title"><h2 id="skills-title">{% translate 'Mes compétences' %}</h2>
     {% for item in skills %}
     <div class="row-item">
-        <span><span class="title">{{ item.skill }}</span><span class="level" role="img" aria-label="Niveau {{ item.level }} sur 5">{% for i in '12345' %}<i{% if forloop.counter <= item.level %} class="on"{% endif %}></i>{% endfor %}</span>{% if item.experience %}<span class="sub">{{ item.experience }}</span>{% endif %}</span>
-        <span class="link-actions"><a href="{% url 'accounts:skill-edit' item.pk %}">Modifier</a><a href="{% url 'accounts:skill-delete' item.pk %}">Retirer</a></span>
+        <span><span class="title">{{ item.skill }}</span><span class="level" role="img" aria-label="{% blocktranslate with v0=item.level %}Niveau {{ v0 }} sur 5{% endblocktranslate %}">{% for i in '12345' %}<i{% if forloop.counter <= item.level %} class="on"{% endif %}></i>{% endfor %}</span>{% if item.experience %}<span class="sub">{{ item.experience }}</span>{% endif %}</span>
+        <span class="link-actions"><a href="{% url 'accounts:skill-edit' item.pk %}" aria-label="{% blocktranslate with v0=item %}Modifier {{ v0 }}{% endblocktranslate %}">{% icon 'edit' %}{% translate 'Modifier' %}</a><a href="{% url 'accounts:skill-delete' item.pk %}">{% icon 'delete' %}{% translate 'Retirer' %}</a></span>
     </div>
-    {% empty %}<p>Aucune compétence déclarée. Le référentiel est géré dans l’administration.</p>{% endfor %}
+    {% empty %}<p>{% translate 'Aucune compétence déclarée. Le référentiel est géré dans l’administration.' %}</p>{% endfor %}
 </section>
-<section class="panel" aria-labelledby="roles-title"><h2 id="roles-title">Mes rôles par hackathon</h2>
+<section class="panel" aria-labelledby="roles-title"><h2 id="roles-title">{% translate 'Mes rôles par hackathon' %}</h2>
     {% for item in assignments %}
     <div class="row-item"><span><span class="title">{{ item.hackathon }}</span><span class="sub">{{ item.get_role_display }}</span></span><span class="badge badge--{% if item.status == 'ACTIVE' %}published{% else %}draft{% endif %}">{{ item.get_status_display }}</span></div>
-    {% empty %}<p>Votre compte n’est affecté à aucun hackathon.</p>{% endfor %}
-    <h3>Organisations représentées</h3>
-    {% for item in memberships %}<div class="row-item"><span class="title">{{ item.organization }}</span><span class="badge">{{ item.get_status_display }}</span></div>{% empty %}<p>Aucune organisation.</p>{% endfor %}
+    {% empty %}<p>{% translate 'Votre compte n’est affecté à aucun hackathon.' %}</p>{% endfor %}
+    <h3>{% translate 'Organisations représentées' %}</h3>
+    {% for item in memberships %}<div class="row-item"><span class="title">{{ item.organization }}</span><span class="badge">{{ item.get_status_display }}</span></div>{% empty %}<p>{% translate 'Aucune organisation.' %}</p>{% endfor %}
 </section>
 </div>
 {% endblock %}

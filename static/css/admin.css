@@ -1,0 +1,221 @@
+:root, html[data-theme="light"] {
+  --primary:#55554f;
+  --secondary:#f7f7f5;
+  --accent:#242422;
+  --header-color:#242422;
+  --header-bg:#f7f7f5;
+  --header-branding-color:#242422;
+  --header-link-color:#242422;
+  --body-fg:#242422;
+  --body-bg:#fff;
+  --body-quiet-color:#62625d;
+  --darkened-bg:#f7f7f5;
+  --selected-bg:#ededeb;
+  --link-fg:#305c85;
+  --link-selected-fg:#242422;
+  --button-bg:#252523;
+  --button-hover-bg:#44443e;
+  --default-button-bg:#252523;
+  --default-button-hover-bg:#44443e;
+  --breadcrumbs-bg:#f7f7f5;
+  --breadcrumbs-fg:#62625d;
+  --breadcrumbs-link-fg:#242422;
+  --font-family-primary:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+  --hairline-color:#e7e7e3;
+  --border-color:#d1d1cb;
+  --body-loud-color:#242422;
+  --selected-row:#ededeb;
+  --close-button-bg:#62625d;
+  --on-button:#fff;
+  --surface:#fff;
+  --focus:#2469b3;
+  --button-fg:#fff;
+  --link-hover-color:#305c85;
+  color-scheme:light
+}
+
+html[data-theme="dark"] {
+  --primary:#b5b5ae;
+  --secondary:#262626;
+  --accent:#eeeee9;
+  --header-color:#eeeee9;
+  --header-bg:#202020;
+  --header-branding-color:#eeeee9;
+  --header-link-color:#eeeee9;
+  --body-fg:#eeeee9;
+  --body-bg:#181818;
+  --body-quiet-color:#b9b9b1;
+  --darkened-bg:#262626;
+  --selected-bg:#333;
+  --link-fg:#a9c3e5;
+  --link-selected-fg:#fff;
+  --button-bg:#555;
+  --button-hover-bg:#666;
+  --default-button-bg:#555;
+  --default-button-hover-bg:#666;
+  --breadcrumbs-bg:#262626;
+  --breadcrumbs-fg:#b9b9b1;
+  --breadcrumbs-link-fg:#eeeee9;
+  --hairline-color:#383838;
+  --border-color:#72726c;
+  --body-loud-color:#eeeee9;
+  --selected-row:#333;
+  --button-bg:#eeeee9;
+  --button-hover-bg:#d1d1c9;
+  --default-button-bg:#eeeee9;
+  --default-button-hover-bg:#d1d1c9;
+  --on-button:#202020;
+  --surface:#202020;
+  --focus:#91bbf1;
+  --button-fg:#202020;
+  --link-hover-color:#a9c3e5;
+  --error-fg:#ffaaa2;
+  --message-success-bg:#203027;
+  --message-warning-bg:#352e1e;
+  --message-error-bg:#382321;
+  color-scheme:dark
+}
+
+/* Loaded after Django's page styles so login, tables and editors share the app shell. */
+body {font-size:15px; line-height:1.6; background:var(--body-bg)}
+body, input, select, textarea, button {font-family:var(--font-family-primary)}
+#container {min-width:0}
+#header {padding:16px 32px; gap:16px; flex-wrap:wrap; flex-direction:row; align-items:center; background:var(--body-bg); color:var(--body-fg)}
+#branding {margin:0}
+#site-name {margin:0; line-height:1.4; font-size:22px; font-weight:600; letter-spacing:-.5px}
+#site-name a {display:flex; align-items:center; gap:16px; color:var(--body-fg)}
+.admin-caption {margin:0; padding-left:16px; border-left:1px solid var(--hairline-color); color:var(--body-quiet-color); font-size:13px}
+#header a:link, #header a:visited {color:var(--body-fg)}
+#header #user-tools {margin-left:0; padding:0; font-size:14px; letter-spacing:0; text-transform:none; order:3}
+.admin-preferences, .admin-language {display:flex; align-items:center; gap:8px}
+.admin-preferences {order:2; margin-left:auto}
+.admin-language {margin:0}
+.back-to-app {display:inline-flex; align-items:center; gap:8px; margin:0 12px 0 0; min-height:44px; white-space:nowrap}
+.icon {display:inline-block; vertical-align:middle; flex-shrink:0}
+#header select {min-height:44px; padding:8px 12px; color:var(--body-fg); background:var(--body-bg); border:1px solid var(--border-color); border-radius:6px; font-size:13px; margin:0}
+.admin-account {position:relative}
+.admin-account summary {display:flex; align-items:center; gap:8px; cursor:pointer; list-style:none; min-height:44px; padding:0 12px; border:1px solid var(--border-color); border-radius:6px}
+.admin-account summary::-webkit-details-marker {display:none}
+.admin-account-panel {position:absolute; z-index:100; right:0; top:calc(100% + 8px); min-width:250px; padding:8px; background:var(--surface); border:1px solid var(--hairline-color); border-radius:8px; box-shadow:0 8px 32px #00000016}
+.admin-account-panel a, #header #logout-form button {display:flex; align-items:center; gap:10px; box-sizing:border-box; width:100%; min-height:44px; padding:10px; border:0; border-radius:6px; text-align:left; text-decoration:none; font:inherit; color:var(--body-fg); background:transparent}
+.admin-account-panel a:hover, #header #logout-form button:hover {background:var(--darkened-bg)}
+#header #logout-form {display:block; margin:0; width:100%}
+div.breadcrumbs {padding:12px 32px; border-bottom:1px solid var(--hairline-color); font-size:13px}
+#content {padding:32px; min-width:0}
+#content h1 {font-size:28px; font-weight:600; margin:0 0 24px}
+.module {border:1px solid var(--hairline-color); border-radius:8px; overflow:hidden; margin-bottom:24px; background:var(--surface)}
+.module h2, .module caption, .inline-group h2 {padding:14px 16px; font-size:15px; letter-spacing:0; text-transform:none; background:var(--surface); border-bottom:1px solid var(--hairline-color); font-weight:600}
+.module table {width:100%}
+table thead th {background:var(--surface); color:var(--body-quiet-color); font-size:12px; text-transform:none; font-weight:500}
+td, th {padding:12px 16px; border-color:var(--hairline-color); font-size:14px; line-height:1.6}
+tbody tr:hover, .row1:hover, .row2:hover {background:var(--darkened-bg)}
+tr:nth-child(odd), tr:nth-child(even) {background:var(--surface)}
+.module a.addlink, .module a.changelink, .module a.viewlink {display:inline-flex; align-items:center; gap:6px; min-height:44px; padding:0; background-image:none; white-space:nowrap}
+a:link, a:visited {color:var(--body-fg)}
+a:hover {color:var(--link-fg)}
+.button, input[type=submit], input[type=button], .submit-row input, a.button, .object-tools a:link, .object-tools a:visited {box-sizing:border-box; min-height:44px; padding:12px 16px; color:var(--on-button); background-color:var(--button-bg); font-size:14px; line-height:20px; font-weight:500; text-transform:none; border-radius:6px}
+.button:hover, input[type=submit]:hover, input[type=button]:hover, .object-tools a:hover {background-color:var(--button-hover-bg)}
+.object-tools {margin:0 0 16px; padding:0; height:auto; float:none; display:flex; justify-content:flex-end; flex-wrap:wrap; gap:8px}
+.object-tools li {float:none; height:auto; margin:0; padding:0}
+.object-tools a.addlink {padding-right:32px}
+input:not([type=checkbox]):not([type=radio]):not([type=hidden]):not([type=submit]):not([type=button]), select, textarea {box-sizing:border-box; min-height:44px; padding:10px 12px; border:1px solid var(--border-color); background:var(--body-bg); color:var(--body-fg); font-size:14px; max-width:100%}
+input[type=checkbox], input[type=radio] {accent-color:var(--body-fg); width:18px; height:18px; vertical-align:middle}
+input[type=checkbox].action-select {margin:0}
+.form-row {padding:18px 20px}
+.aligned label {font-size:14px; line-height:24px}
+.help, p.help, form p.help, div.help {color:var(--body-quiet-color); font-size:13px; line-height:1.6}
+.submit-row {padding:16px; border:1px solid var(--hairline-color); border-radius:8px; background:var(--darkened-bg)}
+.submit-row a.deletelink {box-sizing:border-box; min-height:44px; padding:12px 16px; border-radius:6px; line-height:20px}
+#changelist {background:var(--surface); border:1px solid var(--hairline-color); border-radius:8px; overflow:hidden}
+#changelist #toolbar {padding:16px; border-bottom:1px solid var(--hairline-color); background:var(--surface)}
+#changelist #toolbar form {display:flex; align-items:center; gap:8px; flex-wrap:wrap}
+#changelist #toolbar form #searchbar {flex:1; min-width:120px}
+#changelist .actions {padding:12px 16px; background:var(--surface); border-color:var(--hairline-color); color:var(--body-quiet-color)}
+#changelist .actions .button {min-height:44px; padding:8px 16px; color:var(--on-button); background:var(--button-bg)}
+#changelist .paginator {padding:16px; background:var(--surface); border-color:var(--hairline-color)}
+#changelist-filter {background:var(--darkened-bg); border-left:1px solid var(--hairline-color)}
+#changelist-filter h2 {background:transparent; color:var(--body-fg); font-weight:600}
+#changelist-filter a {padding:6px 0}
+#nav-sidebar {background:var(--body-bg); border-right:1px solid var(--hairline-color)}
+#nav-sidebar .module {border:0; border-radius:0}
+#nav-sidebar th, #nav-sidebar td {padding:8px 12px; font-size:13px}
+#nav-sidebar .current-model {background:var(--selected-bg)}
+#nav-sidebar .current-app .section:link, #nav-sidebar .current-app .section:visited {color:var(--body-fg)}
+.toggle-nav-sidebar {background:var(--darkened-bg); color:var(--body-fg); border-color:var(--hairline-color)}
+.dashboard #content {max-width:1280px; width:100%; box-sizing:border-box; margin:auto}
+.dashboard #content-main {width:calc(100% - 320px)}
+.dashboard #content-related {width:280px; margin-right:-320px; background:var(--darkened-bg); border-radius:8px}
+#content-related .module {border:0; background:transparent}
+#content-related .module h2 {background:transparent}
+.errornote, ul.errorlist {border-radius:6px}
+:focus-visible {outline:2px solid var(--focus); outline-offset:3px}
+/* The login uses the same split composition and original illustration as account pages. */
+body.login {background:var(--body-bg)}
+.login #container {width:100%; min-width:0; margin:0; border:0; border-radius:0; overflow:visible; min-height:100vh; background:var(--body-bg)}
+.login #header {justify-content:space-between; padding:16px 32px; gap:16px}
+.login #content {max-width:1120px; margin:0 auto; padding:64px 32px; box-sizing:border-box; width:100%}
+.admin-login-layout {display:grid; grid-template-columns:1fr 1fr; align-items:center; gap:80px}
+.admin-login-intro img {display:block; width:100%; max-width:320px; height:auto; filter:grayscale(1) contrast(1.08); margin-bottom:24px}
+html[data-theme=dark] .admin-login-intro img {filter:grayscale(1) invert(1)}
+.admin-login-intro h2 {font-size:30px; font-weight:600; letter-spacing:-.7px; margin:0 0 12px}
+.admin-login-intro p {color:var(--body-quiet-color); font-size:15px}
+.admin-login-card {padding:32px; border:1px solid var(--hairline-color); border-radius:8px; background:var(--surface)}
+.login #content-main {width:100%; float:none}
+.login #content h1 {margin-bottom:24px}
+.login .form-row {padding:0 0 20px}
+.login .form-row label {font-size:14px; margin-bottom:8px; line-height:1.6}
+.login .form-row #id_username, .login .form-row #id_password {min-height:46px; padding:10px 12px; border-color:var(--border-color)}
+.login .submit-row {border:0; background:transparent; padding:4px 0 0; margin:0}
+.login .submit-row input {width:100%}
+.login .password-reset-link {margin:8px 0 16px}
+@supports (appearance:base-select) {
+  select:not([multiple]), select:not([multiple])::picker(select) {appearance:base-select}
+  select:not([multiple])::picker(select) {background:var(--surface); color:var(--body-fg); border:1px solid var(--border-color); border-radius:6px; padding:4px}
+  select:not([multiple]) option {padding:10px; min-height:40px}
+  select:not([multiple]) option:checked {background:var(--selected-bg)}
+}
+@media (max-width:1100px) {
+  #nav-sidebar, #toggle-nav-sidebar {display:none}
+  .main > #nav-sidebar + .content, .main.shifted > #nav-sidebar + .content {max-width:100%}
+}
+@media (max-width:1024px) {
+  #header, .login #header {padding:16px 24px}
+  .dashboard #content-main {width:100%}
+  .dashboard #content-related {width:100%; margin:24px 0 0; float:none; clear:both}
+  .admin-login-layout {gap:32px}
+}
+@media (max-width:767px) {
+  #header, .login #header {padding:16px 20px; align-items:flex-start}
+  #site-name a {gap:12px}
+  .admin-caption {padding-left:12px}
+  #content, .login #content {padding:24px 20px}
+  div.breadcrumbs {padding:12px 20px}
+  .admin-login-layout {display:block; max-width:480px; margin:0 auto}
+  .admin-login-intro {display:none}
+  .admin-login-card {padding:24px}
+  .object-tools {margin:0 0 16px; float:none}
+  .form-row {padding:16px}
+  .submit-row {display:flex; flex-wrap:wrap; gap:8px}
+  .submit-row input {margin:0; width:100%}
+  .admin-account-panel {right:auto; left:0; min-width:240px}
+}
+@media (max-width:850px) {
+  #header #user-tools {order:1; margin-left:auto}
+  #header:has(#user-tools) .admin-preferences {width:100%; margin-left:0}
+  #header:has(#user-tools) .admin-language {margin-left:auto}
+}
+@media (max-width:650px) {
+  .admin-preferences {width:100%; margin-left:0; gap:8px}
+  .admin-language {margin-left:auto}
+  .back-to-app {margin:0; font-size:13px}
+  #header select {padding:8px; max-width:130px}
+  .admin-account-panel {right:0; left:auto}
+}
+@media (max-width:400px) {
+  .admin-caption {display:none}
+  .back-to-app {white-space:normal; max-width:125px; line-height:1.4}
+}
+@media (forced-colors:active) {
+  .module, .admin-login-card, .admin-account-panel {border:1px solid CanvasText}
+  :focus-visible {outline:2px solid Highlight}
+}

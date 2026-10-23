@@ -1,16 +1,16 @@
-{% extends 'base.html' %}
-{% block title %}Control Tower — HackFlow{% endblock %}
+{% extends 'base.html' %}{% load i18n ui %}
+{% block title %}{% translate 'Control Tower — HackFlow' %}{% endblock %}
 {% block content %}
-<header class="page-head"><p class="eyebrow">Pilotage des éditions</p><h1>Control Tower</h1>
-<p class="lead">{{ active_count }} hackathon(s) actif(s) dans votre périmètre.</p>
-<div class="actions"><a class="button small secondary" href="{% url 'hackathons:compare' %}">Comparer deux éditions</a></div></header>
+<header class="page-head"><h1>{% translate 'Control Tower' %}</h1>
+<p class="lead">{% blocktranslate count total=active_count %}{{ total }} hackathon actif dans votre périmètre.{% plural %}{{ total }} hackathons actifs dans votre périmètre.{% endblocktranslate %}</p>
+<div class="actions"><a class="button small secondary" href="{% url 'hackathons:compare' %}">{% icon 'compare' %}{% translate 'Comparer deux éditions' %}</a></div></header>
 {% for row in rows %}<section class="panel" aria-labelledby="event-{{ row.event.pk }}"><span class="badge badge--{{ row.event.status|lower }}">{{ row.event.get_status_display }}</span><h2 id="event-{{ row.event.pk }}" style="margin-top:8px"><a href="{% url 'hackathons:manage' row.event.slug %}">{{ row.event }}</a></h2>
-{% if row.event.status == 'ARCHIVED' %}<p class="muted">Indicateurs figés le {{ row.event.archived_at|date:'d/m/Y H:i' }}.</p>{% endif %}
+{% if row.event.status == 'ARCHIVED' %}<p class="muted">{% translate 'Indicateurs figés le' %} {{ row.event.archived_at|date:"SHORT_DATETIME_FORMAT" }}.</p>{% endif %}
 {% include 'hackathons/metrics.html' with metrics=row.metrics %}
 <div class="manage-grid">
-<div><h3>Phases en cours</h3>{% for phase in row.current_phases %}<p>{{ phase }} · fin {{ phase.end|date:'d/m/Y H:i' }}</p>{% empty %}<p class="muted">Aucune phase en cours.</p>{% endfor %}</div>
-<div><h3>Échéances à 7 jours</h3>{% for phase in row.deadlines %}<p>{{ phase }} · {{ phase.end|date:'d/m/Y H:i' }}</p>{% empty %}<p class="muted">Aucune échéance proche.</p>{% endfor %}</div>
-<div><h3>Alertes de configuration</h3>{% for error in row.errors %}<p class="warning">{{ error }}</p>{% empty %}<p class="muted">Aucune anomalie de configuration détectée.</p>{% endfor %}</div>
-<div><h3>Alertes transversales / IA</h3>{% if row.alerts.available %}<ul class="alert-list">{% for item in row.alerts.items %}<li class="{{ item.severity }}">{{ item.code }} · {{ item.message }}</li>{% empty %}<li>Aucune alerte fournie.</li>{% endfor %}</ul>{% else %}<p class="muted">{{ row.alerts.error|default:'Fournisseur non connecté.' }}</p>{% endif %}</div>
-</div></section>{% empty %}<p class="empty">Aucun hackathon à piloter. Une autorisation de création ou un rôle organisateur est nécessaire.</p>{% endfor %}
+<div><h3>{% translate 'Phases en cours' %}</h3>{% for phase in row.current_phases %}<p>{{ phase }} {% translate '· fin' %} {{ phase.end|date:"SHORT_DATETIME_FORMAT" }}</p>{% empty %}<p class="muted">{% translate 'Aucune phase en cours.' %}</p>{% endfor %}</div>
+<div><h3>{% translate 'Échéances à 7 jours' %}</h3>{% for phase in row.deadlines %}<p>{{ phase }} · {{ phase.end|date:"SHORT_DATETIME_FORMAT" }}</p>{% empty %}<p class="muted">{% translate 'Aucune échéance proche.' %}</p>{% endfor %}</div>
+<div><h3>{% translate 'Alertes de configuration' %}</h3>{% for error in row.errors %}<p class="warning">{{ error }}</p>{% empty %}<p class="muted">{% translate 'Aucune anomalie de configuration détectée.' %}</p>{% endfor %}</div>
+<div><h3>{% translate 'Alertes transversales / IA' %}</h3>{% if row.alerts.available %}<ul class="alert-list">{% for item in row.alerts.items %}<li class="{{ item.severity }}">{{ item.code }} · {{ item.message }}</li>{% empty %}<li>{% translate 'Aucune alerte fournie.' %}</li>{% endfor %}</ul>{% else %}<p class="muted">{{ row.alerts.error|default:_('Fournisseur non connecté.') }}</p>{% endif %}</div>
+</div></section>{% empty %}<p class="empty">{% translate 'Aucun hackathon à piloter. Une autorisation de création ou un rôle organisateur est nécessaire.' %}</p>{% endfor %}
 {% endblock %}

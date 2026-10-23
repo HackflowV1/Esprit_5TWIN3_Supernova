@@ -1,0 +1,17 @@
+{% load i18n ui %}
+<details class="hf-menu hf-account" data-dropdown>
+  <summary class="hf-control" aria-label="{% if user.is_authenticated %}{% translate 'Menu du compte' %}{% else %}{% translate 'Préférences' %}{% endif %}">
+    {% if user.is_authenticated %}<span class="hf-avatar" aria-hidden="true">{{ user.username|slice:':1'|upper }}</span><span class="hf-account-name">{{ user.first_name|default:user.username }}</span>{% else %}{% icon 'settings' %}{% endif %}{% icon 'chevron-down' 14 %}
+  </summary>
+  <div class="hf-panel hf-account-panel">
+    {% if user.is_authenticated %}
+    <div class="hf-identity"><strong>{{ user.get_full_name|default:user.username }}</strong><span>{{ user.email }}</span></div>
+    <a href="{% url 'accounts:profile' %}">{% icon 'user' %}{% translate 'Mon profil' %}</a>
+    {% if admin_shell %}<a href="{% url 'admin:password_change' %}">{% icon 'shield' %}{% translate 'Changer le mot de passe' %}</a>{% else %}<a href="{% url 'accounts:password' %}">{% icon 'shield' %}{% translate 'Changer le mot de passe' %}</a>{% endif %}
+    <a href="{% url 'hackathons:dashboard' %}">{% icon 'dashboard' %}{% translate 'Control Tower' %}</a>
+    {% if user.is_superuser and not admin_shell %}<a href="{% url 'admin:index' %}">{% icon 'settings' %}{% translate 'Administration' %}</a>{% endif %}
+    {% endif %}
+    <div class="hf-preference-section"><label for="hf-theme">{% icon 'monitor' 16 %}{% translate 'Apparence' %}</label><select id="hf-theme" data-theme-select><option value="system">{% translate 'Système' %}</option><option value="light">{% translate 'Claire' %}</option><option value="dark">{% translate 'Sombre' %}</option></select></div>
+    {% if user.is_authenticated %}<form method="post" action="{% if admin_shell %}{% url 'admin:logout' %}{% else %}{% url 'accounts:logout' %}{% endif %}" class="hf-logout">{% csrf_token %}<button type="submit" class="menu-action">{% icon 'logout' %}{% translate 'Déconnexion' %}</button></form>{% endif %}
+  </div>
+</details>

@@ -2,6 +2,63 @@
 (function () {
   document.documentElement.classList.add('js');
 
+  /* Native disclosure menus keep a no-JavaScript fallback. */
+  var menus = Array.from(document.querySelectorAll('[data-dropdown]'));
+  menus.forEach(function (menu) {
+    var summary = menu.querySelector('summary');
+    summary.setAttribute('aria-expanded', String(menu.open));
+    menu.addEventListener('toggle', function () {
+      summary.setAttribute('aria-expanded', String(menu.open));
+      if (menu.open) menus.forEach(function (other) { if (other !== menu) other.open = false; });
+    });
+  });
+  document.addEventListener('click', function (event) {
+    menus.forEach(function (menu) { if (!menu.contains(event.target)) menu.open = false; });
+  });
+  document.addEventListener('keydown', function (event) {
+    if (event.key === 'Escape') menus.forEach(function (menu) {
+      if (menu.open) { menu.open = false; menu.querySelector('summary').focus(); }
+    });
+  });
+  var themeSelect = document.querySelector('[data-theme-select]');
+  document.querySelectorAll('[data-language-select]').forEach(function (select) {
+    select.addEventListener('change', function () { select.form.requestSubmit(); });
+  });
+  var systemTheme = matchMedia('(prefers-color-scheme: dark)');
+  function applyTheme(choice) {
+    document.documentElement.dataset.themeChoice = choice;
+    document.documentElement.dataset.theme = choice === 'dark' || (choice === 'system' && systemTheme.matches) ? 'dark' : 'light';
+  }
+  if (themeSelect) {
+    themeSelect.value = document.documentElement.dataset.themeChoice || 'system';
+    themeSelect.addEventListener('change', function () {
+      applyTheme(themeSelect.value);
+      try { localStorage.setItem('hackflow-theme', themeSelect.value); } catch (_) {}
+    });
+  }
+  systemTheme.addEventListener('change', function () {
+    if (document.documentElement.dataset.themeChoice === 'system') applyTheme('system');
+  });
+  document.querySelectorAll('[data-dismiss-message]').forEach(function (button) {
+    button.addEventListener('click', function () { button.closest('.message').remove(); });
+  });
+  var errorSummary = document.querySelector('[data-error-summary]');
+  if (errorSummary) errorSummary.focus();
+
+  /* Content remains visible if scripts or observers are unavailable. */
+  var landing = document.querySelector('.landing');
+  if (landing && 'IntersectionObserver' in window && !matchMedia('(prefers-reduced-motion: reduce)').matches) {
+    var observer = new IntersectionObserver(function (entries) {
+      entries.forEach(function (entry) {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('reveal-in');
+          observer.unobserve(entry.target);
+        }
+      });
+    }, {threshold: 0.12});
+    landing.querySelectorAll('h1,h2,.hero-description,.hero-copy .actions,.landing-editions .event-grid,.role-intro>p,.role-guide,.journey-stories li,.faq-band,.landing-close>div').forEach(function (element) { observer.observe(element); });
+  }
+
   /* Onglets accessibles (page de pilotage). Sans JavaScript, toutes les sections restent visibles. */
   var shell = document.querySelector('[data-tabs]');
   if (shell) {

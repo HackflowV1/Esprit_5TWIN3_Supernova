@@ -1,3 +1,4 @@
+from django.utils.translation import gettext_lazy as _
 from django.core.exceptions import ValidationError
 from django.db import transaction
 from .models import User, RoleAssignment, RoleAssignmentHistory, AssignmentStatus, Role
@@ -15,7 +16,7 @@ def set_role(*, actor, user, hackathon, role, status=AssignmentStatus.ACTIVE):
     previous = assignment.status if assignment else ''
     if assignment and role == Role.ORGANIZER and status == AssignmentStatus.REVOKED:
         if not event.role_assignments.filter(role=Role.ORGANIZER, status=AssignmentStatus.ACTIVE).exclude(pk=assignment.pk).exists():
-            raise ValidationError('Le dernier organisateur actif ne peut pas être retiré.')
+            raise ValidationError(_('Le dernier organisateur actif ne peut pas être retiré.'))
     if assignment is None:
         assignment = RoleAssignment(user=user, hackathon=event, role=role, assigned_by=actor)
     assignment.status = status

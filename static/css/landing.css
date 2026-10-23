@@ -1,0 +1,148 @@
+/* HackFlow: monochrome editorial illustrations, quiet shared app components. */
+.landing { font-size:16px; line-height:1.65; }
+.landing figure { margin:0; }
+.landing img { display:block; width:100%; height:auto; }
+.landing h1,.landing h2,.landing h3 { text-wrap:balance; }
+.landing h2 { font-size:36px; letter-spacing:-.04em; font-weight:550; line-height:1.15; }
+.landing h3 { font-size:21px; font-weight:550; line-height:1.3; }
+.landing .landing-axis {
+  display:grid;
+  grid-template-columns:minmax(0,42fr) minmax(0,58fr);
+  column-gap:40px;
+  align-items:start;
+}
+/* Text and art are separate: copy keeps normal theme contrast in both modes. */
+.landing-hero {
+  display:grid;
+  grid-template-columns:minmax(0,1fr) minmax(0,1.15fr);
+  align-items:center;
+  gap:48px;
+  min-height:550px;
+  padding:32px 0 48px;
+}
+.hero-copy { min-width:0; }
+.landing h1 {
+  font-size:clamp(44px,5vw,66px);
+  line-height:1.04;
+  letter-spacing:-.055em;
+  font-weight:550;
+  max-width:14ch;
+  margin:0 0 28px;
+}
+.hero-description { font-size:18px; line-height:1.65; max-width:43ch; }
+.landing .actions { margin-top:26px; gap:16px 24px; }
+.hero-links { display:flex; flex-wrap:wrap; gap:8px 20px; margin-top:28px; font-size:14px; }
+.hero-links a { display:inline-flex; align-items:center; min-height:44px; color:var(--muted); text-decoration:none; }
+.hero-links a:hover { color:var(--ink); text-decoration:underline; }
+.hero-illustration { width:100%; max-width:580px; justify-self:end; }
+.hero-illustration img { object-fit:contain; }
+.landing>section+section { margin-top:96px; }
+.landing .section-head { margin-bottom:28px; align-items:end; }
+.landing .section-head h2 { margin-bottom:12px; }
+.landing .section-head p { margin:0; max-width:46ch; }
+.landing .section-head>a { font-size:14px; min-height:44px; white-space:nowrap; }
+.landing .card p { font-size:15px; }
+.landing .card h3 { font-size:24px; }
+.landing .card-meta { font-size:13px; }
+.edition-empty {
+  grid-column:1/-1;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:40px;
+  background:var(--raised);
+  padding:32px;
+  border-radius:var(--radius);
+}
+.edition-empty>div { max-width:64ch; }
+.edition-empty .icon { margin-bottom:16px; color:var(--muted); }
+.edition-empty h3 { margin-bottom:12px; }
+.edition-empty p { margin:0; }
+.edition-empty>a { flex:none; font-size:14px; white-space:nowrap; }
+.edition-empty>a .icon { margin:0; }
+.role-intro h2 { margin-bottom:24px; }
+.role-intro>p { max-width:32ch; }
+.role-intro .role-note { font-size:14px; color:var(--muted); margin-top:32px; }
+.role-guide details { border-bottom:1px solid var(--line); }
+.role-guide details:first-child { border-top:1px solid var(--line); }
+.role-guide summary {
+  list-style:none;
+  display:flex;
+  align-items:center;
+  gap:14px;
+  min-height:64px;
+  padding:16px 4px;
+  font-size:18px;
+  font-weight:500;
+  line-height:1.4;
+}
+.role-guide summary::-webkit-details-marker { display:none; }
+.role-guide summary span { flex:1; }
+.role-guide summary>.icon:last-child { transition:rotate .2s; }
+.role-guide details[open] summary>.icon:last-child { rotate:45deg; }
+.role-guide details[open]>summary { margin-bottom:0; }
+.role-guide details>div { padding:0 34px 24px; }
+.role-guide .small-text { color:var(--muted); font-size:14px; }
+.role-guide .text-link { font-size:14px; min-height:44px; }
+.journey-layout { display:grid; grid-template-columns:minmax(0,1fr) minmax(0,1fr); gap:64px; align-items:center; }
+.journey-illustration { max-width:430px; }
+.landing .journey-stories { list-style:none; margin:0; padding:0; }
+.journey-stories li+li { margin-top:28px; }
+.journey-stories h3 { margin-bottom:10px; }
+.journey-stories p { font-size:16px; line-height:1.65; max-width:46ch; }
+.landing-faq>h2 { margin-bottom:32px; }
+.landing .faq-band { padding:32px; column-gap:40px; }
+.faq-band:nth-child(even) { background:var(--raised); border-radius:var(--radius); }
+.faq-band h3 { font-size:24px; max-width:22ch; margin:0; }
+.faq-band p { margin:0; font-size:16px; line-height:1.7; }
+.landing-close { background:var(--raised); padding:40px; border-radius:var(--radius); }
+.landing-close h2 { margin:0; }
+.landing-close p { max-width:45ch; }
+.image-credit { font-size:13px; color:var(--muted); margin:32px 0 0; }
+.landing .button { transition:background .15s,transform .15s; }
+.landing .button:active { transform:translateY(1px); }
+@keyframes landing-appear { from { transform:translateY(12px); } to { transform:translateY(0); } }
+.landing .reveal-in { animation:landing-appear .45s ease-out both; }
+@media(max-width:1000px) {
+  .landing-hero { gap:28px; min-height:490px; }
+  .landing h1 { font-size:52px; }
+  .landing h2 { font-size:30px; }
+  .landing .landing-axis { column-gap:28px; }
+  .hero-description { font-size:17px; }
+  .edition-empty { gap:28px; flex-wrap:wrap; }
+  .landing .faq-band { padding:28px; }
+  .landing-close { padding:32px; }
+  .journey-layout { gap:36px; }
+}
+@media(max-width:760px) {
+  .landing-hero { grid-template-columns:1fr; gap:20px; padding:16px 0 0; min-height:0; }
+  .landing h1 { font-size:48px; max-width:15ch; margin-bottom:24px; }
+  .hero-illustration { width:min(100%,420px); justify-self:center; }
+  .hero-links { margin-top:18px; }
+  .landing .landing-axis { grid-template-columns:1fr; gap:24px; }
+  .landing>section+section { margin-top:64px; }
+  .landing .section-head { align-items:start; gap:16px; }
+  .landing .section-head>a { white-space:normal; }
+  .landing h3 { font-size:21px; }
+  .edition-empty { padding:24px; gap:24px; }
+  .role-intro>p { max-width:46ch; }
+  .role-intro .role-note { margin:20px 0 0; }
+  .role-guide summary { font-size:17px; }
+  .journey-layout { grid-template-columns:1fr; gap:28px; }
+  .journey-illustration { width:min(100%,320px); justify-self:center; }
+  .landing .faq-band { padding:24px 20px; gap:14px; }
+  .faq-band h3 { font-size:22px; max-width:none; }
+  .landing-close { padding:28px 24px; }
+  .landing-close h2 { font-size:28px; }
+  .image-credit { margin-top:24px; }
+}
+@media(max-width:420px) {
+  .landing h1 { font-size:44px; }
+  .landing .section-head h2 { font-size:28px; }
+  .landing .faq-band h3 { font-size:21px; }
+  .landing-close h2 { font-size:27px; }
+  .hero-links { gap:0 16px; font-size:13px; }
+}
+@media(prefers-reduced-motion:reduce) {
+  .landing *, .landing *::before, .landing *::after { animation:none!important; transition:none!important; }
+}

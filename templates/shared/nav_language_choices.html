@@ -1,0 +1,6 @@
+{% load i18n ui %}{% get_current_language as LANGUAGE_CODE %}
+<form action="{% url 'set_language' %}" method="post" class="hf-language-choices">
+  {% csrf_token %}<input type="hidden" name="next" value="{{ request.get_full_path }}">
+  <button class="menu-action" type="submit" name="language" value="fr" lang="fr" aria-pressed="{% if LANGUAGE_CODE == 'fr' %}true{% else %}false{% endif %}"><span>Français</span>{% if LANGUAGE_CODE == 'fr' %}{% icon 'check' 16 %}{% endif %}</button>
+  <button class="menu-action" type="submit" name="language" value="en" lang="en" aria-pressed="{% if LANGUAGE_CODE == 'en' %}true{% else %}false{% endif %}"><span>English</span>{% if LANGUAGE_CODE == 'en' %}{% icon 'check' 16 %}{% endif %}</button>
+</form>

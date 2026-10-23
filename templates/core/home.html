@@ -1,90 +1,58 @@
-{% extends "base.html" %}
-{% block title %}HackFlow — Construisez, apprenez, innovez{% endblock %}
+{% extends 'base.html' %}{% load static i18n ui %}
+{% block title %}HackFlow — {% translate 'Vos idées, en équipe.' %}{% endblock %}
+{% block extra_css %}<link rel="stylesheet" href="{% static 'css/landing.css' %}">{% endblock %}
 {% block content %}
-<section class="hero" aria-labelledby="hero-title">
-    <div>
-        <p class="eyebrow">Hackathons étudiants</p>
-        <h1 id="hero-title">Un hackathon, <span class="gradient-text">une équipe</span>, une idée qui devient réalité.</h1>
-        <p class="lead">HackFlow orchestre tout le parcours : événements, équipes, projets, mentorat et jury. Les organisateurs pilotent, les participants créent.</p>
-        <div class="actions">
-            <a class="button" href="{% url 'hackathons:list' %}">Découvrir les hackathons</a>
-            {% if user.is_authenticated %}<a class="button secondary" href="{% url 'accounts:profile' %}">Mon espace</a>
-            {% else %}<a class="button secondary" href="{% url 'accounts:signup' %}">Créer mon compte</a>{% endif %}
-        </div>
+<div class="landing">
+<section class="landing-hero" aria-labelledby="hero-title">
+    <div class="hero-copy">
+        <h1 id="hero-title">{% translate 'Vos idées, en équipe.' %}</h1>
+        <p class="hero-description">{% translate 'HackFlow rassemble vos hackathons étudiants : les éditions, leurs challenges et les personnes qui les font vivre.' %}</p>
+        <div class="actions"><a class="button" href="{% url 'hackathons:list' %}">{% translate 'Découvrir les hackathons' %}{% icon 'arrow-right' %}</a>{% if user.is_authenticated %}<a class="text-link" href="{% url 'accounts:profile' %}">{% translate 'Mon espace' %}</a>{% else %}<a class="text-link" href="{% url 'accounts:signup' %}">{% translate 'Créer mon compte' %}</a>{% endif %}</div>
+        <nav class="hero-links" aria-label="{% translate 'Découvrir HackFlow' %}"><a href="#roles-title">{% translate 'Pour qui ?' %}</a><a href="#journey-title">{% translate 'Le parcours' %}</a><a href="#faq-title">{% translate 'Questions fréquentes' %}</a></nav>
     </div>
-    <div class="hero-art" aria-hidden="true">
-        <div class="terminal">
-            <div class="dots"><i></i><i></i><i></i></div>
-            <div><span class="hl">$</span> hackflow start</div>
-            <div class="ok">✔ équipe constituée</div>
-            <div class="ok">✔ mentor réservé · 15:00</div>
-            <div class="ok">✔ projet soumis · v3</div>
-            <div><span class="hl">$</span> demo --jury<span class="hl"> ▌</span></div>
-        </div>
+    <figure class="hero-illustration" aria-hidden="true"><img class="ink-illustration" src="{% static 'images/hackflow-hero-illustration.webp' %}" width="1448" height="1086" fetchpriority="high" alt=""></figure>
+</section>
+
+<section class="landing-editions" aria-labelledby="upcoming-title">
+    <div class="section-head"><div><h2 id="upcoming-title">{% translate 'Prochains hackathons' %}</h2><p>{% translate 'Un thème qui vous parle, un challenge à explorer.' %}</p></div><a class="text-link" href="{% url 'hackathons:list' %}">{% translate 'Tout le catalogue' %}{% icon 'arrow-right' 16 %}</a></div>
+    <div class="grid event-grid" data-ui>
+        {% for event in upcoming %}<article class="card event-card"><p class="card-meta">{% icon 'calendar' 16 %}{{ event.start_date|date:'j F Y' }}<span class="badge badge--{{ event.status|lower }}">{{ event.get_status_display }}</span></p><h3><a href="{{ event.get_absolute_url }}">{{ event }}</a></h3><p>{{ event.description|truncatewords:24 }}</p><p class="muted">{{ event.get_format_display }}{% if event.location %} · {{ event.location }}{% endif %}</p><a class="text-link" href="{{ event.get_absolute_url }}">{% translate 'Découvrir cette édition' %}{% icon 'arrow-right' 16 %}</a></article>
+        {% empty %}<div class="edition-empty"><div>{% icon 'calendar' 24 %}<h3>{% translate 'La prochaine édition arrive bientôt' %}</h3><p>{% translate 'Aucun hackathon n’est publié pour le moment. Les prochaines éditions apparaîtront ici dès leur publication.' %}</p></div>{% if can_create %}<a class="button secondary" href="{% url 'hackathons:create' %}">{% icon 'add' %}{% translate 'Créer la première édition' %}</a>{% else %}<a class="text-link" href="{% url 'hackathons:list' %}">{% translate 'Explorer le catalogue' %}{% icon 'arrow-right' 16 %}</a>{% endif %}</div>{% endfor %}
     </div>
 </section>
 
-<ul class="trust" aria-label="Ce que propose HackFlow">
-    <li><strong>1 compte</strong><span>Des rôles différents par événement</span></li>
-    <li><strong>5 rôles</strong><span>Organisateur, participant, mentor, juré, sponsor</span></li>
-    <li><strong>De A à Z</strong><span>De l’inscription à la remise des prix</span></li>
-    <li><strong>Transparent</strong><span>Notation pondérée et classement justifiable</span></li>
-</ul>
-
-<section aria-labelledby="upcoming-title">
-    <div class="section-head">
-        <div><p class="eyebrow">À l’affiche</p><h2 id="upcoming-title">Prochains hackathons</h2></div>
-        <a href="{% url 'hackathons:list' %}">Voir tout le catalogue →</a>
-    </div>
-    <div class="grid">
-        {% for event in upcoming %}
-        <article class="card card-link">
-            <span class="badge badge--{{ event.status|lower }}">{{ event.get_status_display }}</span>
-            <h3><a href="{{ event.get_absolute_url }}">{{ event }}</a></h3>
-            <p>{{ event.description|truncatewords:22 }}</p>
-            <p class="card-meta"><span>{{ event.start_date|date:'d/m/Y' }}</span><span>{{ event.get_format_display }}</span>{% if event.location %}<span>{{ event.location }}</span>{% endif %}</p>
-        </article>
-        {% empty %}
-        <div class="empty-state">
-            <span class="feature-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l2.4 5.2 5.6.7-4.1 3.9 1 5.6L12 15.6 7.1 18.4l1-5.6L4 8.9l5.6-.7z"/></svg></span>
-            <h3>La prochaine édition arrive bientôt</h3>
-            <p>Aucun hackathon n’est publié pour le moment. {% if can_create %}Vous pouvez créer le premier et inviter les participants.{% elif user.is_authenticated %}Dès qu’un organisateur en publiera un, il apparaîtra ici.{% else %}Créez votre compte pour être prêt·e dès l’ouverture des inscriptions.{% endif %}</p>
-            <div class="actions">
-                {% if can_create %}<a class="button" href="{% url 'hackathons:create' %}">Créer un hackathon</a>
-                {% elif not user.is_authenticated %}<a class="button" href="{% url 'accounts:signup' %}">Créer mon compte</a>{% endif %}
-                <a class="button secondary" href="{% url 'hackathons:list' %}">Explorer le catalogue</a>
-            </div>
-        </div>
-        {% endfor %}
+<section class="landing-roles landing-axis" aria-labelledby="roles-title">
+    <div class="role-intro"><h2 id="roles-title">{% translate 'Un compte.<br>Plusieurs rôles.' %}</h2><p>{% translate 'Participant aujourd’hui, mentor demain. Votre compte reste le même ; votre rôle dépend de chaque hackathon.' %}</p><p class="role-note">{% translate 'Choisissez un rôle pour découvrir sa place dans le parcours.' %}</p></div>
+    <div class="role-guide" data-ui>
+        <details name="role-guide" open><summary>{% icon 'calendar' %}<span>{% translate 'Organiser une édition' %}</span>{% icon 'add' 16 %}</summary><div><p>{% translate 'Définissez les dates, les phases et les challenges. Gérez les partenaires et les rôles depuis votre espace de pilotage.' %}</p><p class="small-text">{% translate 'La création d’un hackathon nécessite une autorisation de la plateforme.' %}</p>{% if can_create %}<a class="text-link" href="{% url 'hackathons:create' %}">{% translate 'Créer un hackathon' %}{% icon 'arrow-right' 16 %}</a>{% elif user.is_authenticated %}<a class="text-link" href="{% url 'hackathons:dashboard' %}">{% translate 'Ouvrir la Control Tower' %}{% icon 'arrow-right' 16 %}</a>{% endif %}</div></details>
+        <details name="role-guide"><summary>{% icon 'users' %}<span>{% translate 'Participer et créer' %}</span>{% icon 'add' 16 %}</summary><div><p>{% translate 'Découvrez les éditions et leurs consignes, puis complétez votre profil et vos compétences pour préparer votre participation.' %}</p><p class="small-text">{% translate 'Les inscriptions aux éditions et les équipes arrivent dans la suite du projet.' %}</p><a class="text-link" href="{% url 'accounts:profile' %}">{% translate 'Préparer mon profil' %}{% icon 'arrow-right' 16 %}</a></div></details>
+        <details name="role-guide"><summary>{% icon 'user' %}<span>{% translate 'Accompagner une équipe' %}</span>{% icon 'add' 16 %}</summary><div><p>{% translate 'Le mentor aide les équipes à avancer. Les demandes d’accompagnement, les séances et les ateliers feront partie du parcours.' %}</p><p class="small-text">{% translate 'Les outils de mentorat arrivent prochainement.' %}</p></div></details>
+        <details name="role-guide"><summary>{% icon 'award' %}<span>{% translate 'Évaluer les projets' %}</span>{% icon 'add' 16 %}</summary><div><p>{% translate 'Le jury examine les projets selon les critères de l’édition. Les évaluations et les résultats seront regroupés dans cet espace.' %}</p><p class="small-text">{% translate 'Les outils d’évaluation arrivent prochainement.' %}</p></div></details>
+        <details name="role-guide"><summary>{% icon 'building' %}<span>{% translate 'Soutenir un challenge' %}</span>{% icon 'add' 16 %}</summary><div><p>{% translate 'Un représentant sponsor autorisé peut proposer un challenge dans le cadre d’un partenariat confirmé. L’organisateur le valide avant sa publication.' %}</p><a class="text-link" href="{% url 'hackathons:list' %}">{% translate 'Découvrir les éditions' %}{% icon 'arrow-right' 16 %}</a></div></details>
     </div>
 </section>
 
-<section aria-labelledby="features-title">
-    <div class="section-head"><div><p class="eyebrow">Une plateforme, tous les rôles</p><h2 id="features-title">Pensé pour chaque participant</h2></div></div>
-    <div class="grid">
-        <article class="card"><span class="feature-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="17" rx="3"/><path d="M8 2v4M16 2v4M3 10h18"/></svg></span><h3>Organisateurs</h3><p>Phases, tracks, challenges et sponsors : pilotez l’édition depuis la Control Tower.</p></article>
-        <article class="card"><span class="feature-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="8" r="3.5"/><path d="M2.5 20c0-3.6 2.9-6 6.5-6s6.5 2.4 6.5 6M17 11a3 3 0 1 0 0-6M21.5 20c0-2.6-1.6-4.5-4-5.3"/></svg></span><h3>Participants</h3><p>Montez votre équipe, valorisez vos compétences et livrez un projet dans les temps.</p></article>
-        <article class="card"><span class="feature-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12a8 8 0 0 1-11.6 7.1L4 20l1-4.6A8 8 0 1 1 21 12z"/><path d="M9 10h6M9 14h4"/></svg></span><h3>Mentors</h3><p>Partagez votre expertise : créneaux, séances d’accompagnement et ateliers.</p></article>
-        <article class="card"><span class="feature-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M8 21h8M12 17v4M7 4h10v5a5 5 0 0 1-10 0V4z"/><path d="M17 5h3v2a3 3 0 0 1-3 3M7 5H4v2a3 3 0 0 0 3 3"/></svg></span><h3>Jurés</h3><p>Évaluez avec une grille pondérée et un classement transparent.</p></article>
+<section class="landing-journey" aria-labelledby="journey-title">
+    <div class="landing-axis section-head"><h2 id="journey-title">{% translate 'De l’idée au projet.' %}</h2><p>{% translate 'Un cadre pour apprendre, construire et partager. Le parcours s’enrichit au fil du développement de HackFlow.' %}</p></div>
+    <div class="journey-layout">
+        <figure class="journey-illustration" aria-hidden="true"><img class="ink-illustration" src="{% static 'images/hackflow-project-illustration.webp' %}" width="1254" height="1254" loading="lazy" decoding="async" alt=""></figure>
+        <ol class="journey-stories">
+            <li><h3>{% translate 'Trouver le déclic' %}</h3><p>{% translate 'Explorez les thématiques, lisez les challenges et repérez les dates de l’édition qui vous correspond.' %}</p></li>
+            <li><h3>{% translate 'Construire ensemble' %}</h3><p>{% translate 'Réunir des compétences, confronter ses idées et avancer vers un prototype : le cœur de chaque hackathon.' %}</p></li>
+            <li><h3>{% translate 'Partager le résultat' %}</h3><p>{% translate 'Présenter sa démarche, expliquer ses choix et recevoir des retours pour aller plus loin.' %}</p></li>
+        </ol>
     </div>
 </section>
 
-<section aria-labelledby="flow-title">
-    <div class="section-head"><div><p class="eyebrow">Le parcours</p><h2 id="flow-title">De l’idée à la remise des prix</h2></div></div>
-    <ol class="steps">
-        <li><strong>Inscription</strong>Un compte unique, des rôles par hackathon.</li>
-        <li><strong>Équipe</strong>Compétences complémentaires et invitations.</li>
-        <li><strong>Projet</strong>Milestones, livrables et versions.</li>
-        <li><strong>Accompagnement</strong>Mentors et ateliers pour débloquer.</li>
-        <li><strong>Jury</strong>Notation par critères et classement.</li>
-    </ol>
+<section class="landing-faq" aria-labelledby="faq-title">
+    <h2 id="faq-title">{% translate 'Avant de commencer.' %}</h2>
+    <div class="faq-band landing-axis"><h3>{% translate 'Un compte suffit ?' %}</h3><p>{% translate 'Oui. Un seul compte vous permet de découvrir les éditions et de gérer votre profil. Les rôles sont attribués pour chaque hackathon.' %}</p></div>
+    <div class="faq-band landing-axis"><h3>{% translate 'Compte créé, déjà inscrit ?' %}</h3><p>{% translate 'Créer un compte ne vous inscrit pas automatiquement à un événement. L’inscription à une édition est une démarche distincte, dont le module est en préparation.' %}</p></div>
+    <div class="faq-band landing-axis"><h3>{% translate 'Qui crée les hackathons ?' %}</h3><p>{% translate 'Les personnes autorisées par la plateforme. En créant une édition, elles deviennent organisatrices de cet événement et gèrent sa configuration.' %}</p></div>
+    <div class="faq-band landing-axis"><h3>{% translate 'Que peut-on faire aujourd’hui ?' %}</h3><p>{% translate 'Créer son compte et son profil, déclarer ses compétences et consulter les éditions publiées. Les organisateurs disposent aussi du calendrier, des challenges, des partenaires et du pilotage. Les équipes, projets, séances de mentorat et évaluations arrivent progressivement.' %}</p></div>
 </section>
 
-{% if not user.is_authenticated %}
-<section class="cta-band" aria-labelledby="cta-title">
-    <h2 id="cta-title">Prêt·e à relever le défi ?</h2>
-    <p>Créez votre compte gratuitement et rejoignez la prochaine édition.</p>
-    <div class="actions"><a class="button" href="{% url 'accounts:signup' %}">Créer mon compte</a><a class="button secondary" href="{% url 'accounts:login' %}">Se connecter</a></div>
-</section>
-{% endif %}
+<section class="landing-close landing-axis" aria-labelledby="closing-title"><h2 id="closing-title">{% translate 'Le prochain déclic ?<br>Peut-être le vôtre.' %}</h2><div><p>{% translate 'Commencez par une édition qui vous inspire. Les bonnes idées prennent une autre dimension quand on les construit ensemble.' %}</p><div class="actions"><a class="button" href="{% url 'hackathons:list' %}">{% translate 'Explorer les éditions' %}{% icon 'arrow-right' %}</a>{% if not user.is_authenticated %}<a class="text-link" href="{% url 'accounts:signup' %}">{% translate 'Créer mon compte' %}</a>{% endif %}</div></div></section>
+<p class="image-credit">{% translate 'Visuels d’illustration générés pour HackFlow.' %}</p>
+</div>
 {% endblock %}
