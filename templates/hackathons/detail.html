@@ -32,7 +32,7 @@
     </section>
 
     <section aria-labelledby="challenges-title"><h2 id="challenges-title">{% translate 'Challenges disponibles' %}</h2>
-        <div class="grid">{% for challenge in challenges %}<article class="card"><p class="eyebrow">{{ challenge.track }}</p><h3>{{ challenge }}</h3><p>{{ challenge.problem|linebreaksbr }}</p><h4>{% translate 'Objectifs' %}</h4><p>{{ challenge.objectives|linebreaksbr }}</p><h4>{% translate 'Livrables' %}</h4><p>{{ challenge.deliverables|linebreaksbr }}</p>{% if challenge.participation_conditions %}<p class="muted">{{ challenge.participation_conditions }}</p>{% endif %}{% if challenge.sponsorship %}<p><span class="chip">{% translate 'Sponsor :' %} {{ challenge.sponsorship.organization }}</span></p>{% endif %}</article>{% empty %}<p class="empty">{% translate 'Aucun challenge publié.' %}</p>{% endfor %}</div>
+        <div class="grid">{% for challenge in challenges %}<article class="card"><p class="card-meta">{{ challenge.track }}</p><h3>{{ challenge }}</h3><p>{{ challenge.problem|linebreaksbr }}</p><h4>{% translate 'Objectifs' %}</h4><p>{{ challenge.objectives|linebreaksbr }}</p><h4>{% translate 'Livrables' %}</h4><p>{{ challenge.deliverables|linebreaksbr }}</p>{% if challenge.participation_conditions %}<p class="muted">{{ challenge.participation_conditions }}</p>{% endif %}{% if challenge.sponsorship %}<p><span class="chip">{% translate 'Sponsor :' %} {{ challenge.sponsorship.organization }}</span></p>{% endif %}</article>{% empty %}<p class="empty">{% translate 'Aucun challenge publié.' %}</p>{% endfor %}</div>
     </section>
 
     <section aria-labelledby="partners-title"><h2 id="partners-title">{% translate 'Partenaires confirmés' %}</h2>

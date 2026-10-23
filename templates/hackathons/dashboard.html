@@ -1,7 +1,7 @@
 {% extends 'base.html' %}{% load i18n ui %}
 {% block title %}{% translate 'Control Tower — HackFlow' %}{% endblock %}
 {% block content %}
-<header class="page-head"><p class="eyebrow">{% translate 'Pilotage des éditions' %}</p><h1>{% translate 'Control Tower' %}</h1>
+<header class="page-head"><h1>{% translate 'Control Tower' %}</h1>
 <p class="lead">{% blocktranslate count total=active_count %}{{ total }} hackathon actif dans votre périmètre.{% plural %}{{ total }} hackathons actifs dans votre périmètre.{% endblocktranslate %}</p>
 <div class="actions"><a class="button small secondary" href="{% url 'hackathons:compare' %}">{% icon 'compare' %}{% translate 'Comparer deux éditions' %}</a></div></header>
 {% for row in rows %}<section class="panel" aria-labelledby="event-{{ row.event.pk }}"><span class="badge badge--{{ row.event.status|lower }}">{{ row.event.get_status_display }}</span><h2 id="event-{{ row.event.pk }}" style="margin-top:8px"><a href="{% url 'hackathons:manage' row.event.slug %}">{{ row.event }}</a></h2>

@@ -132,6 +132,32 @@ class InterfaceTests(TestCase):
             self.assertEqual(phase.state_code, french_code)
             self.assertNotEqual(str(phase.state), french_state)
 
+    def test_comparison_preserves_both_selected_editions(self):
+        self.client.force_login(self.owner)
+        other = make_event(self.owner, 'comparison-other')
+        response = self.client.get(reverse('hackathons:compare'), {
+            'left': str(self.event.pk), 'right': str(other.pk)})
+        selected = [attrs.get('value') for tag, attrs in Elements(response.content.decode()).elements
+                    if tag == 'option' and 'selected' in attrs]
+        self.assertIn(str(self.event.pk), selected)
+        self.assertIn(str(other.pk), selected)
+
+    def test_manage_only_offers_draft_deletion_when_service_allows_it(self):
+        self.client.force_login(self.owner)
+        response = self.client.get(reverse('hackathons:manage', kwargs={'slug': self.event.slug}))
+        for kind, obj in (
+            ('track', self.event.tracks.first()), ('phase', self.event.phases.first()),
+            ('challenge', Challenge.objects.filter(track__hackathon=self.event).first()),
+            ('sponsorship', self.partnership),
+        ):
+            url = reverse('hackathons:' + kind + '-delete', kwargs={'slug': self.event.slug, 'pk': obj.pk})
+            self.assertNotContains(response, 'href="' + url + '"')
+        draft = make_event(self.owner, 'deletable-draft')
+        track = Track.objects.create(hackathon=draft, name='Draft track')
+        response = self.client.get(reverse('hackathons:manage', kwargs={'slug': draft.slug}))
+        self.assertContains(response, 'href="' + reverse('hackathons:track-delete',
+            kwargs={'slug': draft.slug, 'pk': track.pk}) + '"')
+
     @override_settings(DEBUG=False)
     def test_error_pages_and_standalone_server_error_are_translated(self):
         self.language('en')

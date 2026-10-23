@@ -1,15 +1,15 @@
-{% extends 'base.html' %}{% load i18n ui %}
+{% extends 'base.html' %}{% load static i18n ui %}
 {% block title %}{{ title }} {% translate '— HackFlow' %}{% endblock %}
 {% block content %}
 {% with page=request.resolver_match.url_name %}
 <div class="auth">
     <aside class="auth-side" aria-label="{% translate 'Pourquoi rejoindre HackFlow' %}">
-        <p class="eyebrow">{% if page == 'login' %}{% translate 'Bon retour' %}{% else %}{% translate 'Rejoignez la communauté' %}{% endif %}</p>
+        <img class="auth-illustration ink-illustration" src="{% static 'images/hackflow-project-illustration.webp' %}" width="1254" height="1254" alt="" aria-hidden="true">
         <h2>{% if page == 'login' %}{% translate 'Retrouvez votre espace.' %}{% else %}{% translate 'Un compte, tous les hackathons.' %}{% endif %}</h2>
         <ul class="auth-points">
             <li>{% icon 'check' 17 %} {% translate 'Un seul compte, des rôles différents selon chaque événement.' %}</li>
-            <li>{% icon 'check' 17 %} {% translate 'Constituez votre équipe grâce à vos compétences.' %}</li>
-            <li>{% icon 'check' 17 %} {% translate 'Suivez votre projet, vos mentors et vos échéances.' %}</li>
+            <li>{% icon 'check' 17 %} {% translate 'Présentez votre profil et vos compétences.' %}</li>
+            <li>{% icon 'check' 17 %} {% translate 'Retrouvez les dates et les consignes de chaque édition.' %}</li>
         </ul>
     </aside>
 

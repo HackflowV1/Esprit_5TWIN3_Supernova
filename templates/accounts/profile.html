@@ -2,7 +2,6 @@
 {% block title %}{% translate 'Mon profil — HackFlow' %}{% endblock %}
 {% block content %}
 <header class="page-head">
-    <p class="eyebrow">{% translate 'Mon espace' %}</p>
     <h1>{% translate 'Mon profil ·' %} {{ user.username }}</h1>
     <div class="actions"><a class="button small" href="{% url 'accounts:profile-edit' %}">{% icon 'edit' %}{% translate 'Modifier le profil' %}</a><a class="button small secondary" href="{% url 'accounts:password' %}">{% translate 'Changer le mot de passe' %}</a><a class="button small secondary" href="{% url 'accounts:skill-add' %}">{% icon 'add' %}{% translate 'Ajouter une compétence' %}</a></div>
 </header>

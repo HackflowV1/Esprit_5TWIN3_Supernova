@@ -151,10 +151,14 @@ L’administration Django garde son propre sélecteur de thème natif.
 - Respecter `prefers-reduced-motion`, le zoom et le mode de couleurs forcées.
 - Vérifier mobile, tablette et bureau dans les deux langues et les deux thèmes.
 
-Le texte blanc du hero utilise un voile noir uniforme à 62 % : contraste minimum
-de 6,2:1 même au-dessus d’un pixel blanc. Garder ce voile si l’image change.
-Les quatre visuels de l’accueil sont illustratifs, générés pour le projet et stockés
-en WebP local ; les images sous la ligne de flottaison sont chargées progressivement.
+Le hero présente le texte à gauche et une illustration à droite. Sur téléphone,
+le texte précède l’image. Garder le texte dans le HTML, jamais dans une image.
+Les visuels sont des illustrations éditoriales au trait, affichées en noir et blanc :
+utiliser la classe `ink-illustration`, qui retire toute couleur et inverse l’encre
+sur le thème sombre. Aucun filtre ne doit être appliqué au texte ou aux contrôles.
+Les deux fichiers locaux `hackflow-hero-illustration.webp` et
+`hackflow-project-illustration.webp` sont réutilisés sur l’accueil et les pages de
+connexion/inscription. Les anciennes photographies ne sont plus affichées.
 
 Avant de partager une modification :
 

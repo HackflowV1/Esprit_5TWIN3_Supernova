@@ -1,3 +1,21 @@
+# État actuel — illustrations monochromes intégrées
+
+Dernière demande : noir et blanc, texte du hero à gauche, illustration à droite,
+intégration sur l’accueil et la connexion, redémarrage rapide et vérifications ciblées.
+Cette consigne remplace l’ancienne demande de photo en arrière-plan ci-dessous.
+
+Réalisé : deux illustrations approuvées intégrées en WebP avec transparence,
+filtre monochrome et encre inversée en mode sombre ; nouveau hero en deux colonnes,
+parcours illustré et visuel sur les pages de connexion/inscription.
+Les correctifs de reprise (comparaison, suppression des brouillons, traduction de
+« Non renseigné », CSS lisible) sont aussi intégrés.
+Serveur relancé sur http://127.0.0.1:8000/. Vérification Django et pages ciblées,
+sans relancer la suite complète conformément à la demande de l’utilisateur.
+
+---
+
+## Ancien checkpoint conservé pour historique
+
 # Checkpoint — refonte de l’interface HackFlow
 
 Arrêt demandé par l’utilisateur le **23 octobre 2026**. Reprendre depuis ce point,
