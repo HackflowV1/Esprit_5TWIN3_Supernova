@@ -1,0 +1,41 @@
+{% extends 'base.html' %}
+{% block title %}Mon espace mentor — HackFlow{% endblock %}
+{% block content %}
+<header class="page-banner">
+    <div>
+        <p class="eyebrow">Espace mentor</p>
+        <h1>Mes expertises</h1>
+        <p class="lead">Indiquez ce que vous maîtrisez : les équipes vous trouveront plus facilement quand elles auront besoin d’aide.</p>
+    </div>
+    <a class="button" href="{% url 'mentoring:expertise-add' %}">+ Ajouter une expertise</a>
+</header>
+
+<section class="panel" aria-labelledby="mentor-events-title">
+    <h2 id="mentor-events-title">Mes hackathons</h2>
+    <ul class="chips">{% for item in assignments %}<li><a class="chip" href="{{ item.hackathon.get_absolute_url }}">{{ item.hackathon }}</a></li>{% endfor %}</ul>
+    <p class="muted">Vous êtes mentor dans {{ assignments|length }} hackathon{{ assignments|length|pluralize }}.</p>
+</section>
+
+<section aria-labelledby="expertise-title">
+    <h2 id="expertise-title" class="visually-hidden">Liste de mes expertises</h2>
+    <div class="grid">
+        {% for item in expertises %}
+        <article class="card">
+            <p class="eyebrow">{{ item.skill.category }}</p>
+            <h3 style="margin:.2em 0">{{ item.skill }}</h3>
+            <p><span class="level" role="img" aria-label="Niveau {{ item.level }} sur 5">{% for i in '12345' %}<i{% if forloop.counter <= item.level %} class="on"{% endif %}></i>{% endfor %}</span> <span class="muted">Niveau {{ item.level }}/5</span></p>
+            <div class="actions">
+                <a class="button small secondary" href="{% url 'mentoring:expertise-edit' item.pk %}">Modifier<span class="visually-hidden"> {{ item.skill }}</span></a>
+                <a class="link-danger" href="{% url 'mentoring:expertise-delete' item.pk %}">Retirer<span class="visually-hidden"> {{ item.skill }}</span></a>
+            </div>
+        </article>
+        {% empty %}
+        <div class="empty-state">
+            <h3>Aucune expertise déclarée</h3>
+            <p>Ajoutez vos compétences (Django, React, UI/UX…) pour apparaître dans les recommandations de mentors.</p>
+            <div class="actions"><a class="button" href="{% url 'mentoring:expertise-add' %}">Ajouter ma première expertise</a></div>
+        </div>
+        {% endfor %}
+    </div>
+</section>
+{% endblock %}
