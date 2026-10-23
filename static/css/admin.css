@@ -1,78 +1,78 @@
 :root, html[data-theme="light"] {
-  --primary:#55554f;
-  --secondary:#f7f7f5;
-  --accent:#242422;
-  --header-color:#242422;
-  --header-bg:#f7f7f5;
-  --header-branding-color:#242422;
-  --header-link-color:#242422;
-  --body-fg:#242422;
-  --body-bg:#fff;
-  --body-quiet-color:#62625d;
-  --darkened-bg:#f7f7f5;
-  --selected-bg:#ededeb;
-  --link-fg:#305c85;
-  --link-selected-fg:#242422;
-  --button-bg:#252523;
-  --button-hover-bg:#44443e;
-  --default-button-bg:#252523;
-  --default-button-hover-bg:#44443e;
-  --breadcrumbs-bg:#f7f7f5;
-  --breadcrumbs-fg:#62625d;
-  --breadcrumbs-link-fg:#242422;
+  --primary:var(--brand-primary);
+  --secondary:var(--brand-raised);
+  --accent:var(--brand-ink);
+  --header-color:var(--brand-ink);
+  --header-bg:var(--brand-bg);
+  --header-branding-color:var(--brand-ink);
+  --header-link-color:var(--brand-ink);
+  --body-fg:var(--brand-ink);
+  --body-bg:var(--brand-bg);
+  --body-quiet-color:var(--brand-muted);
+  --darkened-bg:var(--brand-raised);
+  --selected-bg:var(--brand-active);
+  --link-fg:var(--brand-accent);
+  --link-selected-fg:var(--brand-ink);
+  --button-bg:var(--brand-primary);
+  --button-hover-bg:var(--brand-primary-hover);
+  --default-button-bg:var(--brand-primary);
+  --default-button-hover-bg:var(--brand-primary-hover);
+  --breadcrumbs-bg:var(--brand-raised);
+  --breadcrumbs-fg:var(--brand-muted);
+  --breadcrumbs-link-fg:var(--brand-ink);
   --font-family-primary:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
-  --hairline-color:#e7e7e3;
-  --border-color:#d1d1cb;
-  --body-loud-color:#242422;
-  --selected-row:#ededeb;
-  --close-button-bg:#62625d;
-  --on-button:#fff;
-  --surface:#fff;
-  --focus:#2469b3;
-  --button-fg:#fff;
-  --link-hover-color:#305c85;
+  --hairline-color:var(--brand-line);
+  --border-color:var(--brand-control);
+  --body-loud-color:var(--brand-ink);
+  --selected-row:var(--brand-soft);
+  --close-button-bg:var(--brand-muted);
+  --on-button:var(--brand-on-primary);
+  --surface:var(--brand-surface);
+  --focus:var(--brand-focus);
+  --button-fg:var(--brand-on-primary);
+  --link-hover-color:var(--brand-accent);
   color-scheme:light
 }
 
 html[data-theme="dark"] {
-  --primary:#b5b5ae;
-  --secondary:#262626;
-  --accent:#eeeee9;
-  --header-color:#eeeee9;
-  --header-bg:#202020;
-  --header-branding-color:#eeeee9;
-  --header-link-color:#eeeee9;
-  --body-fg:#eeeee9;
-  --body-bg:#181818;
-  --body-quiet-color:#b9b9b1;
-  --darkened-bg:#262626;
-  --selected-bg:#333;
-  --link-fg:#a9c3e5;
-  --link-selected-fg:#fff;
-  --button-bg:#555;
-  --button-hover-bg:#666;
-  --default-button-bg:#555;
-  --default-button-hover-bg:#666;
-  --breadcrumbs-bg:#262626;
-  --breadcrumbs-fg:#b9b9b1;
-  --breadcrumbs-link-fg:#eeeee9;
-  --hairline-color:#383838;
-  --border-color:#72726c;
-  --body-loud-color:#eeeee9;
-  --selected-row:#333;
-  --button-bg:#eeeee9;
-  --button-hover-bg:#d1d1c9;
-  --default-button-bg:#eeeee9;
-  --default-button-hover-bg:#d1d1c9;
-  --on-button:#202020;
-  --surface:#202020;
-  --focus:#91bbf1;
-  --button-fg:#202020;
-  --link-hover-color:#a9c3e5;
-  --error-fg:#ffaaa2;
-  --message-success-bg:#203027;
-  --message-warning-bg:#352e1e;
-  --message-error-bg:#382321;
+  --primary:var(--brand-primary);
+  --secondary:var(--brand-raised);
+  --accent:var(--brand-ink);
+  --header-color:var(--brand-ink);
+  --header-bg:var(--brand-bg);
+  --header-branding-color:var(--brand-ink);
+  --header-link-color:var(--brand-ink);
+  --body-fg:var(--brand-ink);
+  --body-bg:var(--brand-bg);
+  --body-quiet-color:var(--brand-muted);
+  --darkened-bg:var(--brand-raised);
+  --selected-bg:var(--brand-active);
+  --link-fg:var(--brand-accent);
+  --link-selected-fg:var(--brand-ink);
+  --button-bg:var(--brand-primary);
+  --button-hover-bg:var(--brand-primary-hover);
+  --default-button-bg:var(--brand-primary);
+  --default-button-hover-bg:var(--brand-primary-hover);
+  --breadcrumbs-bg:var(--brand-raised);
+  --breadcrumbs-fg:var(--brand-muted);
+  --breadcrumbs-link-fg:var(--brand-ink);
+  --hairline-color:var(--brand-line);
+  --border-color:var(--brand-control);
+  --body-loud-color:var(--brand-ink);
+  --selected-row:var(--brand-soft);
+  --button-bg:var(--brand-primary);
+  --button-hover-bg:var(--brand-primary-hover);
+  --default-button-bg:var(--brand-primary);
+  --default-button-hover-bg:var(--brand-primary-hover);
+  --on-button:var(--brand-on-primary);
+  --surface:var(--brand-surface);
+  --focus:var(--brand-focus);
+  --button-fg:var(--brand-on-primary);
+  --link-hover-color:var(--brand-accent);
+  --error-fg:var(--brand-danger);
+  --message-success-bg:var(--brand-success-soft);
+  --message-warning-bg:var(--brand-warning-soft);
+  --message-error-bg:var(--brand-danger-soft);
   color-scheme:dark
 }
 
@@ -155,8 +155,8 @@ body.login {background:var(--body-bg)}
 .login #header {justify-content:space-between; padding:16px 32px; gap:16px}
 .login #content {max-width:1120px; margin:0 auto; padding:64px 32px; box-sizing:border-box; width:100%}
 .admin-login-layout {display:grid; grid-template-columns:1fr 1fr; align-items:center; gap:80px}
-.admin-login-intro img {display:block; width:100%; max-width:320px; height:auto; filter:grayscale(1) contrast(1.08); margin-bottom:24px}
-html[data-theme=dark] .admin-login-intro img {filter:grayscale(1) invert(1)}
+.admin-login-intro img {display:block; width:100%; max-width:320px; height:auto; filter:none; margin-bottom:24px}
+html[data-theme=dark] .admin-login-intro img {background:var(--brand-illustration-paper); padding:16px; border-radius:8px; box-sizing:border-box}
 .admin-login-intro h2 {font-size:30px; font-weight:600; letter-spacing:-.7px; margin:0 0 12px}
 .admin-login-intro p {color:var(--body-quiet-color); font-size:15px}
 .admin-login-card {padding:32px; border:1px solid var(--hairline-color); border-radius:8px; background:var(--surface)}

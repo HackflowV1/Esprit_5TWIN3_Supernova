@@ -1,70 +1,248 @@
 /* Shared navigation controls: the public app and Django admin use these exact components. */
-:is(.site-header, #header) .hf-menu {
-  --menu-ink:var(--ink, var(--body-fg));
-  --menu-muted:var(--muted, var(--body-quiet-color));
-  --menu-line:var(--line, var(--hairline-color));
-  --menu-raised:var(--raised, var(--darkened-bg));
-  position:relative;
-  font:13px/1.5 -apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
-  color:var(--menu-ink);
-  text-transform:none;
-  letter-spacing:0;
+:is(.site-header, #header) :is(.hf-menu, .account-menu, .language-menu, .dropdown) {
+  --menu-ink: var(--ink, var(--body-fg));
+  --menu-muted: var(--muted, var(--body-quiet-color));
+  --menu-line: var(--line, var(--hairline-color));
+  --menu-raised: var(--raised, var(--darkened-bg));
+  position: relative;
+  font: 13px/1.5 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  color: var(--menu-ink);
+  text-transform: none;
+  letter-spacing: 0;
 }
+
 :is(.site-header, #header) .hf-control {
-  display:flex; align-items:center; justify-content:center; gap:8px;
-  min-height:44px; padding:8px; box-sizing:border-box;
-  border:0; border-radius:6px; background:transparent; color:inherit;
-  list-style:none; cursor:pointer; white-space:nowrap;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 7px;
+  min-height: 40px;
+  padding: 6px 12px;
+  box-sizing: border-box;
+  border: 1px solid var(--menu-line);
+  border-radius: 9px;
+  background: var(--surface);
+  color: var(--menu-ink);
+  list-style: none;
+  cursor: pointer;
+  white-space: nowrap;
+  font-weight: 500;
+  font-size: 13px;
+  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.04);
 }
-.hf-control::-webkit-details-marker {display:none}
+
+.hf-control::-webkit-details-marker { display: none; }
+
 :is(.site-header, #header) .hf-control:hover,
-:is(.site-header, #header) .hf-menu[open]>.hf-control {background:var(--menu-raised)}
-:is(.site-header, #header) .hf-panel {
-  position:absolute; right:0; top:calc(100% + 10px); z-index:100;
-  width:288px; max-width:calc(100vw - 32px); box-sizing:border-box;
-  padding:12px; background:var(--surface); color:var(--menu-ink);
-  border:1px solid var(--menu-line); border-radius:8px;
-  box-shadow:0 8px 32px #00000016;
-  max-height:calc(100dvh - 100px); overflow:auto;
+:is(.site-header, #header) .hf-menu[open] > .hf-control {
+  background: var(--menu-raised);
+  border-color: var(--control, var(--menu-muted));
+  color: var(--brand-primary);
 }
-:is(.site-header, #header) .hf-language-panel {width:180px; padding:6px}
+
+:is(.site-header, #header) .hf-panel {
+  position: absolute;
+  right: 0;
+  top: calc(100% + 8px);
+  z-index: 100;
+  width: 290px;
+  max-width: calc(100vw - 32px);
+  box-sizing: border-box;
+  padding: 10px;
+  background: var(--surface);
+  color: var(--menu-ink);
+  border: 1px solid var(--menu-line);
+  border-radius: 12px;
+  box-shadow: 0 12px 36px -4px rgba(0, 0, 0, 0.12), 0 0 0 1px rgba(0, 0, 0, 0.04);
+  max-height: calc(100dvh - 100px);
+  overflow: auto;
+  animation: hf-pop-in 0.2s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+@keyframes hf-pop-in {
+  from {
+    opacity: 0;
+    transform: translateY(-6px) scale(0.98);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+:is(.site-header, #header) .hf-language-panel {
+  width: 175px;
+  padding: 6px;
+}
+
 :is(.site-header, #header) .hf-panel a,
 :is(.site-header, #header) .hf-panel .menu-action {
-  display:flex; align-items:center; gap:10px; width:100%; box-sizing:border-box;
-  min-height:44px; padding:10px 8px; margin:0;
-  border:0; border-radius:6px; background:transparent; color:var(--menu-ink);
-  font:14px/1.5 -apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
-  text-align:left; text-decoration:none; text-transform:none; cursor:pointer;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  width: 100%;
+  box-sizing: border-box;
+  min-height: 40px;
+  padding: 8px 10px;
+  margin: 1px 0;
+  border: 0;
+  border-radius: 8px;
+  background: transparent;
+  color: var(--menu-ink);
+  font: 500 13.5px/1.4 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  text-align: left;
+  text-decoration: none;
+  text-transform: none;
+  cursor: pointer;
+  transition: all 0.15s ease;
 }
+
 :is(.site-header, #header) .hf-panel a:hover,
-:is(.site-header, #header) .hf-panel .menu-action:hover {background:var(--menu-raised)}
-:is(.site-header, #header) .hf-panel form {display:block; margin:0; padding:0}
-.hf-language-choices .menu-action>span {flex:1}
-.hf-language-choices [aria-pressed=true] {font-weight:600!important}
-.hf-avatar {width:28px; height:28px; display:inline-flex; align-items:center; justify-content:center; border-radius:50%; background:var(--menu-raised); font-weight:600}
-.hf-account-name {max-width:120px; overflow:hidden; text-overflow:ellipsis}
-.hf-identity {padding:0 8px 14px; margin-bottom:6px; border-bottom:1px solid var(--menu-line); overflow-wrap:anywhere}
-.hf-identity strong, .hf-identity span {display:block}
-.hf-identity span {color:var(--menu-muted); font-size:12px}
-.hf-preference-section {border-top:1px solid var(--menu-line); margin-top:8px; padding:12px 0 0}
-:is(.site-header, #header) .hf-setting-label,
-:is(.site-header, #header) .hf-preference-section label {display:flex; align-items:center; gap:8px; margin:0 8px 8px; padding:0; font-size:12px; font-weight:500; color:var(--menu-muted); line-height:1.5}
-:is(.site-header, #header) .hf-panel select {width:100%; max-width:none; box-sizing:border-box; min-height:44px; margin:0; padding:10px 12px; border:1px solid var(--control, var(--border-color)); border-radius:6px; background:var(--surface); color:var(--menu-ink); font:14px/1.5 -apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}
-:is(.site-header, #header) form.hf-logout {border-top:1px solid var(--menu-line); margin-top:12px; padding-top:8px}
-.hf-menu :focus-visible {outline:2px solid var(--focus); outline-offset:3px}
-#header .hf-admin-tools {display:flex; align-items:center; gap:12px; margin-left:auto}
-#header .hf-admin-tools .back-to-app {margin-right:4px}
-#header .hf-admin-tools .hf-control {font-size:13px}
-@media (max-width:650px) {
-  #header .hf-admin-tools {gap:8px}
-  #header .hf-admin-tools .back-to-app {font-size:0; width:44px; min-height:44px; justify-content:center; margin:0}
-  #header .hf-admin-tools .back-to-app .icon {width:18px; height:18px}
-  .hf-account-name {max-width:85px}
-  #header {gap:8px}
-  #header .admin-caption {display:none}
+:is(.site-header, #header) .hf-panel .menu-action:hover {
+  background: var(--menu-raised);
+  color: var(--brand-primary);
 }
-@media (max-width:480px) {
-  .hf-account-name {display:none}
-  .hf-control {gap:4px}
-  :is(.site-header, #header) .hf-panel {position:fixed; right:16px; top:76px; max-height:calc(100dvh - 92px)}
+
+:is(.site-header, #header) .hf-panel form {
+  display: block;
+  margin: 0;
+  padding: 0;
+}
+
+.hf-language-choices .menu-action > span { flex: 1; }
+
+.hf-language-choices [aria-pressed=true] {
+  font-weight: 600 !important;
+  color: var(--brand-primary);
+  background: var(--brand-soft);
+}
+
+.hf-avatar {
+  width: 24px;
+  height: 24px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  background: linear-gradient(135deg, var(--brand-primary), #ff8557);
+  color: #fff;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0;
+  box-shadow: 0 2px 6px rgba(249, 87, 33, 0.25);
+}
+
+.hf-account-name {
+  max-width: 120px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  font-weight: 600;
+}
+
+.hf-identity {
+  padding: 4px 8px 12px;
+  margin-bottom: 6px;
+  border-bottom: 1px solid var(--menu-line);
+  overflow-wrap: anywhere;
+}
+
+.hf-identity strong {
+  display: block;
+  font-size: 14px;
+  font-weight: 650;
+  color: var(--menu-ink);
+}
+
+.hf-identity span {
+  display: block;
+  color: var(--menu-muted);
+  font-size: 12px;
+  margin-top: 2px;
+}
+
+.hf-preference-section {
+  border-top: 1px solid var(--menu-line);
+  margin-top: 8px;
+  padding: 10px 0 0;
+}
+
+:is(.site-header, #header) .hf-setting-label,
+:is(.site-header, #header) .hf-preference-section label {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin: 0 8px 8px;
+  padding: 0;
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--menu-muted);
+  line-height: 1.5;
+}
+
+:is(.site-header, #header) .hf-panel select {
+  width: 100%;
+  max-width: none;
+  box-sizing: border-box;
+  min-height: 38px;
+  margin: 0;
+  padding: 8px 12px;
+  border: 1px solid var(--control, var(--border-color));
+  border-radius: 8px;
+  background: var(--surface);
+  color: var(--menu-ink);
+  font: 13.5px/1.5 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  cursor: pointer;
+  transition: border-color 0.15s;
+}
+
+:is(.site-header, #header) .hf-panel select:focus {
+  border-color: var(--brand-primary);
+  outline: none;
+}
+
+:is(.site-header, #header) form.hf-logout {
+  border-top: 1px solid var(--menu-line);
+  margin-top: 8px;
+  padding-top: 6px;
+}
+
+.hf-menu :focus-visible {
+  outline: 2px solid var(--focus);
+  outline-offset: 3px;
+}
+
+#header .hf-admin-tools {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-left: auto;
+}
+
+#header .hf-admin-tools .back-to-app {
+  margin-right: 4px;
+}
+
+#header .hf-admin-tools .hf-control {
+  font-size: 13px;
+}
+
+@media (max-width: 650px) {
+  #header .hf-admin-tools { gap: 8px; }
+  #header .hf-admin-tools .back-to-app { font-size: 0; width: 40px; min-height: 40px; justify-content: center; margin: 0; }
+  #header .hf-admin-tools .back-to-app .icon { width: 18px; height: 18px; }
+  .hf-account-name { max-width: 85px; }
+  #header { gap: 8px; }
+  #header .admin-caption { display: none; }
+}
+
+@media (max-width: 480px) {
+  .hf-account-name { display: none; }
+  .hf-control { gap: 4px; padding: 6px 8px; }
+  :is(.site-header, #header) .hf-panel {
+    position: fixed;
+    right: 16px;
+    top: 72px;
+    max-height: calc(100dvh - 88px);
+  }
 }
