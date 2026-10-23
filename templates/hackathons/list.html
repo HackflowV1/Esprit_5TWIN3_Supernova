@@ -1,10 +1,49 @@
-{% extends 'base.html' %}{% block content %}
-<p class="eyebrow">Explorer · Construire · Innover</p><h1>Les hackathons</h1>
-{% if can_create %}<p><a class="button" href="{% url 'hackathons:create' %}">Créer un hackathon</a></p>{% endif %}
-<form method="get" class="filters"><label>Recherche<input name="q" value="{{ request.GET.q }}" placeholder="Titre, lieu, description"></label>
-<label>Statut<select name="status"><option value="">Tous les statuts</option>{% for value,label in statuses %}<option value="{{ value }}" {% if request.GET.status == value %}selected{% endif %}>{{ label }}</option>{% endfor %}</select></label>
-<label>Format<select name="format"><option value="">Tous les formats</option>{% for value,label in formats %}<option value="{{ value }}" {% if request.GET.format == value %}selected{% endif %}>{{ label }}</option>{% endfor %}</select></label><button>Rechercher</button></form>
-<div class="grid">{% for event in events %}<article class="panel"><span class="badge">{{ event.get_status_display }}</span><h2><a href="{{ event.get_absolute_url }}">{{ event }}</a></h2>
-<p>{{ event.description|truncatewords:30 }}</p><p>{{ event.start_date|date:'d/m/Y H:i' }} · {{ event.get_format_display }}</p><p>{{ event.location }}</p></article>{% empty %}<p>Aucun hackathon correspondant.</p>{% endfor %}</div>
-{% if is_paginated %}<nav aria-label="Pagination">{% if page_obj.has_previous %}<a href="?q={{ request.GET.q|urlencode }}&status={{ request.GET.status|urlencode }}&format={{ request.GET.format|urlencode }}&page={{ page_obj.previous_page_number }}">Précédent</a>{% endif %} Page {{ page_obj.number }} / {{ paginator.num_pages }} {% if page_obj.has_next %}<a href="?q={{ request.GET.q|urlencode }}&status={{ request.GET.status|urlencode }}&format={{ request.GET.format|urlencode }}&page={{ page_obj.next_page_number }}">Suivant</a>{% endif %}</nav>{% endif %}
+{% extends 'base.html' %}
+{% block title %}Les hackathons — HackFlow{% endblock %}
+{% block content %}
+<header class="page-banner">
+    <div>
+        <p class="eyebrow">Explorer · Construire · Innover</p>
+        <h1>Les hackathons</h1>
+        <p class="lead">Trouvez l’édition qui vous correspond, découvrez ses challenges et rejoignez l’aventure.</p>
+    </div>
+    {% if can_create %}<a class="button" href="{% url 'hackathons:create' %}">+ Créer un hackathon</a>{% endif %}
+</header>
+
+<form method="get" class="filters" role="search" aria-label="Filtrer les hackathons">
+    <label>Recherche<input type="search" name="q" value="{{ request.GET.q }}" placeholder="Titre, lieu, description"></label>
+    <label>Statut<select name="status"><option value="">Tous les statuts</option>{% for value,label in statuses %}<option value="{{ value }}" {% if request.GET.status == value %}selected{% endif %}>{{ label }}</option>{% endfor %}</select></label>
+    <label>Format<select name="format"><option value="">Tous les formats</option>{% for value,label in formats %}<option value="{{ value }}" {% if request.GET.format == value %}selected{% endif %}>{{ label }}</option>{% endfor %}</select></label>
+    <button type="submit">Rechercher</button>
+    {% if request.GET.q or request.GET.status or request.GET.format %}<a class="button secondary" href="{% url 'hackathons:list' %}">Réinitialiser</a>{% endif %}
+</form>
+
+{% if paginator %}<p class="results-count" role="status" aria-live="polite">{{ paginator.count }} hackathon{{ paginator.count|pluralize }} trouvé{{ paginator.count|pluralize }}</p>{% endif %}
+
+<div class="grid event-grid">
+    {% for event in events %}
+    <article class="card card-link event-card">
+        <div class="event-card-top">
+            <div class="date-chip" aria-hidden="true"><strong>{{ event.start_date|date:'d' }}</strong><span>{{ event.start_date|date:'M'|upper }}</span></div>
+            <span class="badge badge--{{ event.status|lower }}">{{ event.get_status_display }}</span>
+        </div>
+        <h2><a href="{{ event.get_absolute_url }}">{{ event }}</a></h2>
+        <p class="event-desc">{{ event.description|truncatewords:26 }}</p>
+        <ul class="meta-list" aria-label="Informations sur {{ event }}">
+            <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="4" width="18" height="17" rx="3"/><path d="M8 2v4M16 2v4M3 10h18"/></svg><span><span class="visually-hidden">Début : </span>{{ event.start_date|date:'d/m/Y H:i' }}</span></li>
+            <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 21s7-6.1 7-11a7 7 0 1 0-14 0c0 4.9 7 11 7 11z"/><circle cx="12" cy="10" r="2.5"/></svg><span>{{ event.get_format_display }}{% if event.location %} · {{ event.location }}{% endif %}</span></li>
+            <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="9" cy="8" r="3.5"/><path d="M2.5 20c0-3.6 2.9-6 6.5-6s6.5 2.4 6.5 6M17 11a3 3 0 1 0 0-6M21.5 20c0-2.6-1.6-4.5-4-5.3"/></svg><span>{{ event.capacity }} places · équipes de {{ event.min_team_size }} à {{ event.max_team_size }}</span></li>
+        </ul>
+        <span class="card-cta" aria-hidden="true">Voir les détails →</span>
+    </article>
+    {% empty %}
+    <div class="empty-state">
+        <h2>Aucun hackathon correspondant</h2>
+        <p>Essayez d’autres mots-clés ou retirez un filtre.</p>
+        <div class="actions"><a class="button secondary" href="{% url 'hackathons:list' %}">Réinitialiser la recherche</a></div>
+    </div>
+    {% endfor %}
+</div>
+
+{% if is_paginated %}<nav class="pagination" aria-label="Pagination">{% if page_obj.has_previous %}<a class="button small secondary" href="?q={{ request.GET.q|urlencode }}&status={{ request.GET.status|urlencode }}&format={{ request.GET.format|urlencode }}&page={{ page_obj.previous_page_number }}">Précédent</a>{% endif %}<span>Page {{ page_obj.number }} / {{ paginator.num_pages }}</span>{% if page_obj.has_next %}<a class="button small secondary" href="?q={{ request.GET.q|urlencode }}&status={{ request.GET.status|urlencode }}&format={{ request.GET.format|urlencode }}&page={{ page_obj.next_page_number }}">Suivant</a>{% endif %}</nav>{% endif %}
 {% endblock %}

@@ -11,6 +11,15 @@ class SignupForm(UserCreationForm):
         model = User
         fields = ('username', 'first_name', 'last_name', 'email')
 
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        for name, value in (('username', 'username'), ('first_name', 'given-name'), ('last_name', 'family-name'), ('email', 'email')):
+            self.fields[name].widget.attrs['autocomplete'] = value
+        # Rules are reported by the server under each field after submission; validators are unchanged.
+        for name in ('username', 'password1', 'password2'):
+            self.fields[name].help_text = ''
+        self.fields['password1'].widget.attrs['placeholder'] = '8 caractères minimum'
+
     def clean_email(self):
         email = self.cleaned_data['email'].strip().lower()
         if User.objects.filter(email__iexact=email).exists():

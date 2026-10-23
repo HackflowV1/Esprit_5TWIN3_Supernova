@@ -1,2 +1,11 @@
-{% extends 'base.html' %}{% block content %}<section class="panel"><h1>Supprimer {{ object }} ?</h1>
-<form method="post">{% csrf_token %}{{ form.as_p }}<button>Confirmer la suppression</button></form></section>{% endblock %}
+{% extends 'base.html' %}
+{% block title %}Confirmer la suppression — HackFlow{% endblock %}
+{% block content %}
+<section class="panel form-panel" aria-labelledby="delete-title">
+    <h1 id="delete-title">Supprimer {{ object }} ?</h1>
+    <p class="muted">Cette action est définitive. Seuls les brouillons non référencés peuvent être supprimés.</p>
+    <form method="post">{% csrf_token %}{{ form.as_div }}
+        <div class="actions"><button type="submit" class="danger">Confirmer la suppression</button><a class="button secondary" href="javascript:history.back()">Annuler</a></div>
+    </form>
+</section>
+{% endblock %}

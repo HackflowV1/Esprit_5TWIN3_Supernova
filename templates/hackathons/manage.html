@@ -1,26 +1,152 @@
-{% extends 'base.html' %}{% block content %}
-<h1>Pilotage · {{ event }}</h1><p><a href="{{ event.get_absolute_url }}">Consulter l’édition</a> · {{ event.get_status_display }}</p>
-{% if event.status != 'ARCHIVED' %}
-<div class="actions"><a href="{% url 'hackathons:edit' event.slug %}">Configurer l’événement</a><a href="{% url 'hackathons:roles' event.slug %}">Affecter / retirer un rôle</a><a href="{% url 'hackathons:organization-add' event.slug %}">Créer une organisation</a></div>
-<section class="panel"><h2>Cycle de vie</h2>
-{% if event.status == 'DRAFT' %}<form method="post" action="{% url 'hackathons:status' event.slug 'PUBLISHED' %}">{% csrf_token %}<button>Valider et publier l’événement</button></form>{% endif %}
-{% if event.status == 'PUBLISHED' %}<div class="actions"><form method="post" action="{% url 'hackathons:status' event.slug 'ONGOING' %}">{% csrf_token %}<button>Démarrer l’événement</button></form><form method="post" action="{% url 'hackathons:status' event.slug 'FINISHED' %}">{% csrf_token %}<button>Terminer une édition échue</button></form></div>{% endif %}
-{% if event.status == 'ONGOING' %}<form method="post" action="{% url 'hackathons:status' event.slug 'FINISHED' %}">{% csrf_token %}<button>Terminer l’événement</button></form>{% endif %}
-{% if event.status == 'FINISHED' %}<form method="post" action="{% url 'hackathons:status' event.slug 'ARCHIVED' %}">{% csrf_token %}<button>Archiver et figer les indicateurs</button></form>{% endif %}
-{% for error in errors %}<p class="warning">{{ error }}</p>{% endfor %}</section>
-{% else %}<p class="message">Édition archivée le {{ event.archived_at }}. Configuration figée et indicateurs conservés.</p>{% endif %}
-<section class="panel"><h2>Tracks</h2>{% if event.status != 'ARCHIVED' %}<a href="{% url 'hackathons:track-add' event.slug %}">Ajouter un track</a>{% endif %}
-{% for item in tracks %}<p>{{ item }} · {{ item.active|yesno:'Actif,Inactif' }} {% if event.status != 'ARCHIVED' %}<a href="{% url 'hackathons:track-edit' event.slug item.pk %}">Modifier</a> <a href="{% url 'hackathons:track-delete' event.slug item.pk %}">Supprimer le brouillon</a>{% endif %}</p>{% empty %}<p>Aucun track.</p>{% endfor %}</section>
-<section class="panel"><h2>Phases</h2>{% if event.status != 'ARCHIVED' %}<a href="{% url 'hackathons:phase-add' event.slug %}">Ajouter une phase</a>{% endif %}
-{% for item in phases %}<p>{{ item }} · {{ item.start }} → {{ item.end }} · {{ item.state }} {% if event.status != 'ARCHIVED' %}<a href="{% url 'hackathons:phase-edit' event.slug item.pk %}">Modifier</a> <a href="{% url 'hackathons:phase-delete' event.slug item.pk %}">Supprimer le brouillon</a>{% endif %}</p>{% empty %}<p>Aucune phase.</p>{% endfor %}</section>
-<section class="panel"><h2>Challenges et propositions sponsor</h2>{% if event.status != 'ARCHIVED' %}<a href="{% url 'hackathons:challenge-add' event.slug %}">Ajouter un challenge</a>{% endif %}
-{% for item in challenges %}<article class="subpanel"><h3>{{ item }} · {{ item.get_status_display }}</h3><p>{{ item.track }} · {{ item.problem }}</p><p>{{ item.objectives }} · {{ item.deliverables }}</p>
-{% if event.status != 'ARCHIVED' %}<div class="actions"><a href="{% url 'hackathons:challenge-edit' event.slug item.pk %}">Modifier</a><a href="{% url 'hackathons:challenge-delete' event.slug item.pk %}">Supprimer le brouillon</a>
-{% if item.status == 'DRAFT' or item.status == 'PROPOSED' %}<form method="post" action="{% url 'hackathons:challenge-action' event.slug item.pk 'approve' %}">{% csrf_token %}<button>Valider</button></form>{% endif %}
-{% if item.status == 'APPROVED' %}<form method="post" action="{% url 'hackathons:challenge-action' event.slug item.pk 'publish' %}">{% csrf_token %}<button>Publier</button></form>{% endif %}
-{% if item.status == 'PUBLISHED' or item.status == 'APPROVED' or item.status == 'PROPOSED' %}<form method="post" action="{% url 'hackathons:challenge-action' event.slug item.pk 'withdraw' %}">{% csrf_token %}<button>Retirer / refuser</button></form>{% endif %}</div>{% endif %}</article>{% empty %}<p>Aucun challenge.</p>{% endfor %}</section>
-<section class="panel"><h2>Partenariats</h2>{% if event.status != 'ARCHIVED' %}<a href="{% url 'hackathons:sponsorship-add' event.slug %}">Ajouter un partenariat</a>{% endif %}
-{% for item in partnerships %}<p>{{ item.organization }} · {{ item.contribution_type }} · {{ item.get_status_display }} · {{ item.estimated_value|default_if_none:'Non renseigné' }} {{ item.currency }} {% if event.status != 'ARCHIVED' %}<a href="{% url 'hackathons:sponsorship-edit' event.slug item.pk %}">Modifier</a> <a href="{% url 'hackathons:sponsorship-delete' event.slug item.pk %}">Supprimer le brouillon</a>{% endif %}</p>{% empty %}<p>Aucun partenariat.</p>{% endfor %}</section>
-<section class="panel"><h2>Affectations contextualisées</h2>{% for item in assignments %}<p>{{ item.user }} · {{ item.get_role_display }} · {{ item.get_status_display }}</p>{% endfor %}</section>
-<section class="panel"><h2>Historique (50 dernières opérations)</h2><a href="{% url 'hackathons:history' event.slug %}">Consulter tout l’historique</a>{% for item in history %}<details><summary>{{ item.timestamp }} · {{ item.actor|default:'Compte supprimé' }} · {{ item.action }} · {{ item.target }}</summary><pre>{{ item.details }}</pre></details>{% empty %}<p>Aucune opération.</p>{% endfor %}</section>
+{% extends 'base.html' %}
+{% block title %}Pilotage — {{ event }}{% endblock %}
+{% block content %}
+<header class="manage-head">
+    <p class="breadcrumb"><a href="{% url 'hackathons:dashboard' %}">← Control Tower</a> · <a href="{{ event.get_absolute_url }}">Voir la page publique</a></p>
+    <div class="manage-title">
+        <h1>{{ event }}</h1>
+        <span class="badge badge--{{ event.status|lower }}">{{ event.get_status_display }}</span>
+    </div>
+    <p class="muted">{{ event.start_date|date:'d/m/Y' }} → {{ event.end_date|date:'d/m/Y' }}{% if event.location %} · {{ event.location }}{% endif %} · {{ event.get_format_display }}</p>
+</header>
+
+<div class="manage-shell" data-tabs>
+    <nav class="manage-nav" aria-label="Sections du pilotage">
+        <div data-tablist>
+            <a href="#panel-overview" data-tab>Vue d’ensemble</a>
+            <a href="#panel-tracks" data-tab>Tracks <span class="count">{{ tracks|length }}</span></a>
+            <a href="#panel-phases" data-tab>Phases <span class="count">{{ phases|length }}</span></a>
+            <a href="#panel-challenges" data-tab>Challenges <span class="count">{{ challenges|length }}</span></a>
+            <a href="#panel-partners" data-tab>Partenariats <span class="count">{{ partnerships|length }}</span></a>
+            <a href="#panel-roles" data-tab>Rôles <span class="count">{{ assignments|length }}</span></a>
+            <a href="#panel-history" data-tab>Historique</a>
+        </div>
+    </nav>
+
+    <div class="manage-panels">
+
+    <!-- ===================== VUE D'ENSEMBLE ===================== -->
+    <section id="panel-overview" class="tab-panel" aria-labelledby="overview-title">
+        <h2 id="overview-title">Vue d’ensemble</h2>
+
+        {% if event.status == 'ARCHIVED' %}
+        <p class="message">Édition archivée le {{ event.archived_at|date:'d/m/Y H:i' }}. Configuration figée et indicateurs conservés.</p>
+        {% else %}
+        <div class="overview-card">
+            <h3>Où en est l’événement ?</h3>
+            {% with s=event.status %}
+            <ol class="stepper" aria-label="Étapes de l’événement">
+                <li class="{% if s == 'DRAFT' %}current{% else %}done{% endif %}"{% if s == 'DRAFT' %} aria-current="step"{% endif %}>Brouillon{% if s != 'DRAFT' %}<span class="visually-hidden"> (terminé)</span>{% endif %}</li>
+                <li class="{% if s == 'PUBLISHED' %}current{% elif s == 'ONGOING' or s == 'FINISHED' %}done{% endif %}"{% if s == 'PUBLISHED' %} aria-current="step"{% endif %}>Publié{% if s == 'ONGOING' or s == 'FINISHED' %}<span class="visually-hidden"> (terminé)</span>{% endif %}</li>
+                <li class="{% if s == 'ONGOING' %}current{% elif s == 'FINISHED' %}done{% endif %}"{% if s == 'ONGOING' %} aria-current="step"{% endif %}>En cours{% if s == 'FINISHED' %}<span class="visually-hidden"> (terminé)</span>{% endif %}</li>
+                <li class="{% if s == 'FINISHED' %}current{% endif %}"{% if s == 'FINISHED' %} aria-current="step"{% endif %}>Terminé</li>
+                <li>Archivé</li>
+            </ol>
+            <p class="next-step"><strong>Prochaine étape :</strong>
+                {% if s == 'DRAFT' %}terminer la configuration, puis publier l’événement.
+                {% elif s == 'PUBLISHED' %}démarrer l’événement à sa date de début.
+                {% elif s == 'ONGOING' %}suivre le déroulement ; vous pourrez le terminer après sa date de fin.
+                {% elif s == 'FINISHED' %}archiver l’édition pour figer ses indicateurs.{% endif %}</p>
+            {% endwith %}
+            {% if event.status == 'DRAFT' %}<form method="post" action="{% url 'hackathons:status' event.slug 'PUBLISHED' %}">{% csrf_token %}<button type="submit">Valider et publier l’événement</button></form>{% endif %}
+            {% if event.status == 'PUBLISHED' %}<div class="actions"><form method="post" action="{% url 'hackathons:status' event.slug 'ONGOING' %}">{% csrf_token %}<button type="submit">Démarrer l’événement</button></form><form method="post" action="{% url 'hackathons:status' event.slug 'FINISHED' %}">{% csrf_token %}<button type="submit" class="secondary">Terminer une édition échue</button></form></div>{% endif %}
+            {% if event.status == 'ONGOING' %}<form method="post" action="{% url 'hackathons:status' event.slug 'FINISHED' %}">{% csrf_token %}<button type="submit">Terminer l’événement</button></form>{% endif %}
+            {% if event.status == 'FINISHED' %}<form method="post" action="{% url 'hackathons:status' event.slug 'ARCHIVED' %}">{% csrf_token %}<button type="submit">Archiver et figer les indicateurs</button></form>{% endif %}
+        </div>
+        {% endif %}
+
+        {% if errors %}
+        <div class="notice notice--warning" role="alert"><strong>À corriger avant publication</strong><ul>{% for error in errors %}<li>{{ error }}</li>{% endfor %}</ul></div>
+        {% else %}
+        <div class="notice notice--ok"><strong>Configuration complète.</strong> Aucune anomalie détectée.</div>
+        {% endif %}
+
+        {% for item in challenges %}{% if item.status == 'PROPOSED' %}
+        <article class="todo-card">
+            <div><span class="badge badge--proposed">À traiter</span> <strong>{{ item }}</strong><span class="sub">Proposition de challenge · {{ item.track }}</span></div>
+            <div class="actions">
+                <form method="post" action="{% url 'hackathons:challenge-action' event.slug item.pk 'approve' %}">{% csrf_token %}<button type="submit" class="small">Valider</button></form>
+                <form method="post" action="{% url 'hackathons:challenge-action' event.slug item.pk 'withdraw' %}">{% csrf_token %}<button type="submit" class="small danger">Refuser</button></form>
+            </div>
+        </article>
+        {% endif %}{% endfor %}
+
+        <h3>En chiffres</h3>
+        <ul class="stat-links">
+            <li><a href="#panel-tracks"><strong>{{ tracks|length }}</strong><span>Tracks</span></a></li>
+            <li><a href="#panel-phases"><strong>{{ phases|length }}</strong><span>Phases</span></a></li>
+            <li><a href="#panel-challenges"><strong>{{ challenges|length }}</strong><span>Challenges</span></a></li>
+            <li><a href="#panel-partners"><strong>{{ partnerships|length }}</strong><span>Partenariats</span></a></li>
+            <li><a href="#panel-roles"><strong>{{ assignments|length }}</strong><span>Rôles attribués</span></a></li>
+        </ul>
+
+        {% if event.status != 'ARCHIVED' %}
+        <h3>Actions rapides</h3>
+        <div class="action-cards">
+            <a class="action-card" href="{% url 'hackathons:edit' event.slug %}"><strong>Configurer l’événement</strong><span>Titre, dates, règlement, capacité et tailles d’équipe.</span></a>
+            <a class="action-card" href="{% url 'hackathons:roles' event.slug %}"><strong>Affecter / retirer un rôle</strong><span>Participants, mentors, jurés et représentants de sponsor.</span></a>
+            <a class="action-card" href="{% url 'hackathons:organization-add' event.slug %}"><strong>Créer une organisation</strong><span>Ajoutez un sponsor, puis liez-le à l’édition.</span></a>
+        </div>
+        {% endif %}
+    </section>
+
+    <!-- ===================== TRACKS ===================== -->
+    <section id="panel-tracks" class="tab-panel" aria-labelledby="tracks-title">
+        <div class="panel-head"><h2 id="tracks-title">Tracks</h2>{% if event.status != 'ARCHIVED' %}<a class="button small" href="{% url 'hackathons:track-add' event.slug %}">+ Ajouter un track</a>{% endif %}</div>
+        <p class="muted">Les tracks regroupent les challenges par thématique.</p>
+        {% for item in tracks %}<div class="row-item"><span><span class="title">{{ item }}</span><span class="sub">{{ item.active|yesno:'Actif,Inactif' }}</span></span>{% if event.status != 'ARCHIVED' %}<span class="row-actions"><a class="button small secondary" href="{% url 'hackathons:track-edit' event.slug item.pk %}">Modifier</a><a class="link-danger" href="{% url 'hackathons:track-delete' event.slug item.pk %}">Supprimer le brouillon</a></span>{% endif %}</div>{% empty %}<p class="empty">Aucun track pour l’instant.</p>{% endfor %}
+    </section>
+
+    <!-- ===================== PHASES ===================== -->
+    <section id="panel-phases" class="tab-panel" aria-labelledby="phases-title">
+        <div class="panel-head"><h2 id="phases-title">Phases</h2>{% if event.status != 'ARCHIVED' %}<a class="button small" href="{% url 'hackathons:phase-add' event.slug %}">+ Ajouter une phase</a>{% endif %}</div>
+        <p class="muted">Inscriptions, développement, soumission et évaluation sont requises pour publier.</p>
+        {% for item in phases %}<div class="row-item"><span><span class="title">{{ item }} <span class="badge badge--{{ item.state|slugify }}">{{ item.state }}</span></span><span class="sub">{{ item.start|date:'d/m/Y H:i' }} → {{ item.end|date:'d/m/Y H:i' }}</span></span>{% if event.status != 'ARCHIVED' %}<span class="row-actions"><a class="button small secondary" href="{% url 'hackathons:phase-edit' event.slug item.pk %}">Modifier</a><a class="link-danger" href="{% url 'hackathons:phase-delete' event.slug item.pk %}">Supprimer le brouillon</a></span>{% endif %}</div>{% empty %}<p class="empty">Aucune phase pour l’instant.</p>{% endfor %}
+    </section>
+
+    <!-- ===================== CHALLENGES ===================== -->
+    <section id="panel-challenges" class="tab-panel" aria-labelledby="challenges-title">
+        <div class="panel-head"><h2 id="challenges-title">Challenges et propositions sponsor</h2>{% if event.status != 'ARCHIVED' %}<a class="button small" href="{% url 'hackathons:challenge-add' event.slug %}">+ Ajouter un challenge</a>{% endif %}</div>
+        <p class="muted">Un challenge doit être validé puis publié pour apparaître publiquement.</p>
+        {% for item in challenges %}
+        <article class="item-card">
+            <div class="item-top"><h3>{{ item }}</h3><span class="badge badge--{{ item.status|lower }}">{{ item.get_status_display }}</span></div>
+            <p class="muted">Track : {{ item.track }}</p>
+            <p>{{ item.problem|truncatewords:30 }}</p>
+            <details><summary>Voir objectifs et livrables</summary><p><strong>Objectifs :</strong> {{ item.objectives }}</p><p><strong>Livrables :</strong> {{ item.deliverables }}</p></details>
+            {% if event.status != 'ARCHIVED' %}<div class="actions">
+                {% if item.status == 'DRAFT' or item.status == 'PROPOSED' %}<form method="post" action="{% url 'hackathons:challenge-action' event.slug item.pk 'approve' %}">{% csrf_token %}<button type="submit" class="small">Valider</button></form>{% endif %}
+                {% if item.status == 'APPROVED' %}<form method="post" action="{% url 'hackathons:challenge-action' event.slug item.pk 'publish' %}">{% csrf_token %}<button type="submit" class="small">Publier</button></form>{% endif %}
+                <a class="button small secondary" href="{% url 'hackathons:challenge-edit' event.slug item.pk %}">Modifier</a>
+                {% if item.status == 'PUBLISHED' or item.status == 'APPROVED' or item.status == 'PROPOSED' %}<form method="post" action="{% url 'hackathons:challenge-action' event.slug item.pk 'withdraw' %}">{% csrf_token %}<button type="submit" class="small secondary">Retirer / refuser</button></form>{% endif %}
+                <a class="link-danger" href="{% url 'hackathons:challenge-delete' event.slug item.pk %}">Supprimer le brouillon</a>
+            </div>{% endif %}
+        </article>
+        {% empty %}<p class="empty">Aucun challenge pour l’instant.</p>{% endfor %}
+    </section>
+
+    <!-- ===================== PARTENARIATS ===================== -->
+    <section id="panel-partners" class="tab-panel" aria-labelledby="partners-title">
+        <div class="panel-head"><h2 id="partners-title">Partenariats</h2>{% if event.status != 'ARCHIVED' %}<a class="button small" href="{% url 'hackathons:sponsorship-add' event.slug %}">+ Ajouter un partenariat</a>{% endif %}</div>
+        <p class="muted">Un sponsor doit avoir un partenariat confirmé pour proposer des challenges.</p>
+        {% for item in partnerships %}<div class="row-item"><span><span class="title">{{ item.organization }}</span><span class="sub">{{ item.contribution_type }} · {{ item.get_status_display }} · {{ item.estimated_value|default_if_none:'Non renseigné' }} {{ item.currency }}</span></span>{% if event.status != 'ARCHIVED' %}<span class="row-actions"><a class="button small secondary" href="{% url 'hackathons:sponsorship-edit' event.slug item.pk %}">Modifier</a><a class="link-danger" href="{% url 'hackathons:sponsorship-delete' event.slug item.pk %}">Supprimer le brouillon</a></span>{% endif %}</div>{% empty %}<p class="empty">Aucun partenariat pour l’instant.</p>{% endfor %}
+        {% if event.status != 'ARCHIVED' %}<p class="form-aside"><a href="{% url 'hackathons:organization-add' event.slug %}">Créer une nouvelle organisation sponsor</a></p>{% endif %}
+    </section>
+
+    <!-- ===================== RÔLES ===================== -->
+    <section id="panel-roles" class="tab-panel" aria-labelledby="roles-title">
+        <div class="panel-head"><h2 id="roles-title">Affectations contextualisées</h2>{% if event.status != 'ARCHIVED' %}<a class="button small" href="{% url 'hackathons:roles' event.slug %}">Affecter / retirer un rôle</a>{% endif %}</div>
+        <p class="muted">Les rôles s’appliquent uniquement à cette édition.</p>
+        {% for item in assignments %}<div class="row-item"><span><span class="title">{{ item.user }}</span><span class="sub">{{ item.get_role_display }}</span></span><span class="badge badge--{% if item.status == 'ACTIVE' %}published{% else %}draft{% endif %}">{{ item.get_status_display }}</span></div>{% empty %}<p class="empty">Aucune affectation.</p>{% endfor %}
+    </section>
+
+    <!-- ===================== HISTORIQUE ===================== -->
+    <section id="panel-history" class="tab-panel" aria-labelledby="history-title">
+        <h2 id="history-title">Historique (50 dernières opérations)</h2>
+        <p><a href="{% url 'hackathons:history' event.slug %}">Consulter tout l’historique</a></p>
+        {% for item in history %}<details><summary>{{ item.timestamp|date:'d/m/Y H:i' }} · {{ item.actor|default:'Compte supprimé' }} · {{ item.action }} · {{ item.target }}</summary><pre>{{ item.details }}</pre></details>{% empty %}<p class="empty">Aucune opération.</p>{% endfor %}
+    </section>
+
+    </div>
+</div>
 {% endblock %}

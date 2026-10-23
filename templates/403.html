@@ -1,1 +1,7 @@
-{% extends 'base.html' %}{% block content %}<h1>Accès refusé</h1><p>Votre compte ne dispose pas des autorisations nécessaires pour cette opération, ou cette édition est archivée.</p><a href="{% url 'hackathons:list' %}">Retour aux hackathons</a>{% endblock %}
+{% extends 'base.html' %}
+{% block title %}Accès refusé — HackFlow{% endblock %}
+{% block content %}
+<section class="error-page"><p class="error-code gradient-text" aria-hidden="true">403</p><h1>Accès refusé</h1>
+<p class="lead">Votre compte ne dispose pas des autorisations nécessaires pour cette opération, ou cette édition est archivée.</p>
+<div class="actions" style="justify-content:center"><a class="button" href="{% url 'hackathons:list' %}">Retour aux hackathons</a></div></section>
+{% endblock %}

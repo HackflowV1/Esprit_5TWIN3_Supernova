@@ -11,7 +11,7 @@ from .models import Profile, UserSkill
 
 class SignupView(SuccessMessageMixin, CreateView):
     form_class = SignupForm
-    template_name = 'shared/form.html'
+    template_name = 'accounts/auth.html'
     success_url = reverse_lazy('accounts:profile')
     success_message = 'Votre compte a été créé.'
     extra_context = {'title': 'Créer mon compte', 'button_label': 'Créer mon compte'}
