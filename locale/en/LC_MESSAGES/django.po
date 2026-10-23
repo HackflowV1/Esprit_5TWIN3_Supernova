@@ -1,0 +1,2010 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: HackFlow 0.1\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2026-10-23 17:37+0100\n"
+"PO-Revision-Date: 2026-10-23 19:00+0100\n"
+"Last-Translator: HackFlow team\n"
+"Language-Team: HackFlow\n"
+"Language: en\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+#: .\accounts\forms.py:22
+msgid "8 caractères minimum"
+msgstr "At least 8 characters"
+
+#: .\accounts\forms.py:27 .\accounts\forms.py:56 .\accounts\views.py:58
+msgid "Cet email est déjà utilisé."
+msgstr "This email address is already in use."
+
+#: .\accounts\forms.py:39
+msgid "Prénom"
+msgstr "First name"
+
+#: .\accounts\forms.py:40 .\hackathons\forms.py:16
+msgid "Nom"
+msgstr "Last name"
+
+#: .\accounts\forms.py:46
+msgid "Biographie"
+msgstr "Biography"
+
+#: .\accounts\forms.py:46
+msgid "Établissement / université"
+msgstr "School / university"
+
+#: .\accounts\forms.py:46
+msgid "Centres d’intérêt"
+msgstr "Interests"
+
+#: .\accounts\forms.py:46
+msgid "Photo de profil"
+msgstr "Profile photo"
+
+#: .\accounts\forms.py:75
+msgid "Compétence"
+msgstr "Skill"
+
+#: .\accounts\forms.py:75
+msgid "Niveau (1–5)"
+msgstr "Level (1–5)"
+
+#: .\accounts\forms.py:75
+msgid "Expérience"
+msgstr "Experience"
+
+#: .\accounts\forms.py:79 .\accounts\models.py:15
+msgid "Utilisateur"
+msgstr "User"
+
+#: .\accounts\forms.py:80
+msgid "Rôle"
+msgstr "Role"
+
+#: .\accounts\forms.py:81 .\core\templatetags\ui.py:12
+#: .\hackathons\forms.py:19 .\templates\hackathons\list.html:15
+msgid "Statut"
+msgstr "Status"
+
+#: .\accounts\models.py:16
+msgid "Utilisateurs"
+msgstr "Users"
+
+#: .\accounts\models.py:17
+msgid "Peut créer un hackathon"
+msgstr "Can create a hackathon"
+
+#: .\accounts\models.py:65
+msgid "Organisateur"
+msgstr "Organizer"
+
+#: .\accounts\models.py:66
+msgid "Participant"
+msgstr "Participant"
+
+#: .\accounts\models.py:67
+msgid "Juré"
+msgstr "Jury member"
+
+#: .\accounts\models.py:68
+msgid "Mentor"
+msgstr "Mentor"
+
+#: .\accounts\models.py:69
+msgid "Représentant sponsor"
+msgstr "Sponsor representative"
+
+#: .\accounts\models.py:73 .\hackathons\forms.py:16
+msgid "Actif"
+msgstr "Active"
+
+#: .\accounts\models.py:74 .\hackathons\models.py:183
+msgid "Retiré"
+msgstr "Removed"
+
+#: .\accounts\models.py:94 .\accounts\services.py:19
+msgid "Le dernier organisateur actif ne peut pas être retiré."
+msgstr "The last active organizer cannot be removed."
+
+#: .\accounts\models.py:99
+msgid "Participant et juré sont incompatibles dans le même hackathon."
+msgstr "Participant and jury member roles are incompatible within the same hackathon."
+
+#: .\accounts\permissions.py:27
+msgid "Rôle organisateur requis dans ce hackathon."
+msgstr "An organizer role is required for this hackathon."
+
+#: .\accounts\permissions.py:29
+msgid "Édition archivée : consultation uniquement."
+msgstr "Archived edition: read-only access."
+
+#: .\accounts\urls.py:9 .\core\context_processors.py:12
+#: .\templates\base.html:23
+msgid "Connexion"
+msgstr "Sign in"
+
+#: .\accounts\urls.py:9 .\templates\accounts\auth.html:27
+#: .\templates\shared\form.html:18
+msgid "Se connecter"
+msgstr "Sign in"
+
+#: .\accounts\urls.py:14
+msgid "Changer mon mot de passe"
+msgstr "Change my password"
+
+#: .\accounts\views.py:17
+msgid "Votre compte a été créé."
+msgstr "Your account has been created."
+
+#: .\accounts\views.py:18 .\core\context_processors.py:12
+#: .\templates\accounts\auth.html:26 .\templates\core\home.html:10
+#: .\templates\core\home.html:50 .\templates\shared\form.html:17
+msgid "Créer mon compte"
+msgstr "Create my account"
+
+#: .\accounts\views.py:25
+msgid "Identifiant ou email déjà utilisé."
+msgstr "Username or email address already in use."
+
+#: .\accounts\views.py:47
+msgid "Profil mis à jour."
+msgstr "Profile updated."
+
+#: .\accounts\views.py:48 .\core\context_processors.py:10
+msgid "Modifier mon profil"
+msgstr "Edit my profile"
+
+#: .\accounts\views.py:66
+msgid "Compétence ajoutée."
+msgstr "Skill added."
+
+#: .\accounts\views.py:67 .\core\context_processors.py:13
+#: .\templates\accounts\profile.html:7
+msgid "Ajouter une compétence"
+msgstr "Add a skill"
+
+#: .\accounts\views.py:79 .\accounts\views.py:97
+msgid "Cette compétence existe déjà sur votre profil."
+msgstr "This skill is already on your profile."
+
+#: .\accounts\views.py:87
+msgid "Compétence modifiée."
+msgstr "Skill updated."
+
+#: .\core\context_processors.py:10 .\templates\base.html:22
+#: .\templates\shared\breadcrumbs.html:4
+msgid "Mon profil"
+msgstr "My profile"
+
+#: .\core\context_processors.py:11 .\templates\accounts\profile.html:7
+#: .\templates\base.html:22
+msgid "Changer le mot de passe"
+msgstr "Change password"
+
+#: .\core\context_processors.py:11 .\templates\accounts\password_done.html:4
+msgid "Mot de passe modifié"
+msgstr "Password changed"
+
+#: .\core\context_processors.py:13
+msgid "Modifier une compétence"
+msgstr "Edit a skill"
+
+#: .\core\context_processors.py:14
+msgid "Retirer une compétence"
+msgstr "Remove a skill"
+
+#: .\core\context_processors.py:17 .\templates\hackathons\list.html:7
+msgid "Les hackathons"
+msgstr "Browse hackathons"
+
+#: .\core\context_processors.py:17 .\hackathons\views.py:103
+#: .\templates\core\home.html:25 .\templates\hackathons\list.html:10
+msgid "Créer un hackathon"
+msgstr "Create a hackathon"
+
+#: .\core\context_processors.py:18 .\templates\base.html:15
+#: .\templates\base.html:22 .\templates\hackathons\compare.html:4
+#: .\templates\hackathons\dashboard.html:4
+#: .\templates\shared\breadcrumbs.html:7
+msgid "Control Tower"
+msgstr "Control Tower"
+
+#: .\core\context_processors.py:18 .\templates\hackathons\compare.html:4
+msgid "Comparer les éditions"
+msgstr "Compare editions"
+
+#: .\core\context_processors.py:19 .\hackathons\views.py:126
+msgid "Configurer le hackathon"
+msgstr "Configure hackathon"
+
+#: .\core\context_processors.py:19 .\templates\shared\breadcrumbs.html:9
+msgid "Pilotage"
+msgstr "Manage edition"
+
+#: .\core\context_processors.py:20 .\templates\hackathons\manage.html:22
+msgid "Historique"
+msgstr "History"
+
+#: .\core\context_processors.py:20
+msgid "Gérer les rôles"
+msgstr "Manage roles"
+
+#: .\core\context_processors.py:21 .\templates\hackathons\manage.html:88
+msgid "Créer une organisation"
+msgstr "Create an organization"
+
+#: .\core\context_processors.py:21
+msgid "Proposer un challenge"
+msgstr "Propose a challenge"
+
+#: .\core\context_processors.py:22 .\templates\hackathons\manage.html:95
+msgid "Ajouter un track"
+msgstr "Add a track"
+
+#: .\core\context_processors.py:22
+msgid "Modifier un track"
+msgstr "Edit a track"
+
+#: .\core\context_processors.py:23
+msgid "Supprimer un track"
+msgstr "Delete a track"
+
+#: .\core\context_processors.py:23 .\templates\hackathons\manage.html:102
+msgid "Ajouter une phase"
+msgstr "Add a phase"
+
+#: .\core\context_processors.py:24
+msgid "Modifier une phase"
+msgstr "Edit a phase"
+
+#: .\core\context_processors.py:24
+msgid "Supprimer une phase"
+msgstr "Delete a phase"
+
+#: .\core\context_processors.py:25 .\templates\hackathons\manage.html:109
+msgid "Ajouter un challenge"
+msgstr "Add a challenge"
+
+#: .\core\context_processors.py:25
+msgid "Modifier un challenge"
+msgstr "Edit a challenge"
+
+#: .\core\context_processors.py:26
+msgid "Supprimer un challenge"
+msgstr "Delete a challenge"
+
+#: .\core\context_processors.py:26 .\templates\hackathons\manage.html:130
+msgid "Ajouter un partenariat"
+msgstr "Add a partnership"
+
+#: .\core\context_processors.py:27
+msgid "Modifier un partenariat"
+msgstr "Edit a partnership"
+
+#: .\core\context_processors.py:27
+msgid "Supprimer un partenariat"
+msgstr "Delete a partnership"
+
+#: .\core\context_processors.py:29 .\core\templatetags\ui.py:11
+msgid "Configuration"
+msgstr "Configuration"
+
+#: .\core\templatetags\ui.py:11
+msgid "Création"
+msgstr "Creation"
+
+#: .\core\templatetags\ui.py:11
+msgid "Modification"
+msgstr "Update"
+
+#: .\core\templatetags\ui.py:12
+msgid "Suppression"
+msgstr "Deletion"
+
+#: .\core\templatetags\ui.py:12
+msgid "Affectation de rôle"
+msgstr "Role assignment"
+
+#: .\core\templatetags\ui.py:13
+msgid "Organisation créée"
+msgstr "Organization created"
+
+#: .\core\templatetags\ui.py:13
+msgid "Proposition sponsor"
+msgstr "Sponsor proposal"
+
+#: .\core\templatetags\ui.py:14
+msgid "Challenge : validation"
+msgstr "Challenge: approval"
+
+#: .\core\templatetags\ui.py:14
+msgid "Challenge : publication"
+msgstr "Challenge: publication"
+
+#: .\core\templatetags\ui.py:15
+msgid "Challenge : retrait"
+msgstr "Challenge: withdrawal"
+
+#: .\core\validators.py:7
+msgid "Image limitée à 5 Mo."
+msgstr "Images must be no larger than 5 MB."
+
+#: .\hackathons\admin.py:35
+msgid "Événement"
+msgstr "Event"
+
+#: .\hackathons\admin.py:37
+msgid "Capacités"
+msgstr "Capacity"
+
+#: .\hackathons\admin.py:59
+msgid "Publier après validation métier"
+msgstr "Publish after business validation"
+
+#: .\hackathons\admin.py:63
+msgid "Archiver les éditions terminées"
+msgstr "Archive completed editions"
+
+#: .\hackathons\forms.py:9
+msgid "Titre"
+msgstr "Title"
+
+#: .\hackathons\forms.py:9 .\templates\hackathons\detail.html:26
+msgid "Règlement"
+msgstr "Rules"
+
+#: .\hackathons\forms.py:9 .\templates\hackathons\detail.html:27
+msgid "Conditions de participation"
+msgstr "Participation requirements"
+
+#: .\hackathons\forms.py:10
+msgid "Description"
+msgstr "Description"
+
+#: .\hackathons\forms.py:10
+msgid "Image"
+msgstr "Image"
+
+#: .\hackathons\forms.py:10
+msgid "Identifiant dans l’URL"
+msgstr "URL identifier"
+
+#: .\hackathons\forms.py:11 .\templates\hackathons\detail.html:53
+#: .\templates\hackathons\list.html:16
+msgid "Format"
+msgstr "Format"
+
+#: .\hackathons\forms.py:11
+msgid "Track"
+msgstr "Track"
+
+#: .\hackathons\forms.py:11
+msgid "Logo"
+msgstr "Logo"
+
+#: .\hackathons\forms.py:12
+msgid "Lieu"
+msgstr "Location"
+
+#: .\hackathons\forms.py:12
+msgid "Début de l’événement"
+msgstr "Event start"
+
+#: .\hackathons\forms.py:12
+msgid "Fin de l’événement"
+msgstr "Event end"
+
+#: .\hackathons\forms.py:13
+msgid "Ouverture des inscriptions"
+msgstr "Registration opens"
+
+#: .\hackathons\forms.py:13
+msgid "Clôture des inscriptions"
+msgstr "Registration closes"
+
+#: .\hackathons\forms.py:14
+msgid "Date limite de soumission"
+msgstr "Submission deadline"
+
+#: .\hackathons\forms.py:14
+msgid "Capacité maximale"
+msgstr "Maximum capacity"
+
+#: .\hackathons\forms.py:15
+msgid "Taille minimale des équipes"
+msgstr "Minimum team size"
+
+#: .\hackathons\forms.py:15
+msgid "Taille maximale des équipes"
+msgstr "Maximum team size"
+
+#: .\hackathons\forms.py:16
+msgid "Type de phase"
+msgstr "Phase type"
+
+#: .\hackathons\forms.py:16 .\templates\hackathons\detail.html:47
+msgid "Début"
+msgstr "Start"
+
+#: .\hackathons\forms.py:16 .\templates\hackathons\detail.html:48
+msgid "Fin"
+msgstr "End"
+
+#: .\hackathons\forms.py:17
+msgid "Problématique"
+msgstr "Problem statement"
+
+#: .\hackathons\forms.py:17 .\templates\hackathons\detail.html:35
+msgid "Objectifs"
+msgstr "Objectives"
+
+#: .\hackathons\forms.py:17
+msgid "Livrables attendus"
+msgstr "Expected deliverables"
+
+#: .\hackathons\forms.py:18
+msgid "Partenariat sponsor"
+msgstr "Sponsor partnership"
+
+#: .\hackathons\forms.py:18
+msgid "Organisation"
+msgstr "Organization"
+
+#: .\hackathons\forms.py:18
+msgid "Type de contribution"
+msgstr "Contribution type"
+
+#: .\hackathons\forms.py:19
+msgid "Valeur estimée"
+msgstr "Estimated value"
+
+#: .\hackathons\forms.py:19
+msgid "Devise"
+msgstr "Currency"
+
+#: .\hackathons\forms.py:19
+msgid "Informations pour les prix (M5)"
+msgstr "Prize information (M5)"
+
+#: .\hackathons\forms.py:20
+msgid "Secteur"
+msgstr "Industry"
+
+#: .\hackathons\forms.py:20
+msgid "Site web"
+msgstr "Website"
+
+#: .\hackathons\forms.py:20
+msgid "Nom du contact"
+msgstr "Contact name"
+
+#: .\hackathons\forms.py:20
+msgid "Email du contact"
+msgstr "Contact email"
+
+#: .\hackathons\models.py:23 .\hackathons\models.py:179
+#: .\templates\hackathons\manage.html:39
+msgid "Brouillon"
+msgstr "Draft"
+
+#: .\hackathons\models.py:24 .\hackathons\models.py:182
+#: .\templates\hackathons\manage.html:40
+msgid "Publié"
+msgstr "Published"
+
+#: .\hackathons\models.py:25 .\hackathons\models.py:275
+#: .\templates\hackathons\manage.html:41
+msgid "En cours"
+msgstr "In progress"
+
+#: .\hackathons\models.py:26 .\templates\hackathons\manage.html:42
+msgid "Terminé"
+msgstr "Finished"
+
+#: .\hackathons\models.py:27 .\templates\hackathons\manage.html:43
+msgid "Archivé"
+msgstr "Archived"
+
+#: .\hackathons\models.py:30
+msgid "Présentiel"
+msgstr "In person"
+
+#: .\hackathons\models.py:31
+msgid "En ligne"
+msgstr "Online"
+
+#: .\hackathons\models.py:32
+msgid "Hybride"
+msgstr "Hybrid"
+
+#: .\hackathons\models.py:70 .\hackathons\models.py:101
+msgid "Édition archivée : modification interdite."
+msgstr "Archived edition: changes are not allowed."
+
+#: .\hackathons\models.py:72
+msgid "Le début doit précéder la fin."
+msgstr "The start must be before the end."
+
+#: .\hackathons\models.py:74
+msgid "Période d’inscription invalide."
+msgstr "Invalid registration period."
+
+#: .\hackathons\models.py:76
+msgid "Les inscriptions doivent finir avant la fin de l’événement."
+msgstr "Registration must close before the event ends."
+
+#: .\hackathons\models.py:78
+msgid "Deadline de soumission hors événement."
+msgstr "The submission deadline must fall within the event."
+
+#: .\hackathons\models.py:80
+msgid "Tailles d’équipe ou capacité incohérentes."
+msgstr "Inconsistent team sizes or capacity."
+
+#: .\hackathons\models.py:139
+msgid "Proposé"
+msgstr "Proposed"
+
+#: .\hackathons\models.py:140
+msgid "Confirmé"
+msgstr "Confirmed"
+
+#: .\hackathons\models.py:141
+msgid "Annulé"
+msgstr "Cancelled"
+
+#: .\hackathons\models.py:150
+msgid "Information pour M5 ; aucune attribution de prix dans M1."
+msgstr "Information for M5; M1 does not award prizes."
+
+#: .\hackathons\models.py:164 .\hackathons\services.py:150
+msgid "Retirez les challenges validés avant de désactiver le partenariat."
+msgstr "Withdraw approved challenges before deactivating the partnership."
+
+#: .\hackathons\models.py:166 .\hackathons\services.py:135
+msgid "L’organisation d’un partenariat existant ne peut pas changer."
+msgstr "The organization of an existing partnership cannot be changed."
+
+#: .\hackathons\models.py:180
+msgid "À valider"
+msgstr "Awaiting approval"
+
+#: .\hackathons\models.py:181
+msgid "Validé"
+msgstr "Approved"
+
+#: .\hackathons\models.py:204
+msgid "Le partenariat doit appartenir au hackathon du track."
+msgstr "The partnership must belong to the track’s hackathon."
+
+#: .\hackathons\models.py:207
+msgid "Les consignes et livrables doivent être complets."
+msgstr "Instructions and deliverables must be complete."
+
+#: .\hackathons\models.py:209
+msgid "Validation organisateur requise."
+msgstr "Organizer approval required."
+
+#: .\hackathons\models.py:211
+msgid "Partenariat confirmé requis."
+msgstr "A confirmed partnership is required."
+
+#: .\hackathons\models.py:219 .\templates\hackathons\detail.html:49
+msgid "Inscriptions"
+msgstr "Registration"
+
+#: .\hackathons\models.py:220
+msgid "Constitution des équipes"
+msgstr "Team formation"
+
+#: .\hackathons\models.py:221
+msgid "Développement"
+msgstr "Development"
+
+#: .\hackathons\models.py:222
+msgid "Soumissions"
+msgstr "Submissions"
+
+#: .\hackathons\models.py:223
+msgid "Évaluations"
+msgstr "Evaluation"
+
+#: .\hackathons\models.py:224
+msgid "Résultats"
+msgstr "Results"
+
+#: .\hackathons\models.py:246
+msgid "Le début de phase doit précéder sa fin."
+msgstr "The phase start must be before its end."
+
+#: .\hackathons\models.py:252
+msgid "Phase hors calendrier de l’événement."
+msgstr "The phase falls outside the event schedule."
+
+#: .\hackathons\models.py:254
+msgid "La phase inscriptions doit correspondre aux dates d’inscription."
+msgstr "The registration phase must match the registration dates."
+
+#: .\hackathons\models.py:256
+msgid "La fin des soumissions doit correspondre à la deadline."
+msgstr "The submission phase must end at the submission deadline."
+
+#: .\hackathons\models.py:258
+msgid "L’évaluation doit commencer après la deadline de soumission."
+msgstr "Evaluation must begin after the submission deadline."
+
+#: .\hackathons\models.py:267
+msgid "Chevauchement de phases incompatible."
+msgstr "Incompatible overlapping phases."
+
+#: .\hackathons\models.py:269
+msgid "Les résultats doivent suivre l’évaluation."
+msgstr "Results must follow evaluation."
+
+#: .\hackathons\models.py:271
+msgid "L’évaluation doit précéder les résultats."
+msgstr "Evaluation must precede results."
+
+#: .\hackathons\models.py:275
+msgid "À venir"
+msgstr "Upcoming"
+
+#: .\hackathons\models.py:275
+msgid "Terminée"
+msgstr "Completed"
+
+#: .\hackathons\services.py:29
+msgid "Autorisation technique de création requise."
+msgstr "Technical permission to create a hackathon is required."
+
+#: .\hackathons\services.py:67
+#, python-format
+msgid "Phases manquantes : %(phases)s"
+msgstr "Missing phases: %(phases)s"
+
+#: .\hackathons\services.py:69
+msgid "Un track actif est requis."
+msgstr "An active track is required."
+
+#: .\hackathons\services.py:71
+msgid "Un challenge validé et publié est requis."
+msgstr "An approved and published challenge is required."
+
+#: .\hackathons\services.py:86
+msgid "Transition de statut interdite."
+msgstr "This status transition is not allowed."
+
+#: .\hackathons\services.py:91
+msgid "Événement déjà terminé."
+msgstr "The event has already ended."
+
+#: .\hackathons\services.py:95
+msgid "Le démarrage exige une date dans la période de l’événement."
+msgstr "The event can only be started during its scheduled dates."
+
+#: .\hackathons\services.py:97
+msgid "La date de fin n’est pas atteinte."
+msgstr "The end date has not been reached."
+
+#: .\hackathons\services.py:121
+msgid "Cette période est fermée."
+msgstr "This period is closed."
+
+#: .\hackathons\services.py:132
+msgid "Une ressource ne peut pas changer de hackathon."
+msgstr "A resource cannot be moved to another hackathon."
+
+#: .\hackathons\services.py:144 .\hackathons\services.py:166
+msgid "Un partenariat confirmé du hackathon est requis."
+msgstr "A confirmed partnership for this hackathon is required."
+
+#: .\hackathons\services.py:163
+msgid "Rôle représentant sponsor requis dans cet événement."
+msgstr "A sponsor representative role is required for this event."
+
+#: .\hackathons\services.py:169
+msgid "Mandat de représentation actif requis."
+msgstr "An active representation mandate is required."
+
+#: .\hackathons\services.py:194
+msgid "Transition de challenge interdite."
+msgstr "This challenge transition is not allowed."
+
+#: .\hackathons\services.py:221
+msgid "Indicateurs indisponibles ; vérifier le fournisseur."
+msgstr "Metrics unavailable; check the provider."
+
+#: .\hackathons\services.py:238
+msgid "Fournisseur d’alertes indisponible."
+msgstr "Alert provider unavailable."
+
+#: .\hackathons\views.py:116
+msgid "Conflit de données : vérifiez le slug."
+msgstr "Data conflict: check the slug."
+
+#: .\hackathons\views.py:118
+msgid "Hackathon créé ; rôle organisateur attribué."
+msgstr "Hackathon created; organizer role assigned."
+
+#: .\hackathons\views.py:135
+msgid "Conflit de données."
+msgstr "Data conflict."
+
+#: .\hackathons\views.py:137 .\hackathons\views.py:208
+msgid "Configuration enregistrée."
+msgstr "Configuration saved."
+
+#: .\hackathons\views.py:170
+msgid "Statut mis à jour."
+msgstr "Status updated."
+
+#: .\hackathons\views.py:206
+msgid "Conflit : cet élément existe déjà."
+msgstr "Conflict: this item already exists."
+
+#: .\hackathons\views.py:208
+msgid "Challenge enregistré ; validation requise."
+msgstr "Challenge saved; approval is required."
+
+#: .\hackathons\views.py:233
+msgid "Suppression réservée aux brouillons ; utilisez le retrait ou l’archivage."
+msgstr "Only drafts can be deleted; use withdrawal or archiving instead."
+
+#: .\hackathons\views.py:238
+msgid "Élément référencé : suppression impossible."
+msgstr "Referenced item: deletion is not allowed."
+
+#: .\hackathons\views.py:263
+msgid "Challenge mis à jour."
+msgstr "Challenge updated."
+
+#: .\hackathons\views.py:278
+msgid "Organisation créée. Ajoutez maintenant son partenariat."
+msgstr "Organization created. Now add its partnership."
+
+#: .\hackathons\views.py:285
+msgid "Affecter ou retirer un rôle dans ce hackathon"
+msgstr "Assign or remove a role in this hackathon"
+
+#: .\hackathons\views.py:293
+msgid "Affectation historisée."
+msgstr "Role assignment recorded."
+
+#: .\templates\403.html:2
+msgid "Accès refusé — HackFlow"
+msgstr "Access denied — HackFlow"
+
+#: .\templates\403.html:4
+msgid "Accès refusé"
+msgstr "Access denied"
+
+#: .\templates\403.html:5
+msgid "Votre compte ne dispose pas des autorisations nécessaires pour cette opération, ou cette édition est archivée."
+msgstr "Your account does not have permission to perform this action, or this edition is archived."
+
+#: .\templates\403.html:6 .\templates\404.html:6
+msgid "Retour aux hackathons"
+msgstr "Back to hackathons"
+
+#: .\templates\404.html:2
+msgid "Page introuvable — HackFlow"
+msgstr "Page not found — HackFlow"
+
+#: .\templates\404.html:4
+msgid "Page introuvable"
+msgstr "Page not found"
+
+#: .\templates\404.html:5
+msgid "Cette ressource est indisponible ou privée."
+msgstr "This resource is unavailable or private."
+
+#: .\templates\500.html:2
+msgid "Erreur serveur"
+msgstr "Server error"
+
+#: .\templates\500.html:2
+msgid "Une erreur est survenue"
+msgstr "Something went wrong"
+
+#: .\templates\500.html:2
+msgid "Le serveur a rencontré un problème. Réessayez dans un instant."
+msgstr "The server encountered a problem. Please try again shortly."
+
+#: .\templates\500.html:2
+msgid "Retour à l’accueil"
+msgstr "Back to home"
+
+#: .\templates\accounts\auth.html:2 .\templates\hackathons\detail.html:2
+#: .\templates\shared\form.html:2
+msgid "— HackFlow"
+msgstr "— HackFlow"
+
+#: .\templates\accounts\auth.html:6
+msgid "Pourquoi rejoindre HackFlow"
+msgstr "Why join HackFlow"
+
+#: .\templates\accounts\auth.html:7
+msgid "Bon retour"
+msgstr "Welcome back"
+
+#: .\templates\accounts\auth.html:7
+msgid "Rejoignez la communauté"
+msgstr "Join the community"
+
+#: .\templates\accounts\auth.html:8
+msgid "Retrouvez votre espace."
+msgstr "Welcome to your workspace."
+
+#: .\templates\accounts\auth.html:8
+msgid "Un compte, tous les hackathons."
+msgstr "One account, every hackathon."
+
+#: .\templates\accounts\auth.html:10
+msgid "Un seul compte, des rôles différents selon chaque événement."
+msgstr "One account, with different roles for each event."
+
+#: .\templates\accounts\auth.html:11
+msgid "Constituez votre équipe grâce à vos compétences."
+msgstr "Build a team around your skills."
+
+#: .\templates\accounts\auth.html:12
+msgid "Suivez votre projet, vos mentors et vos échéances."
+msgstr "Keep track of your project, mentors and deadlines."
+
+#: .\templates\accounts\auth.html:18
+msgid "Connectez-vous pour accéder à votre espace."
+msgstr "Sign in to access your workspace."
+
+#: .\templates\accounts\auth.html:18
+msgid "Créez votre compte pour découvrir les éditions."
+msgstr "Create an account to discover the editions."
+
+#: .\templates\accounts\auth.html:26 .\templates\shared\form.html:17
+msgid "Pas encore de compte ?"
+msgstr "Don’t have an account yet?"
+
+#: .\templates\accounts\auth.html:27
+msgid "Déjà inscrit ?"
+msgstr "Already have an account?"
+
+#: .\templates\accounts\password_done.html:2
+msgid "Mot de passe modifié — HackFlow"
+msgstr "Password changed — HackFlow"
+
+#: .\templates\accounts\password_done.html:4
+msgid "Votre mot de passe a bien été mis à jour."
+msgstr "Your password has been updated."
+
+#: .\templates\accounts\password_done.html:5
+msgid "Retour au profil"
+msgstr "Back to profile"
+
+#: .\templates\accounts\profile.html:2
+msgid "Mon profil — HackFlow"
+msgstr "My profile — HackFlow"
+
+#: .\templates\accounts\profile.html:5 .\templates\base.html:26
+#: .\templates\core\home.html:10
+msgid "Mon espace"
+msgstr "My workspace"
+
+#: .\templates\accounts\profile.html:6
+msgid "Mon profil ·"
+msgstr "My profile ·"
+
+#: .\templates\accounts\profile.html:7
+msgid "Modifier le profil"
+msgstr "Edit profile"
+
+#: .\templates\accounts\profile.html:11
+#, python-format
+msgid "Photo de profil de %(v0)s"
+msgstr "Profile photo of %(v0)s"
+
+#: .\templates\accounts\profile.html:18
+msgid "Centres d’intérêt :"
+msgstr "Interests:"
+
+#: .\templates\accounts\profile.html:21
+msgid "Mes compétences"
+msgstr "My skills"
+
+#: .\templates\accounts\profile.html:24
+#, python-format
+msgid "Niveau %(v0)s sur 5"
+msgstr "Level %(v0)s out of 5"
+
+#: .\templates\accounts\profile.html:25 .\templates\hackathons\manage.html:97
+#: .\templates\hackathons\manage.html:104
+#: .\templates\hackathons\manage.html:120
+#: .\templates\hackathons\manage.html:132
+#, python-format
+msgid "Modifier %(v0)s"
+msgstr "Edit %(v0)s"
+
+#: .\templates\accounts\profile.html:25 .\templates\hackathons\manage.html:97
+#: .\templates\hackathons\manage.html:104
+#: .\templates\hackathons\manage.html:120
+#: .\templates\hackathons\manage.html:132
+msgid "Modifier"
+msgstr "Edit"
+
+#: .\templates\accounts\profile.html:25
+msgid "Retirer"
+msgstr "Remove"
+
+#: .\templates\accounts\profile.html:27
+msgid "Aucune compétence déclarée. Le référentiel est géré dans l’administration."
+msgstr "No skills added. The skills directory is managed in administration."
+
+#: .\templates\accounts\profile.html:29
+msgid "Mes rôles par hackathon"
+msgstr "My roles by hackathon"
+
+#: .\templates\accounts\profile.html:32
+msgid "Votre compte n’est affecté à aucun hackathon."
+msgstr "Your account is not assigned to any hackathon."
+
+#: .\templates\accounts\profile.html:33
+msgid "Organisations représentées"
+msgstr "Represented organizations"
+
+#: .\templates\accounts\profile.html:34
+msgid "Aucune organisation."
+msgstr "No organizations."
+
+#: .\templates\admin\base_site.html:3 .\templates\base.html:22
+msgid "Administration"
+msgstr "Administration"
+
+#: .\templates\admin\base_site.html:5
+msgid "Retour à HackFlow"
+msgstr "Back to HackFlow"
+
+#: .\templates\admin\base_site.html:5 .\templates\base.html:19
+msgid "Langue"
+msgstr "Language"
+
+#: .\templates\admin\base_site.html:5 .\templates\base.html:19
+msgid "Appliquer"
+msgstr "Apply"
+
+#: .\templates\base.html:4
+msgid "Hackathons étudiants"
+msgstr "Student hackathons"
+
+#: .\templates\base.html:5
+msgid "Un espace pour organiser les hackathons étudiants, former des équipes et faire avancer les projets."
+msgstr "A workspace to organize student hackathons, build teams and move projects forward."
+
+#: .\templates\base.html:8
+msgid "Aller au contenu principal"
+msgstr "Skip to main content"
+
+#: .\templates\base.html:10
+msgid "HackFlow, accueil"
+msgstr "HackFlow, home"
+
+#: .\templates\base.html:11
+msgid "Ouvrir la navigation"
+msgstr "Open navigation"
+
+#: .\templates\base.html:12
+msgid "Navigation principale"
+msgstr "Main navigation"
+
+#: .\templates\base.html:13 .\templates\shared\breadcrumbs.html:2
+msgid "Accueil"
+msgstr "Home"
+
+#: .\templates\base.html:14 .\templates\base.html:26
+#: .\templates\shared\breadcrumbs.html:6
+msgid "Hackathons"
+msgstr "Hackathons"
+
+#: .\templates\base.html:17
+msgid "Langue et apparence"
+msgstr "Language and appearance"
+
+#: .\templates\base.html:18
+msgid "Préférences"
+msgstr "Preferences"
+
+#: .\templates\base.html:20
+msgid "Apparence"
+msgstr "Appearance"
+
+#: .\templates\base.html:20
+msgid "Système"
+msgstr "System"
+
+#: .\templates\base.html:20
+msgid "Claire"
+msgstr "Light"
+
+#: .\templates\base.html:20
+msgid "Sombre"
+msgstr "Dark"
+
+#: .\templates\base.html:20
+msgid "Votre choix est conservé sur cet appareil."
+msgstr "Your choice is saved on this device."
+
+#: .\templates\base.html:21
+msgid "Menu du compte"
+msgstr "Account menu"
+
+#: .\templates\base.html:22
+msgid "Déconnexion"
+msgstr "Sign out"
+
+#: .\templates\base.html:23
+msgid "Créer un compte"
+msgstr "Create an account"
+
+#: .\templates\base.html:25
+msgid "Fermer le message"
+msgstr "Dismiss message"
+
+#: .\templates\base.html:26
+msgid "Des équipes, des idées, des projets."
+msgstr "Teams, ideas, projects."
+
+#: .\templates\base.html:26
+msgid "Liens de pied de page"
+msgstr "Footer links"
+
+#: .\templates\base.html:26
+msgid "Haut de page"
+msgstr "Back to top"
+
+#: .\templates\core\home.html:2 .\templates\core\home.html:10
+msgid "Vos idées, en équipe."
+msgstr "Your ideas, together."
+
+#: .\templates\core\home.html:9
+msgid "Les hackathons étudiants, ensemble."
+msgstr "Student hackathons, together."
+
+#: .\templates\core\home.html:9
+msgid "Découvrir HackFlow"
+msgstr "Discover HackFlow"
+
+#: .\templates\core\home.html:9
+msgid "Pour qui ?"
+msgstr "Who is it for?"
+
+#: .\templates\core\home.html:9
+msgid "Le parcours"
+msgstr "The journey"
+
+#: .\templates\core\home.html:9
+msgid "Questions fréquentes"
+msgstr "Frequently asked questions"
+
+#: .\templates\core\home.html:10
+msgid "HackFlow rassemble vos hackathons étudiants : les éditions, leurs challenges et les personnes qui les font vivre."
+msgstr "HackFlow brings your student hackathons together: the editions, their challenges and the people who make them happen."
+
+#: .\templates\core\home.html:10
+msgid "Découvrir les hackathons"
+msgstr "Explore hackathons"
+
+#: .\templates\core\home.html:15
+msgid "Prochains hackathons"
+msgstr "Upcoming hackathons"
+
+#: .\templates\core\home.html:15
+msgid "Un thème qui vous parle, un challenge à explorer."
+msgstr "A topic that speaks to you, a challenge to explore."
+
+#: .\templates\core\home.html:15
+msgid "Tout le catalogue"
+msgstr "Full catalogue"
+
+#: .\templates\core\home.html:17
+msgid "Découvrir cette édition"
+msgstr "Explore this edition"
+
+#: .\templates\core\home.html:18
+msgid "La prochaine édition arrive bientôt"
+msgstr "The next edition is coming soon"
+
+#: .\templates\core\home.html:18
+msgid "Aucun hackathon n’est publié pour le moment. Les prochaines éditions apparaîtront ici dès leur publication."
+msgstr "No hackathons have been published yet. Upcoming editions will appear here once published."
+
+#: .\templates\core\home.html:18
+msgid "Créer la première édition"
+msgstr "Create the first edition"
+
+#: .\templates\core\home.html:18
+msgid "Explorer le catalogue"
+msgstr "Browse the catalogue"
+
+#: .\templates\core\home.html:23
+msgid "Un compte.<br>Plusieurs rôles."
+msgstr "One account.<br>Many roles."
+
+#: .\templates\core\home.html:23
+msgid "Participant aujourd’hui, mentor demain. Votre compte reste le même ; votre rôle dépend de chaque hackathon."
+msgstr "A participant today, a mentor tomorrow. Your account stays the same; your role depends on each hackathon."
+
+#: .\templates\core\home.html:23
+msgid "Choisissez un rôle pour découvrir sa place dans le parcours."
+msgstr "Choose a role to discover its place in the journey."
+
+#: .\templates\core\home.html:25
+msgid "Organiser une édition"
+msgstr "Organize an edition"
+
+#: .\templates\core\home.html:25
+msgid "Définissez les dates, les phases et les challenges. Gérez les partenaires et les rôles depuis votre espace de pilotage."
+msgstr "Set dates, phases and challenges. Manage partners and roles from your organizer workspace."
+
+#: .\templates\core\home.html:25
+msgid "La création d’un hackathon nécessite une autorisation de la plateforme."
+msgstr "Creating a hackathon requires permission from the platform."
+
+#: .\templates\core\home.html:25
+msgid "Ouvrir la Control Tower"
+msgstr "Open the Control Tower"
+
+#: .\templates\core\home.html:26
+msgid "Participer et créer"
+msgstr "Participate and create"
+
+#: .\templates\core\home.html:26
+msgid "Découvrez les éditions et leurs consignes, puis complétez votre profil et vos compétences pour préparer votre participation."
+msgstr "Discover editions and their guidelines, then complete your profile and skills to prepare for participation."
+
+#: .\templates\core\home.html:26
+msgid "Les inscriptions aux éditions et les équipes arrivent dans la suite du projet."
+msgstr "Event registration and teams are coming in the next stages of the project."
+
+#: .\templates\core\home.html:26
+msgid "Préparer mon profil"
+msgstr "Prepare my profile"
+
+#: .\templates\core\home.html:27
+msgid "Accompagner une équipe"
+msgstr "Support a team"
+
+#: .\templates\core\home.html:27
+msgid "Le mentor aide les équipes à avancer. Les demandes d’accompagnement, les séances et les ateliers feront partie du parcours."
+msgstr "Mentors help teams move forward. Support requests, sessions and workshops will be part of the journey."
+
+#: .\templates\core\home.html:27
+msgid "Les outils de mentorat arrivent prochainement."
+msgstr "Mentoring tools are coming soon."
+
+#: .\templates\core\home.html:28
+msgid "Évaluer les projets"
+msgstr "Evaluate projects"
+
+#: .\templates\core\home.html:28
+msgid "Le jury examine les projets selon les critères de l’édition. Les évaluations et les résultats seront regroupés dans cet espace."
+msgstr "Jury members review projects against the edition’s criteria. Evaluations and results will be brought together in this space."
+
+#: .\templates\core\home.html:28
+msgid "Les outils d’évaluation arrivent prochainement."
+msgstr "Evaluation tools are coming soon."
+
+#: .\templates\core\home.html:29
+msgid "Soutenir un challenge"
+msgstr "Support a challenge"
+
+#: .\templates\core\home.html:29
+msgid "Un représentant sponsor autorisé peut proposer un challenge dans le cadre d’un partenariat confirmé. L’organisateur le valide avant sa publication."
+msgstr "An authorized sponsor representative can propose a challenge through a confirmed partnership. The organizer approves it before publication."
+
+#: .\templates\core\home.html:29
+msgid "Découvrir les éditions"
+msgstr "Explore editions"
+
+#: .\templates\core\home.html:34
+msgid "De l’idée au projet."
+msgstr "From idea to project."
+
+#: .\templates\core\home.html:34
+msgid "Un cadre pour apprendre, construire et partager. Le parcours s’enrichit au fil du développement de HackFlow."
+msgstr "A framework to learn, build and share. The journey grows as HackFlow develops."
+
+#: .\templates\core\home.html:36
+msgid "Des premières maquettes dessinées au crayon dans un carnet."
+msgstr "Early wireframes sketched in pencil in a notebook."
+
+#: .\templates\core\home.html:36
+msgid "Trouver le déclic"
+msgstr "Find your spark"
+
+#: .\templates\core\home.html:36
+msgid "Explorez les thématiques, lisez les challenges et repérez les dates de l’édition qui vous correspond."
+msgstr "Explore themes, read challenges and check the dates of the edition that suits you."
+
+#: .\templates\core\home.html:37
+msgid "Un étudiant développe un prototype sur son ordinateur."
+msgstr "A student develops a prototype on a laptop."
+
+#: .\templates\core\home.html:37
+msgid "Construire ensemble"
+msgstr "Build together"
+
+#: .\templates\core\home.html:37
+msgid "Réunir des compétences, confronter ses idées et avancer vers un prototype : le cœur de chaque hackathon."
+msgstr "Bring skills together, discuss ideas and work towards a prototype: the heart of every hackathon."
+
+#: .\templates\core\home.html:38
+msgid "Une étudiante présente un prototype à deux autres étudiants."
+msgstr "A student presents a prototype to two fellow students."
+
+#: .\templates\core\home.html:38
+msgid "Partager le résultat"
+msgstr "Share the result"
+
+#: .\templates\core\home.html:38
+msgid "Présenter sa démarche, expliquer ses choix et recevoir des retours pour aller plus loin."
+msgstr "Present your approach, explain your choices and gather feedback to take it further."
+
+#: .\templates\core\home.html:43
+msgid "Avant de commencer."
+msgstr "Before you begin."
+
+#: .\templates\core\home.html:44
+msgid "Un compte suffit ?"
+msgstr "Is one account enough?"
+
+#: .\templates\core\home.html:44
+msgid "Oui. Un seul compte vous permet de découvrir les éditions et de gérer votre profil. Les rôles sont attribués pour chaque hackathon."
+msgstr "Yes. One account lets you explore editions and manage your profile. Roles are assigned for each hackathon."
+
+#: .\templates\core\home.html:45
+msgid "Compte créé, déjà inscrit ?"
+msgstr "Account created, already registered?"
+
+#: .\templates\core\home.html:45
+msgid "Créer un compte ne vous inscrit pas automatiquement à un événement. L’inscription à une édition est une démarche distincte, dont le module est en préparation."
+msgstr "Creating an account does not automatically register you for an event. Registration for an edition is a separate step; its module is being prepared."
+
+#: .\templates\core\home.html:46
+msgid "Qui crée les hackathons ?"
+msgstr "Who creates hackathons?"
+
+#: .\templates\core\home.html:46
+msgid "Les personnes autorisées par la plateforme. En créant une édition, elles deviennent organisatrices de cet événement et gèrent sa configuration."
+msgstr "People authorized by the platform. Creating an edition makes them organizers of that event, responsible for its configuration."
+
+#: .\templates\core\home.html:47
+msgid "Que peut-on faire aujourd’hui ?"
+msgstr "What can I do today?"
+
+#: .\templates\core\home.html:47
+msgid "Créer son compte et son profil, déclarer ses compétences et consulter les éditions publiées. Les organisateurs disposent aussi du calendrier, des challenges, des partenaires et du pilotage. Les équipes, projets, séances de mentorat et évaluations arrivent progressivement."
+msgstr "Create an account and profile, add your skills and browse published editions. Organizers also have schedules, challenges, partners and management tools. Teams, projects, mentoring sessions and evaluations are being added progressively."
+
+#: .\templates\core\home.html:50
+msgid "Le prochain déclic ?<br>Peut-être le vôtre."
+msgstr "Your next idea?<br>Start it here."
+
+#: .\templates\core\home.html:50
+msgid "Commencez par une édition qui vous inspire. Les bonnes idées prennent une autre dimension quand on les construit ensemble."
+msgstr "Start with an edition that inspires you. Good ideas take on a new dimension when you build them together."
+
+#: .\templates\core\home.html:50
+msgid "Explorer les éditions"
+msgstr "Explore editions"
+
+#: .\templates\core\home.html:51
+msgid "Visuels d’illustration générés pour HackFlow."
+msgstr "Illustrative images generated for HackFlow."
+
+#: .\templates\hackathons\compare.html:2
+msgid "Comparer les éditions — HackFlow"
+msgstr "Compare editions — HackFlow"
+
+#: .\templates\hackathons\compare.html:5
+msgid "Choisir deux éditions"
+msgstr "Choose two editions"
+
+#: .\templates\hackathons\compare.html:6
+msgid "Première édition"
+msgstr "First edition"
+
+#: .\templates\hackathons\compare.html:6 .\templates\hackathons\compare.html:7
+msgid "Choisir"
+msgstr "Choose"
+
+#: .\templates\hackathons\compare.html:7
+msgid "Deuxième édition"
+msgstr "Second edition"
+
+#: .\templates\hackathons\compare.html:7
+msgid "Comparer"
+msgstr "Compare"
+
+#: .\templates\hackathons\compare.html:8
+msgid "Capacité :"
+msgstr "Capacity:"
+
+#: .\templates\hackathons\compare.html:8
+msgid "· Équipes :"
+msgstr "· Teams:"
+
+#: .\templates\hackathons\dashboard.html:2
+msgid "Control Tower — HackFlow"
+msgstr "Control Tower — HackFlow"
+
+#: .\templates\hackathons\dashboard.html:4
+msgid "Pilotage des éditions"
+msgstr "Manage editions"
+
+#: .\templates\hackathons\dashboard.html:5
+#, python-format
+msgid "%(total)s hackathon actif dans votre périmètre."
+msgid_plural "%(total)s hackathons actifs dans votre périmètre."
+msgstr[0] "%(total)s active hackathon within your scope."
+msgstr[1] "%(total)s active hackathons within your scope."
+
+#: .\templates\hackathons\dashboard.html:6
+msgid "Comparer deux éditions"
+msgstr "Compare two editions"
+
+#: .\templates\hackathons\dashboard.html:8
+msgid "Indicateurs figés le"
+msgstr "Metrics frozen on"
+
+#: .\templates\hackathons\dashboard.html:11
+msgid "Phases en cours"
+msgstr "Current phases"
+
+#: .\templates\hackathons\dashboard.html:11
+msgid "· fin"
+msgstr "· ends"
+
+#: .\templates\hackathons\dashboard.html:11
+msgid "Aucune phase en cours."
+msgstr "No phases in progress."
+
+#: .\templates\hackathons\dashboard.html:12
+msgid "Échéances à 7 jours"
+msgstr "Deadlines in the next 7 days"
+
+#: .\templates\hackathons\dashboard.html:12
+msgid "Aucune échéance proche."
+msgstr "No upcoming deadlines."
+
+#: .\templates\hackathons\dashboard.html:13
+msgid "Alertes de configuration"
+msgstr "Configuration alerts"
+
+#: .\templates\hackathons\dashboard.html:13
+msgid "Aucune anomalie de configuration détectée."
+msgstr "No configuration issues detected."
+
+#: .\templates\hackathons\dashboard.html:14
+msgid "Alertes transversales / IA"
+msgstr "Cross-module / AI alerts"
+
+#: .\templates\hackathons\dashboard.html:14
+msgid "Aucune alerte fournie."
+msgstr "No alerts provided."
+
+#: .\templates\hackathons\dashboard.html:14
+msgid "Fournisseur non connecté."
+msgstr "Provider not connected."
+
+#: .\templates\hackathons\dashboard.html:15
+msgid "Aucun hackathon à piloter. Une autorisation de création ou un rôle organisateur est nécessaire."
+msgstr "No hackathons to manage. A creation permission or organizer role is required."
+
+#: .\templates\hackathons\detail.html:15
+msgid "Sur cette page"
+msgstr "On this page"
+
+#: .\templates\hackathons\detail.html:16 .\templates\hackathons\detail.html:24
+msgid "À propos"
+msgstr "About"
+
+#: .\templates\hackathons\detail.html:17
+msgid "Calendrier"
+msgstr "Schedule"
+
+#: .\templates\hackathons\detail.html:18 .\templates\hackathons\manage.html:19
+#: .\templates\hackathons\manage.html:78 .\templates\hackathons\metrics.html:2
+msgid "Challenges"
+msgstr "Challenges"
+
+#: .\templates\hackathons\detail.html:19
+msgid "Partenaires"
+msgstr "Partners"
+
+#: .\templates\hackathons\detail.html:30
+msgid "Calendrier des phases"
+msgstr "Phase schedule"
+
+#: .\templates\hackathons\detail.html:31
+msgid "Calendrier en préparation."
+msgstr "The schedule is being prepared."
+
+#: .\templates\hackathons\detail.html:34
+msgid "Challenges disponibles"
+msgstr "Available challenges"
+
+#: .\templates\hackathons\detail.html:35
+msgid "Livrables"
+msgstr "Deliverables"
+
+#: .\templates\hackathons\detail.html:35
+msgid "Sponsor :"
+msgstr "Sponsor:"
+
+#: .\templates\hackathons\detail.html:35
+msgid "Aucun challenge publié."
+msgstr "No published challenges."
+
+#: .\templates\hackathons\detail.html:38
+msgid "Partenaires confirmés"
+msgstr "Confirmed partners"
+
+#: .\templates\hackathons\detail.html:39
+#, python-format
+msgid "Logo %(v0)s"
+msgstr "%(v0)s logo"
+
+#: .\templates\hackathons\detail.html:39
+msgid "Site du partenaire"
+msgstr "Partner website"
+
+#: .\templates\hackathons\detail.html:39
+msgid "Aucun partenaire confirmé."
+msgstr "No confirmed partners."
+
+#: .\templates\hackathons\detail.html:43
+msgid "Informations clés"
+msgstr "Key information"
+
+#: .\templates\hackathons\detail.html:45
+msgid "En un coup d’œil"
+msgstr "At a glance"
+
+#: .\templates\hackathons\detail.html:50
+msgid "Dépôt des projets avant"
+msgstr "Submit projects by"
+
+#: .\templates\hackathons\detail.html:51
+msgid "Capacité"
+msgstr "Capacity"
+
+#: .\templates\hackathons\detail.html:51
+msgid "participants"
+msgstr "participants"
+
+#: .\templates\hackathons\detail.html:52
+msgid "Taille des équipes"
+msgstr "Team size"
+
+#: .\templates\hackathons\detail.html:52 .\templates\hackathons\list.html:35
+msgid "à"
+msgstr "to"
+
+#: .\templates\hackathons\detail.html:52
+msgid "personnes"
+msgstr "people"
+
+#: .\templates\hackathons\detail.html:55
+msgid "Fin des inscriptions et heure limite de dépôt exclues · fuseau Africa/Tunis."
+msgstr "Registration closing and submission deadlines are exclusive · Africa/Tunis time zone."
+
+#: .\templates\hackathons\detail.html:58
+msgid "Piloter cette édition"
+msgstr "Manage this edition"
+
+#: .\templates\hackathons\detail.html:59
+msgid "Proposer un challenge sponsorisé"
+msgstr "Propose a sponsored challenge"
+
+#: .\templates\hackathons\history.html:2
+msgid "Historique —"
+msgstr "History —"
+
+#: .\templates\hackathons\history.html:4
+msgid "Historique ·"
+msgstr "History ·"
+
+#: .\templates\hackathons\history.html:5
+#: .\templates\hackathons\manage.html:147
+msgid "Aucune opération."
+msgstr "No operations."
+
+#: .\templates\hackathons\history.html:6 .\templates\hackathons\list.html:48
+msgid "Pagination"
+msgstr "Pagination"
+
+#: .\templates\hackathons\history.html:6 .\templates\hackathons\list.html:48
+msgid "Précédent"
+msgstr "Previous"
+
+#: .\templates\hackathons\history.html:6 .\templates\hackathons\list.html:48
+msgid "Page"
+msgstr "Page"
+
+#: .\templates\hackathons\history.html:6 .\templates\hackathons\list.html:48
+msgid "Suivant"
+msgstr "Next"
+
+#: .\templates\hackathons\list.html:2
+msgid "Les hackathons — HackFlow"
+msgstr "Hackathons — HackFlow"
+
+#: .\templates\hackathons\list.html:6
+msgid "Explorer · Construire · Innover"
+msgstr "Explore · Build · Innovate"
+
+#: .\templates\hackathons\list.html:8
+msgid "Trouvez l’édition qui vous correspond, découvrez ses challenges et rejoignez l’aventure."
+msgstr "Find the right edition, discover its challenges and join the adventure."
+
+#: .\templates\hackathons\list.html:13
+msgid "Filtrer les hackathons"
+msgstr "Filter hackathons"
+
+#: .\templates\hackathons\list.html:14
+msgid "Recherche"
+msgstr "Search"
+
+#: .\templates\hackathons\list.html:14
+msgid "Titre, lieu, description"
+msgstr "Title, location, description"
+
+#: .\templates\hackathons\list.html:15
+msgid "Tous les statuts"
+msgstr "All statuses"
+
+#: .\templates\hackathons\list.html:16
+msgid "Tous les formats"
+msgstr "All formats"
+
+#: .\templates\hackathons\list.html:17
+msgid "Rechercher"
+msgstr "Search"
+
+#: .\templates\hackathons\list.html:18
+msgid "Réinitialiser"
+msgstr "Reset"
+
+#: .\templates\hackathons\list.html:21
+#, python-format
+msgid "%(total)s hackathon trouvé"
+msgid_plural "%(total)s hackathons trouvés"
+msgstr[0] "%(total)s hackathon found"
+msgstr[1] "%(total)s hackathons found"
+
+#: .\templates\hackathons\list.html:32
+#, python-format
+msgid "Informations sur %(v0)s"
+msgstr "Information about %(v0)s"
+
+#: .\templates\hackathons\list.html:33
+msgid "Début :"
+msgstr "Starts:"
+
+#: .\templates\hackathons\list.html:35
+msgid "places · équipes de"
+msgstr "places · teams of"
+
+#: .\templates\hackathons\list.html:37
+msgid "Voir les détails →"
+msgstr "View details →"
+
+#: .\templates\hackathons\list.html:41
+msgid "Aucun hackathon correspondant"
+msgstr "No matching hackathons"
+
+#: .\templates\hackathons\list.html:42
+msgid "Essayez d’autres mots-clés ou retirez un filtre."
+msgstr "Try different keywords or remove a filter."
+
+#: .\templates\hackathons\list.html:43
+msgid "Réinitialiser la recherche"
+msgstr "Reset search"
+
+#: .\templates\hackathons\manage.html:2
+msgid "Pilotage —"
+msgstr "Manage —"
+
+#: .\templates\hackathons\manage.html:14
+msgid "Sections du pilotage"
+msgstr "Management sections"
+
+#: .\templates\hackathons\manage.html:16 .\templates\hackathons\manage.html:30
+msgid "Vue d’ensemble"
+msgstr "Overview"
+
+#: .\templates\hackathons\manage.html:17 .\templates\hackathons\manage.html:76
+#: .\templates\hackathons\manage.html:95 .\templates\hackathons\metrics.html:2
+msgid "Tracks"
+msgstr "Tracks"
+
+#: .\templates\hackathons\manage.html:18 .\templates\hackathons\manage.html:77
+#: .\templates\hackathons\manage.html:102
+msgid "Phases"
+msgstr "Phases"
+
+#: .\templates\hackathons\manage.html:20 .\templates\hackathons\manage.html:79
+#: .\templates\hackathons\manage.html:130
+msgid "Partenariats"
+msgstr "Partnerships"
+
+#: .\templates\hackathons\manage.html:21
+msgid "Rôles"
+msgstr "Roles"
+
+#: .\templates\hackathons\manage.html:33
+msgid "Édition archivée le"
+msgstr "Edition archived on"
+
+#: .\templates\hackathons\manage.html:33
+msgid ". Configuration figée et indicateurs conservés."
+msgstr ". Configuration is frozen and metrics are preserved."
+
+#: .\templates\hackathons\manage.html:36
+msgid "Où en est l’événement ?"
+msgstr "Where does the event stand?"
+
+#: .\templates\hackathons\manage.html:38
+msgid "Étapes de l’événement"
+msgstr "Event steps"
+
+#: .\templates\hackathons\manage.html:39 .\templates\hackathons\manage.html:40
+#: .\templates\hackathons\manage.html:41
+msgid "(terminé)"
+msgstr "(completed)"
+
+#: .\templates\hackathons\manage.html:45
+msgid "Prochaine étape :"
+msgstr "Next step:"
+
+#: .\templates\hackathons\manage.html:46
+msgid "terminer la configuration, puis publier l’événement."
+msgstr "finish the configuration, then publish the event."
+
+#: .\templates\hackathons\manage.html:47
+msgid "démarrer l’événement à sa date de début."
+msgstr "start the event on its start date."
+
+#: .\templates\hackathons\manage.html:48
+msgid "suivre le déroulement ; vous pourrez le terminer après sa date de fin."
+msgstr "follow the event; you can mark it as finished after its end date."
+
+#: .\templates\hackathons\manage.html:49
+msgid "archiver l’édition pour figer ses indicateurs."
+msgstr "archive the edition to freeze its metrics."
+
+#: .\templates\hackathons\manage.html:51
+msgid "Valider et publier l’événement"
+msgstr "Validate and publish the event"
+
+#: .\templates\hackathons\manage.html:52
+msgid "Démarrer l’événement"
+msgstr "Start the event"
+
+#: .\templates\hackathons\manage.html:52
+msgid "Terminer une édition échue"
+msgstr "Finish an event whose end date has passed"
+
+#: .\templates\hackathons\manage.html:53
+msgid "Terminer l’événement"
+msgstr "Finish the event"
+
+#: .\templates\hackathons\manage.html:54
+msgid "Archiver et figer les indicateurs"
+msgstr "Archive and freeze metrics"
+
+#: .\templates\hackathons\manage.html:59
+msgid "À corriger avant publication"
+msgstr "To fix before publication"
+
+#: .\templates\hackathons\manage.html:61
+msgid "Configuration complète."
+msgstr "Configuration complete."
+
+#: .\templates\hackathons\manage.html:61
+msgid "Aucune anomalie détectée."
+msgstr "No issues detected."
+
+#: .\templates\hackathons\manage.html:66
+msgid "À traiter"
+msgstr "To review"
+
+#: .\templates\hackathons\manage.html:66
+msgid "Proposition de challenge ·"
+msgstr "Challenge proposal ·"
+
+#: .\templates\hackathons\manage.html:68
+#: .\templates\hackathons\manage.html:118
+msgid "Valider"
+msgstr "Approve"
+
+#: .\templates\hackathons\manage.html:69
+msgid "Refuser"
+msgstr "Reject"
+
+#: .\templates\hackathons\manage.html:74
+msgid "En chiffres"
+msgstr "In numbers"
+
+#: .\templates\hackathons\manage.html:80
+msgid "Rôles attribués"
+msgstr "Assigned roles"
+
+#: .\templates\hackathons\manage.html:84
+msgid "Actions rapides"
+msgstr "Quick actions"
+
+#: .\templates\hackathons\manage.html:86
+msgid "Configurer l’événement"
+msgstr "Configure the event"
+
+#: .\templates\hackathons\manage.html:86
+msgid "Titre, dates, règlement, capacité et tailles d’équipe."
+msgstr "Title, dates, rules, capacity and team sizes."
+
+#: .\templates\hackathons\manage.html:87
+#: .\templates\hackathons\manage.html:138
+msgid "Affecter / retirer un rôle"
+msgstr "Assign / remove a role"
+
+#: .\templates\hackathons\manage.html:87
+msgid "Participants, mentors, jurés et représentants de sponsor."
+msgstr "Participants, mentors, jury members and sponsor representatives."
+
+#: .\templates\hackathons\manage.html:88
+msgid "Ajoutez un sponsor, puis liez-le à l’édition."
+msgstr "Add a sponsor, then link it to the edition."
+
+#: .\templates\hackathons\manage.html:96
+msgid "Les tracks regroupent les challenges par thématique."
+msgstr "Tracks group challenges by topic."
+
+#: .\templates\hackathons\manage.html:97
+msgid "Actif,Inactif"
+msgstr "Active,Inactive"
+
+#: .\templates\hackathons\manage.html:97
+#: .\templates\hackathons\manage.html:104
+#: .\templates\hackathons\manage.html:122
+#: .\templates\hackathons\manage.html:132
+#, python-format
+msgid "Supprimer le brouillon %(v0)s"
+msgstr "Delete draft %(v0)s"
+
+#: .\templates\hackathons\manage.html:97
+#: .\templates\hackathons\manage.html:104
+#: .\templates\hackathons\manage.html:122
+#: .\templates\hackathons\manage.html:132
+msgid "Supprimer le brouillon"
+msgstr "Delete draft"
+
+#: .\templates\hackathons\manage.html:97
+msgid "Aucun track pour l’instant."
+msgstr "No tracks yet."
+
+#: .\templates\hackathons\manage.html:103
+msgid "Inscriptions, développement, soumission et évaluation sont requises pour publier."
+msgstr "Registration, development, submission and evaluation phases are required to publish."
+
+#: .\templates\hackathons\manage.html:104
+msgid "Aucune phase pour l’instant."
+msgstr "No phases yet."
+
+#: .\templates\hackathons\manage.html:109
+msgid "Challenges et propositions sponsor"
+msgstr "Challenges and sponsor proposals"
+
+#: .\templates\hackathons\manage.html:110
+msgid "Un challenge doit être validé puis publié pour apparaître publiquement."
+msgstr "A challenge must be approved and then published to appear publicly."
+
+#: .\templates\hackathons\manage.html:114
+msgid "Track :"
+msgstr "Track:"
+
+#: .\templates\hackathons\manage.html:116
+msgid "Voir objectifs et livrables"
+msgstr "View objectives and deliverables"
+
+#: .\templates\hackathons\manage.html:116
+msgid "Objectifs :"
+msgstr "Objectives:"
+
+#: .\templates\hackathons\manage.html:116
+msgid "Livrables :"
+msgstr "Deliverables:"
+
+#: .\templates\hackathons\manage.html:119
+msgid "Publier"
+msgstr "Publish"
+
+#: .\templates\hackathons\manage.html:121
+msgid "Retirer / refuser"
+msgstr "Withdraw / reject"
+
+#: .\templates\hackathons\manage.html:125
+msgid "Aucun challenge pour l’instant."
+msgstr "No challenges yet."
+
+#: .\templates\hackathons\manage.html:131
+msgid "Un sponsor doit avoir un partenariat confirmé pour proposer des challenges."
+msgstr "A sponsor needs a confirmed partnership to propose challenges."
+
+#: .\templates\hackathons\manage.html:132
+msgid "Aucun partenariat pour l’instant."
+msgstr "No partnerships yet."
+
+#: .\templates\hackathons\manage.html:133
+msgid "Créer une nouvelle organisation sponsor"
+msgstr "Create a new sponsor organization"
+
+#: .\templates\hackathons\manage.html:138
+msgid "Affectations contextualisées"
+msgstr "Contextual role assignments"
+
+#: .\templates\hackathons\manage.html:139
+msgid "Les rôles s’appliquent uniquement à cette édition."
+msgstr "Roles apply only to this edition."
+
+#: .\templates\hackathons\manage.html:140 .\templates\shared\form.html:36
+msgid "Aucune affectation."
+msgstr "No assignments."
+
+#: .\templates\hackathons\manage.html:145
+msgid "Historique (50 dernières opérations)"
+msgstr "History (last 50 operations)"
+
+#: .\templates\hackathons\manage.html:146
+msgid "Consulter tout l’historique"
+msgstr "View full history"
+
+#: .\templates\hackathons\manage.html:147
+msgid "Compte supprimé"
+msgstr "Deleted account"
+
+#: .\templates\hackathons\metrics.html:2
+msgid "Challenges publiés"
+msgstr "Published challenges"
+
+#: .\templates\hackathons\metrics.html:2
+msgid "Sponsors confirmés"
+msgstr "Confirmed sponsors"
+
+#: .\templates\hackathons\metrics.html:2
+msgid "Rôles participants actifs"
+msgstr "Active participant roles"
+
+#: .\templates\hackathons\metrics.html:3
+msgid "Aucun indicateur fourni."
+msgstr "No metrics provided."
+
+#: .\templates\hackathons\metrics.html:3
+msgid "Module non connecté : indicateurs indisponibles."
+msgstr "Module not connected: metrics unavailable."
+
+#: .\templates\shared\breadcrumbs.html:2
+msgid "Fil d’Ariane"
+msgstr "Breadcrumbs"
+
+#: .\templates\shared\breadcrumbs.html:11
+msgid "Page indisponible"
+msgstr "Page unavailable"
+
+#: .\templates\shared\confirm_delete.html:2
+msgid "Confirmer la suppression — HackFlow"
+msgstr "Confirm deletion — HackFlow"
+
+#: .\templates\shared\confirm_delete.html:5
+msgid "Supprimer"
+msgstr "Delete"
+
+#: .\templates\shared\confirm_delete.html:6
+msgid "Cette action est définitive. Seuls les brouillons non référencés peuvent être supprimés."
+msgstr "This action is permanent. Only unreferenced drafts can be deleted."
+
+#: .\templates\shared\confirm_delete.html:8
+msgid "Confirmer la suppression"
+msgstr "Confirm deletion"
+
+#: .\templates\shared\confirm_delete.html:8 .\templates\shared\form.html:14
+msgid "Annuler"
+msgstr "Cancel"
+
+#: .\templates\shared\field.html:4
+msgid "obligatoire"
+msgstr "required"
+
+#: .\templates\shared\field.html:4
+msgid "facultatif"
+msgstr "optional"
+
+#: .\templates\shared\form.html:8
+msgid "Édition :"
+msgstr "Edition:"
+
+#: .\templates\shared\form.html:8
+msgid "· Horaires : Africa/Tunis"
+msgstr "· Times: Africa/Tunis"
+
+#: .\templates\shared\form.html:13
+msgid "Enregistrer"
+msgstr "Save"
+
+#: .\templates\shared\form.html:18
+msgid "Déjà inscrit·e ?"
+msgstr "Already have an account?"
+
+#: .\templates\shared\form.html:22
+msgid "Aide"
+msgstr "Help"
+
+#: .\templates\shared\form.html:25
+msgid "Bien configurer l’édition"
+msgstr "Configure the edition"
+
+#: .\templates\shared\form.html:27
+msgid "Le début doit précéder la fin de l’événement."
+msgstr "The start must be before the event ends."
+
+#: .\templates\shared\form.html:28
+msgid "La clôture des inscriptions ne peut pas dépasser la fin de l’événement."
+msgstr "Registration cannot close after the event ends."
+
+#: .\templates\shared\form.html:29
+msgid "La date limite de soumission doit se situer pendant l’événement."
+msgstr "The submission deadline must fall within the event."
+
+#: .\templates\shared\form.html:30
+msgid "La capacité doit couvrir au moins la taille maximale d’une équipe."
+msgstr "Capacity must cover at least the maximum team size."
+
+#: .\templates\shared\form.html:33
+msgid "Rôles de cette édition"
+msgstr "Roles in this edition"
+
+#: .\templates\shared\form.html:34
+msgid "Un rôle s’applique uniquement à ce hackathon. Un participant ne peut pas être juré dans la même édition."
+msgstr "A role applies only to this hackathon. A participant cannot be a jury member in the same edition."
+
+#: .\templates\shared\form.html:39
+msgid "À quoi sert une organisation ?"
+msgstr "What is an organization for?"
+
+#: .\templates\shared\form.html:41
+msgid "Elle représente un sponsor ou un partenaire."
+msgstr "It represents a sponsor or partner."
+
+#: .\templates\shared\form.html:42
+msgid "Pour l’associer à cette édition, ajoutez ensuite un partenariat depuis la page de pilotage."
+msgstr "To associate it with this edition, add a partnership from the management page."
+
+#: .\templates\shared\form.html:43
+msgid "Les contacts restent privés ; seule la description publique est affichée."
+msgstr "Contacts stay private; only the public description is displayed."
+
+#: .\templates\shared\form.html:46
+msgid "Besoin d’aide ?"
+msgstr "Need help?"
+
+#: .\templates\shared\form.html:47
+msgid "Les champs obligatoires sont contrôlés côté serveur. Les erreurs s’affichent sous chaque champ."
+msgstr "Required fields are checked by the server. Errors appear below each field."
+
+#: .\templates\shared\form_errors.html:3
+msgid "Vérifiez les informations saisies"
+msgstr "Check the information you entered"

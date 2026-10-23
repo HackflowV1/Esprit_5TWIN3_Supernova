@@ -3,6 +3,11 @@
 Monolithe Django 5.2 (MVT), Templates, ModelForms, vues génériques et PostgreSQL.
 Le modèle original `accounts.User(AbstractUser)` et sa migration initiale sont conservés.
 
+**Interface commune aux cinq modules : [DESIGN.md](DESIGN.md).**
+L’application démarre en français. Le menu « Langue et apparence » propose l’anglais
+et les thèmes clair, sombre ou système. Les icônes Hugeicons et les images sont locales.
+Après modification des traductions, lancer `uv run python scripts/compile_translations.py`.
+
 ## Démarrage local
 
 Dans le dépôt existant, avec Python 3.11+ et `uv` :

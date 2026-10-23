@@ -1,0 +1,168 @@
+# Design commun de HackFlow
+
+Ce guide sert aux cinq membres du groupe. Chaque nouveau module réutilise les mêmes
+composants : on ne recrée pas sa propre navbar, ses boutons ou son thème.
+
+## L’esprit du design
+
+Une interface calme, lisible et simple, inspirée de Notion et d’Apple : couleurs
+neutres, typographie système, peu d’effets et des actions faciles à comprendre.
+La page d’accueil peut être plus visuelle ; les écrans de travail restent sobres.
+Références : [Taste Skill](https://www.tasteskill.dev/) et
+[Hugeicons](https://hugeicons.com/).
+
+Éviter les dégradés décoratifs, les halos, les cartes multicolores et les compteurs
+inventés. Une fonctionnalité à venir doit être annoncée clairement. Un module non
+connecté affiche « indisponible », pas un faux zéro.
+
+## Les fichiers à réutiliser
+
+| Besoin | Fichier |
+| --- | --- |
+| Structure, navbar, compte, préférences, footer | `templates/base.html` |
+| Couleurs, tailles, composants, responsive | `static/css/base.css` |
+| Accueil public uniquement | `templates/core/home.html`, `static/css/landing.css` |
+| Choix du thème avant l’affichage | `static/js/theme.js` |
+| Menus, onglets, erreurs, interactions | `static/js/base.js` |
+| Fil d’Ariane | `templates/shared/breadcrumbs.html` |
+| Champ accessible et résumé des erreurs | `shared/field.html`, `shared/form_errors.html` |
+| Icônes et rendu des champs | `core/templatetags/ui.py` |
+| Traduction anglaise | `locale/en/LC_MESSAGES/django.po` et `.mo` |
+
+## Couleurs et dimensions
+
+Toujours utiliser les variables CSS. Les mêmes noms fonctionnent dans les deux thèmes.
+
+| Variable | Utilisation |
+| --- | --- |
+| `--bg`, `--surface`, `--raised` | Page, panneau, zone secondaire |
+| `--ink`, `--muted` | Texte principal, texte secondaire |
+| `--line` | Séparation discrète entre contenus |
+| `--control` | Contour visible des champs et contrôles |
+| `--primary`, `--on-primary` | Action principale et son texte |
+| `--danger`, `--success`, `--warning` | États qui ont un sens métier |
+| `--focus` | Contour du focus clavier |
+
+Contenu : 1120 px maximum. Espacements courants : 8, 12, 16, 24, 32 et 48 px.
+Angles : 6 px pour les contrôles, 8 px pour les panneaux. Corps de texte : 15–16 px ;
+titres d’écran : environ 30 px. L’accueil utilise des titres plus grands.
+Les boutons et champs ont une hauteur minimale de 44 px.
+
+## Une nouvelle page
+
+```django
+{% extends 'base.html' %}
+{% load i18n ui %}
+{% block title %}{% translate 'Mes équipes' %} — HackFlow{% endblock %}
+{% block content %}
+<header class="page-head">
+  <h1>{% translate 'Mes équipes' %}</h1>
+</header>
+<section class="panel" aria-labelledby="teams-title">
+  <h2 id="teams-title">{% translate 'Équipes de cette édition' %}</h2>
+  <!-- Contenu réel du module -->
+</section>
+{% endblock %}
+```
+
+Ajouter les titres et parents des nouvelles routes dans
+`core/context_processors.py` et `shared/breadcrumbs.html`. Le dernier élément du
+fil d’Ariane indique la page actuelle. Garder un seul `h1` et des titres dans l’ordre.
+
+## Boutons, CRUD et icônes
+
+Une action principale par zone ; `secondary` pour les autres ; `danger` pour une
+action destructive. Garder un texte visible avec l’icône.
+
+```django
+<a class="button secondary" href="...">{% icon 'edit' %}{% translate 'Modifier' %}</a>
+<button type="submit" class="danger">{% icon 'delete' %}{% translate 'Supprimer' %}</button>
+```
+
+Icônes disponibles : `add`, `edit`, `delete`, `view`, `search`, `save`, `close`,
+`check`, `arrow-right`, `arrow-left`, `chevron-down`, `chevron-right`, `home`,
+`calendar`, `users`, `user`, `logout`, `settings`, `globe`, `sun`, `moon`,
+`monitor`, `menu`, `code`, `dashboard`, `clock`, `archive`, `help`, `shield`,
+`link`, `filter`, `compare`, `history`, `upload`, `building`, `award`.
+
+Elles viennent de **Hugeicons Core Free 4.3.5**, sous licence MIT conservée dans
+`static/icons/LICENSE-hugeicons.md`. Le sprite SVG est local : aucun CDN requis.
+Pour une icône seule, donner au bouton un `aria-label` traduit et précis.
+Pour plusieurs lignes, préciser l’objet : « Modifier l’équipe Alpha ».
+Les icônes décoratives sont cachées aux lecteurs d’écran par le helper.
+
+## Formulaires et listes déroulantes
+
+```django
+<form method="post" novalidate>
+  {% csrf_token %}
+  {% include 'shared/form_errors.html' %}
+  {% for field in form %}{% render_field field %}{% endfor %}
+  <button type="submit">{% icon 'save' %}{% translate 'Enregistrer' %}</button>
+</form>
+```
+
+Le helper associe label, aide et erreur au champ. Le résumé reçoit le focus après
+un envoi invalide. Garder la validation et les autorisations côté serveur.
+Le lien « Annuler » utilise une URL Django explicite ; éviter `history.back()`.
+
+Utiliser de vrais `<select>`. Les navigateurs compatibles affichent notre popup
+avec `appearance: base-select` ; les autres gardent leur sélecteur natif avec les
+couleurs du thème. Conserver les raccourcis clavier et les choix multiples natifs.
+Ne pas remplacer une liste par un simple `<div>` cliquable.
+
+## Français, anglais et thèmes
+
+Le français est la langue de départ, même si le navigateur est en anglais. Le menu
+« Langue et apparence » permet de choisir l’anglais ; Django conserve ce choix dans
+le cookie `hackflow_language`. Les URL et les permissions restent identiques.
+
+Dans les templates : `{% translate 'Texte français' %}`. Pour une phrase avec des
+variables ou un pluriel, utiliser `blocktranslate`, sans couper la phrase en morceaux.
+En Python : `gettext_lazy` pour les labels et `gettext` pour un message évalué dans
+une fonction. Traduire les libellés, jamais les codes métier (`PUBLISHED`, `MENTOR`),
+les titres de projets ou les textes écrits par les utilisateurs.
+
+Après ajout ou modification de textes :
+
+```powershell
+uv run python manage.py makemessages -l en --ignore=.venv --ignore=.taste-skill --ignore=static --ignore=docs --no-obsolete --no-wrap
+# Compléter et vérifier les msgstr du fichier .po.
+uv run python scripts/compile_translations.py
+```
+
+L’extraction `makemessages` demande les outils GNU gettext. La compilation du projet
+utilise `polib` via `uv`, donc ne demande pas `msgfmt` sur les postes des collègues.
+Versionner `.po` **et** `.mo` : les traductions sont alors utilisables dès le clone.
+
+Les thèmes clair, sombre et système utilisent les mêmes variables. Le choix est
+enregistré dans `localStorage['hackflow-theme']`. Ne pas coder le thème page par page.
+L’administration Django garde son propre sélecteur de thème natif.
+
+## Accessibilité et vérification rapide
+
+- Contraste du texte courant : au moins 4,5:1 ; contrôles et focus : au moins 3:1.
+- Ne jamais donner une information uniquement par une couleur ou une icône.
+- Parcours au clavier : Tab, Maj+Tab, Entrée, Espace et Échap pour fermer un menu.
+- Menus du compte et préférences : `details/summary`, utilisables sans JavaScript.
+- Onglets du pilotage : flèches, Début et Fin ; sections visibles sans JavaScript.
+- Labels visibles, aides associées, erreurs précises et un état vide utile.
+- Images informatives : texte alternatif ; images décoratives : `alt=""`.
+- Respecter `prefers-reduced-motion`, le zoom et le mode de couleurs forcées.
+- Vérifier mobile, tablette et bureau dans les deux langues et les deux thèmes.
+
+Le texte blanc du hero utilise un voile noir uniforme à 62 % : contraste minimum
+de 6,2:1 même au-dessus d’un pixel blanc. Garder ce voile si l’image change.
+Les quatre visuels de l’accueil sont illustratifs, générés pour le projet et stockés
+en WebP local ; les images sous la ligne de flottaison sont chargées progressivement.
+
+Avant de partager une modification :
+
+```powershell
+uv run python manage.py check
+uv run python manage.py makemigrations --check --dry-run
+uv run python manage.py test --keepdb
+```
+
+Les tests utilisent uniquement `test_hackflow_db`. Un changement visuel ne doit pas
+changer les règles des rôles, la logique des phases ou les données de `hackflow_db`.

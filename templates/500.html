@@ -1,4 +1,2 @@
-<!DOCTYPE html>
-<html lang="fr"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>Erreur serveur — HackFlow</title>
-<style>body{font:1rem/1.6 system-ui,sans-serif;background:#f6f7fd;color:#161b3a;display:grid;place-items:center;min-height:100vh;margin:0;text-align:center;padding:24px}h1{font-size:2rem}a{color:#4338ca}</style></head>
-<body><main><h1>Une erreur est survenue</h1><p>Le serveur a rencontré un problème. Réessayez dans un instant.</p><p><a href="/">Retour à l’accueil</a></p></main></body></html>
+{% load i18n static %}{% get_current_language as LANGUAGE_CODE %}<!DOCTYPE html>
+<html lang="{{ LANGUAGE_CODE }}"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1"><meta name="color-scheme" content="light dark"><title>{% translate 'Erreur serveur' %} — HackFlow</title><script src="{% static 'js/theme.js' %}"></script><link rel="stylesheet" href="{% static 'css/base.css' %}"></head><body><main id="contenu"><section class="error-page"><p class="error-code" aria-hidden="true">500</p><h1>{% translate 'Une erreur est survenue' %}</h1><p class="lead">{% translate 'Le serveur a rencontré un problème. Réessayez dans un instant.' %}</p><a class="button" href="/">{% translate 'Retour à l’accueil' %}</a></section></main></body></html>

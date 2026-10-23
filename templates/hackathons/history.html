@@ -1,7 +1,7 @@
-{% extends 'base.html' %}
-{% block title %}Historique — {{ event }}{% endblock %}
+{% extends 'base.html' %}{% load i18n ui %}
+{% block title %}{% translate 'Historique —' %} {{ event }}{% endblock %}
 {% block content %}
-<header class="page-head"><p class="breadcrumb"><a href="{% url 'hackathons:manage' event.slug %}">← Retour au pilotage</a></p><h1>Historique · {{ event }}</h1></header>
-{% for entry in entries %}<details class="panel"><summary>{{ entry.timestamp|date:'d/m/Y H:i' }} · {{ entry.actor }} · {{ entry.action }} · {{ entry.target }}</summary><pre>{{ entry.details }}</pre></details>{% empty %}<p class="empty">Aucune opération.</p>{% endfor %}
-<nav class="pagination" aria-label="Pagination">{% if page_obj.has_previous %}<a class="button small secondary" href="?page={{ page_obj.previous_page_number }}">Précédent</a>{% endif %}<span>Page {{ page_obj.number }} / {{ paginator.num_pages }}</span>{% if page_obj.has_next %}<a class="button small secondary" href="?page={{ page_obj.next_page_number }}">Suivant</a>{% endif %}</nav>
+<header class="page-head"><h1>{% translate 'Historique ·' %} {{ event }}</h1></header>
+{% for entry in entries %}<details class="panel"><summary>{{ entry.timestamp|date:"SHORT_DATETIME_FORMAT" }} · {{ entry.actor }} · {{ entry.action|translate }} · {{ entry.target }}</summary><pre>{{ entry.details }}</pre></details>{% empty %}<p class="empty">{% translate 'Aucune opération.' %}</p>{% endfor %}
+<nav class="pagination" aria-label="{% translate 'Pagination' %}">{% if page_obj.has_previous %}<a class="button small secondary" href="?page={{ page_obj.previous_page_number }}">{% translate 'Précédent' %}</a>{% endif %}<span>{% translate 'Page' %} {{ page_obj.number }} / {{ paginator.num_pages }}</span>{% if page_obj.has_next %}<a class="button small secondary" href="?page={{ page_obj.next_page_number }}">{% translate 'Suivant' %}</a>{% endif %}</nav>
 {% endblock %}

@@ -1,0 +1,92 @@
+/* Public landing: an editorial masthead and a shared 42% reading axis.
+   Application controls inside data-ui keep the same tokens and behavior. */
+.landing{font-size:16px;line-height:1.65}
+.landing figure{margin:0;overflow:hidden}
+.landing img{display:block;width:100%;object-fit:cover}
+.landing h1,.landing h2,.landing h3{text-wrap:balance}
+.landing h2{font-size:36px;letter-spacing:-.04em;font-weight:550;line-height:1.15}
+.landing h3{font-size:21px;font-weight:550;line-height:1.3}
+.landing .landing-axis{display:grid;grid-template-columns:minmax(0,42fr) minmax(0,58fr);column-gap:40px;align-items:start}
+.landing .landing-masthead{height:clamp(240px,32vh,350px);border-radius:var(--radius)}
+.landing-masthead img{height:100%;object-position:50% 42%}
+.landing .hero-copy{padding-top:36px;align-items:end}
+.hero-context>p{max-width:24ch;font-size:22px;line-height:1.4;letter-spacing:-.02em}
+.hero-context nav{display:flex;flex-wrap:wrap;gap:8px 20px;margin-top:32px;font-size:14px}
+.hero-context nav a{display:inline-flex;align-items:center;min-height:44px;text-decoration:none;color:var(--muted)}
+.hero-context nav a:hover{color:var(--ink);text-decoration:underline}
+.landing h1{font-size:clamp(48px,5.2vw,68px);line-height:1.02;letter-spacing:-.055em;font-weight:550;max-width:15ch;margin-bottom:28px}
+.hero-description{font-size:18px;line-height:1.6;max-width:46ch}
+.landing .actions{margin-top:24px;gap:24px}
+.landing>section+section{margin-top:112px}
+.landing .section-head{margin-bottom:28px;align-items:end}
+.landing .section-head h2{margin-bottom:12px}
+.landing .section-head p{margin:0;max-width:46ch}
+.landing .section-head>a{font-size:14px;min-height:44px;white-space:nowrap}
+.landing .card p{font-size:15px}
+.landing .card h3{font-size:24px}
+.landing .card-meta{font-size:13px}
+.edition-empty{grid-column:1/-1;display:flex;align-items:center;justify-content:space-between;gap:40px;background:var(--raised);padding:32px;border-radius:var(--radius)}
+.edition-empty>div{max-width:64ch}
+.edition-empty .icon{margin-bottom:16px;color:var(--muted)}
+.edition-empty h3{margin-bottom:12px}
+.edition-empty p{margin:0}
+.edition-empty>a{flex:none;font-size:14px;white-space:nowrap}
+.edition-empty>a .icon{margin:0}
+.role-intro h2{margin-bottom:24px}
+.role-intro>p{max-width:32ch}
+.role-intro .role-note{font-size:14px;color:var(--muted);margin-top:32px}
+.role-guide details{border-bottom:1px solid var(--line)}
+.role-guide details:first-child{border-top:1px solid var(--line)}
+.role-guide summary{list-style:none;display:flex;align-items:center;gap:14px;min-height:64px;padding:16px 4px;font-size:18px;font-weight:500;line-height:1.4}
+.role-guide summary::-webkit-details-marker{display:none}
+.role-guide summary span{flex:1}
+.role-guide summary>.icon:last-child{transition:rotate .2s}
+.role-guide details[open] summary>.icon:last-child{rotate:45deg}
+.role-guide details[open]>summary{margin-bottom:0}
+.role-guide details>div{padding:0 34px 24px}
+.role-guide .small-text{color:var(--muted);font-size:14px}
+.role-guide .text-link{font-size:14px;min-height:44px}
+.landing .journey-stories{list-style:none;margin:32px 0 0;padding:0;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:24px}
+.journey-stories img{height:100%;transition:transform .35s ease}
+.journey-stories figure{aspect-ratio:4/3;margin-bottom:24px!important;border-radius:var(--radius)}
+.journey-stories h3{margin-bottom:12px}
+.journey-stories p{font-size:16px;line-height:1.65}
+.landing-faq>h2{margin-bottom:32px}
+.landing .faq-band{padding:32px;column-gap:40px}
+.faq-band:nth-child(even){background:var(--raised);border-radius:var(--radius)}
+.faq-band h3{font-size:24px;max-width:22ch;margin:0}
+.faq-band p{margin:0;font-size:16px;line-height:1.7}
+.landing-close{background:var(--raised);padding:40px;border-radius:var(--radius)}
+.landing-close h2{margin:0}
+.landing-close p{max-width:45ch}
+.image-credit{font-size:12px;color:var(--muted);margin:32px 0 0}
+.landing .button{transition:background .15s,transform .15s}
+.landing .button:active{transform:translateY(1px)}
+/* A uniform 62% black scrim caps even a white photo pixel at #616161.
+   White copy therefore has at least 6.1:1 contrast, in either theme. */
+.landing-hero{position:relative;isolation:isolate;overflow:hidden;border-radius:var(--radius);min-height:600px;display:flex;align-items:center;background:#202020;color:#fff}
+.landing .landing-masthead{position:absolute;inset:0;height:100%!important;border-radius:0;z-index:-2}
+.landing-masthead img{object-position:50% 45%;height:100%}
+.landing-hero:before{content:'';position:absolute;inset:0;z-index:-1;background:rgb(0 0 0 / 62%)}
+.landing .landing-hero .hero-copy{display:flex;flex-direction:column-reverse;align-items:start;gap:32px;padding:56px;max-width:780px}
+.landing-hero h1{font-size:clamp(48px,5.2vw,72px);max-width:14ch;margin-bottom:28px;color:#fff}
+.landing-hero .hero-description{max-width:44ch;color:#fff}
+.landing-hero .hero-context>p{display:none}
+.landing-hero .hero-context nav{margin:0;gap:8px 24px}
+.landing-hero .hero-context nav a{color:#fff;text-decoration:underline;text-decoration-color:rgb(255 255 255 / 60%)}
+.landing-hero .hero-context nav a:hover{color:#fff;text-decoration-color:#fff}
+.landing-hero .button{background:#fff;color:#242422;border-color:#fff}
+.landing-hero .button:hover{background:#ededeb;border-color:#ededeb}
+.landing-hero .text-link{color:#fff}
+.landing-hero :focus-visible{outline-color:#fff;outline-offset:5px}
+.landing-hero .button:focus-visible{outline:2px solid #fff;box-shadow:0 0 0 2px #242422}
+@media(min-width:761px){.landing-masthead img{animation:landing-breathe 24s ease-in-out infinite alternate}}
+@keyframes landing-breathe{from{transform:scale(1)}to{transform:scale(1.035)}}
+@keyframes landing-appear{from{transform:translateY(14px)}to{transform:translateY(0)}}
+.landing .reveal-in{animation:landing-appear .55s ease-out both}
+@media(max-width:1000px){.landing .landing-axis{column-gap:28px}.landing .landing-masthead{height:clamp(220px,30vh,300px)}.landing h1{font-size:52px}.landing h2{font-size:30px}.hero-context>p{font-size:19px}.hero-context nav{gap:4px 16px}.hero-description{font-size:17px}.landing .journey-stories{gap:20px}.landing .faq-band{padding:28px}.edition-empty{gap:28px;flex-wrap:wrap}.landing-close{padding:32px}}
+@media(max-width:760px){.landing .landing-axis{grid-template-columns:1fr;gap:24px}.landing .landing-masthead{height:260px}.landing .hero-copy{padding-top:28px;gap:16px}.hero-context>p{font-size:16px;max-width:none;margin:0}.hero-context nav{display:none}.landing h1{font-size:48px;max-width:17ch;margin-bottom:24px}.hero-description{font-size:17px}.landing>section+section{margin-top:72px}.landing .section-head{align-items:start;gap:16px}.landing h2{font-size:30px}.landing h3{font-size:21px}.landing .section-head>a{white-space:normal}.edition-empty{padding:24px;gap:24px}.edition-empty p{font-size:16px}.role-intro>p{max-width:46ch}.role-intro .role-note{margin:20px 0 0}.role-guide summary{font-size:17px}.landing .journey-stories{grid-template-columns:1fr;gap:36px}.journey-stories figure{aspect-ratio:16/9;margin-bottom:20px!important}.journey-stories p{max-width:50ch}.landing .faq-band{padding:24px 20px;gap:14px}.faq-band h3{font-size:22px;max-width:none}.landing-close{padding:28px 24px}.landing-close h2{font-size:28px}.image-credit{margin-top:24px}}
+@media(max-width:420px){.landing .landing-masthead{height:220px}.landing h1{font-size:44px}.landing .actions{gap:12px 20px}.landing>section+section{margin-top:64px}.landing .section-head h2{font-size:28px}.landing .faq-band h3{font-size:21px}.landing-close h2{font-size:27px}}
+@media(max-width:760px){.landing-hero{min-height:560px}.landing .landing-hero .hero-copy{padding:36px 28px;gap:16px}.landing-hero h1{font-size:52px;max-width:14ch}.landing-hero .hero-context{display:none}.landing-hero .hero-description{font-size:17px}}
+@media(max-width:420px){.landing-hero{min-height:540px}.landing .landing-hero .hero-copy{padding:32px 24px}.landing-hero h1{font-size:44px;max-width:12ch}.landing-hero .actions{align-items:start;flex-direction:column;gap:16px}}
+@media(prefers-reduced-motion:reduce){.landing *, .landing *::before, .landing *::after{animation:none!important;transition:none!important}}

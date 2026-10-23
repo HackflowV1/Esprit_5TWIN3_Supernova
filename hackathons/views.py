@@ -1,3 +1,4 @@
+from django.utils.translation import gettext_lazy as _
 from django.contrib import messages
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.core.exceptions import PermissionDenied, ValidationError
@@ -99,7 +100,7 @@ class HackathonDetailView(DetailView):
 class HackathonCreateView(LoginRequiredMixin, CreateView):
     form_class = HackathonForm
     template_name = 'shared/form.html'
-    extra_context = {'title': 'Créer un hackathon'}
+    extra_context = {'title': _('Créer un hackathon')}
 
     def dispatch(self, request, *args, **kwargs):
         if not request.user.is_authenticated:
@@ -112,9 +113,9 @@ class HackathonCreateView(LoginRequiredMixin, CreateView):
         try:
             self.object = services.create_hackathon(actor=self.request.user, event=form.save(commit=False))
         except (ValidationError, IntegrityError) as exc:
-            form.add_error(None, exc if isinstance(exc, ValidationError) else 'Conflit de données : vérifiez le slug.')
+            form.add_error(None, exc if isinstance(exc, ValidationError) else _('Conflit de données : vérifiez le slug.'))
             return self.form_invalid(form)
-        messages.success(self.request, 'Hackathon créé ; rôle organisateur attribué.')
+        messages.success(self.request, _('Hackathon créé ; rôle organisateur attribué.'))
         return redirect(self.object)
 
 
@@ -122,7 +123,7 @@ class HackathonUpdateView(OrganizerMixin, UpdateView):
     model = Hackathon
     form_class = HackathonForm
     template_name = 'shared/form.html'
-    extra_context = {'title': 'Configurer le hackathon'}
+    extra_context = {'title': _('Configurer le hackathon')}
 
     def get_object(self, queryset=None):
         return self.get_event()
@@ -131,9 +132,9 @@ class HackathonUpdateView(OrganizerMixin, UpdateView):
         try:
             self.object = services.save_configuration(actor=self.request.user, event=form.save(commit=False))
         except (ValidationError, IntegrityError) as exc:
-            form.add_error(None, exc if isinstance(exc, ValidationError) else 'Conflit de données.')
+            form.add_error(None, exc if isinstance(exc, ValidationError) else _('Conflit de données.'))
             return self.form_invalid(form)
-        messages.success(self.request, 'Configuration enregistrée.')
+        messages.success(self.request, _('Configuration enregistrée.'))
         return redirect(self.object)
 
 
@@ -166,7 +167,7 @@ class LifecycleView(OrganizerMixin, View):
     def post(self, request, *args, **kwargs):
         try:
             services.transition(actor=request.user, event=self.get_event(), target=kwargs['target'])
-            messages.success(request, 'Statut mis à jour.')
+            messages.success(request, _('Statut mis à jour.'))
         except ValidationError as exc:
             messages.error(request, ' '.join(exc.messages))
         return redirect(self.get_success_url())
@@ -202,9 +203,9 @@ class ResourceMixin(OrganizerMixin):
                 self.object = services.save_resource(actor=self.request.user, resource=resource,
                     action='Création' if not resource.pk else 'Modification')
         except (ValidationError, IntegrityError) as exc:
-            form.add_error(None, exc if isinstance(exc, ValidationError) else 'Conflit : cet élément existe déjà.')
+            form.add_error(None, exc if isinstance(exc, ValidationError) else _('Conflit : cet élément existe déjà.'))
             return self.form_invalid(form)
-        messages.success(self.request, 'Challenge enregistré ; validation requise.' if self.model == Challenge else 'Configuration enregistrée.')
+        messages.success(self.request, _('Challenge enregistré ; validation requise.') if self.model == Challenge else _('Configuration enregistrée.'))
         return redirect(self.get_success_url())
 
 
@@ -229,12 +230,12 @@ class ResourceDeleteView(ResourceMixin, DeleteView):
                 require_organizer(self.request.user, event)
                 obj = self.get_object()
                 if event.status != Hackathon.Status.DRAFT or (isinstance(obj, Challenge) and obj.status != Challenge.Status.DRAFT):
-                    raise ValidationError('Suppression réservée aux brouillons ; utilisez le retrait ou l’archivage.')
+                    raise ValidationError(_('Suppression réservée aux brouillons ; utilisez le retrait ou l’archivage.'))
                 label, pk = str(obj), obj.pk
                 obj.delete()
                 services.record(event, self.request.user, 'Suppression', label, pk=pk)
         except (ValidationError, ProtectedError) as exc:
-            messages.error(self.request, ' '.join(exc.messages) if isinstance(exc, ValidationError) else 'Élément référencé : suppression impossible.')
+            messages.error(self.request, ' '.join(exc.messages) if isinstance(exc, ValidationError) else _('Élément référencé : suppression impossible.'))
         return redirect(self.get_success_url())
 
 
@@ -259,7 +260,7 @@ class ChallengeReviewView(OrganizerMixin, View):
         challenge = get_object_or_404(Challenge, pk=kwargs['pk'], track__hackathon=self.get_event())
         try:
             services.review_challenge(actor=request.user, challenge=challenge, action=kwargs['action'])
-            messages.success(request, 'Challenge mis à jour.')
+            messages.success(request, _('Challenge mis à jour.'))
         except ValidationError as exc:
             messages.error(request, ' '.join(exc.messages))
         return redirect(self.get_success_url())
@@ -274,14 +275,14 @@ class OrganizationCreateView(OrganizerMixin, CreateView):
             require_organizer(self.request.user, event)
             self.object = form.save()
             services.record(event, self.request.user, 'Organisation créée', self.object, pk=self.object.pk)
-        messages.success(self.request, 'Organisation créée. Ajoutez maintenant son partenariat.')
+        messages.success(self.request, _('Organisation créée. Ajoutez maintenant son partenariat.'))
         return redirect(self.get_success_url())
 
 
 class RoleManageView(OrganizerMixin, FormView):
     template_name = 'shared/form.html'
     form_class = RoleForm
-    extra_context = {'title': 'Affecter ou retirer un rôle dans ce hackathon'}
+    extra_context = {'title': _('Affecter ou retirer un rôle dans ce hackathon')}
 
     def form_valid(self, form):
         try:
@@ -289,7 +290,7 @@ class RoleManageView(OrganizerMixin, FormView):
         except ValidationError as exc:
             form.add_error(None, exc)
             return self.form_invalid(form)
-        messages.success(self.request, 'Affectation historisée.')
+        messages.success(self.request, _('Affectation historisée.'))
         return redirect(self.get_success_url())
 
 

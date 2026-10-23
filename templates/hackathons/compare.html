@@ -1,9 +1,9 @@
-{% extends 'base.html' %}
-{% block title %}Comparer les éditions — HackFlow{% endblock %}
+{% extends 'base.html' %}{% load i18n ui %}
+{% block title %}{% translate 'Comparer les éditions — HackFlow' %}{% endblock %}
 {% block content %}
-<header class="page-head"><p class="eyebrow">Control Tower</p><h1>Comparer les éditions</h1></header>
-<form method="get" class="filters" aria-label="Choisir deux éditions">
-<label>Première édition<select name="left" required><option value="">Choisir</option>{% for item in events %}<option value="{{ item.pk }}">{{ item }}</option>{% endfor %}</select></label>
-<label>Deuxième édition<select name="right" required><option value="">Choisir</option>{% for item in events %}<option value="{{ item.pk }}">{{ item }}</option>{% endfor %}</select></label><button type="submit">Comparer</button></form>
-<div class="grid">{% for row in rows %}<section class="panel"><h2 style="margin-top:0">{{ row.event }}</h2><p class="muted">{{ row.event.start_date|date:'d/m/Y' }} · <span class="badge badge--{{ row.event.status|lower }}">{{ row.event.get_status_display }}</span></p><p>Capacité : {{ row.event.capacity }} · Équipes : {{ row.event.min_team_size }}–{{ row.event.max_team_size }}</p>{% include 'hackathons/metrics.html' with metrics=row.metrics %}</section>{% endfor %}</div>
+<header class="page-head"><p class="eyebrow">{% translate 'Control Tower' %}</p><h1>{% translate 'Comparer les éditions' %}</h1></header>
+<form method="get" class="filters" aria-label="{% translate 'Choisir deux éditions' %}">
+<label>{% translate 'Première édition' %}<select name="left" required><option value="">{% translate 'Choisir' %}</option>{% for item in events %}<option value="{{ item.pk }}">{{ item }}</option>{% endfor %}</select></label>
+<label>{% translate 'Deuxième édition' %}<select name="right" required><option value="">{% translate 'Choisir' %}</option>{% for item in events %}<option value="{{ item.pk }}">{{ item }}</option>{% endfor %}</select></label><button type="submit">{% icon 'compare' %}{% translate 'Comparer' %}</button></form>
+<div class="grid">{% for row in rows %}<section class="panel"><h2 style="margin-top:0">{{ row.event }}</h2><p class="muted">{{ row.event.start_date|date:"SHORT_DATE_FORMAT" }} · <span class="badge badge--{{ row.event.status|lower }}">{{ row.event.get_status_display }}</span></p><p>{% translate 'Capacité :' %} {{ row.event.capacity }} {% translate '· Équipes :' %} {{ row.event.min_team_size }}–{{ row.event.max_team_size }}</p>{% include 'hackathons/metrics.html' with metrics=row.metrics %}</section>{% endfor %}</div>
 {% endblock %}

@@ -1,3 +1,4 @@
+from django.utils.translation import gettext_lazy as _
 """Shared identity, skills, contextual roles and sponsor representation."""
 from django.contrib.auth.models import AbstractUser
 from django.db import models
@@ -11,9 +12,9 @@ class User(AbstractUser):
     """Original AbstractUser retained; business roles live in RoleAssignment."""
 
     class Meta:
-        verbose_name = 'Utilisateur'
-        verbose_name_plural = 'Utilisateurs'
-        permissions = [('create_hackathon', 'Peut créer un hackathon')]
+        verbose_name = _('Utilisateur')
+        verbose_name_plural = _('Utilisateurs')
+        permissions = [('create_hackathon', _('Peut créer un hackathon'))]
         constraints = [models.UniqueConstraint(Lower('email'), condition=~models.Q(email=''), name='user_email_ci_unique')]
 
     def __str__(self):
@@ -61,16 +62,16 @@ class UserSkill(models.Model):
 
 
 class Role(models.TextChoices):
-    ORGANIZER = 'ORGANIZER', 'Organisateur'
-    PARTICIPANT = 'PARTICIPANT', 'Participant'
-    JURY = 'JURY', 'Juré'
-    MENTOR = 'MENTOR', 'Mentor'
-    SPONSOR_REPRESENTATIVE = 'SPONSOR_REPRESENTATIVE', 'Représentant sponsor'
+    ORGANIZER = 'ORGANIZER', _('Organisateur')
+    PARTICIPANT = 'PARTICIPANT', _('Participant')
+    JURY = 'JURY', _('Juré')
+    MENTOR = 'MENTOR', _('Mentor')
+    SPONSOR_REPRESENTATIVE = 'SPONSOR_REPRESENTATIVE', _('Représentant sponsor')
 
 
 class AssignmentStatus(models.TextChoices):
-    ACTIVE = 'ACTIVE', 'Actif'
-    REVOKED = 'REVOKED', 'Retiré'
+    ACTIVE = 'ACTIVE', _('Actif')
+    REVOKED = 'REVOKED', _('Retiré')
 
 
 class RoleAssignment(models.Model):
@@ -90,12 +91,12 @@ class RoleAssignment(models.Model):
         if self.pk and self.role == Role.ORGANIZER and self.status == AssignmentStatus.REVOKED:
             if not RoleAssignment.objects.filter(hackathon_id=self.hackathon_id, role=Role.ORGANIZER,
                     status=AssignmentStatus.ACTIVE).exclude(pk=self.pk).exists():
-                raise ValidationError('Le dernier organisateur actif ne peut pas être retiré.')
+                raise ValidationError(_('Le dernier organisateur actif ne peut pas être retiré.'))
         incompatible = {Role.PARTICIPANT: Role.JURY, Role.JURY: Role.PARTICIPANT}
         if self.status == AssignmentStatus.ACTIVE and self.role in incompatible and self.hackathon_id and self.user_id:
             if RoleAssignment.objects.filter(user_id=self.user_id, hackathon_id=self.hackathon_id,
                     role=incompatible[self.role], status=AssignmentStatus.ACTIVE).exclude(pk=self.pk).exists():
-                raise ValidationError('Participant et juré sont incompatibles dans le même hackathon.')
+                raise ValidationError(_('Participant et juré sont incompatibles dans le même hackathon.'))
 
     def __str__(self):
         return f'{self.user} / {self.hackathon} / {self.get_role_display()}'
