@@ -1,0 +1,6 @@
+{% load i18n ui %}
+<div class="hf-admin-tools">
+  <a class="back-to-app" href="{% url 'core:home' %}" aria-label="{% translate 'Retour à HackFlow' %}">{% icon 'arrow-left' 16 %} {% translate 'Retour à HackFlow' %}</a>
+  {% include 'shared/nav_language.html' %}
+  {% include 'shared/nav_account.html' with admin_shell=True %}
+</div>

@@ -17,6 +17,18 @@ connecté affiche « indisponible », pas un faux zéro.
 
 ## Les fichiers à réutiliser
 
+L’administration Django utilise `templates/admin/` et `static/css/admin.css` pour
+garder les mêmes couleurs, contrôles et icônes. Son thème partage la préférence
+`hackflow-theme` avec l’application. La connexion utilise une illustration dédiée :
+`static/images/hackflow-admin-illustration.webp`. Garder les formulaires, permissions,
+filtres et protections CSRF de Django ; personnaliser leur présentation.
+
+Les deux navbars réutilisent `shared/nav_language.html`, `shared/nav_account.html`
+et `static/css/nav-menus.css`. Le globe ouvre directement les langues ; cliquer
+une langue l’applique immédiatement. L’apparence reste dans le menu du compte
+(ou le menu Préférences avant connexion). Ne pas dupliquer le choix de langue
+dans le profil.
+
 | Besoin | Fichier |
 | --- | --- |
 | Structure, navbar, compte, préférences, footer | `templates/base.html` |

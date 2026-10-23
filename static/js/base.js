@@ -21,6 +21,9 @@
     });
   });
   var themeSelect = document.querySelector('[data-theme-select]');
+  document.querySelectorAll('[data-language-select]').forEach(function (select) {
+    select.addEventListener('change', function () { select.form.requestSubmit(); });
+  });
   var systemTheme = matchMedia('(prefers-color-scheme: dark)');
   function applyTheme(choice) {
     document.documentElement.dataset.themeChoice = choice;
