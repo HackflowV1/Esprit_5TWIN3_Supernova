@@ -6,6 +6,7 @@ from django.conf import settings
 from django.core.exceptions import ValidationError
 from django.core.validators import MaxValueValidator, MinValueValidator
 from django.db import models
+from django.urls import reverse
 from django.utils import timezone
 
 from accounts.models import AssignmentStatus, Role, RoleAssignment, Skill
@@ -104,3 +105,81 @@ class MentorSlot(ValidatedModel):
     def __str__(self):
         local = timezone.localtime
         return f'{self.mentor} · {local(self.start):%d/%m/%Y %H:%M}–{local(self.end):%H:%M}'
+
+
+class Workshop(ValidatedModel):
+    """A training session given by a mentor (the trainer) during a hackathon.
+
+    Business rules (also enforced by mentoring.services under row locks):
+    - the trainer holds an active MENTOR role in that hackathon;
+    - the workshop lasts between 15 minutes and 4 hours and fits inside the event;
+    - it takes place in a room, online, or both; a trainer cannot give two workshops at the same time;
+    - capacity is at least 1 (registrations and their capacity check come with WorkshopRegistration).
+    """
+
+    class Status(models.TextChoices):
+        PUBLISHED = 'PUBLISHED', 'Publié'
+        CANCELLED = 'CANCELLED', 'Annulé'
+
+    MIN_MINUTES = 15
+    MAX_MINUTES = 240
+    MAX_CAPACITY = 500
+
+    hackathon = models.ForeignKey('hackathons.Hackathon', on_delete=models.PROTECT, related_name='workshops')
+    trainer = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.PROTECT, related_name='workshops')
+    title = models.CharField(max_length=200)
+    description = models.TextField(blank=True)
+    capacity = models.PositiveSmallIntegerField(validators=[MinValueValidator(1), MaxValueValidator(MAX_CAPACITY)])
+    start = models.DateTimeField()
+    end = models.DateTimeField()
+    location = models.CharField(max_length=200, blank=True)
+    url = models.URLField(blank=True)
+    status = models.CharField(max_length=10, choices=Status.choices, default=Status.PUBLISHED)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    class Meta:
+        ordering = ['start']
+        verbose_name = 'Atelier'
+        verbose_name_plural = 'Ateliers'
+        indexes = [models.Index(fields=['trainer', 'start'], name='workshop_trainer_start_idx')]
+        constraints = [
+            models.CheckConstraint(condition=models.Q(start__lt=models.F('end')), name='workshop_dates_order'),
+            models.CheckConstraint(condition=models.Q(capacity__gte=1), name='workshop_capacity_min'),
+        ]
+
+    @property
+    def duration_minutes(self):
+        return int((self.end - self.start).total_seconds() // 60)
+
+    def clean(self):
+        super().clean()
+        if self.status == self.Status.CANCELLED:
+            return  # a cancellation must always be possible
+        if not (self.start and self.end and self.hackathon_id and self.trainer_id):
+            return
+        if self.start >= self.end:
+            raise ValidationError('Le début de l’atelier doit précéder sa fin.')
+        if not self.MIN_MINUTES <= self.duration_minutes <= self.MAX_MINUTES:
+            raise ValidationError(f'Un atelier dure entre {self.MIN_MINUTES} minutes et {self.MAX_MINUTES // 60} heures.')
+        if not (self.location.strip() or self.url):
+            raise ValidationError('Indiquez une salle, un lien en ligne, ou les deux.')
+        event = self.hackathon
+        if event.status == 'ARCHIVED':
+            raise ValidationError('Édition archivée : modification interdite.')
+        if self.start < event.start_date or self.end > event.end_date:
+            local = timezone.localtime
+            raise ValidationError('L’atelier doit se situer pendant l’événement '
+                f'({local(event.start_date):%d/%m/%Y %H:%M} → {local(event.end_date):%d/%m/%Y %H:%M}).')
+        if not RoleAssignment.objects.filter(user_id=self.trainer_id, hackathon_id=self.hackathon_id,
+                role=Role.MENTOR, status=AssignmentStatus.ACTIVE).exists():
+            raise ValidationError('Le formateur doit avoir le rôle mentor actif dans ce hackathon.')
+        if Workshop.objects.filter(trainer_id=self.trainer_id, start__lt=self.end, end__gt=self.start).exclude(
+                status=self.Status.CANCELLED).exclude(pk=self.pk).exists():
+            raise ValidationError('Vous animez déjà un autre atelier à cette heure-là.')
+
+    def get_absolute_url(self):
+        return reverse('mentoring:workshop-detail', kwargs={'pk': self.pk})
+
+    def __str__(self):
+        return self.title

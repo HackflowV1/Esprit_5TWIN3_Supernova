@@ -268,9 +268,9 @@ button:hover, .button:hover { background: var(--primary-hover); color: #fff; tra
   box-shadow: var(--shadow-lg);
   border-color: #c7cdf5;
 }
-.card-link h2, .card-link h3 { margin: 4px 0; font-size: 1.25rem; }
-.card-link h2 a, .card-link h3 a { color: var(--ink); text-decoration: none; }
-.card-link h2 a::after, .card-link h3 a::after { content: ""; position: absolute; inset: 0; border-radius: var(--radius); }
+.card-link h2, .card-link h3, .card-link h4 { margin: 4px 0; font-size: 1.25rem; }
+.card-link h2 a, .card-link h3 a, .card-link h4 a { color: var(--ink); text-decoration: none; }
+.card-link h2 a::after, .card-link h3 a::after, .card-link h4 a::after { content: ""; position: absolute; inset: 0; border-radius: var(--radius); }
 .card-link { position: relative; }
 .card-meta { margin-top: auto; color: var(--ink-soft); font-size: .93rem; display: flex; gap: 14px; flex-wrap: wrap; }
 

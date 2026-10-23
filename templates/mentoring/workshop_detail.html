@@ -1,0 +1,38 @@
+{% extends 'base.html' %}
+{% block title %}{{ workshop.title }} — HackFlow{% endblock %}
+{% block content %}
+<p class="breadcrumb"><a href="{% url 'mentoring:workshop-list' %}">← Tous les ateliers</a></p>
+<header class="page-banner">
+    <div>
+        <p class="eyebrow">{{ workshop.hackathon }}</p>
+        <h1>{{ workshop.title }}</h1>
+        <p>{% if workshop.status == 'CANCELLED' %}<span class="badge badge--cancelled">Annulé</span>{% else %}<span class="badge badge--published">Publié</span>{% endif %}</p>
+    </div>
+    {% if can_edit %}<div class="actions"><a class="button" href="{% url 'mentoring:workshop-edit' workshop.pk %}">Modifier</a><a class="button secondary" href="{% url 'mentoring:workshop-cancel' workshop.pk %}">Annuler l’atelier</a></div>{% endif %}
+</header>
+
+{% if workshop.status == 'CANCELLED' %}<div class="notice notice--warning" role="status"><strong>Cet atelier a été annulé.</strong></div>{% endif %}
+
+<div class="detail-layout">
+    <div class="detail-main">
+        <section class="panel" aria-labelledby="about-title">
+            <h2 id="about-title">À propos de l’atelier</h2>
+            {% if workshop.description %}<p>{{ workshop.description|linebreaksbr }}</p>{% else %}<p class="muted">Aucune description fournie.</p>{% endif %}
+        </section>
+    </div>
+    <aside class="detail-side" aria-label="Informations pratiques">
+        <div class="side-card">
+            <h2>Informations pratiques</h2>
+            <dl class="fact-list">
+                <div><dt>Date</dt><dd>{{ workshop.start|date:'l j F Y'|capfirst }}</dd></div>
+                <div><dt>Horaire</dt><dd><time datetime="{{ workshop.start|date:'c' }}">{{ workshop.start|date:'H:i' }}</time> → <time datetime="{{ workshop.end|date:'c' }}">{{ workshop.end|date:'H:i' }}</time> ({{ workshop.duration_minutes }} min)</dd></div>
+                <div><dt>Formateur</dt><dd>{{ workshop.trainer.get_full_name|default:workshop.trainer.username }}</dd></div>
+                {% if workshop.location %}<div><dt>Salle</dt><dd>{{ workshop.location }}</dd></div>{% endif %}
+                {% if workshop.url %}<div><dt>Lien en ligne</dt><dd><a href="{{ workshop.url }}" rel="noopener noreferrer">Rejoindre l’atelier</a></dd></div>{% endif %}
+                <div><dt>Places</dt><dd>{{ workshop.capacity }}</dd></div>
+            </dl>
+            <p class="muted small-text">Heure de Tunis.</p>
+        </div>
+    </aside>
+</div>
+{% endblock %}

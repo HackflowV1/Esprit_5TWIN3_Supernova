@@ -1,0 +1,19 @@
+{% extends 'base.html' %}
+{% block title %}Annuler l’atelier — HackFlow{% endblock %}
+{% block content %}
+<section class="panel form-panel" aria-labelledby="cancel-title">
+    <h1 id="cancel-title">Annuler cet atelier ?</h1>
+    <p>
+        <strong>{{ workshop.title }}</strong><br>
+        {{ workshop.start|date:'l j F Y'|capfirst }}, de {{ workshop.start|date:'H:i' }} à {{ workshop.end|date:'H:i' }}<br>
+        <span class="muted">{{ workshop.hackathon }}</span>
+    </p>
+    <p class="muted">L’atelier ne sera plus proposé. Cette action ne peut pas être annulée.</p>
+    <form method="post">{% csrf_token %}
+        <div class="form-actions">
+            <button type="submit" class="danger">Oui, annuler l’atelier</button>
+            <a class="button secondary" href="{{ workshop.get_absolute_url }}">Garder l’atelier</a>
+        </div>
+    </form>
+</section>
+{% endblock %}

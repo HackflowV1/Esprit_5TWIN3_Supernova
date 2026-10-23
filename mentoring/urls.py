@@ -12,4 +12,9 @@ urlpatterns = [
     path('slots/add/', views.SlotCreateView.as_view(), name='slot-add'),
     path('slots/<int:pk>/edit/', views.SlotUpdateView.as_view(), name='slot-edit'),
     path('slots/<int:pk>/cancel/', views.SlotCancelView.as_view(), name='slot-cancel'),
+    path('workshops/', views.WorkshopListView.as_view(), name='workshop-list'),
+    path('workshops/add/', views.WorkshopCreateView.as_view(), name='workshop-add'),
+    path('workshops/<int:pk>/', views.WorkshopDetailView.as_view(), name='workshop-detail'),
+    path('workshops/<int:pk>/edit/', views.WorkshopUpdateView.as_view(), name='workshop-edit'),
+    path('workshops/<int:pk>/cancel/', views.WorkshopCancelView.as_view(), name='workshop-cancel'),
 ]

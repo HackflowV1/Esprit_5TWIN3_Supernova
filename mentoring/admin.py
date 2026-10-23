@@ -1,7 +1,7 @@
 from django.contrib import admin
 
 from core.admin import SuperuserAdmin
-from .models import MentorExpertise, MentorSlot
+from .models import MentorExpertise, MentorSlot, Workshop
 
 
 @admin.register(MentorExpertise)
@@ -16,4 +16,12 @@ class MentorSlotAdmin(SuperuserAdmin):
     list_display = ('mentor', 'hackathon', 'start', 'end', 'status')
     list_filter = ('status', 'hackathon')
     search_fields = ('mentor__username', 'hackathon__title')
+    date_hierarchy = 'start'
+
+
+@admin.register(Workshop)
+class WorkshopAdmin(SuperuserAdmin):
+    list_display = ('title', 'hackathon', 'trainer', 'start', 'capacity', 'status')
+    list_filter = ('status', 'hackathon')
+    search_fields = ('title', 'trainer__username', 'hackathon__title')
     date_hierarchy = 'start'

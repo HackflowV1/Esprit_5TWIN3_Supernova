@@ -20,7 +20,8 @@
                 <a href="{% url 'core:home' %}"{% if request.resolver_match.app_name == 'core' %} aria-current="page"{% endif %}>Accueil</a>
                 <a href="{% url 'hackathons:list' %}"{% if request.resolver_match.app_name == 'hackathons' and request.resolver_match.url_name != 'dashboard' and request.resolver_match.url_name != 'compare' %} aria-current="page"{% endif %}>Hackathons</a>
                 {% if user.is_authenticated %}
-                {% if is_mentor %}<a href="{% url 'mentoring:expertise-list' %}"{% if request.resolver_match.app_name == 'mentoring' %} aria-current="page"{% endif %}>Espace mentor</a>{% endif %}
+                <a href="{% url 'mentoring:workshop-list' %}"{% if request.resolver_match.url_name|slice:':8' == 'workshop' %} aria-current="page"{% endif %}>Ateliers</a>
+                {% if is_mentor %}<a href="{% url 'mentoring:expertise-list' %}"{% if request.resolver_match.app_name == 'mentoring' and request.resolver_match.url_name|slice:':8' != 'workshop' %} aria-current="page"{% endif %}>Espace mentor</a>{% endif %}
                 <a href="{% url 'hackathons:dashboard' %}"{% if request.resolver_match.url_name == 'dashboard' %} aria-current="page"{% endif %}>Control Tower</a>
                 <a href="{% url 'accounts:profile' %}"{% if request.resolver_match.app_name == 'accounts' %} aria-current="page"{% endif %}>Mon profil</a>
                 <form method="post" action="{% url 'accounts:logout' %}">{% csrf_token %}<button type="submit" class="secondary small">Déconnexion</button></form>
