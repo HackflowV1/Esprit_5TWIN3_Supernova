@@ -1,0 +1,71 @@
+{% extends 'base.html' %}
+{% block title %}Mes créneaux — HackFlow{% endblock %}
+{% block content %}
+{% include 'mentoring/_mentor_nav.html' %}
+<header class="page-banner">
+    <div>
+        <p class="eyebrow">Espace mentor</p>
+        <h1>Mes créneaux</h1>
+        <p class="lead">Publiez les plages horaires où vous êtes disponible : les équipes pourront les réserver.</p>
+    </div>
+    {% if can_create %}<a class="button" href="{% url 'mentoring:slot-add' %}">+ Publier un créneau</a>{% endif %}
+</header>
+
+{% if not can_create %}
+<div class="notice notice--warning" role="status">
+    <strong>Aucun hackathon ouvert pour publier un créneau.</strong>
+    Les créneaux se publient pour un hackathon <em>publié</em> ou <em>en cours</em> dans lequel vous avez le rôle de mentor.
+</div>
+{% endif %}
+
+<section aria-labelledby="upcoming-title">
+    <h2 id="upcoming-title">À venir <span class="count-pill">{{ upcoming_count }}</span></h2>
+    {% for group in days %}
+    <section class="day-group" aria-labelledby="day-{{ group.day|date:'Ymd' }}">
+        <h3 id="day-{{ group.day|date:'Ymd' }}">{{ group.day|date:'l j F Y'|capfirst }}</h3>
+        <ul class="slot-list">
+            {% for slot in group.slots %}
+            <li class="slot-item">
+                <div class="slot-time">
+                    <time datetime="{{ slot.start|date:'c' }}">{{ slot.start|date:'H:i' }}</time>
+                    <span aria-hidden="true">→</span><span class="visually-hidden"> jusqu’à </span>
+                    <time datetime="{{ slot.end|date:'c' }}">{{ slot.end|date:'H:i' }}</time>
+                    <span class="muted">· {{ slot.duration_minutes }} min</span>
+                </div>
+                <div class="slot-info">
+                    <span>{{ slot.hackathon }}</span>
+                    <span class="badge badge--{% if slot.status == 'AVAILABLE' %}published{% else %}finished{% endif %}">{{ slot.get_status_display }}</span>
+                </div>
+                {% if slot.status == 'AVAILABLE' %}
+                <div class="row-actions">
+                    <a class="button small secondary" href="{% url 'mentoring:slot-edit' slot.pk %}">Modifier<span class="visually-hidden"> le créneau de {{ slot.start|date:'H:i' }}</span></a>
+                    <a class="link-danger" href="{% url 'mentoring:slot-cancel' slot.pk %}">Annuler<span class="visually-hidden"> le créneau de {{ slot.start|date:'H:i' }}</span></a>
+                </div>
+                {% endif %}
+            </li>
+            {% endfor %}
+        </ul>
+    </section>
+    {% empty %}
+    <div class="empty-state">
+        <h3>Aucun créneau à venir</h3>
+        <p>Publiez vos disponibilités pour que les équipes puissent demander votre aide.</p>
+        {% if can_create %}<div class="actions"><a class="button" href="{% url 'mentoring:slot-add' %}">Publier mon premier créneau</a></div>{% endif %}
+    </div>
+    {% endfor %}
+</section>
+
+{% if history %}
+<section aria-labelledby="history-title">
+    <h2 id="history-title">Passés et annulés</h2>
+    <ul class="slot-list slot-list--muted">
+        {% for slot in history %}
+        <li class="slot-item">
+            <div class="slot-time"><time datetime="{{ slot.start|date:'c' }}">{{ slot.start|date:'d/m/Y H:i' }}</time> <span aria-hidden="true">→</span><span class="visually-hidden"> jusqu’à </span> <time datetime="{{ slot.end|date:'c' }}">{{ slot.end|date:'H:i' }}</time></div>
+            <div class="slot-info"><span>{{ slot.hackathon }}</span><span class="badge badge--{% if slot.status == 'CANCELLED' %}cancelled{% else %}finished{% endif %}">{% if slot.status == 'CANCELLED' %}Annulé{% else %}Passé{% endif %}</span></div>
+        </li>
+        {% endfor %}
+    </ul>
+</section>
+{% endif %}
+{% endblock %}

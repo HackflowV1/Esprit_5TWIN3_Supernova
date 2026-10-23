@@ -1,11 +1,17 @@
 from django.contrib import messages
 from django.contrib.messages.views import SuccessMessageMixin
-from django.urls import reverse_lazy
-from django.views.generic import CreateView, DeleteView, TemplateView, UpdateView
+from django.core.exceptions import PermissionDenied, ValidationError
+from django.db.models import Q
+from django.shortcuts import get_object_or_404, redirect, render
+from django.urls import reverse, reverse_lazy
+from django.utils import timezone
+from django.views import View
+from django.views.generic import CreateView, DeleteView, FormView, TemplateView, UpdateView
 
 from accounts.models import AssignmentStatus, Role
-from .forms import MentorExpertiseForm
-from .models import MentorExpertise
+from . import services
+from .forms import MentorExpertiseForm, SlotForm
+from .models import MentorExpertise, MentorSlot
 from .permissions import MentorRequiredMixin
 
 
@@ -53,3 +59,95 @@ class ExpertiseDeleteView(OwnExpertiseMixin, DeleteView):
         response = super().form_valid(form)
         messages.success(self.request, 'Expertise retirée.')
         return response
+
+
+# ------------------------------------------------------------------ slots
+class SlotListView(MentorRequiredMixin, TemplateView):
+    template_name = 'mentoring/slot_list.html'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        now = timezone.now()
+        own = MentorSlot.objects.filter(mentor=self.request.user).select_related('hackathon')
+        upcoming = own.filter(end__gt=now).exclude(status=MentorSlot.Status.CANCELLED).order_by('start')
+        days = []
+        for slot in upcoming:
+            day = timezone.localtime(slot.start).date()
+            if not days or days[-1]['day'] != day:
+                days.append({'day': day, 'slots': []})
+            days[-1]['slots'].append(slot)
+        context['days'] = days
+        context['upcoming_count'] = len(upcoming)
+        context['history'] = own.filter(Q(end__lte=now) | Q(status=MentorSlot.Status.CANCELLED)).order_by('-start')[:15]
+        context['can_create'] = SlotForm(user=self.request.user).fields['hackathon'].queryset.exists()
+        return context
+
+
+class SlotFormMixin(MentorRequiredMixin, FormView):
+    form_class = SlotForm
+    template_name = 'shared/form.html'
+    success_url = reverse_lazy('mentoring:slot-list')
+
+    def get_slot(self):
+        return None
+
+    def get_form_kwargs(self):
+        kwargs = super().get_form_kwargs()
+        kwargs.update(user=self.request.user, slot=self.get_slot())
+        return kwargs
+
+    def run(self, form):
+        raise NotImplementedError
+
+    def form_valid(self, form):
+        try:
+            self.run(form)
+        except ValidationError as exc:
+            form.add_error(None, exc)
+            return self.form_invalid(form)
+        except PermissionDenied as exc:
+            form.add_error(None, str(exc) or 'Action non autorisée.')
+            return self.form_invalid(form)
+        messages.success(self.request, self.success_message)
+        return redirect(self.get_success_url())
+
+
+class SlotCreateView(SlotFormMixin):
+    success_message = 'Créneau publié.'
+    extra_context = {'title': 'Publier un créneau', 'button_label': 'Publier le créneau'}
+
+    def run(self, form):
+        services.create_slot(actor=self.request.user, hackathon=form.cleaned_data['hackathon'],
+            start=form.cleaned_data['start'], end=form.cleaned_data['end'])
+
+
+class SlotUpdateView(SlotFormMixin):
+    success_message = 'Créneau modifié.'
+    extra_context = {'title': 'Modifier le créneau', 'button_label': 'Enregistrer'}
+
+    def get_slot(self):
+        if not hasattr(self, '_slot'):
+            self._slot = get_object_or_404(MentorSlot, pk=self.kwargs['pk'], mentor=self.request.user)
+        return self._slot
+
+    def run(self, form):
+        services.update_slot(actor=self.request.user, slot=self.get_slot(),
+            start=form.cleaned_data['start'], end=form.cleaned_data['end'])
+
+
+class SlotCancelView(MentorRequiredMixin, View):
+    template_name = 'mentoring/slot_cancel.html'
+
+    def get_slot(self):
+        return get_object_or_404(MentorSlot, pk=self.kwargs['pk'], mentor=self.request.user)
+
+    def get(self, request, *args, **kwargs):
+        return render(request, self.template_name, {'slot': self.get_slot()})
+
+    def post(self, request, *args, **kwargs):
+        try:
+            services.cancel_slot(actor=request.user, slot=self.get_slot())
+            messages.success(request, 'Créneau annulé.')
+        except ValidationError as exc:
+            messages.error(request, ' '.join(exc.messages))
+        return redirect(reverse('mentoring:slot-list'))

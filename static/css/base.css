@@ -819,6 +819,21 @@ summary { cursor: pointer; font-weight: 600; }
   .detail-side { order: -1; }
 }
 
+/* ---------- Espace mentor ---------- */
+.subnav { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 18px; }
+.subnav a { padding: 9px 18px; border-radius: 999px; background: var(--surface); border: 1px solid var(--line); color: var(--ink); font-weight: 700; text-decoration: none; }
+.subnav a:hover { background: var(--primary-soft); color: var(--primary-hover); }
+.subnav a[aria-current="page"] { background: var(--primary); border-color: var(--primary); color: #fff; }
+.count-pill { display: inline-block; min-width: 28px; padding: 0 10px; border-radius: 999px; background: var(--primary-soft); color: #312e81; font-size: .9rem; text-align: center; vertical-align: middle; }
+.day-group { margin: 22px 0; }
+.day-group h3 { margin: 0 0 10px; font-size: 1.05rem; color: var(--ink-soft); }
+.slot-list { list-style: none; margin: 0; padding: 0; display: grid; gap: 10px; }
+.slot-item { display: grid; grid-template-columns: minmax(150px, auto) minmax(0, 1fr) auto; gap: 8px 20px; align-items: center; padding: 14px 18px; background: var(--surface); border: 1px solid var(--line); border-left: 5px solid var(--primary); border-radius: var(--radius-sm); box-shadow: var(--shadow); }
+.slot-list--muted .slot-item { border-left-color: #c3c8e2; box-shadow: none; background: var(--bg); }
+.slot-time { font-weight: 800; font-size: 1.1rem; }
+.slot-info { display: flex; gap: 10px; align-items: center; flex-wrap: wrap; }
+@media (max-width: 720px) { .slot-item { grid-template-columns: minmax(0, 1fr); } }
+
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after { transition: none !important; animation: none !important; scroll-behavior: auto !important; }
   button:hover, .button:hover, .card-link:hover { transform: none; }

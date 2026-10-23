@@ -1,0 +1,18 @@
+{% extends 'base.html' %}
+{% block title %}Annuler le créneau — HackFlow{% endblock %}
+{% block content %}
+<section class="panel form-panel" aria-labelledby="cancel-title">
+    <h1 id="cancel-title">Annuler ce créneau ?</h1>
+    <p>
+        <strong>{{ slot.start|date:'l j F Y'|capfirst }}</strong>, de {{ slot.start|date:'H:i' }} à {{ slot.end|date:'H:i' }}<br>
+        <span class="muted">{{ slot.hackathon }}</span>
+    </p>
+    <p class="muted">Le créneau ne sera plus proposé aux équipes. Vous pourrez en publier un nouveau.</p>
+    <form method="post">{% csrf_token %}
+        <div class="form-actions">
+            <button type="submit" class="danger">Oui, annuler le créneau</button>
+            <a class="button secondary" href="{% url 'mentoring:slot-list' %}">Garder le créneau</a>
+        </div>
+    </form>
+</section>
+{% endblock %}
