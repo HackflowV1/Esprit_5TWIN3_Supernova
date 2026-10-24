@@ -3,6 +3,7 @@ from datetime import timedelta
 
 from django.test import TestCase
 from django.urls import reverse
+from django.utils import translation
 
 from accounts.models import Role, Skill, User
 from accounts.services import set_role
@@ -27,6 +28,9 @@ class EnglishInterfaceTests(TestCase):
         cls.slot = MentorSlot.objects.create(hackathon=cls.event, mentor=cls.mentor, start=start, end=start + timedelta(minutes=30))
         cls.workshop = Workshop.objects.create(hackathon=cls.event, trainer=cls.mentor, title='API', description='REST',
             capacity=5, start=start + timedelta(hours=2), end=start + timedelta(hours=3), location='Room 1')
+
+    def setUp(self):
+        self.addCleanup(translation.deactivate)
 
     def english(self, user):
         self.client.force_login(user)

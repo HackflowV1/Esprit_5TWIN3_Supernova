@@ -18,7 +18,6 @@ from .permissions import MentorRequiredMixin, is_mentor
 
 
 def group_by_day(items, attr='start'):
-    """Group already ordered objects by local calendar day: [{'day': date, 'items': [...]}]."""
     days = []
     for item in items:
         day = timezone.localtime(getattr(item, attr)).date()
@@ -81,11 +80,11 @@ class SlotListView(MentorRequiredMixin, TemplateView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         now = timezone.now()
-        own = MentorSlot.objects.filter(mentor=self.request.user).select_related('hackathon')
-        upcoming = list(own.filter(end__gt=now).exclude(status=MentorSlot.Status.CANCELLED).order_by('start'))
+        own = MentorSlot.objects.filter(mentor=self.request.user).select_related('hackathon').prefetch_related('sessions')
+        upcoming = list(own.filter(end__gt=now, withdrawn_at__isnull=True).order_by('start'))
         context['days'] = [{'day': g['day'], 'slots': g['items']} for g in group_by_day(upcoming)]
         context['upcoming_count'] = len(upcoming)
-        context['history'] = own.filter(Q(end__lte=now) | Q(status=MentorSlot.Status.CANCELLED)).order_by('-start')[:15]
+        context['history'] = own.filter(Q(end__lte=now) | Q(withdrawn_at__isnull=False)).order_by('-start')[:15]
         context['can_create'] = services.mentor_open_hackathons(self.request.user).exists()
         return context
 

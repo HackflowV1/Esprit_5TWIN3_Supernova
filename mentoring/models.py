@@ -1,28 +1,38 @@
-"""M4 — Assistance, mentorat et ateliers.
-
-Owned by M4. Other modules only read these models through the public services of this app.
-"""
 from django.conf import settings
 from django.core.exceptions import ValidationError
 from django.core.validators import MaxValueValidator, MinValueValidator
 from django.db import models
-from django.utils.translation import gettext_lazy as _
+from django.db.models import Q
 from django.urls import reverse
 from django.utils import timezone
+from django.utils.translation import gettext_lazy as _
 
 from accounts.models import AssignmentStatus, Role, RoleAssignment, Skill
-from hackathons.models import ValidatedModel
+from hackathons.models import EventPhase, ValidatedModel
+
+
+def local_label(value):
+    return f'{timezone.localtime(value):%d/%m/%Y %H:%M}'
+
+
+def development_phase(event):
+    return event.phases.filter(kind=EventPhase.Kind.DEVELOPMENT).first()
+
+
+def check_inside_development(event, start, end, message):
+    phase = development_phase(event)
+    if phase is None:
+        raise ValidationError(_('Ce hackathon n’a pas de phase de développement.'))
+    if start < phase.start or end > phase.end:
+        raise ValidationError(message % {'start': local_label(phase.start), 'end': local_label(phase.end)})
 
 
 class MentorExpertise(ValidatedModel):
-    """A skill declared by a mentor, with a self-assessed level (1 to 5).
-
-    The skill comes from the shared referential (accounts.Skill): no duplicated catalogue.
-    """
-
+   
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='mentor_expertises')
     skill = models.ForeignKey(Skill, on_delete=models.PROTECT, related_name='mentor_expertises')
     level = models.PositiveSmallIntegerField(default=3, validators=[MinValueValidator(1), MaxValueValidator(5)])
+    description = models.TextField(blank=True, max_length=500)
 
     class Meta:
         ordering = ['user__username', '-level', 'skill__name']
@@ -43,20 +53,16 @@ class MentorExpertise(ValidatedModel):
         return f'{self.user} · {self.skill} ({self.level}/5)'
 
 
+class MentorSlotQuerySet(models.QuerySet):
+    def published(self):
+        return self.filter(withdrawn_at__isnull=True)
+
+    def available(self):
+        return self.published().exclude(sessions__status='BOOKED')
+
+
 class MentorSlot(ValidatedModel):
-    """A time range during which a mentor offers help, inside one hackathon.
-
-    Business rules (also enforced by mentoring.services under row locks):
-    - the mentor holds an active MENTOR role in that hackathon;
-    - the slot lasts between 15 minutes and 2 hours and fits inside the event;
-    - a mentor never has two overlapping slots, whatever the hackathon (cancelled slots do not count).
-    """
-
-    class Status(models.TextChoices):
-        AVAILABLE = 'AVAILABLE', _('Disponible')
-        BOOKED = 'BOOKED', _('Réservé')
-        CANCELLED = 'CANCELLED', _('Annulé')
-
+   
     MIN_MINUTES = 15
     MAX_MINUTES = 120
 
@@ -64,9 +70,11 @@ class MentorSlot(ValidatedModel):
     mentor = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.PROTECT, related_name='mentor_slots')
     start = models.DateTimeField()
     end = models.DateTimeField()
-    status = models.CharField(max_length=10, choices=Status.choices, default=Status.AVAILABLE)
+    withdrawn_at = models.DateTimeField(null=True, blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
+
+    objects = MentorSlotQuerySet.as_manager()
 
     class Meta:
         ordering = ['start']
@@ -79,10 +87,28 @@ class MentorSlot(ValidatedModel):
     def duration_minutes(self):
         return int((self.end - self.start).total_seconds() // 60)
 
+    @property
+    def is_published(self):
+        return self.withdrawn_at is None
+
+    @property
+    def is_booked(self):
+        return any(session.status == 'BOOKED' for session in self.sessions.all())
+
+    @property
+    def availability(self):
+        if not self.is_published:
+            return 'WITHDRAWN'
+        return 'BOOKED' if self.is_booked else 'AVAILABLE'
+
+    @property
+    def availability_label(self):
+        return {'WITHDRAWN': _('Annulé'), 'BOOKED': _('Réservé'), 'AVAILABLE': _('Disponible')}[self.availability]
+
     def clean(self):
         super().clean()
-        if self.status == self.Status.CANCELLED:
-            return  # a cancellation must always be possible
+        if self.withdrawn_at is not None:
+            return  # a withdrawal must always be possible
         if not (self.start and self.end and self.hackathon_id and self.mentor_id):
             return
         if self.start >= self.end:
@@ -93,32 +119,20 @@ class MentorSlot(ValidatedModel):
         event = self.hackathon
         if event.status == 'ARCHIVED':
             raise ValidationError(_('Édition archivée : modification interdite.'))
-        if self.start < event.start_date or self.end > event.end_date:
-            local = timezone.localtime
-            raise ValidationError(_('Le créneau doit se situer pendant l’événement (%(start)s → %(end)s).') % {
-                'start': f'{local(event.start_date):%d/%m/%Y %H:%M}', 'end': f'{local(event.end_date):%d/%m/%Y %H:%M}'})
+        check_inside_development(event, self.start, self.end,
+            _('Le créneau doit se situer pendant la phase de développement (%(start)s → %(end)s).'))
         if not RoleAssignment.objects.filter(user_id=self.mentor_id, hackathon_id=self.hackathon_id,
                 role=Role.MENTOR, status=AssignmentStatus.ACTIVE).exists():
             raise ValidationError(_('Rôle mentor actif requis dans ce hackathon.'))
-        if MentorSlot.objects.filter(mentor_id=self.mentor_id, start__lt=self.end, end__gt=self.start).exclude(
-                status=self.Status.CANCELLED).exclude(pk=self.pk).exists():
+        if MentorSlot.objects.published().filter(mentor_id=self.mentor_id, start__lt=self.end, end__gt=self.start).exclude(
+                pk=self.pk).exists():
             raise ValidationError(_('Ce créneau chevauche un autre de vos créneaux.'))
 
     def __str__(self):
-        local = timezone.localtime
-        return f'{self.mentor} · {local(self.start):%d/%m/%Y %H:%M}–{local(self.end):%H:%M}'
+        return f'{self.mentor} · {local_label(self.start)}–{timezone.localtime(self.end):%H:%M}'
 
 
 class Workshop(ValidatedModel):
-    """A training session given by a mentor (the trainer) during a hackathon.
-
-    Business rules (also enforced by mentoring.services under row locks):
-    - the trainer holds an active MENTOR role in that hackathon;
-    - the workshop lasts between 15 minutes and 4 hours and fits inside the event;
-    - it takes place in a room, online, or both; a trainer cannot give two workshops at the same time;
-    - capacity is at least 1 (registrations and their capacity check come with WorkshopRegistration).
-    """
-
     class Status(models.TextChoices):
         PUBLISHED = 'PUBLISHED', _('Publié')
         CANCELLED = 'CANCELLED', _('Annulé')
@@ -170,10 +184,8 @@ class Workshop(ValidatedModel):
         event = self.hackathon
         if event.status == 'ARCHIVED':
             raise ValidationError(_('Édition archivée : modification interdite.'))
-        if self.start < event.start_date or self.end > event.end_date:
-            local = timezone.localtime
-            raise ValidationError(_('L’atelier doit se situer pendant l’événement (%(start)s → %(end)s).') % {
-                'start': f'{local(event.start_date):%d/%m/%Y %H:%M}', 'end': f'{local(event.end_date):%d/%m/%Y %H:%M}'})
+        check_inside_development(event, self.start, self.end,
+            _('L’atelier doit se situer pendant la phase de développement (%(start)s → %(end)s).'))
         if not RoleAssignment.objects.filter(user_id=self.trainer_id, hackathon_id=self.hackathon_id,
                 role=Role.MENTOR, status=AssignmentStatus.ACTIVE).exists():
             raise ValidationError(_('Le formateur doit avoir le rôle mentor actif dans ce hackathon.'))
@@ -186,3 +198,179 @@ class Workshop(ValidatedModel):
 
     def __str__(self):
         return self.title
+
+
+class SupportRequest(ValidatedModel):
+   
+    class Priority(models.TextChoices):
+        LOW = 'LOW', _('Faible')
+        NORMAL = 'NORMAL', _('Normale')
+        HIGH = 'HIGH', _('Élevée')
+        CRITICAL = 'CRITICAL', _('Critique')
+
+    class Status(models.TextChoices):
+        OPEN = 'OPEN', _('Ouverte')
+        BOOKED = 'BOOKED', _('Rendez-vous réservé')
+        IN_PROGRESS = 'IN_PROGRESS', _('Accompagnement en cours')
+        RESOLVED = 'RESOLVED', _('Résolue')
+        CANCELLED = 'CANCELLED', _('Annulée')
+
+    ACTIVE_STATUSES = (Status.OPEN, Status.BOOKED, Status.IN_PROGRESS)
+
+    hackathon = models.ForeignKey('hackathons.Hackathon', on_delete=models.PROTECT, related_name='support_requests')
+    team = models.ForeignKey('teams.Team', on_delete=models.PROTECT, related_name='support_requests')
+    author = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.PROTECT, related_name='support_requests')
+    subject = models.CharField(max_length=200)
+    description = models.TextField()
+    skill = models.ForeignKey(Skill, on_delete=models.PROTECT, null=True, blank=True, related_name='support_requests')
+    priority = models.CharField(max_length=10, choices=Priority.choices, default=Priority.NORMAL)
+    status = models.CharField(max_length=12, choices=Status.choices, default=Status.OPEN)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+    resolved_at = models.DateTimeField(null=True, blank=True)
+
+    class Meta:
+        ordering = ['-created_at']
+        verbose_name = _('Demande d’aide')
+        verbose_name_plural = _('Demandes d’aide')
+        indexes = [models.Index(fields=['team', 'status'], name='request_team_status_idx'),
+                   models.Index(fields=['hackathon', 'priority'], name='request_event_priority_idx')]
+
+    @property
+    def is_active(self):
+        return self.status in self.ACTIVE_STATUSES
+
+    def clean(self):
+        super().clean()
+        if self.team_id and self.hackathon_id and self.team.hackathon_id != self.hackathon_id:
+            raise ValidationError(_('L’équipe doit appartenir au même hackathon.'))
+        if not (self.subject or '').strip():
+            raise ValidationError({'subject': _('Indiquez le sujet de votre demande.')})
+
+    def __str__(self):
+        return self.subject
+
+
+class MentoringSession(ValidatedModel):
+   
+    class Status(models.TextChoices):
+        BOOKED = 'BOOKED', _('Réservée')
+        COMPLETED = 'COMPLETED', _('Terminée')
+        CANCELLED = 'CANCELLED', _('Annulée')
+
+    request = models.ForeignKey(SupportRequest, on_delete=models.PROTECT, related_name='sessions')
+    slot = models.ForeignKey(MentorSlot, on_delete=models.PROTECT, related_name='sessions')
+    status = models.CharField(max_length=10, choices=Status.choices, default=Status.BOOKED)
+    booked_by = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.PROTECT, related_name='booked_sessions')
+    report = models.TextField(blank=True)  # compte rendu, shared with the team
+    private_notes = models.TextField(blank=True)  # visible by the mentor and the organizers only
+    completed_at = models.DateTimeField(null=True, blank=True)
+    feedback_rating = models.PositiveSmallIntegerField(null=True, blank=True, validators=[MinValueValidator(1), MaxValueValidator(5)])
+    feedback_comment = models.TextField(blank=True)
+    feedback_at = models.DateTimeField(null=True, blank=True)
+    cancelled_at = models.DateTimeField(null=True, blank=True)
+    cancelled_by = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.SET_NULL, null=True, blank=True, related_name='+')
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    class Meta:
+        ordering = ['-slot__start']
+        verbose_name = _('Séance de mentorat')
+        verbose_name_plural = _('Séances de mentorat')
+        constraints = [
+            models.UniqueConstraint(fields=['slot'], condition=Q(status='BOOKED'), name='m4_one_booked_session_per_slot'),
+            models.UniqueConstraint(fields=['request'], condition=Q(status='BOOKED'), name='m4_one_booked_session_per_request'),
+            models.CheckConstraint(condition=Q(feedback_rating__isnull=True) | Q(feedback_rating__gte=1, feedback_rating__lte=5),
+                name='m4_feedback_rating_range'),
+        ]
+
+    @property
+    def team(self):
+        return self.request.team
+
+    @property
+    def mentor(self):
+        return self.slot.mentor
+
+    @property
+    def hackathon(self):
+        return self.slot.hackathon
+
+    def clean(self):
+        super().clean()
+        if not (self.request_id and self.slot_id):
+            return
+        if self.request.hackathon_id != self.slot.hackathon_id:
+            raise ValidationError(_('La demande et le créneau doivent appartenir au même hackathon.'))
+        if self.status != self.Status.BOOKED:
+            return
+        if self.slot.withdrawn_at is not None:
+            raise ValidationError(_('Ce créneau n’est plus proposé.'))
+        if self.request.team.memberships.filter(ended_at__isnull=True, registration__user_id=self.slot.mentor_id).exists():
+            raise ValidationError(_('Un mentor ne peut pas accompagner sa propre équipe.'))
+
+    def __str__(self):
+        return f'{self.request} · {self.slot}'
+
+
+class WorkshopRegistration(ValidatedModel):
+   
+
+    class Status(models.TextChoices):
+        REGISTERED = 'REGISTERED', _('Inscrit')
+        CANCELLED = 'CANCELLED', _('Annulée')
+
+    class Attendance(models.TextChoices):
+        UNKNOWN = 'UNKNOWN', _('Non renseignée')
+        PRESENT = 'PRESENT', _('Présent')
+        ABSENT = 'ABSENT', _('Absent')
+
+    workshop = models.ForeignKey(Workshop, on_delete=models.PROTECT, related_name='registrations')
+    registration = models.ForeignKey('teams.Registration', on_delete=models.PROTECT, related_name='workshop_registrations')
+    status = models.CharField(max_length=10, choices=Status.choices, default=Status.REGISTERED)
+    attendance = models.CharField(max_length=10, choices=Attendance.choices, default=Attendance.UNKNOWN)
+    attendance_marked_by = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.SET_NULL, null=True, blank=True, related_name='+')
+    attendance_marked_at = models.DateTimeField(null=True, blank=True)
+    cancelled_at = models.DateTimeField(null=True, blank=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    class Meta:
+        ordering = ['created_at']
+        verbose_name = _('Inscription à un atelier')
+        verbose_name_plural = _('Inscriptions aux ateliers')
+        constraints = [models.UniqueConstraint(fields=['workshop', 'registration'], name='m4_one_workshop_registration')]
+
+    def clean(self):
+        super().clean()
+        if not (self.workshop_id and self.registration_id):
+            return
+        if self.registration.hackathon_id != self.workshop.hackathon_id:
+            raise ValidationError(_('L’inscription et l’atelier doivent appartenir au même hackathon.'))
+        if self.status == self.Status.REGISTERED and self.registration.status != 'ACCEPTED':
+            raise ValidationError(_('Une inscription acceptée au hackathon est requise.'))
+
+    def __str__(self):
+        return f'{self.registration.user} → {self.workshop}'
+
+
+class M4History(models.Model):
+    """Minimal audit trail of M4: who did what, on which object, with the useful change."""
+
+    hackathon = models.ForeignKey('hackathons.Hackathon', on_delete=models.PROTECT, related_name='m4_history')
+    actor = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.SET_NULL, null=True, blank=True, related_name='+')
+    action = models.CharField(max_length=60)  # stable code, e.g. 'request.opened'
+    object_type = models.CharField(max_length=40)
+    object_id = models.PositiveBigIntegerField()
+    details = models.JSONField(default=dict, blank=True)
+    timestamp = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        ordering = ['-timestamp', '-id']
+        verbose_name = _('Historique M4')
+        verbose_name_plural = _('Historique M4')
+        indexes = [models.Index(fields=['hackathon', 'timestamp'], name='m4hist_event_time_idx'),
+                   models.Index(fields=['object_type', 'object_id'], name='m4hist_object_idx')]
+
+    def __str__(self):
+        return f'{self.action} · {self.object_type}#{self.object_id}'

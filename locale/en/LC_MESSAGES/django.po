@@ -4007,3 +4007,160 @@ msgstr "About the workshop"
 #: mentoring/forms.py
 msgid "Évaluez honnêtement votre niveau : il aide les équipes à trouver le bon mentor."
 msgstr "Rate your level honestly: it helps teams find the right mentor."
+
+# --- M4 : modèles du plan, demandes d’aide, séances (application mentoring) ---
+
+#: mentoring/models.py
+msgid "Absent"
+msgstr "Absent"
+
+#: mentoring/models.py
+msgid "Accompagnement en cours"
+msgstr "Coaching in progress"
+
+#: mentoring/models.py
+msgid "Ce créneau n’est plus proposé."
+msgstr "This slot is no longer offered."
+
+#: mentoring/models.py
+msgid "Ce hackathon n’a pas de phase de développement."
+msgstr "This hackathon has no development phase."
+
+#: mentoring/forms.py
+msgid "Comment pouvez-vous aider les équipes ? (500 caractères maximum)"
+msgstr "How can you help teams? (500 characters maximum)"
+
+#: mentoring/models.py
+msgid "Critique"
+msgstr "Critical"
+
+#: mentoring/models.py
+msgid "Demande d’aide"
+msgstr "Help request"
+
+#: mentoring/models.py
+msgid "Demandes d’aide"
+msgstr "Help requests"
+
+#: mentoring/admin.py
+msgid "Disponibilité"
+msgstr "Availability"
+
+#: mentoring/models.py
+msgid "Faible"
+msgstr "Low"
+
+#: mentoring/models.py
+msgid "Historique M4"
+msgstr "M4 history"
+
+#: mentoring/models.py
+msgid "Indiquez le sujet de votre demande."
+msgstr "Enter the subject of your request."
+
+#: mentoring/models.py
+msgid "Inscription à un atelier"
+msgstr "Workshop registration"
+
+#: mentoring/models.py
+msgid "Inscriptions aux ateliers"
+msgstr "Workshop registrations"
+
+#: mentoring/models.py
+msgid "Inscrit"
+msgstr "Registered"
+
+#: mentoring/services.py
+#, python-format
+msgid "La capacité ne peut pas être inférieure au nombre d’inscrits (%(count)s)."
+msgstr "The capacity cannot be lower than the number of registered people (%(count)s)."
+
+#: mentoring/models.py
+msgid "La demande et le créneau doivent appartenir au même hackathon."
+msgstr "The request and the slot must belong to the same hackathon."
+
+#: mentoring/models.py
+#, python-format
+msgid "Le créneau doit se situer pendant la phase de développement (%(start)s → %(end)s)."
+msgstr "The slot must take place during the development phase (%(start)s → %(end)s)."
+
+#: mentoring/services.py
+msgid "Les demandes d’aide sont possibles pendant la phase de développement d’un hackathon publié ou en cours."
+msgstr "Help requests are possible during the development phase of a published or ongoing hackathon."
+
+#: mentoring/models.py
+#, python-format
+msgid "L’atelier doit se situer pendant la phase de développement (%(start)s → %(end)s)."
+msgstr "The workshop must take place during the development phase (%(start)s → %(end)s)."
+
+#: mentoring/models.py
+msgid "L’inscription et l’atelier doivent appartenir au même hackathon."
+msgstr "The registration and the workshop must belong to the same hackathon."
+
+#: mentoring/models.py
+msgid "L’équipe doit appartenir au même hackathon."
+msgstr "The team must belong to the same hackathon."
+
+#: mentoring/models.py
+msgid "Non renseignée"
+msgstr "Not recorded"
+
+#: mentoring/models.py
+msgid "Ouverte"
+msgstr "Open"
+
+#: mentoring/models.py
+msgid "Présent"
+msgstr "Present"
+
+#: mentoring/forms.py
+msgid "Présentation"
+msgstr "Presentation"
+
+#: mentoring/models.py
+msgid "Rendez-vous réservé"
+msgstr "Appointment booked"
+
+#: mentoring/models.py
+msgid "Réservée"
+msgstr "Booked"
+
+#: mentoring/models.py
+msgid "Résolue"
+msgstr "Resolved"
+
+#: mentoring/services.py
+msgid "Seule une demande ouverte peut être annulée. Annulez d’abord le rendez-vous."
+msgstr "Only an open request can be cancelled. Cancel the appointment first."
+
+#: mentoring/services.py
+msgid "Seuls les membres actifs de l’équipe peuvent demander de l’aide."
+msgstr "Only active members of the team can ask for help."
+
+#: mentoring/services.py
+msgid "Seuls l’auteur, le capitaine ou un organisateur peuvent annuler cette demande."
+msgstr "Only the author, the captain or an organizer can cancel this request."
+
+#: mentoring/models.py
+msgid "Séance de mentorat"
+msgstr "Mentoring session"
+
+#: mentoring/models.py
+msgid "Séances de mentorat"
+msgstr "Mentoring sessions"
+
+#: mentoring/services.py
+msgid "Un atelier qui a des inscrits ne peut pas changer d’horaire : annulez-le et publiez-en un nouveau."
+msgstr "A workshop with registered people cannot change its schedule: cancel it and publish a new one."
+
+#: mentoring/models.py
+msgid "Un mentor ne peut pas accompagner sa propre équipe."
+msgstr "A mentor cannot coach their own team."
+
+#: mentoring/models.py
+msgid "Une inscription acceptée au hackathon est requise."
+msgstr "An accepted hackathon registration is required."
+
+#: mentoring/models.py
+msgid "Élevée"
+msgstr "High"

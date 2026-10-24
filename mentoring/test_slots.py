@@ -15,6 +15,7 @@ from hackathons.models import Hackathon
 from hackathons.services import transition
 from hackathons.test_helpers import make_event, make_owner
 from . import services
+from .test_helpers import book_slot
 from .models import MentorSlot
 
 FORMAT = '%Y-%m-%dT%H:%M'
@@ -53,7 +54,7 @@ class SlotBase(TestCase):
 class SlotModelTests(SlotBase):
     def test_valid_slot(self):
         slot = self.make()
-        self.assertEqual(slot.status, 'AVAILABLE')
+        self.assertEqual(slot.availability, 'AVAILABLE')
         self.assertEqual(slot.duration_minutes, 30)
 
     def test_end_must_follow_start(self):
@@ -112,7 +113,7 @@ class SlotModelTests(SlotBase):
 
     def test_cancelled_slot_frees_the_time_and_can_always_be_saved(self):
         slot = self.make(hours=1)
-        slot.status = MentorSlot.Status.CANCELLED
+        slot.withdrawn_at = timezone.now()
         slot.save()
         self.make(hours=1)
         set_role(actor=self.owner, user=self.mentor, hackathon=self.event, role=Role.MENTOR, status=AssignmentStatus.REVOKED)
@@ -132,7 +133,7 @@ class SlotModelTests(SlotBase):
 class SlotServiceTests(SlotBase):
     def test_create_slot(self):
         slot = services.create_slot(actor=self.mentor, hackathon=self.event, start=self.at(1), end=self.at(1, 30))
-        self.assertEqual((slot.mentor, slot.hackathon, slot.status), (self.mentor, self.event, 'AVAILABLE'))
+        self.assertEqual((slot.mentor, slot.hackathon, slot.availability), (self.mentor, self.event, 'AVAILABLE'))
 
     def test_only_a_mentor_of_that_hackathon_can_create(self):
         with self.assertRaises(PermissionDenied):
@@ -167,13 +168,13 @@ class SlotServiceTests(SlotBase):
 
     def test_booked_slot_cannot_be_changed_or_cancelled(self):
         slot = self.make()
-        MentorSlot.objects.filter(pk=slot.pk).update(status='BOOKED')
+        book_slot(self.event, slot)
         with self.assertRaises(ValidationError):
             services.update_slot(actor=self.mentor, slot=slot, start=self.at(3), end=self.at(3, 30))
         with self.assertRaises(ValidationError):
             services.cancel_slot(actor=self.mentor, slot=slot)
         slot.refresh_from_db()
-        self.assertEqual(slot.status, 'BOOKED')
+        self.assertEqual(slot.availability, 'BOOKED')
 
     def test_started_slot_cannot_be_changed(self):
         slot = self.make(hours=1)
@@ -188,13 +189,13 @@ class SlotServiceTests(SlotBase):
         with self.assertRaises(PermissionDenied):
             services.cancel_slot(actor=self.rival, slot=slot)
         slot.refresh_from_db()
-        self.assertEqual((slot.start, slot.status), (self.at(1), 'AVAILABLE'))
+        self.assertEqual((slot.start, slot.availability), (self.at(1), 'AVAILABLE'))
 
     def test_cancel_slot(self):
         slot = self.make()
         services.cancel_slot(actor=self.mentor, slot=slot)
         slot.refresh_from_db()
-        self.assertEqual(slot.status, 'CANCELLED')
+        self.assertEqual(slot.availability, 'WITHDRAWN')
 
 
 class SlotViewTests(SlotBase):
@@ -222,7 +223,7 @@ class SlotViewTests(SlotBase):
         self.assertEqual(self.client.post(reverse('mentoring:slot-cancel', args=[slot.pk])).status_code, 403)
         self.assertEqual(self.post_slot(self.at(5), self.at(5, 30)).status_code, 403)
         slot.refresh_from_db()
-        self.assertEqual(slot.status, 'AVAILABLE')
+        self.assertEqual(slot.availability, 'AVAILABLE')
         self.assertEqual(MentorSlot.objects.count(), 1)
 
     def test_empty_list_then_create(self):
@@ -294,21 +295,21 @@ class SlotViewTests(SlotBase):
         url = reverse('mentoring:slot-cancel', args=[slot.pk])
         self.assertContains(self.client.get(url), 'Annuler ce créneau ?')
         slot.refresh_from_db()
-        self.assertEqual(slot.status, 'AVAILABLE')
+        self.assertEqual(slot.availability, 'AVAILABLE')
         response = self.client.post(url, follow=True)
         self.assertContains(response, 'Créneau annulé')
         slot.refresh_from_db()
-        self.assertEqual(slot.status, 'CANCELLED')
+        self.assertEqual(slot.availability, 'WITHDRAWN')
         self.assertContains(response, 'Passés et annulés')
 
     def test_booked_slot_cannot_be_cancelled_from_the_page(self):
         slot = self.make()
-        MentorSlot.objects.filter(pk=slot.pk).update(status='BOOKED')
+        book_slot(self.event, slot)
         self.client.force_login(self.mentor)
         response = self.client.post(reverse('mentoring:slot-cancel', args=[slot.pk]), follow=True)
         self.assertContains(response, 'Seul un créneau disponible')
         slot.refresh_from_db()
-        self.assertEqual(slot.status, 'BOOKED')
+        self.assertEqual(slot.availability, 'BOOKED')
 
 
 class SlotConcurrencyTests(TransactionTestCase):

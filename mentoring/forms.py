@@ -17,8 +17,10 @@ class MentorExpertiseForm(forms.ModelForm):
 
     class Meta:
         model = MentorExpertise
-        fields = ('skill', 'level')
-        labels = {'skill': _('Compétence')}
+        fields = ('skill', 'level', 'description')
+        labels = {'skill': _('Compétence'), 'description': _('Présentation')}
+        help_texts = {'description': _('Comment pouvez-vous aider les équipes ? (500 caractères maximum)')}
+        widgets = {'description': forms.Textarea(attrs={'rows': 3, 'maxlength': 500})}
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
@@ -32,7 +34,6 @@ class MentorExpertiseForm(forms.ModelForm):
 
 
 class SlotForm(forms.Form):
-    """Create or edit a slot. Business rules live in mentoring.services; this form only collects the input."""
 
     hackathon = forms.ModelChoiceField(label=_('Hackathon'), queryset=Hackathon.objects.none(), empty_label=_('Choisir un hackathon'))
     start = forms.DateTimeField(label=_('Début'), widget=DATETIME, help_text=_('Heure de Tunis.'))
@@ -50,7 +51,6 @@ class SlotForm(forms.Form):
 
 
 class WorkshopForm(forms.Form):
-    """Create or edit a workshop. Business rules live in mentoring.services."""
 
     hackathon = forms.ModelChoiceField(label=_('Hackathon'), queryset=Hackathon.objects.none(), empty_label=_('Choisir un hackathon'))
     title = forms.CharField(label=_('Thème de l’atelier'), max_length=200)

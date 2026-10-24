@@ -23,6 +23,7 @@
 <p class="m4-eyebrow">{{ item.skill.category }}</p>
 <h3 class="m4-card-title">{{ item.skill }}</h3>
 {% blocktranslate asvar level_label with level=item.level %}Niveau {{ level }} sur 5{% endblocktranslate %}
+{% if item.description %}<p>{{ item.description|linebreaksbr }}</p>{% endif %}
 <p><span class="level" role="img" aria-label="{{ level_label }}">{% for i in '12345' %}<i{% if forloop.counter <= item.level %} class="on"{% endif %}></i>{% endfor %}</span> <span class="muted">{% blocktranslate with level=item.level %}Niveau {{ level }}/5{% endblocktranslate %}</span></p>
 <div class="actions">
 <a class="button small secondary" href="{% url 'mentoring:expertise-edit' item.pk %}">{% icon 'edit' %}{% translate 'Modifier' %}<span class="visually-hidden"> {{ item.skill }}</span></a>

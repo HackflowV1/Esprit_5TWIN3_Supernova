@@ -30,8 +30,8 @@
 <time datetime="{{ slot.end|date:'c' }}">{{ slot.end|date:'H:i' }}</time>
 <span class="muted">· {{ slot.duration_minutes }} min</span>
 </div>
-<div class="m4-info"><span>{{ slot.hackathon }}</span><span class="badge badge--{% if slot.status == 'AVAILABLE' %}published{% else %}finished{% endif %}">{{ slot.get_status_display|translate }}</span></div>
-{% if slot.status == 'AVAILABLE' %}
+<div class="m4-info"><span>{{ slot.hackathon }}</span><span class="badge badge--{% if slot.availability == 'AVAILABLE' %}published{% else %}finished{% endif %}">{{ slot.availability_label }}</span></div>
+{% if slot.availability == 'AVAILABLE' %}
 <div class="m4-actions">
 <a class="button small secondary" href="{% url 'mentoring:slot-edit' slot.pk %}">{% icon 'edit' %}{% translate 'Modifier' %}<span class="visually-hidden"> {% blocktranslate with hour=slot.start|date:'H:i' %}le créneau de {{ hour }}{% endblocktranslate %}</span></a>
 <a class="link-danger" href="{% url 'mentoring:slot-cancel' slot.pk %}">{% translate 'Annuler' %}<span class="visually-hidden"> {% blocktranslate with hour=slot.start|date:'H:i' %}le créneau de {{ hour }}{% endblocktranslate %}</span></a>
@@ -57,7 +57,7 @@
 {% for slot in history %}
 <li class="m4-item m4-item--muted">
 <div class="m4-time"><time datetime="{{ slot.start|date:'c' }}">{{ slot.start|date:'d/m/Y H:i' }}</time> <span aria-hidden="true">→</span><span class="visually-hidden"> {% translate 'jusqu’à' %} </span> <time datetime="{{ slot.end|date:'c' }}">{{ slot.end|date:'H:i' }}</time></div>
-<div class="m4-info"><span>{{ slot.hackathon }}</span><span class="badge badge--{% if slot.status == 'CANCELLED' %}withdrawn{% else %}finished{% endif %}">{% if slot.status == 'CANCELLED' %}{% translate 'Annulé' %}{% else %}{% translate 'Passé' %}{% endif %}</span></div>
+<div class="m4-info"><span>{{ slot.hackathon }}</span><span class="badge badge--{% if not slot.is_published %}withdrawn{% else %}finished{% endif %}">{% if not slot.is_published %}{% translate 'Annulé' %}{% else %}{% translate 'Passé' %}{% endif %}</span></div>
 </li>
 {% endfor %}
 </ul>
