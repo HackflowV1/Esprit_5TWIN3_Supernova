@@ -2,174 +2,292 @@
 {% block title %}{{ event }} {% translate '— HackFlow' %}{% endblock %}
 {% block content %}
 
-<section class="event-hero{% if event.image %} has-cover{% endif %}" aria-labelledby="event-title">
+<div class="event-detail-wrapper">
+  <!-- Event Hero Section -->
+  <header class="event-hero{% if event.image %} has-cover{% endif %}" aria-labelledby="event-title">
     {% if event.image %}
-    <img class="cover" src="{{ event.image.url }}" alt="{% blocktranslate with v0=event %}Visuel de couverture {{ v0 }}{% endblocktranslate %}">
-    {% endif %}
-    <div class="event-hero-body">
-        <div class="event-hero-meta">
-            <span class="badge badge--{{ event.status|lower }}">{{ event.get_status_display }}</span>
-            <span class="meta-item">{% icon 'calendar' 15 %} {{ event.start_date|date:"SHORT_DATE_FORMAT" }} → {{ event.end_date|date:"SHORT_DATE_FORMAT" }}</span>
-            <span class="meta-item">{% icon 'globe' 15 %} {{ event.get_format_display }}{% if event.location %} · {{ event.location }}{% endif %}</span>
-        </div>
-        <h1 id="event-title">{{ event }}</h1>
-        <p class="event-hero-lead">{{ event.description|truncatewords:32 }}</p>
+    <div class="event-hero-cover-container">
+      <img class="event-hero-cover" src="{{ event.image.url }}" alt="{% blocktranslate with v0=event %}Visuel de couverture {{ v0 }}{% endblocktranslate %}">
     </div>
-</section>
+    {% endif %}
+    
+    <div class="event-hero-content">
+      <div class="event-hero-meta">
+        <span class="status-pill status-pill--{{ event.status|lower }}">
+          <span class="status-dot"></span>
+          {{ event.get_status_display }}
+        </span>
+        <span class="meta-chip">{% icon 'calendar' 15 %} {{ event.start_date|date:"SHORT_DATE_FORMAT" }} → {{ event.end_date|date:"SHORT_DATE_FORMAT" }}</span>
+        <span class="meta-chip">{% icon 'globe' 15 %} {{ event.get_format_display }}{% if event.location %} · {{ event.location }}{% endif %}</span>
+        <span class="meta-chip">{% icon 'users' 15 %} {{ event.min_team_size }}–{{ event.max_team_size }} {% translate 'pers. / équipe' %}</span>
+        <span class="meta-chip">{% icon 'flag' 15 %} {{ event.capacity }} {% translate 'places' %}</span>
+      </div>
 
-<nav class="section-nav" aria-label="{% translate 'Sur cette page' %}">
-    <a href="#about-title">{% translate 'À propos' %}</a>
-    <a href="#phases-title">{% translate 'Calendrier' %}</a>
-    <a href="#challenges-title">{% translate 'Challenges' %}</a>
-    <a href="#partners-title">{% translate 'Partenaires' %}</a>
-</nav>
+      <h1 id="event-title" class="event-hero-title">{{ event }}</h1>
+      <p class="event-hero-lead">{{ event.description|truncatewords:42 }}</p>
 
-<div class="detail-layout">
-<div class="detail-main">
-    <section class="panel about-panel" aria-labelledby="about-title">
-        <h2 id="about-title">{% translate 'À propos' %}</h2>
-        <div class="prose">
-            <p>{{ event.description|linebreaksbr }}</p>
+      <div class="event-hero-footer">
+        <div class="event-hero-deadline">
+          {% icon 'clock' 16 %}
+          <span>{% translate 'Dépôt des projets jusqu’au' %} <strong>{{ event.submission_deadline|date:"SHORT_DATETIME_FORMAT" }}</strong></span>
+        </div>
+        {% if can_manage or can_propose %}
+        <div class="event-hero-cta-group">
+          {% if can_manage %}
+          <a class="button small hero-cta" href="{% url 'hackathons:manage' event.slug %}">
+            {% icon 'settings' 16 %} {% translate 'Piloter l’édition' %}
+          </a>
+          {% endif %}
+          {% if can_propose %}
+          <a class="button secondary small hero-cta" href="{% url 'hackathons:propose' event.slug %}">
+            {% icon 'add' 16 %} {% translate 'Proposer un challenge' %}
+          </a>
+          {% endif %}
+        </div>
+        {% endif %}
+      </div>
+    </div>
+  </header>
+
+  <!-- In-Page Sticky Nav -->
+  <nav class="section-nav" aria-label="{% translate 'Navigation de la page' %}">
+    <a href="#about-title" class="section-nav-link">{% icon 'info' 15 %} {% translate 'À propos' %}</a>
+    <a href="#rules-title" class="section-nav-link">{% icon 'shield' 15 %} {% translate 'Règlement & Conditions' %}</a>
+    <a href="#phases-title" class="section-nav-link">{% icon 'calendar' 15 %} {% translate 'Calendrier' %} <span class="nav-count">{{ phases|length }}</span></a>
+    <a href="#challenges-title" class="section-nav-link">{% icon 'code' 15 %} {% translate 'Challenges' %} <span class="nav-count">{{ challenges|length }}</span></a>
+    <a href="#partners-title" class="section-nav-link">{% icon 'award' 15 %} {% translate 'Partenaires' %} <span class="nav-count">{{ partnerships|length }}</span></a>
+  </nav>
+
+  <!-- Two Column Layout: Main Details + Sticky Passport Sidebar -->
+  <div class="detail-layout">
+    <div class="detail-main">
+      <!-- Section 1: Overview / Presentation -->
+      <section class="detail-card" aria-labelledby="about-title">
+        <div class="detail-card-head">
+          <div class="detail-card-icon">{% icon 'info' 20 %}</div>
+          <div>
+            <h2 id="about-title" class="detail-card-title">{% translate 'À propos de cette édition' %}</h2>
+            <p class="detail-card-subtitle">{% translate 'Contexte général et vision de l’événement' %}</p>
+          </div>
+        </div>
+        <div class="prose detail-card-body">
+          <p>{{ event.description|linebreaksbr }}</p>
+        </div>
+      </section>
+
+      <!-- Section 2: Rules & Participation Guidelines -->
+      <section class="detail-card" aria-labelledby="rules-title">
+        <div class="detail-card-head">
+          <div class="detail-card-icon">{% icon 'shield' 20 %}</div>
+          <div>
+            <h2 id="rules-title" class="detail-card-title">{% translate 'Règlement & Conditions' %}</h2>
+            <p class="detail-card-subtitle">{% translate 'Modalités de travail, intégrité et éligibilité des participants' %}</p>
+          </div>
         </div>
         
-        <div class="detail-subblock">
-            <h3>{% icon 'shield' 18 %} {% translate 'Règlement' %}</h3>
-            <div class="prose subblock-content">
-                <p>{{ event.rules|linebreaksbr }}</p>
+        <div class="rules-grid">
+          <div class="rule-box">
+            <h3 class="rule-box-title">
+              {% icon 'shield' 16 %} {% translate 'Règlement officiel' %}
+            </h3>
+            <div class="prose rule-box-content">
+              <p>{{ event.rules|linebreaksbr }}</p>
             </div>
+          </div>
+
+          {% if event.participation_conditions %}
+          <div class="rule-box">
+            <h3 class="rule-box-title">
+              {% icon 'users' 16 %} {% translate 'Conditions de participation' %}
+            </h3>
+            <div class="prose rule-box-content">
+              <p>{{ event.participation_conditions|linebreaksbr }}</p>
+            </div>
+          </div>
+          {% endif %}
+        </div>
+      </section>
+
+      <!-- Section 3: Phase Roadmap -->
+      <section class="detail-card" aria-labelledby="phases-title">
+        <div class="detail-card-head">
+          <div class="detail-card-icon">{% icon 'calendar' 20 %}</div>
+          <div>
+            <h2 id="phases-title" class="detail-card-title">{% translate 'Calendrier des phases' %}</h2>
+            <p class="detail-card-subtitle">{% translate 'Les étapes clés du hackathon, du lancement à la remise des prix' %}</p>
+          </div>
         </div>
 
-        {% if event.participation_conditions %}
-        <div class="detail-subblock">
-            <h3>{% icon 'users' 18 %} {% translate 'Conditions de participation' %}</h3>
-            <div class="prose subblock-content">
-                <p>{{ event.participation_conditions|linebreaksbr }}</p>
+        <div class="phase-roadmap">
+          {% for phase in phases %}
+          <div class="phase-item{% if phase.state_code == 'OPEN' %} is-current{% elif phase.state_code == 'CLOSED' %} is-past{% endif %}">
+            <div class="phase-step-badge">0{{ forloop.counter }}</div>
+            <div class="phase-item-body">
+              <div class="phase-item-header">
+                <h3 class="phase-item-title">{{ phase }}</h3>
+                <span class="phase-status-pill phase-status--{{ phase.state_code|lower }}">
+                  {% if phase.state_code == 'OPEN' %}<span class="pulse-dot"></span>{% endif %}
+                  {{ phase.state }}
+                </span>
+              </div>
+              <p class="phase-item-dates">
+                {% icon 'clock' 14 %}
+                <span>{{ phase.start|date:"SHORT_DATETIME_FORMAT" }} → {{ phase.end|date:"SHORT_DATETIME_FORMAT" }}</span>
+              </p>
             </div>
+          </div>
+          {% empty %}
+          <p class="empty-notice">{% translate 'Calendrier en préparation par l’équipe d’organisation.' %}</p>
+          {% endfor %}
         </div>
-        {% endif %}
-    </section>
+      </section>
 
-    <section class="panel timeline-panel" aria-labelledby="phases-title">
-        <h2 id="phases-title">{% translate 'Calendrier des phases' %}</h2>
-        <ol class="timeline">
-            {% for phase in phases %}
-            <li{% if phase.state_code == 'OPEN' %} class="is-current"{% endif %}>
-                <h3>
-                    {{ phase }}
-                    <span class="badge badge--{{ phase.state_code|lower }}">{{ phase.state }}</span>
-                </h3>
-                <p>{% icon 'clock' 14 %} {{ phase.start|date:"SHORT_DATETIME_FORMAT" }} → {{ phase.end|date:"SHORT_DATETIME_FORMAT" }}</p>
-            </li>
-            {% empty %}
-            <li class="empty-phase">{% translate 'Calendrier en préparation.' %}</li>
-            {% endfor %}
-        </ol>
-    </section>
-
-    <section class="panel challenges-panel" aria-labelledby="challenges-title">
-        <h2 id="challenges-title">{% translate 'Challenges disponibles' %}</h2>
-        <div class="grid challenge-grid">
-            {% for challenge in challenges %}
-            <article class="card challenge-card">
-                <div class="challenge-header">
-                    <span class="track-badge">{% icon 'code' 14 %} {{ challenge.track }}</span>
-                    {% if challenge.sponsorship %}
-                    <span class="chip sponsor-chip">{% icon 'award' 14 %} {{ challenge.sponsorship.organization }}</span>
-                    {% endif %}
-                </div>
-                <h3>{{ challenge }}</h3>
-                <p class="challenge-problem">{{ challenge.problem|linebreaksbr }}</p>
-                
-                <div class="challenge-section">
-                    <h4>{% icon 'check' 15 %} {% translate 'Objectifs' %}</h4>
-                    <p>{{ challenge.objectives|linebreaksbr }}</p>
-                </div>
-
-                <div class="challenge-section">
-                    <h4>{% icon 'archive' 15 %} {% translate 'Livrables attendus' %}</h4>
-                    <p>{{ challenge.deliverables|linebreaksbr }}</p>
-                </div>
-
-                {% if challenge.participation_conditions %}
-                <p class="muted challenge-conditions">{% icon 'shield' 14 %} {{ challenge.participation_conditions }}</p>
-                {% endif %}
-            </article>
-            {% empty %}
-            <p class="empty">{% translate 'Aucun challenge publié.' %}</p>
-            {% endfor %}
+      <!-- Section 4: Challenges -->
+      <section class="detail-card" aria-labelledby="challenges-title">
+        <div class="detail-card-head">
+          <div class="detail-card-icon">{% icon 'code' 20 %}</div>
+          <div>
+            <h2 id="challenges-title" class="detail-card-title">{% translate 'Challenges disponibles' %}</h2>
+            <p class="detail-card-subtitle">{% translate 'Choisissez une thématique et construisez votre solution' %}</p>
+          </div>
         </div>
-    </section>
 
-    <section class="panel partners-panel" aria-labelledby="partners-title">
-        <h2 id="partners-title">{% translate 'Partenaires confirmés' %}</h2>
-        <div class="grid partner-grid">
-            {% for item in partnerships %}
-            <article class="card partner">
-                {% if item.organization.logo %}
-                <img src="{{ item.organization.logo.url }}" alt="{% blocktranslate with v0=item.organization %}Logo {{ v0 }}{% endblocktranslate %}">
-                {% endif %}
-                <div class="partner-body">
-                    <h3>{{ item.organization }}</h3>
-                    <p>{{ item.organization.description }}</p>
-                    {% if item.organization.website %}
-                    <a class="text-link" href="{{ item.organization.website }}" target="_blank" rel="noopener noreferrer">
-                        {% translate 'Site du partenaire' %} {% icon 'arrow-right' 14 %}
-                    </a>
-                    {% endif %}
-                </div>
-            </article>
-            {% empty %}
-            <p class="empty">{% translate 'Aucun partenaire confirmé.' %}</p>
-            {% endfor %}
-        </div>
-    </section>
-</div>
+        <div class="challenges-grid">
+          {% for challenge in challenges %}
+          <article class="challenge-tile">
+            <div class="challenge-tile-header">
+              <span class="track-tag">{% icon 'code' 14 %} {{ challenge.track }}</span>
+              {% if challenge.sponsorship %}
+              <span class="sponsor-tag">{% icon 'award' 14 %} {{ challenge.sponsorship.organization }}</span>
+              {% endif %}
+            </div>
 
-<aside class="detail-side" aria-label="{% translate 'Informations clés' %}">
-    <div class="side-card">
-        <h2>{% translate 'En un coup d’œil' %}</h2>
-        <dl class="fact-list">
-            <div>
-                <dt>{% icon 'calendar' 15 %} {% translate 'Début' %}</dt>
-                <dd>{{ event.start_date|date:"SHORT_DATETIME_FORMAT" }}</dd>
+            <h3 class="challenge-tile-title">{{ challenge }}</h3>
+            <p class="challenge-tile-problem">{{ challenge.problem|linebreaksbr }}</p>
+
+            <div class="challenge-tile-specs">
+              <div class="spec-block">
+                <h4>{% icon 'check' 15 %} {% translate 'Objectifs clés' %}</h4>
+                <p>{{ challenge.objectives|linebreaksbr }}</p>
+              </div>
+
+              <div class="spec-block">
+                <h4>{% icon 'archive' 15 %} {% translate 'Livrables attendus' %}</h4>
+                <p>{{ challenge.deliverables|linebreaksbr }}</p>
+              </div>
             </div>
-            <div>
-                <dt>{% icon 'clock' 15 %} {% translate 'Fin' %}</dt>
-                <dd>{{ event.end_date|date:"SHORT_DATETIME_FORMAT" }}</dd>
+
+            {% if challenge.participation_conditions %}
+            <div class="challenge-tile-extra">
+              {% icon 'shield' 14 %}
+              <span>{{ challenge.participation_conditions }}</span>
             </div>
-            <div>
-                <dt>{% icon 'edit' 15 %} {% translate 'Inscriptions' %}</dt>
-                <dd>{{ event.registration_open|date:"SHORT_DATE_FORMAT" }} → {{ event.registration_close|date:"SHORT_DATE_FORMAT" }}</dd>
-            </div>
-            <div>
-                <dt>{% icon 'archive' 15 %} {% translate 'Dépôt des projets' %}</dt>
-                <dd>{{ event.submission_deadline|date:"SHORT_DATETIME_FORMAT" }}</dd>
-            </div>
-            <div>
-                <dt>{% icon 'users' 15 %} {% translate 'Capacité' %}</dt>
-                <dd>{{ event.capacity }} {% translate 'participants' %}</dd>
-            </div>
-            <div>
-                <dt>{% icon 'user' 15 %} {% translate 'Équipes' %}</dt>
-                <dd>{{ event.min_team_size }} {% translate 'à' %} {{ event.max_team_size }} {% translate 'personnes' %}</dd>
-            </div>
-            <div>
-                <dt>{% icon 'globe' 15 %} {% translate 'Format' %}</dt>
-                <dd>{{ event.get_format_display }}{% if event.location %} · {{ event.location }}{% endif %}</dd>
-            </div>
-        </dl>
-        <p class="muted small-text timezone-note">{% translate 'Fin des inscriptions et heure limite de dépôt exclues · fuseau Africa/Tunis.' %}</p>
-        {% if can_manage or can_propose %}
-        <div class="side-actions">
-            {% if can_manage %}
-            <a class="button" href="{% url 'hackathons:manage' event.slug %}">{% icon 'settings' 16 %} {% translate 'Piloter cette édition' %}</a>
             {% endif %}
-            {% if can_propose %}
-            <a class="button secondary" href="{% url 'hackathons:propose' event.slug %}">{% icon 'add' 16 %} {% translate 'Proposer un challenge sponsorisé' %}</a>
-            {% endif %}
+          </article>
+          {% empty %}
+          <p class="empty-notice">{% translate 'Aucun challenge publié pour le moment.' %}</p>
+          {% endfor %}
         </div>
-        {% endif %}
+      </section>
+
+      <!-- Section 5: Partners -->
+      <section class="detail-card" aria-labelledby="partners-title">
+        <div class="detail-card-head">
+          <div class="detail-card-icon">{% icon 'award' 20 %}</div>
+          <div>
+            <h2 id="partners-title" class="detail-card-title">{% translate 'Partenaires confirmés' %}</h2>
+            <p class="detail-card-subtitle">{% translate 'Entreprises et sponsors qui soutiennent cette édition' %}</p>
+          </div>
+        </div>
+
+        <div class="partners-grid">
+          {% for item in partnerships %}
+          <article class="partner-tile">
+            {% if item.organization.logo %}
+            <img class="partner-logo" src="{{ item.organization.logo.url }}" alt="{% blocktranslate with v0=item.organization %}Logo {{ v0 }}{% endblocktranslate %}">
+            {% else %}
+            <div class="partner-logo-fallback">{% icon 'award' 24 %}</div>
+            {% endif %}
+            
+            <div class="partner-content">
+              <div class="partner-header">
+                <h3 class="partner-name">{{ item.organization }}</h3>
+                {% if item.contribution_type %}
+                <span class="partner-type-tag">{{ item.contribution_type }}</span>
+                {% endif %}
+              </div>
+              <p class="partner-desc">{{ item.organization.description }}</p>
+              {% if item.organization.website %}
+              <a class="partner-link" href="{{ item.organization.website }}" target="_blank" rel="noopener noreferrer">
+                {% translate 'Site officiel' %} {% icon 'arrow-right' 14 %}
+              </a>
+              {% endif %}
+            </div>
+          </article>
+          {% empty %}
+          <p class="empty-notice">{% translate 'Partenariats en cours de confirmation.' %}</p>
+          {% endfor %}
+        </div>
+      </section>
     </div>
-</aside>
+
+    <!-- Right Column: Sticky Event Passport -->
+    <aside class="detail-side" aria-label="{% translate 'Informations clés de l’événement' %}">
+      <div class="passport-card">
+        <div class="passport-header">
+          <span class="passport-kicker">{% translate 'Fiche d’identité' %}</span>
+          <h2 class="passport-title">{% translate 'En un coup d’œil' %}</h2>
+        </div>
+
+        <dl class="passport-list">
+          <div class="passport-row">
+            <dt>{% icon 'calendar' 15 %} {% translate 'Début' %}</dt>
+            <dd>{{ event.start_date|date:"SHORT_DATETIME_FORMAT" }}</dd>
+          </div>
+          <div class="passport-row">
+            <dt>{% icon 'clock' 15 %} {% translate 'Fin' %}</dt>
+            <dd>{{ event.end_date|date:"SHORT_DATETIME_FORMAT" }}</dd>
+          </div>
+          <div class="passport-row">
+            <dt>{% icon 'edit' 15 %} {% translate 'Inscriptions' %}</dt>
+            <dd>{{ event.registration_open|date:"SHORT_DATE_FORMAT" }} → {{ event.registration_close|date:"SHORT_DATE_FORMAT" }}</dd>
+          </div>
+          <div class="passport-row highlight-row">
+            <dt>{% icon 'archive' 15 %} {% translate 'Dépôt des projets' %}</dt>
+            <dd><strong>{{ event.submission_deadline|date:"SHORT_DATETIME_FORMAT" }}</strong></dd>
+          </div>
+          <div class="passport-row">
+            <dt>{% icon 'users' 15 %} {% translate 'Capacité' %}</dt>
+            <dd>{{ event.capacity }} {% translate 'participants max' %}</dd>
+          </div>
+          <div class="passport-row">
+            <dt>{% icon 'user' 15 %} {% translate 'Taille équipe' %}</dt>
+            <dd>{{ event.min_team_size }} à {{ event.max_team_size }} {% translate 'personnes' %}</dd>
+          </div>
+          <div class="passport-row">
+            <dt>{% icon 'globe' 15 %} {% translate 'Format' %}</dt>
+            <dd>{{ event.get_format_display }}{% if event.location %} · {{ event.location }}{% endif %}</dd>
+          </div>
+        </dl>
+
+        <p class="passport-timezone">{% translate 'Fin des inscriptions et heure limite de dépôt exclues · fuseau Africa/Tunis.' %}</p>
+
+        {% if can_manage or can_propose %}
+        <div class="passport-actions">
+          {% if can_manage %}
+          <a class="button passport-btn" href="{% url 'hackathons:manage' event.slug %}">
+            {% icon 'settings' 16 %} {% translate 'Piloter cette édition' %}
+          </a>
+          {% endif %}
+          {% if can_propose %}
+          <a class="button secondary passport-btn" href="{% url 'hackathons:propose' event.slug %}">
+            {% icon 'add' 16 %} {% translate 'Proposer un challenge' %}
+          </a>
+          {% endif %}
+        </div>
+        {% endif %}
+      </div>
+    </aside>
+  </div>
 </div>
 {% endblock %}
