@@ -2,12 +2,15 @@
 from django.core.exceptions import PermissionDenied, ValidationError
 from django.db import transaction
 from django.utils import timezone
+from django.utils.translation import gettext_lazy as _
 
 from accounts.models import AssignmentStatus, Role, RoleAssignment, User
 from hackathons.models import Hackathon
 from .models import MentorSlot, Workshop
 
 OPEN_STATUSES = (Hackathon.Status.PUBLISHED, Hackathon.Status.ONGOING)
+SLOTS_CLOSED = _('Les créneaux se gèrent uniquement pour un hackathon publié ou en cours.')
+WORKSHOPS_CLOSED = _('Les ateliers se gèrent uniquement pour un hackathon publié ou en cours.')
 
 
 def mentor_open_hackathons(user):
@@ -37,12 +40,12 @@ def _lock_mentor(actor):
 def _require_mentor(actor, event):
     if not RoleAssignment.objects.filter(user=actor, hackathon=event, role=Role.MENTOR,
             status=AssignmentStatus.ACTIVE).exists():
-        raise PermissionDenied('Rôle mentor requis dans ce hackathon.')
+        raise PermissionDenied(_('Rôle mentor requis dans ce hackathon.'))
 
 
-def _require_open_event(event, what='créneaux'):
+def _require_open_event(event, message):
     if event.status not in OPEN_STATUSES:
-        raise ValidationError(f'Les {what} se gèrent uniquement pour un hackathon publié ou en cours.')
+        raise ValidationError(message)
 
 
 # ------------------------------------------------------------------ slots
@@ -51,9 +54,9 @@ def create_slot(*, actor, hackathon, start, end):
     _lock_mentor(actor)
     event = Hackathon.objects.select_for_update().get(pk=hackathon.pk)
     _require_mentor(actor, event)
-    _require_open_event(event)
+    _require_open_event(event, SLOTS_CLOSED)
     if start <= timezone.now():
-        raise ValidationError('Le créneau doit commencer dans le futur.')
+        raise ValidationError(_('Le créneau doit commencer dans le futur.'))
     slot = MentorSlot(hackathon=event, mentor=actor, start=start, end=end)
     slot.save()
     return slot
@@ -62,9 +65,9 @@ def create_slot(*, actor, hackathon, start, end):
 def _own_available_slot(actor, slot):
     current = MentorSlot.objects.select_for_update(of=('self',)).get(pk=slot.pk)
     if current.mentor_id != actor.pk:
-        raise PermissionDenied('Ce créneau ne vous appartient pas.')
+        raise PermissionDenied(_('Ce créneau ne vous appartient pas.'))
     if current.status != MentorSlot.Status.AVAILABLE:
-        raise ValidationError('Seul un créneau disponible peut être modifié ou annulé.')
+        raise ValidationError(_('Seul un créneau disponible peut être modifié ou annulé.'))
     return current
 
 
@@ -74,11 +77,11 @@ def update_slot(*, actor, slot, start, end):
     current = _own_available_slot(actor, slot)
     event = Hackathon.objects.select_for_update().get(pk=current.hackathon_id)
     _require_mentor(actor, event)
-    _require_open_event(event)
+    _require_open_event(event, SLOTS_CLOSED)
     if current.start <= timezone.now():
-        raise ValidationError('Un créneau déjà commencé ne peut plus être modifié.')
+        raise ValidationError(_('Un créneau déjà commencé ne peut plus être modifié.'))
     if start <= timezone.now():
-        raise ValidationError('Le créneau doit commencer dans le futur.')
+        raise ValidationError(_('Le créneau doit commencer dans le futur.'))
     current.hackathon = event
     current.start, current.end = start, end
     current.save()
@@ -100,9 +103,9 @@ def create_workshop(*, actor, hackathon, title, description, capacity, start, en
     _lock_mentor(actor)
     event = Hackathon.objects.select_for_update().get(pk=hackathon.pk)
     _require_mentor(actor, event)
-    _require_open_event(event, 'ateliers')
+    _require_open_event(event, WORKSHOPS_CLOSED)
     if start <= timezone.now():
-        raise ValidationError('L’atelier doit commencer dans le futur.')
+        raise ValidationError(_('L’atelier doit commencer dans le futur.'))
     workshop = Workshop(hackathon=event, trainer=actor, title=title.strip(), description=description,
         capacity=capacity, start=start, end=end, location=location.strip(), url=url)
     workshop.save()
@@ -112,11 +115,11 @@ def create_workshop(*, actor, hackathon, title, description, capacity, start, en
 def _own_open_workshop(actor, workshop):
     current = Workshop.objects.select_for_update(of=('self',)).get(pk=workshop.pk)
     if current.trainer_id != actor.pk:
-        raise PermissionDenied('Cet atelier ne vous appartient pas.')
+        raise PermissionDenied(_('Cet atelier ne vous appartient pas.'))
     if current.status != Workshop.Status.PUBLISHED:
-        raise ValidationError('Cet atelier est déjà annulé.')
+        raise ValidationError(_('Cet atelier est déjà annulé.'))
     if current.start <= timezone.now():
-        raise ValidationError('Un atelier déjà commencé ne peut plus être modifié ni annulé.')
+        raise ValidationError(_('Un atelier déjà commencé ne peut plus être modifié ni annulé.'))
     return current
 
 
@@ -126,9 +129,9 @@ def update_workshop(*, actor, workshop, title, description, capacity, start, end
     current = _own_open_workshop(actor, workshop)
     event = Hackathon.objects.select_for_update().get(pk=current.hackathon_id)
     _require_mentor(actor, event)
-    _require_open_event(event, 'ateliers')
+    _require_open_event(event, WORKSHOPS_CLOSED)
     if start <= timezone.now():
-        raise ValidationError('L’atelier doit commencer dans le futur.')
+        raise ValidationError(_('L’atelier doit commencer dans le futur.'))
     current.hackathon = event
     current.title, current.description, current.capacity = title.strip(), description, capacity
     current.start, current.end, current.location, current.url = start, end, location.strip(), url

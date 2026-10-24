@@ -6,6 +6,7 @@ from django.db.models import Q
 from django.shortcuts import get_object_or_404, redirect, render
 from django.urls import reverse, reverse_lazy
 from django.utils import timezone
+from django.utils.translation import gettext_lazy as _
 from django.views import View
 from django.views.generic import CreateView, DeleteView, DetailView, FormView, TemplateView, UpdateView
 
@@ -48,8 +49,8 @@ class OwnExpertiseMixin(MentorRequiredMixin):
 class ExpertiseCreateView(OwnExpertiseMixin, SuccessMessageMixin, CreateView):
     form_class = MentorExpertiseForm
     template_name = 'shared/form.html'
-    success_message = 'Expertise ajoutée.'
-    extra_context = {'title': 'Ajouter une expertise', 'button_label': 'Ajouter'}
+    success_message = _('Expertise ajoutée.')
+    extra_context = {'title': _('Ajouter une expertise'), 'button_label': _('Ajouter')}
 
     def get_form_kwargs(self):
         kwargs = super().get_form_kwargs()
@@ -60,8 +61,8 @@ class ExpertiseCreateView(OwnExpertiseMixin, SuccessMessageMixin, CreateView):
 class ExpertiseUpdateView(OwnExpertiseMixin, SuccessMessageMixin, UpdateView):
     form_class = MentorExpertiseForm
     template_name = 'shared/form.html'
-    success_message = 'Niveau mis à jour.'
-    extra_context = {'title': 'Modifier mon niveau'}
+    success_message = _('Niveau mis à jour.')
+    extra_context = {'title': _('Modifier mon niveau')}
 
 
 class ExpertiseDeleteView(OwnExpertiseMixin, DeleteView):
@@ -69,7 +70,7 @@ class ExpertiseDeleteView(OwnExpertiseMixin, DeleteView):
 
     def form_valid(self, form):
         response = super().form_valid(form)
-        messages.success(self.request, 'Expertise retirée.')
+        messages.success(self.request, _('Expertise retirée.'))
         return response
 
 
@@ -112,15 +113,15 @@ class SlotFormMixin(MentorRequiredMixin, FormView):
             form.add_error(None, exc)
             return self.form_invalid(form)
         except PermissionDenied as exc:
-            form.add_error(None, str(exc) or 'Action non autorisée.')
+            form.add_error(None, str(exc) or _('Action non autorisée.'))
             return self.form_invalid(form)
         messages.success(self.request, self.success_message)
         return redirect(self.get_success_url())
 
 
 class SlotCreateView(SlotFormMixin):
-    success_message = 'Créneau publié.'
-    extra_context = {'title': 'Publier un créneau', 'button_label': 'Publier le créneau'}
+    success_message = _('Créneau publié.')
+    extra_context = {'title': _('Publier un créneau'), 'button_label': _('Publier le créneau')}
 
     def run(self, form):
         services.create_slot(actor=self.request.user, hackathon=form.cleaned_data['hackathon'],
@@ -128,8 +129,8 @@ class SlotCreateView(SlotFormMixin):
 
 
 class SlotUpdateView(SlotFormMixin):
-    success_message = 'Créneau modifié.'
-    extra_context = {'title': 'Modifier le créneau', 'button_label': 'Enregistrer'}
+    success_message = _('Créneau modifié.')
+    extra_context = {'title': _('Modifier le créneau'), 'button_label': _('Enregistrer')}
 
     def get_slot(self):
         if not hasattr(self, '_slot'):
@@ -153,7 +154,7 @@ class SlotCancelView(MentorRequiredMixin, View):
     def post(self, request, *args, **kwargs):
         try:
             services.cancel_slot(actor=request.user, slot=self.get_slot())
-            messages.success(request, 'Créneau annulé.')
+            messages.success(request, _('Créneau annulé.'))
         except ValidationError as exc:
             messages.error(request, ' '.join(exc.messages))
         return redirect(reverse('mentoring:slot-list'))
@@ -215,7 +216,7 @@ class WorkshopFormMixin(MentorRequiredMixin, FormView):
             form.add_error(None, exc)
             return self.form_invalid(form)
         except PermissionDenied as exc:
-            form.add_error(None, str(exc) or 'Action non autorisée.')
+            form.add_error(None, str(exc) or _('Action non autorisée.'))
             return self.form_invalid(form)
         messages.success(self.request, self.success_message)
         return redirect(self.workshop.get_absolute_url())
@@ -226,16 +227,16 @@ class WorkshopFormMixin(MentorRequiredMixin, FormView):
 
 
 class WorkshopCreateView(WorkshopFormMixin):
-    success_message = 'Atelier publié.'
-    extra_context = {'title': 'Publier un atelier', 'button_label': 'Publier l’atelier'}
+    success_message = _('Atelier publié.')
+    extra_context = {'title': _('Publier un atelier'), 'button_label': _('Publier l’atelier')}
 
     def run(self, form):
         return services.create_workshop(actor=self.request.user, hackathon=form.cleaned_data['hackathon'], **self.workshop_fields(form))
 
 
 class WorkshopUpdateView(WorkshopFormMixin):
-    success_message = 'Atelier modifié.'
-    extra_context = {'title': 'Modifier l’atelier', 'button_label': 'Enregistrer'}
+    success_message = _('Atelier modifié.')
+    extra_context = {'title': _('Modifier l’atelier'), 'button_label': _('Enregistrer')}
 
     def get_workshop(self):
         if not hasattr(self, '_workshop'):
@@ -259,7 +260,7 @@ class WorkshopCancelView(MentorRequiredMixin, View):
         workshop = self.get_workshop()
         try:
             services.cancel_workshop(actor=request.user, workshop=workshop)
-            messages.success(request, 'Atelier annulé.')
+            messages.success(request, _('Atelier annulé.'))
         except ValidationError as exc:
             messages.error(request, ' '.join(exc.messages))
         return redirect(reverse('mentoring:workshop-list'))

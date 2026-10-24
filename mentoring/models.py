@@ -6,6 +6,7 @@ from django.conf import settings
 from django.core.exceptions import ValidationError
 from django.core.validators import MaxValueValidator, MinValueValidator
 from django.db import models
+from django.utils.translation import gettext_lazy as _
 from django.urls import reverse
 from django.utils import timezone
 
@@ -25,8 +26,8 @@ class MentorExpertise(ValidatedModel):
 
     class Meta:
         ordering = ['user__username', '-level', 'skill__name']
-        verbose_name = 'Expertise de mentor'
-        verbose_name_plural = 'Expertises de mentors'
+        verbose_name = _('Expertise de mentor')
+        verbose_name_plural = _('Expertises de mentors')
         constraints = [
             models.UniqueConstraint(fields=['user', 'skill'], name='unique_mentor_skill'),
             models.CheckConstraint(condition=models.Q(level__gte=1, level__lte=5), name='mentor_level_range'),
@@ -36,7 +37,7 @@ class MentorExpertise(ValidatedModel):
         super().clean()
         if self.user_id and not RoleAssignment.objects.filter(
                 user_id=self.user_id, role=Role.MENTOR, status=AssignmentStatus.ACTIVE).exists():
-            raise ValidationError({'user': 'Seul un mentor (rôle actif dans au moins un hackathon) peut déclarer une expertise.'})
+            raise ValidationError({'user': _('Seul un mentor (rôle actif dans au moins un hackathon) peut déclarer une expertise.')})
 
     def __str__(self):
         return f'{self.user} · {self.skill} ({self.level}/5)'
@@ -52,9 +53,9 @@ class MentorSlot(ValidatedModel):
     """
 
     class Status(models.TextChoices):
-        AVAILABLE = 'AVAILABLE', 'Disponible'
-        BOOKED = 'BOOKED', 'Réservé'
-        CANCELLED = 'CANCELLED', 'Annulé'
+        AVAILABLE = 'AVAILABLE', _('Disponible')
+        BOOKED = 'BOOKED', _('Réservé')
+        CANCELLED = 'CANCELLED', _('Annulé')
 
     MIN_MINUTES = 15
     MAX_MINUTES = 120
@@ -69,8 +70,8 @@ class MentorSlot(ValidatedModel):
 
     class Meta:
         ordering = ['start']
-        verbose_name = 'Créneau de mentorat'
-        verbose_name_plural = 'Créneaux de mentorat'
+        verbose_name = _('Créneau de mentorat')
+        verbose_name_plural = _('Créneaux de mentorat')
         indexes = [models.Index(fields=['mentor', 'start'], name='slot_mentor_start_idx')]
         constraints = [models.CheckConstraint(condition=models.Q(start__lt=models.F('end')), name='slot_dates_order')]
 
@@ -85,22 +86,23 @@ class MentorSlot(ValidatedModel):
         if not (self.start and self.end and self.hackathon_id and self.mentor_id):
             return
         if self.start >= self.end:
-            raise ValidationError('Le début du créneau doit précéder sa fin.')
+            raise ValidationError(_('Le début du créneau doit précéder sa fin.'))
         if not self.MIN_MINUTES <= self.duration_minutes <= self.MAX_MINUTES:
-            raise ValidationError(f'Un créneau dure entre {self.MIN_MINUTES} minutes et {self.MAX_MINUTES // 60} heures.')
+            raise ValidationError(_('Un créneau dure entre %(min)s minutes et %(max)s heures.') % {
+                'min': self.MIN_MINUTES, 'max': self.MAX_MINUTES // 60})
         event = self.hackathon
         if event.status == 'ARCHIVED':
-            raise ValidationError('Édition archivée : modification interdite.')
+            raise ValidationError(_('Édition archivée : modification interdite.'))
         if self.start < event.start_date or self.end > event.end_date:
             local = timezone.localtime
-            raise ValidationError('Le créneau doit se situer pendant l’événement '
-                f'({local(event.start_date):%d/%m/%Y %H:%M} → {local(event.end_date):%d/%m/%Y %H:%M}).')
+            raise ValidationError(_('Le créneau doit se situer pendant l’événement (%(start)s → %(end)s).') % {
+                'start': f'{local(event.start_date):%d/%m/%Y %H:%M}', 'end': f'{local(event.end_date):%d/%m/%Y %H:%M}'})
         if not RoleAssignment.objects.filter(user_id=self.mentor_id, hackathon_id=self.hackathon_id,
                 role=Role.MENTOR, status=AssignmentStatus.ACTIVE).exists():
-            raise ValidationError('Rôle mentor actif requis dans ce hackathon.')
+            raise ValidationError(_('Rôle mentor actif requis dans ce hackathon.'))
         if MentorSlot.objects.filter(mentor_id=self.mentor_id, start__lt=self.end, end__gt=self.start).exclude(
                 status=self.Status.CANCELLED).exclude(pk=self.pk).exists():
-            raise ValidationError('Ce créneau chevauche un autre de vos créneaux.')
+            raise ValidationError(_('Ce créneau chevauche un autre de vos créneaux.'))
 
     def __str__(self):
         local = timezone.localtime
@@ -118,8 +120,8 @@ class Workshop(ValidatedModel):
     """
 
     class Status(models.TextChoices):
-        PUBLISHED = 'PUBLISHED', 'Publié'
-        CANCELLED = 'CANCELLED', 'Annulé'
+        PUBLISHED = 'PUBLISHED', _('Publié')
+        CANCELLED = 'CANCELLED', _('Annulé')
 
     MIN_MINUTES = 15
     MAX_MINUTES = 240
@@ -140,8 +142,8 @@ class Workshop(ValidatedModel):
 
     class Meta:
         ordering = ['start']
-        verbose_name = 'Atelier'
-        verbose_name_plural = 'Ateliers'
+        verbose_name = _('Atelier')
+        verbose_name_plural = _('Ateliers')
         indexes = [models.Index(fields=['trainer', 'start'], name='workshop_trainer_start_idx')]
         constraints = [
             models.CheckConstraint(condition=models.Q(start__lt=models.F('end')), name='workshop_dates_order'),
@@ -159,24 +161,25 @@ class Workshop(ValidatedModel):
         if not (self.start and self.end and self.hackathon_id and self.trainer_id):
             return
         if self.start >= self.end:
-            raise ValidationError('Le début de l’atelier doit précéder sa fin.')
+            raise ValidationError(_('Le début de l’atelier doit précéder sa fin.'))
         if not self.MIN_MINUTES <= self.duration_minutes <= self.MAX_MINUTES:
-            raise ValidationError(f'Un atelier dure entre {self.MIN_MINUTES} minutes et {self.MAX_MINUTES // 60} heures.')
+            raise ValidationError(_('Un atelier dure entre %(min)s minutes et %(max)s heures.') % {
+                'min': self.MIN_MINUTES, 'max': self.MAX_MINUTES // 60})
         if not (self.location.strip() or self.url):
-            raise ValidationError('Indiquez une salle, un lien en ligne, ou les deux.')
+            raise ValidationError(_('Indiquez une salle, un lien en ligne, ou les deux.'))
         event = self.hackathon
         if event.status == 'ARCHIVED':
-            raise ValidationError('Édition archivée : modification interdite.')
+            raise ValidationError(_('Édition archivée : modification interdite.'))
         if self.start < event.start_date or self.end > event.end_date:
             local = timezone.localtime
-            raise ValidationError('L’atelier doit se situer pendant l’événement '
-                f'({local(event.start_date):%d/%m/%Y %H:%M} → {local(event.end_date):%d/%m/%Y %H:%M}).')
+            raise ValidationError(_('L’atelier doit se situer pendant l’événement (%(start)s → %(end)s).') % {
+                'start': f'{local(event.start_date):%d/%m/%Y %H:%M}', 'end': f'{local(event.end_date):%d/%m/%Y %H:%M}'})
         if not RoleAssignment.objects.filter(user_id=self.trainer_id, hackathon_id=self.hackathon_id,
                 role=Role.MENTOR, status=AssignmentStatus.ACTIVE).exists():
-            raise ValidationError('Le formateur doit avoir le rôle mentor actif dans ce hackathon.')
+            raise ValidationError(_('Le formateur doit avoir le rôle mentor actif dans ce hackathon.'))
         if Workshop.objects.filter(trainer_id=self.trainer_id, start__lt=self.end, end__gt=self.start).exclude(
                 status=self.Status.CANCELLED).exclude(pk=self.pk).exists():
-            raise ValidationError('Vous animez déjà un autre atelier à cette heure-là.')
+            raise ValidationError(_('Vous animez déjà un autre atelier à cette heure-là.'))
 
     def get_absolute_url(self):
         return reverse('mentoring:workshop-detail', kwargs={'pk': self.pk})

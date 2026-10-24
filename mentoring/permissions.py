@@ -1,5 +1,6 @@
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.core.exceptions import PermissionDenied
+from django.utils.translation import gettext_lazy as _
 
 from accounts.models import AssignmentStatus, Role, RoleAssignment
 
@@ -17,5 +18,5 @@ class MentorRequiredMixin(LoginRequiredMixin):
         if not request.user.is_authenticated:
             return self.handle_no_permission()
         if not is_mentor(request.user):
-            raise PermissionDenied('Rôle mentor requis.')
+            raise PermissionDenied(_('Rôle mentor requis.'))
         return super().dispatch(request, *args, **kwargs)

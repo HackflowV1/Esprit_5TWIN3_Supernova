@@ -3485,3 +3485,525 @@ msgstr "Recruiting"
 #: .\templates\teams\team_card.html:2
 msgid "Recrutement fermé"
 msgstr "Recruitment closed"
+
+# --- M4 : assistance, mentorat et ateliers (application mentoring) ---
+
+#: mentoring/workshop_list.html
+#, python-format
+msgid "%(total)s place"
+msgid_plural "%(total)s places"
+msgstr[0] "%(total)s seat"
+msgstr[1] "%(total)s seats"
+
+#: mentoring/forms.py
+msgid "1 – Débutant"
+msgstr "1 – Beginner"
+
+#: mentoring/forms.py
+msgid "2 – Notions solides"
+msgstr "2 – Solid basics"
+
+#: mentoring/forms.py
+msgid "3 – Intermédiaire"
+msgstr "3 – Intermediate"
+
+#: mentoring/forms.py
+msgid "4 – Avancé"
+msgstr "4 – Advanced"
+
+#: mentoring/forms.py
+msgid "5 – Expert"
+msgstr "5 – Expert"
+
+#: mentoring/views.py
+msgid "Action non autorisée."
+msgstr "Action not allowed."
+
+#: mentoring/expertise_list.html
+msgid "Ajouter ma première expertise"
+msgstr "Add my first expertise"
+
+#: mentoring/context_processors.py mentoring/expertise_list.html mentoring/views.py
+msgid "Ajouter une expertise"
+msgstr "Add an expertise"
+
+#: mentoring/expertise_list.html
+msgid "Ajoutez vos compétences (Django, React, UI/UX…) pour apparaître dans les recommandations de mentors."
+msgstr "Add your skills (Django, React, UI/UX…) to appear in mentor recommendations."
+
+#: mentoring/slot_cancel.html
+msgid "Annuler ce créneau ?"
+msgstr "Cancel this slot?"
+
+#: mentoring/workshop_cancel.html
+msgid "Annuler cet atelier ?"
+msgstr "Cancel this workshop?"
+
+#: mentoring/context_processors.py mentoring/slot_cancel.html
+msgid "Annuler le créneau"
+msgstr "Cancel the slot"
+
+#: mentoring/context_processors.py mentoring/workshop_cancel.html mentoring/workshop_detail.html
+msgid "Annuler l’atelier"
+msgstr "Cancel the workshop"
+
+#: mentoring/workshop_list.html
+msgid "Apprendre pendant l’événement"
+msgstr "Learn during the event"
+
+#: mentoring/context_processors.py mentoring/models.py
+msgid "Atelier"
+msgstr "Workshop"
+
+#: mentoring/views.py
+msgid "Atelier annulé."
+msgstr "Workshop cancelled."
+
+#: mentoring/views.py
+msgid "Atelier modifié."
+msgstr "Workshop updated."
+
+#: mentoring/views.py
+msgid "Atelier publié."
+msgstr "Workshop published."
+
+#: mentoring/base.html mentoring/breadcrumbs.html mentoring/context_processors.py mentoring/models.py mentoring/shell.html mentoring/workshop_list.html
+msgid "Ateliers"
+msgstr "Workshops"
+
+#: mentoring/workshop_list.html
+msgid "Aucun atelier à venir"
+msgstr "No upcoming workshops"
+
+#: mentoring/slot_list.html
+msgid "Aucun créneau à venir"
+msgstr "No upcoming slots"
+
+#: mentoring/workshop_list.html
+msgid "Aucun hackathon ouvert : vous ne pouvez pas publier de nouvel atelier pour le moment."
+msgstr "No open hackathon: you cannot publish a new workshop right now."
+
+#: mentoring/slot_list.html
+msgid "Aucun hackathon ouvert pour publier un créneau."
+msgstr "No open hackathon to publish a slot for."
+
+#: mentoring/workshop_detail.html
+msgid "Aucune description fournie."
+msgstr "No description provided."
+
+#: mentoring/expertise_list.html
+msgid "Aucune expertise déclarée"
+msgstr "No expertise declared"
+
+#: mentoring/models.py
+msgid "Ce créneau chevauche un autre de vos créneaux."
+msgstr "This slot overlaps another one of your slots."
+
+#: mentoring/services.py
+msgid "Ce créneau ne vous appartient pas."
+msgstr "This slot does not belong to you."
+
+#: mentoring/workshop_detail.html
+msgid "Cet atelier a été annulé."
+msgstr "This workshop has been cancelled."
+
+#: mentoring/services.py
+msgid "Cet atelier est déjà annulé."
+msgstr "This workshop is already cancelled."
+
+#: mentoring/services.py
+msgid "Cet atelier ne vous appartient pas."
+msgstr "This workshop does not belong to you."
+
+#: mentoring/forms.py
+msgid "Choisir un hackathon"
+msgstr "Choose a hackathon"
+
+#: mentoring/forms.py
+msgid "Choisir une compétence"
+msgstr "Choose a skill"
+
+#: mentoring/forms.py
+msgid "Contenu, prérequis, matériel à apporter…"
+msgstr "Content, prerequisites, equipment to bring…"
+
+#: mentoring/views.py
+msgid "Créneau annulé."
+msgstr "Slot cancelled."
+
+#: mentoring/models.py
+msgid "Créneau de mentorat"
+msgstr "Mentoring slot"
+
+#: mentoring/views.py
+msgid "Créneau modifié."
+msgstr "Slot updated."
+
+#: mentoring/views.py
+msgid "Créneau publié."
+msgstr "Slot published."
+
+#: mentoring/models.py
+msgid "Créneaux de mentorat"
+msgstr "Mentoring slots"
+
+#: mentoring/workshop_detail.html
+msgid "Date"
+msgstr "Date"
+
+#: mentoring/workshop_list.html
+msgid "Des sessions animées par les mentors pour monter en compétence sur les sujets clés de votre hackathon."
+msgstr "Sessions led by mentors to build skills on the key topics of your hackathon."
+
+#: mentoring/models.py
+msgid "Disponible"
+msgstr "Available"
+
+#: mentoring/forms.py
+#, python-brace-format
+msgid "Durée : de {min} minutes à {max} heures, pendant l’événement."
+msgstr "Duration: from {min} minutes to {max} hours, during the event."
+
+#: mentoring/base.html mentoring/breadcrumbs.html mentoring/expertise_list.html mentoring/shell.html mentoring/slot_list.html
+msgid "Espace mentor"
+msgstr "Mentor space"
+
+#: mentoring/views.py
+msgid "Expertise ajoutée."
+msgstr "Expertise added."
+
+#: mentoring/models.py
+msgid "Expertise de mentor"
+msgstr "Mentor expertise"
+
+#: mentoring/views.py
+msgid "Expertise retirée."
+msgstr "Expertise removed."
+
+#: mentoring/models.py
+msgid "Expertises de mentors"
+msgstr "Mentor expertises"
+
+#: mentoring/workshop_detail.html
+msgid "Formateur"
+msgstr "Trainer"
+
+#: mentoring/workshop_list.html
+msgid "Formateur :"
+msgstr "Trainer:"
+
+#: mentoring/slot_cancel.html
+msgid "Garder le créneau"
+msgstr "Keep the slot"
+
+#: mentoring/workshop_cancel.html
+msgid "Garder l’atelier"
+msgstr "Keep the workshop"
+
+#: mentoring/forms.py
+msgid "Hackathon"
+msgstr "Hackathon"
+
+#: mentoring/forms.py mentoring/workshop_detail.html
+msgid "Heure de Tunis."
+msgstr "Tunis time."
+
+#: mentoring/workshop_detail.html
+msgid "Horaire"
+msgstr "Time"
+
+#: mentoring/expertise_list.html
+msgid "Indiquez ce que vous maîtrisez : les équipes vous trouveront plus facilement quand elles auront besoin d’aide."
+msgstr "Tell us what you master: teams will find you more easily when they need help."
+
+#: mentoring/models.py
+msgid "Indiquez une salle, un lien en ligne, ou les deux."
+msgstr "Provide a room, an online link, or both."
+
+#: mentoring/forms.py
+msgid "Indiquez une salle, un lien, ou les deux."
+msgstr "Provide a room, a link, or both."
+
+#: mentoring/workshop_detail.html
+msgid "Informations pratiques"
+msgstr "Practical information"
+
+#: mentoring/services.py
+msgid "Le créneau doit commencer dans le futur."
+msgstr "The slot must start in the future."
+
+#: mentoring/models.py
+#, python-format
+msgid "Le créneau doit se situer pendant l’événement (%(start)s → %(end)s)."
+msgstr "The slot must take place during the event (%(start)s → %(end)s)."
+
+#: mentoring/slot_cancel.html
+msgid "Le créneau ne sera plus proposé aux équipes. Vous pourrez en publier un nouveau."
+msgstr "The slot will no longer be offered to teams. You can publish a new one."
+
+#: mentoring/models.py
+msgid "Le début de l’atelier doit précéder sa fin."
+msgstr "The workshop start must be before its end."
+
+#: mentoring/models.py
+msgid "Le début du créneau doit précéder sa fin."
+msgstr "The slot start must be before its end."
+
+#: mentoring/models.py
+msgid "Le formateur doit avoir le rôle mentor actif dans ce hackathon."
+msgstr "The trainer must have an active mentor role in this hackathon."
+
+#: mentoring/workshop_list.html
+msgid "Les ateliers des hackathons auxquels vous participez apparaîtront ici dès qu’ils seront publiés."
+msgstr "Workshops from the hackathons you take part in will appear here as soon as they are published."
+
+#: mentoring/workshop_list.html
+msgid "Les ateliers que j’anime"
+msgstr "Workshops I lead"
+
+#: mentoring/services.py
+msgid "Les ateliers se gèrent uniquement pour un hackathon publié ou en cours."
+msgstr "Workshops can only be managed for a published or ongoing hackathon."
+
+#: mentoring/services.py
+msgid "Les créneaux se gèrent uniquement pour un hackathon publié ou en cours."
+msgstr "Slots can only be managed for a published or ongoing hackathon."
+
+#: mentoring/slot_list.html
+msgid "Les créneaux se publient pour un hackathon publié ou en cours dans lequel vous avez le rôle de mentor."
+msgstr "Slots are published for a published or ongoing hackathon in which you are a mentor."
+
+#: mentoring/forms.py mentoring/workshop_detail.html
+msgid "Lien en ligne"
+msgstr "Online link"
+
+#: mentoring/expertise_list.html
+msgid "Liste de mes expertises"
+msgstr "List of my expertises"
+
+#: mentoring/services.py
+msgid "L’atelier doit commencer dans le futur."
+msgstr "The workshop must start in the future."
+
+#: mentoring/models.py
+#, python-format
+msgid "L’atelier doit se situer pendant l’événement (%(start)s → %(end)s)."
+msgstr "The workshop must take place during the event (%(start)s → %(end)s)."
+
+#: mentoring/workshop_cancel.html
+msgid "L’atelier ne sera plus proposé. Cette action ne peut pas être annulée."
+msgstr "The workshop will no longer be offered. This action cannot be undone."
+
+#: mentoring/context_processors.py
+msgid "Mentorat"
+msgstr "Mentoring"
+
+#: mentoring/breadcrumbs.html mentoring/context_processors.py mentoring/shell.html mentoring/slot_list.html
+msgid "Mes créneaux"
+msgstr "My slots"
+
+#: mentoring/breadcrumbs.html mentoring/context_processors.py mentoring/expertise_list.html mentoring/shell.html
+msgid "Mes expertises"
+msgstr "My expertises"
+
+#: mentoring/expertise_list.html
+msgid "Mes hackathons"
+msgstr "My hackathons"
+
+#: mentoring/context_processors.py mentoring/views.py
+msgid "Modifier le créneau"
+msgstr "Edit the slot"
+
+#: mentoring/context_processors.py mentoring/views.py
+msgid "Modifier l’atelier"
+msgstr "Edit the workshop"
+
+#: mentoring/context_processors.py mentoring/views.py
+msgid "Modifier mon niveau"
+msgstr "Edit my level"
+
+#: mentoring/forms.py
+msgid "Niveau"
+msgstr "Level"
+
+#: mentoring/expertise_list.html
+#, python-format
+msgid "Niveau %(level)s sur 5"
+msgstr "Level %(level)s out of 5"
+
+#: mentoring/expertise_list.html
+#, python-format
+msgid "Niveau %(level)s/5"
+msgstr "Level %(level)s/5"
+
+#: mentoring/views.py
+msgid "Niveau mis à jour."
+msgstr "Level updated."
+
+#: mentoring/forms.py
+msgid "Nombre de places"
+msgstr "Number of seats"
+
+#: mentoring/slot_cancel.html
+msgid "Oui, annuler le créneau"
+msgstr "Yes, cancel the slot"
+
+#: mentoring/workshop_cancel.html
+msgid "Oui, annuler l’atelier"
+msgstr "Yes, cancel the workshop"
+
+#: mentoring/slot_list.html mentoring/workshop_list.html
+msgid "Passé"
+msgstr "Past"
+
+#: mentoring/slot_list.html
+msgid "Passés et annulés"
+msgstr "Past and cancelled"
+
+#: mentoring/workshop_detail.html
+msgid "Places"
+msgstr "Seats"
+
+#: mentoring/views.py
+msgid "Publier le créneau"
+msgstr "Publish the slot"
+
+#: mentoring/views.py
+msgid "Publier l’atelier"
+msgstr "Publish the workshop"
+
+#: mentoring/slot_list.html
+msgid "Publier mon premier créneau"
+msgstr "Publish my first slot"
+
+#: mentoring/context_processors.py mentoring/views.py mentoring/workshop_list.html
+msgid "Publier un atelier"
+msgstr "Publish a workshop"
+
+#: mentoring/context_processors.py mentoring/slot_list.html mentoring/views.py
+msgid "Publier un créneau"
+msgstr "Publish a slot"
+
+#: mentoring/slot_list.html
+msgid "Publiez les plages horaires où vous êtes disponible : les équipes pourront les réserver."
+msgstr "Publish the time ranges when you are available: teams will be able to book them."
+
+#: mentoring/slot_list.html
+msgid "Publiez vos disponibilités pour que les équipes puissent demander votre aide."
+msgstr "Publish your availability so teams can ask for your help."
+
+#: mentoring/workshop_detail.html
+msgid "Rejoindre l’atelier"
+msgstr "Join the workshop"
+
+#: mentoring/expertise_delete.html
+msgid "Retirer l’expertise"
+msgstr "Remove the expertise"
+
+#: mentoring/expertise_delete.html
+#, python-format
+msgid "Retirer l’expertise « %(skill)s » ?"
+msgstr "Remove the expertise “%(skill)s”?"
+
+#: mentoring/context_processors.py mentoring/expertise_delete.html
+msgid "Retirer une expertise"
+msgstr "Remove an expertise"
+
+#: mentoring/models.py
+msgid "Réservé"
+msgstr "Booked"
+
+#: mentoring/models.py
+msgid "Rôle mentor actif requis dans ce hackathon."
+msgstr "An active mentor role is required in this hackathon."
+
+#: mentoring/services.py
+msgid "Rôle mentor requis dans ce hackathon."
+msgstr "Mentor role required in this hackathon."
+
+#: mentoring/permissions.py
+msgid "Rôle mentor requis."
+msgstr "Mentor role required."
+
+#: mentoring/forms.py mentoring/workshop_detail.html
+msgid "Salle"
+msgstr "Room"
+
+#: mentoring/forms.py
+msgid "Salle ou lieu, si l’atelier est sur place."
+msgstr "Room or place, if the workshop is on site."
+
+#: mentoring/services.py
+msgid "Seul un créneau disponible peut être modifié ou annulé."
+msgstr "Only an available slot can be edited or cancelled."
+
+#: mentoring/models.py
+msgid "Seul un mentor (rôle actif dans au moins un hackathon) peut déclarer une expertise."
+msgstr "Only a mentor (active role in at least one hackathon) can declare an expertise."
+
+#: mentoring/forms.py
+msgid "Thème de l’atelier"
+msgstr "Workshop topic"
+
+#: mentoring/models.py
+#, python-format
+msgid "Un atelier dure entre %(min)s minutes et %(max)s heures."
+msgstr "A workshop lasts between %(min)s minutes and %(max)s hours."
+
+#: mentoring/services.py
+msgid "Un atelier déjà commencé ne peut plus être modifié ni annulé."
+msgstr "A workshop that has already started can no longer be edited or cancelled."
+
+#: mentoring/models.py
+#, python-format
+msgid "Un créneau dure entre %(min)s minutes et %(max)s heures."
+msgstr "A slot lasts between %(min)s minutes and %(max)s hours."
+
+#: mentoring/services.py
+msgid "Un créneau déjà commencé ne peut plus être modifié."
+msgstr "A slot that has already started can no longer be edited."
+
+#: mentoring/workshop_list.html
+msgid "Voir les détails"
+msgstr "View details"
+
+#: mentoring/models.py
+msgid "Vous animez déjà un autre atelier à cette heure-là."
+msgstr "You are already leading another workshop at that time."
+
+#: mentoring/workshop_list.html
+msgid "Vous n’animez aucun atelier pour l’instant."
+msgstr "You are not leading any workshop yet."
+
+#: mentoring/expertise_delete.html
+msgid "Vous pourrez la déclarer à nouveau plus tard."
+msgstr "You can declare it again later."
+
+#: mentoring/expertise_list.html
+#, python-format
+msgid "Vous êtes mentor dans %(total)s hackathon."
+msgid_plural "Vous êtes mentor dans %(total)s hackathons."
+msgstr[0] "You are a mentor in %(total)s hackathon."
+msgstr[1] "You are a mentor in %(total)s hackathons."
+
+#: mentoring/slot_cancel.html mentoring/workshop_cancel.html
+#, python-format
+msgid "de %(start)s à %(end)s"
+msgstr "from %(start)s to %(end)s"
+
+#: mentoring/slot_list.html mentoring/workshop_list.html
+msgid "jusqu’à"
+msgstr "until"
+
+#: mentoring/slot_list.html
+#, python-format
+msgid "le créneau de %(hour)s"
+msgstr "the %(hour)s slot"
+
+#: mentoring/workshop_detail.html
+msgid "À propos de l’atelier"
+msgstr "About the workshop"
+
+#: mentoring/forms.py
+msgid "Évaluez honnêtement votre niveau : il aide les équipes à trouver le bon mentor."
+msgstr "Rate your level honestly: it helps teams find the right mentor."
