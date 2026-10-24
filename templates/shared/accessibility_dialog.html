@@ -1,0 +1,5 @@
+{% load i18n ui %}
+<dialog id="accessibility-dialog" class="accessibility-dialog" aria-labelledby="accessibility-title">
+  <div class="a11y-dialog-head"><h2 id="accessibility-title">{% translate 'Accessibilité' %}</h2><button type="button" data-a11y-close aria-label="{% translate 'Fermer' %}">{% icon 'close' 20 %}</button></div>
+  {% include 'shared/accessibility_controls.html' %}
+</dialog>

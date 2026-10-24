@@ -12,6 +12,7 @@
     {% if user.is_superuser and not admin_shell %}<a href="{% url 'admin:index' %}">{% icon 'settings' %}{% translate 'Administration' %}</a>{% endif %}
     {% endif %}
     <div class="hf-preference-section"><label for="hf-theme">{% icon 'monitor' 16 %}{% translate 'Apparence' %}</label><select id="hf-theme" data-theme-select><option value="system">{% translate 'Système' %}</option><option value="light">{% translate 'Claire' %}</option><option value="dark">{% translate 'Sombre' %}</option></select></div>
+    <button type="button" class="menu-action" data-a11y-open>{% icon 'settings' %}{% translate 'Accessibilité' %}</button>
     {% if user.is_authenticated %}<form method="post" action="{% if admin_shell %}{% url 'admin:logout' %}{% else %}{% url 'accounts:logout' %}{% endif %}" class="hf-logout">{% csrf_token %}<button type="submit" class="menu-action">{% icon 'logout' %}{% translate 'Déconnexion' %}</button></form>{% endif %}
   </div>
 </details>

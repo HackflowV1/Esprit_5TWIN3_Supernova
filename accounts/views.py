@@ -42,7 +42,7 @@ class ProfileView(LoginRequiredMixin, TemplateView):
 
 class ProfileUpdateView(LoginRequiredMixin, SuccessMessageMixin, UpdateView):
     form_class = ProfileForm
-    template_name = 'shared/form.html'
+    template_name = 'accounts/profile_form.html'
     success_url = reverse_lazy('accounts:profile')
     success_message = _('Profil mis à jour.')
     extra_context = {'title': _('Modifier mon profil')}
@@ -61,7 +61,7 @@ class ProfileUpdateView(LoginRequiredMixin, SuccessMessageMixin, UpdateView):
 
 class SkillCreateView(LoginRequiredMixin, SuccessMessageMixin, CreateView):
     form_class = UserSkillForm
-    template_name = 'shared/form.html'
+    template_name = 'accounts/profile_form.html'
     success_url = reverse_lazy('accounts:profile')
     success_message = _('Compétence ajoutée.')
     extra_context = {'title': _('Ajouter une compétence')}
@@ -82,7 +82,7 @@ class SkillCreateView(LoginRequiredMixin, SuccessMessageMixin, CreateView):
 
 class SkillUpdateView(LoginRequiredMixin, SuccessMessageMixin, UpdateView):
     form_class = UserSkillForm
-    template_name = 'shared/form.html'
+    template_name = 'accounts/profile_form.html'
     success_url = reverse_lazy('accounts:profile')
     success_message = _('Compétence modifiée.')
 
@@ -99,7 +99,7 @@ class SkillUpdateView(LoginRequiredMixin, SuccessMessageMixin, UpdateView):
 
 
 class SkillDeleteView(LoginRequiredMixin, DeleteView):
-    template_name = 'shared/confirm_delete.html'
+    template_name = 'accounts/profile_delete.html'
     success_url = reverse_lazy('accounts:profile')
 
     def get_queryset(self):

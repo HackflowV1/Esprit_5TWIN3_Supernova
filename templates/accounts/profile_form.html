@@ -1,0 +1,10 @@
+{% extends 'accounts/profile_shell.html' %}{% load i18n ui %}
+{% block profile_content %}
+<section class="panel" aria-labelledby="profile-form-title">
+  <h2 id="profile-form-title">{{ title|default:page_title }}</h2>
+  <form method="post" enctype="multipart/form-data" novalidate>{% csrf_token %}
+    {% include 'shared/form_errors.html' %}{% for field in form %}{% render_field field %}{% endfor %}
+    <div class="form-actions"><button type="submit">{% icon 'save' %}{% translate 'Enregistrer' %}</button><a class="button secondary" href="{% url 'accounts:profile' %}">{% translate 'Retour au profil' %}</a></div>
+  </form>
+</section>
+{% endblock %}

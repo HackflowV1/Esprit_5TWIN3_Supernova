@@ -5,7 +5,7 @@
   --menu-line: var(--line, var(--hairline-color));
   --menu-raised: var(--raised, var(--darkened-bg));
   position: relative;
-  font: 13px/1.5 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  font: 0.8125rem/1.5 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
   color: var(--menu-ink);
   text-transform: none;
   letter-spacing: 0;
@@ -27,7 +27,7 @@
   cursor: pointer;
   white-space: nowrap;
   font-weight: 500;
-  font-size: 13px;
+  font-size: 0.8125rem;
   transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
   box-shadow: 0 1px 2px rgba(0, 0, 0, 0.04);
 }
@@ -90,7 +90,7 @@
   border-radius: 8px;
   background: transparent;
   color: var(--menu-ink);
-  font: 500 13.5px/1.4 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  font: 500 0.84375rem/1.4 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
   text-align: left;
   text-decoration: none;
   text-transform: none;
@@ -125,12 +125,12 @@
   align-items: center;
   justify-content: center;
   border-radius: 50%;
-  background: linear-gradient(135deg, var(--brand-primary), #ff8557);
+  background: linear-gradient(135deg, var(--brand-primary), var(--brand-gradient-end));
   color: #fff;
-  font-size: 11px;
+  font-size: 0.6875rem;
   font-weight: 700;
   letter-spacing: 0;
-  box-shadow: 0 2px 6px rgba(249, 87, 33, 0.25);
+  box-shadow: 0 2px 6px rgba(var(--brand-primary-rgb), 0.25);
 }
 
 .hf-account-name {
@@ -149,7 +149,7 @@
 
 .hf-identity strong {
   display: block;
-  font-size: 14px;
+  font-size: 0.875rem;
   font-weight: 650;
   color: var(--menu-ink);
 }
@@ -157,7 +157,7 @@
 .hf-identity span {
   display: block;
   color: var(--menu-muted);
-  font-size: 12px;
+  font-size: 0.75rem;
   margin-top: 2px;
 }
 
@@ -174,7 +174,7 @@
   gap: 8px;
   margin: 0 8px 8px;
   padding: 0;
-  font-size: 12px;
+  font-size: 0.75rem;
   font-weight: 600;
   color: var(--menu-muted);
   line-height: 1.5;
@@ -191,7 +191,7 @@
   border-radius: 8px;
   background: var(--surface);
   color: var(--menu-ink);
-  font: 13.5px/1.5 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  font: 0.84375rem/1.5 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
   cursor: pointer;
   transition: border-color 0.15s;
 }
@@ -224,7 +224,7 @@
 }
 
 #header .hf-admin-tools .hf-control {
-  font-size: 13px;
+  font-size: 0.8125rem;
 }
 
 @media (max-width: 650px) {

@@ -20,22 +20,24 @@
       if (menu.open) { menu.open = false; menu.querySelector('summary').focus(); }
     });
   });
-  var themeSelect = document.querySelector('[data-theme-select]');
+  var themeSelects = Array.from(document.querySelectorAll('[data-theme-select]'));
+  var themeSelect = themeSelects[0];
   document.querySelectorAll('[data-language-select]').forEach(function (select) {
     select.addEventListener('change', function () { select.form.requestSubmit(); });
   });
   var systemTheme = matchMedia('(prefers-color-scheme: dark)');
   function applyTheme(choice) {
     document.documentElement.dataset.themeChoice = choice;
+    themeSelects.forEach(function (select) { select.value = choice; });
     document.documentElement.dataset.theme = choice === 'dark' || (choice === 'system' && systemTheme.matches) ? 'dark' : 'light';
   }
-  if (themeSelect) {
-    themeSelect.value = document.documentElement.dataset.themeChoice || 'system';
-    themeSelect.addEventListener('change', function () {
-      applyTheme(themeSelect.value);
-      try { localStorage.setItem('hackflow-theme', themeSelect.value); } catch (_) {}
+  themeSelects.forEach(function (select) {
+    select.value = document.documentElement.dataset.themeChoice || 'system';
+    select.addEventListener('change', function () {
+      applyTheme(select.value);
+      try { localStorage.setItem('hackflow-theme', select.value); } catch (_) {}
     });
-  }
+  });
   systemTheme.addEventListener('change', function () {
     if (document.documentElement.dataset.themeChoice === 'system') applyTheme('system');
   });
@@ -58,7 +60,7 @@
 
   /* Content remains visible if scripts or observers are unavailable. */
   var landing = document.querySelector('.landing');
-  if (landing && 'IntersectionObserver' in window && !matchMedia('(prefers-reduced-motion: reduce)').matches) {
+  if (landing && 'IntersectionObserver' in window && document.documentElement.dataset.a11yMotion !== 'reduce' && !matchMedia('(prefers-reduced-motion: reduce)').matches) {
     var observer = new IntersectionObserver(function (entries) {
       entries.forEach(function (entry) {
         if (entry.isIntersecting) {

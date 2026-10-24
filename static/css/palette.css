@@ -1,27 +1,34 @@
 /* HackFlow Modern Signal Orange & Mist Palette. Shared by application & Django admin. */
 :root {
+  --brand-primary-rgb:249,87,33;
+  --brand-gradient-start:#ff6b35;
+  --brand-gradient-end:#ff8557;
+  --brand-gradient-hover-start:#ff7a48;
+  --brand-close-highlight-start:#ff7a48;
+  --brand-close-highlight-end:#ffaa82;
+  --brand-highlight:#ff8557;
   --brand-bg: #f8f9fb;
   --brand-surface: #ffffff;
   --brand-raised: #f1f3f7;
   --brand-active: #e6e9ef;
   --brand-ink: #111418;
   --brand-muted: #565f6c;
-  --brand-faint: #858e9b;
+  --brand-faint: #626c7a;
   --brand-line: #e3e6ec;
   --brand-control: #8e97a4;
   --brand-primary: #f95721;
-  --brand-on-primary: #ffffff;
+  --brand-on-primary: #08090c;
   --brand-primary-hover: #e04410;
-  --brand-accent: #f95721;
+  --brand-accent: #b83c0a;
   --brand-soft: #fff4ee;
   --brand-soft-border: rgba(249, 87, 33, 0.18);
   --brand-illustration-paper: #f0f2f6;
   --brand-focus: #f95721;
-  --brand-danger: #e11d48;
+  --brand-danger: #be123c;
   --brand-danger-soft: #fff1f2;
-  --brand-success: #059669;
+  --brand-success: #047857;
   --brand-success-soft: #ecfdf5;
-  --brand-warning: #d97706;
+  --brand-warning: #92400e;
   --brand-warning-soft: #fffbeb;
 }
 :root[data-theme="dark"] {
@@ -31,9 +38,9 @@
   --brand-active: #272d38;
   --brand-ink: #f4f5f7;
   --brand-muted: #9aa2af;
-  --brand-faint: #676e7b;
+  --brand-faint: #9aa2af;
   --brand-line: #252a35;
-  --brand-control: #4b5563;
+  --brand-control: #7b8593;
   --brand-primary: #ff6b35;
   --brand-on-primary: #0d0f12;
   --brand-primary-hover: #ff8557;
@@ -58,9 +65,9 @@
     --brand-active: #272d38;
     --brand-ink: #f4f5f7;
     --brand-muted: #9aa2af;
-    --brand-faint: #676e7b;
+    --brand-faint: #9aa2af;
     --brand-line: #252a35;
-    --brand-control: #4b5563;
+    --brand-control: #7b8593;
     --brand-primary: #ff6b35;
     --brand-on-primary: #0d0f12;
     --brand-primary-hover: #ff8557;

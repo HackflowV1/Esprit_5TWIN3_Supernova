@@ -2116,3 +2116,146 @@ msgstr ""
 #: .\templates\shared\form_errors.html:3
 msgid "Vérifiez les informations saisies"
 msgstr "Check the information you entered"
+
+msgid ""
+"Ces réglages s’appliquent au site et à l’administration. Ils sont conservés "
+"sur cet appareil, sans modifier votre compte."
+msgstr ""
+"These settings apply to the site and admin. They are saved on this device "
+"without changing your account."
+
+msgid "Palette des statuts"
+msgstr "Status colour palette"
+
+msgid ""
+"Des couleurs alternatives pour les statuts, sans filtre sur les "
+"illustrations. Les libellés restent visibles."
+msgstr ""
+"Alternative status colours, without filtering illustrations. Text labels "
+"remain visible."
+
+msgid "Palette habituelle"
+msgstr "Standard palette"
+
+msgid "Distinction rouge / vert"
+msgstr "Red / green distinction"
+
+msgid "Distinction bleu / jaune"
+msgstr "Blue / yellow distinction"
+
+msgid "Statuts monochromes"
+msgstr "Monochrome statuses"
+
+msgid "Contraste renforcé"
+msgstr "High contrast"
+
+msgid "Renforce les textes, les bordures et les contrôles."
+msgstr "Increases the contrast of text, borders and controls."
+
+msgid "Taille du texte"
+msgstr "Text size"
+
+msgid "Agrandit les textes sans bloquer le zoom du navigateur."
+msgstr "Enlarges text while keeping browser zoom available."
+
+msgid "Normale"
+msgstr "Normal"
+
+msgid "Grande"
+msgstr "Large"
+
+msgid "Très grande"
+msgstr "Extra large"
+
+msgid "Animations"
+msgstr "Animations"
+
+msgid "Le réglage système respecte déjà votre préférence de mouvement réduit."
+msgstr "The system setting already respects your reduced-motion preference."
+
+msgid "Suivre l’appareil"
+msgstr "Follow device settings"
+
+msgid "Réduire les animations"
+msgstr "Reduce animations"
+
+msgid "Espacement confortable"
+msgstr "Comfortable spacing"
+
+msgid "Agrandit les zones cliquables et espace les lignes des listes."
+msgstr "Enlarges click targets and increases spacing between list rows."
+
+msgid "Repère clavier renforcé"
+msgstr "Enhanced keyboard focus"
+
+msgid ""
+"Ajoute un contour plus visible à l’élément sélectionné au clavier. La "
+"navigation clavier reste toujours disponible."
+msgstr ""
+"Adds a stronger outline to the element focused with the keyboard. Keyboard "
+"navigation is always available."
+
+msgid ""
+"Le stockage est indisponible. Les réglages restent actifs sur cette page, "
+"mais ne seront pas conservés."
+msgstr ""
+"Storage is unavailable. Settings remain active on this page but will not be "
+"saved."
+
+msgid "Les réglages d’accessibilité ont été réinitialisés."
+msgstr "Accessibility settings have been reset."
+
+msgid "Rétablir les réglages par défaut"
+msgstr "Restore defaults"
+
+msgid "Accessibilité"
+msgstr "Accessibility"
+
+msgid "Fermer"
+msgstr "Close"
+
+msgid "Votre profil, vos compétences et vos préférences."
+msgstr "Your profile, skills and preferences."
+
+msgid "Navigation du profil"
+msgstr "Profile navigation"
+
+msgid "Informations"
+msgstr "Information"
+
+msgid "Rôles et organisations"
+msgstr "Roles and organizations"
+
+msgid "Sécurité"
+msgstr "Security"
+
+msgid "Gérez le mot de passe de votre compte."
+msgstr "Manage your account password."
+
+msgid "Aperçu des statuts"
+msgstr "Status preview"
+
+msgid "Aperçu"
+msgstr "Preview"
+
+msgid "Accepté"
+msgstr "Accepted"
+
+msgid "En attente"
+msgstr "Pending"
+
+msgid "Refusé"
+msgstr "Declined"
+
+msgid "Voici comment votre texte s’affiche."
+msgstr "This is how your text looks."
+
+msgid "Couleurs de l’interface"
+msgstr "Interface colours"
+
+msgid ""
+"Adapte les boutons, les liens, la navigation et les statuts dans toute "
+"l’application et l’administration."
+msgstr ""
+"Adapts buttons, links, navigation and statuses throughout the application "
+"and admin."
