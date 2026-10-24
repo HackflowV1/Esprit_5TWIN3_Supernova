@@ -90,6 +90,7 @@ class Submission(models.Model):
     class Status(models.TextChoices):
         DRAFT = 'DRAFT', _('Brouillon')
         OFFICIAL = 'OFFICIAL', _('Officielle — figée')
+        DISCARDED = 'DISCARDED', _('Brouillon supprimé')
 
     project = models.ForeignKey(Project, on_delete=models.PROTECT, related_name='submissions')
     version = models.PositiveIntegerField()
@@ -145,7 +146,7 @@ class Deliverable(models.Model):
         ids = {self.submission_id}
         if self.pk:
             ids.update(Deliverable.objects.filter(pk=self.pk).values_list('submission_id', flat=True))
-        if Submission.objects.filter(pk__in=ids, status=Submission.Status.OFFICIAL).exists():
+        if Submission.objects.filter(pk__in=ids).exclude(status=Submission.Status.DRAFT).exists():
             raise ValidationError(_('Cette version est figée. Créez une nouvelle version.'))
 
     def save(self, *args, **kwargs):
@@ -175,4 +176,5 @@ class ProjectActivity(models.Model):
             'CREATE_VERSION': _('Version créée'), 'SAVE_DELIVERABLE': _('Livrable enregistré'),
             'DELETE_DELIVERABLE': _('Livrable retiré'), 'SUBMIT': _('Version officialisée'),
             'REOPEN': _('Dépôt réouvert par dérogation'), 'PUBLICATION': _('Visibilité modifiée'),
+            'DISCARD_VERSION': _('Brouillon supprimé'), 'RESTORE_VERSION': _('Brouillon restauré'),
         }.get(self.action, _('Activité du projet'))

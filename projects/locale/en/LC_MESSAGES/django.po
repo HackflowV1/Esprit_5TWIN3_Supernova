@@ -678,3 +678,43 @@ msgstr "projects found"
 
 msgid "versions"
 msgstr "versions"
+
+msgid "Brouillon supprimé"
+msgstr "Deleted draft"
+
+msgid "Brouillon restauré"
+msgstr "Draft restored"
+
+msgid "Seuls les brouillons peuvent être supprimés ou restaurés."
+msgstr "Only drafts can be deleted or restored."
+
+msgid ""
+"Brouillon supprimé. Vous pouvez le restaurer depuis les brouillons "
+"supprimés."
+msgstr "Draft deleted. You can restore it from Deleted drafts."
+
+msgid "Brouillon restauré avec ses livrables."
+msgstr "Draft restored with its deliverables."
+
+msgid "Supprimer le brouillon"
+msgstr "Delete draft"
+
+msgid "Brouillons supprimés"
+msgstr "Deleted drafts"
+
+msgid "Restaurer"
+msgstr "Restore"
+
+#, python-format
+msgid "Supprimer le brouillon v%(version)s ?"
+msgstr "Delete draft v%(version)s?"
+
+msgid ""
+"Ce brouillon sera retiré de la liste des versions. Vous pourrez le restaurer"
+" avec ses livrables depuis « Brouillons supprimés »."
+msgstr ""
+"This draft will be removed from the version list. You can restore it with "
+"its deliverables from Deleted drafts."
+
+msgid "Votre version officielle restera inchangée."
+msgstr "Your official version will remain unchanged."

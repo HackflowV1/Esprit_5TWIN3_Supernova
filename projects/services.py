@@ -42,6 +42,16 @@ def editing_open(project):
     return True
 
 
+def can_manage_drafts(actor, project):
+    if not can_submit(actor, project) or project.team.hackathon.status not in ('PUBLISHED', 'ONGOING'):
+        return False
+    try:
+        _window(project.team.hackathon, project)
+    except ValidationError:
+        return False
+    return True
+
+
 def gallery():
     return Project.objects.filter(published=True, public_requested=True, official_submission__status='OFFICIAL',
         team__hackathon__status__in=['PUBLISHED', 'ONGOING', 'FINISHED', 'ARCHIVED']).select_related('official_submission', 'team__hackathon')
@@ -152,6 +162,22 @@ def create_version(*, actor, project):
     version = (project.submissions.aggregate(value=Max('version'))['value'] or 0) + 1
     submission = Submission.objects.create(project=project, version=version, created_by=actor, snapshot=project_snapshot(project))
     _log(project, actor, 'CREATE_VERSION', version=version)
+    return submission
+
+
+@transaction.atomic
+def manage_draft(*, actor, submission, restore=False):
+    actor, event, team, project = _lock(actor, submission.project.team, submission.project)
+    if not can_submit(actor, project):
+        raise PermissionDenied
+    _window(event, project)
+    submission = Submission.objects.get(pk=submission.pk, project=project)
+    expected = Submission.Status.DISCARDED if restore else Submission.Status.DRAFT
+    if submission.status != expected or submission.pk == project.official_submission_id:
+        raise ValidationError(_('Seuls les brouillons peuvent être supprimés ou restaurés.'))
+    submission.status = Submission.Status.DRAFT if restore else Submission.Status.DISCARDED
+    submission.save(update_fields=['status'])
+    _log(project, actor, 'RESTORE_VERSION' if restore else 'DISCARD_VERSION', version=submission.version)
     return submission
 
 

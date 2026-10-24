@@ -102,6 +102,7 @@
     <ul class="m3-list">{% for submission in submissions %}<li class="m3-version-row"><a class="m3-version-name" href="{% url 'projects:version' project.pk submission.version %}"><span class="m3-version-icon">{% icon 'code' 17 %}</span>Version {{ submission.version }}</a><span class="m3-version-state{% if submission.status == 'OFFICIAL' %} is-official{% endif %}">{{ submission.get_status_display }}</span><time>{{ submission.submitted_at|default:submission.created_at }}</time><a class="icon-button" href="{% url 'projects:version' project.pk submission.version %}" aria-label="{% blocktranslate with version=submission.version %}Ouvrir la version {{ version }}{% endblocktranslate %}">{% icon 'arrow-right' 16 %}</a></li>{% empty %}<li class="muted">{% translate 'Créez une version pour ajouter vos livrables.' %}</li>{% endfor %}</ul>
   </section>
 
+  {% include 'projects/discarded_versions.html' %}
   <section class="panel m3-activity" id="activity" aria-labelledby="activity-title">
     <header class="m3-section-head"><h2 id="activity-title">{% icon 'clock' 19 %}{% translate 'Activité récente' %}</h2></header>
     <ul class="m3-activity-list">{% for activity in activities %}<li><span class="m3-activity-avatar" aria-hidden="true">{{ activity.actor.username|default:'?'|slice:':1'|upper }}</span><div><p><strong>{{ activity.actor|default:'—' }}</strong> {{ activity.label }}</p><time>{{ activity.created_at }}</time>{% if activity.details.reason %}<p class="muted">{{ activity.details.reason }}</p>{% endif %}</div></li>{% endfor %}</ul>

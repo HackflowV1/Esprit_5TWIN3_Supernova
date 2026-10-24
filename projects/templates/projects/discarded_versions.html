@@ -1,0 +1,7 @@
+{% load i18n ui %}
+{% if captain and discarded_versions %}
+<details class="panel m3-discarded-versions">
+  <summary>{% icon 'delete' 16 %}{% translate 'Brouillons supprimés' %}<span class="m3-column-count">{{ discarded_versions|length }}</span>{% icon 'chevron-down' 14 %}</summary>
+  <ul class="m3-list">{% for item in discarded_versions %}<li><span>Version {{ item.version }}</span><span class="muted">{{ item.deliverables.count }} {% translate 'livrables' %}</span>{% if draft_manager %}<form method="post" action="{% url 'projects:draft-restore' project.pk item.version %}">{% csrf_token %}<button class="secondary small" type="submit">{% icon 'history' 14 %}{% translate 'Restaurer' %}</button></form>{% endif %}</li>{% endfor %}</ul>
+</details>
+{% endif %}

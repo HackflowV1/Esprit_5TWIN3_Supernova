@@ -28,6 +28,8 @@ def _context(request, project):
     return {'project': project, 'team': project.team, 'event': event,
         'editor': services.is_member(request.user, project), 'captain': services.can_submit(request.user, project),
         'editable': services.is_member(request.user, project) and services.editing_open(project),
+        'draft_manager': services.can_manage_drafts(request.user, project),
+        'discarded_versions': project.submissions.filter(status=Submission.Status.DISCARDED),
         'organizer': can_manage(request.user, event)}
 
 
@@ -64,7 +66,7 @@ def mine(request):
     projects = projects.select_related('team__hackathon', 'official_submission').annotate(
         average_progress=Avg('milestones__progress'), milestone_total=Count('milestones', distinct=True),
         milestone_done=Count('milestones', filter=Q(milestones__state=Milestone.State.DONE), distinct=True),
-        version_total=Count('submissions', distinct=True)).order_by('-updated_at', 'pk')
+        version_total=Count('submissions', filter=~Q(submissions__status=Submission.Status.DISCARDED), distinct=True)).order_by('-updated_at', 'pk')
     page = Paginator(projects, 24).get_page(request.GET.get('page'))
     for item in page:
         item.list_progress = round(item.average_progress or 0)
@@ -106,7 +108,7 @@ def detail(request, pk):
             for state, label in Milestone.State.choices],
         'milestone_count': len(milestones),
         'completed_count': sum(item.state == Milestone.State.DONE for item in milestones),
-        'submissions': project.submissions.all(), 'activities': project.activities.select_related('actor')[:30]})
+        'submissions': project.submissions.exclude(status=Submission.Status.DISCARDED), 'activities': project.activities.select_related('actor')[:30]})
 
 
 @login_required
@@ -156,7 +158,7 @@ def version_create(request, pk):
 @require_http_methods(['GET', 'POST'])
 def version(request, pk, version):
     project = _project(request, pk)
-    submission = get_object_or_404(Submission, project=project, version=version)
+    submission = get_object_or_404(Submission.objects.exclude(status=Submission.Status.DISCARDED), project=project, version=version)
     deliverables = list(submission.deliverables.all())
     saved_kinds = {record.kind for record in deliverables}
     next_kind = next((kind for kind in Deliverable.Kind.values if kind not in saved_kinds), Deliverable.Kind.REPOSITORY)
@@ -173,7 +175,40 @@ def version(request, pk, version):
     return render(request, 'projects/version.html', {**_context(request, project), 'submission': submission,
         'form': form, 'submit_form': SubmitForm(), 'deliverables': deliverables,
         'has_repository': any(record.kind == Deliverable.Kind.REPOSITORY for record in deliverables),
-        'versions': project.submissions.annotate(deliverable_count=Count('deliverables'))})
+        'versions': project.submissions.exclude(status=Submission.Status.DISCARDED).annotate(deliverable_count=Count('deliverables'))})
+
+
+@login_required
+@require_http_methods(['GET', 'POST'])
+def draft_delete(request, pk, version):
+    project = _project(request, pk)
+    if not services.can_submit(request.user, project):
+        raise PermissionDenied
+    submission = get_object_or_404(Submission, project=project, version=version, status=Submission.Status.DRAFT)
+    if request.method == 'POST':
+        try:
+            services.manage_draft(actor=request.user, submission=submission)
+        except ValidationError as exc:
+            messages.error(request, ' '.join(exc.messages))
+            return redirect('projects:version', pk=pk, version=version)
+        messages.success(request, _('Brouillon supprimé. Vous pouvez le restaurer depuis les brouillons supprimés.'))
+        target = project.official_submission or project.submissions.exclude(status=Submission.Status.DISCARDED).first()
+        return redirect('projects:version', pk=pk, version=target.version) if target else redirect(project)
+    return render(request, 'projects/draft_delete.html', {**_context(request, project), 'submission': submission})
+
+
+@login_required
+@require_POST
+def draft_restore(request, pk, version):
+    project = _project(request, pk)
+    submission = get_object_or_404(Submission, project=project, version=version, status=Submission.Status.DISCARDED)
+    try:
+        services.manage_draft(actor=request.user, submission=submission, restore=True)
+    except ValidationError as exc:
+        messages.error(request, ' '.join(exc.messages))
+        return redirect(project)
+    messages.success(request, _('Brouillon restauré avec ses livrables.'))
+    return redirect('projects:version', pk=pk, version=version)
 
 
 @login_required
@@ -289,6 +324,8 @@ def public_detail(request, pk):
 def download(request, deliverable_pk):
     record = get_object_or_404(Deliverable.objects.select_related('submission__project__team__hackathon', 'submission__project__team__captain'), pk=deliverable_pk)
     project = record.submission.project
+    if record.submission.status == Submission.Status.DISCARDED:
+        raise Http404
     public = record.submission_id == project.official_submission_id and services.gallery().filter(pk=project.pk).exists()
     if not public and not services.can_read(request.user, project):
         raise PermissionDenied

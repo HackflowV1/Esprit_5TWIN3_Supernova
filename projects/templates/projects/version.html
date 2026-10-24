@@ -7,7 +7,7 @@
     <div><p class="m3-eyebrow">{{ team }} <span aria-hidden="true">/</span> {% translate 'Versions de soumission' %}</p><h1>{{ project }} <span class="m3-title-version">v{{ submission.version }}</span></h1>
       <div class="m3-project-meta"><span class="m3-status{% if submission.status == 'OFFICIAL' %} m3-status-official{% endif %}">{% if submission.status == 'OFFICIAL' %}{% icon 'check' 14 %}{% translate 'Officielle — figée' %}{% else %}{% icon 'edit' 14 %}{% translate 'Brouillon' %}{% endif %}</span><span>{% icon 'clock' 14 %}{{ submission.submitted_at|default:submission.created_at }}</span></div>
     </div>
-    <a class="button secondary" href="{{ project.get_absolute_url }}">{% icon 'arrow-left' 16 %}{% translate 'Retour au tableau' %}</a>
+    <div class="m3-head-actions">{% if draft_manager and submission.status == 'DRAFT' %}<a class="button secondary" href="{% url 'projects:draft-delete' project.pk submission.version %}">{% icon 'delete' 16 %}{% translate 'Supprimer le brouillon' %}</a>{% endif %}<a class="button secondary" href="{{ project.get_absolute_url }}">{% icon 'arrow-left' 16 %}{% translate 'Retour au tableau' %}</a></div>
   </header>
 
   <nav class="m3-version-switcher" aria-label="{% translate 'Choisir une version' %}">
@@ -57,5 +57,6 @@
       <section class="panel m3-requirements-panel"><h2>{% icon 'check' 17 %}{% translate 'Exigences du challenge' %}</h2>{{ submission.snapshot.requirements|linebreaks }}<p class="m3-sidebar-note">{% translate 'Chaque version possède ses propres livrables. Ils ne sont pas copiés automatiquement.' %}</p></section>
     </aside>
   </div>
+  {% include 'projects/discarded_versions.html' %}
 </div>
 {% endblock %}

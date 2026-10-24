@@ -98,6 +98,34 @@ class ProjectSetup(SetupMixin):
 
 
 class ProjectFlowTests(ProjectSetup, TestCase):
+    def test_discard_restore_preserves_deliverables_and_version_numbers(self):
+        project = self.project()
+        first = self.version(project)
+        repository = self.repo(first)
+        for actor in (self.b, self.c):
+            with self.assertRaises(PermissionDenied):
+                services.manage_draft(actor=actor, submission=first)
+        services.manage_draft(actor=self.a, submission=first)
+        first.refresh_from_db()
+        self.assertEqual(first.status, 'DISCARDED')
+        self.assertTrue(Deliverable.objects.filter(pk=repository.pk).exists())
+        with self.assertRaises(ValidationError):
+            services.save_deliverable(actor=self.a, submission=first, kind='DEMO', url='https://example.com')
+        second = self.version(project)
+        self.assertEqual(second.version, 2)
+        services.manage_draft(actor=self.a, submission=first, restore=True)
+        first.refresh_from_db()
+        self.assertEqual(first.status, 'DRAFT')
+        self.assertEqual(first.deliverables.get().commit, 'a'*40)
+        self.repo(second)
+        services.submit(actor=self.a, submission=second, confirm_requirements=True)
+        with self.assertRaises(ValidationError):
+            services.manage_draft(actor=self.a, submission=second)
+        services.manage_draft(actor=self.a, submission=first)
+        project.refresh_from_db()
+        self.assertEqual(project.official_submission_id, second.pk)
+        self.assertEqual(project.activities.filter(action='DISCARD_VERSION').count(), 2)
+
     def test_official_models_reject_direct_edits(self):
         project = self.project()
         version = self.official(project)
@@ -262,6 +290,31 @@ class ProjectFlowTests(ProjectSetup, TestCase):
 
 
 class ScreenTests(ProjectSetup, TestCase):
+    def test_delete_draft_requires_confirmation_and_can_be_restored(self):
+        project = self.project()
+        draft = self.version(project)
+        official = self.official(project)
+        url = reverse('projects:draft-delete', args=[project.pk, draft.version])
+        self.client.force_login(self.b)
+        self.assertEqual(self.client.get(url).status_code, 403)
+        self.client.force_login(self.a)
+        self.assertEqual(self.client.get(url).status_code, 200)
+        draft.refresh_from_db()
+        self.assertEqual(draft.status, 'DRAFT')
+        csrf_client = Client(enforce_csrf_checks=True)
+        csrf_client.force_login(self.a)
+        self.assertEqual(csrf_client.post(url).status_code, 403)
+        self.assertRedirects(self.client.post(url), reverse('projects:version', args=[project.pk, official.version]))
+        self.assertEqual(self.client.get(reverse('projects:version', args=[project.pk, draft.version])).status_code, 404)
+        response = self.client.get(reverse('projects:version', args=[project.pk, official.version]))
+        self.assertEqual(list(response.context['versions'].values_list('version', flat=True)), [official.version])
+        restore_url = reverse('projects:draft-restore', args=[project.pk, draft.version])
+        self.assertEqual(self.client.get(restore_url).status_code, 405)
+        self.assertRedirects(self.client.post(restore_url), reverse('projects:version', args=[project.pk, draft.version]))
+        draft.refresh_from_db()
+        self.assertEqual(draft.status, 'DRAFT')
+        self.assertEqual(self.client.get(reverse('projects:draft-delete', args=[project.pk, official.version])).status_code, 404)
+
     def test_workspace_filters_preserve_project_access(self):
         project = self.project()
         self.client.force_login(self.a)

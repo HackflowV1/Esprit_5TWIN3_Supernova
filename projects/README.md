@@ -178,3 +178,17 @@ La galerie affiche les technologies et les contenus du snapshot officiel,
 avec recherche et filtre par hackathon. Aucun contenu privé courant n’est inclus
 dans la recherche publique. Les filtres sont conservés pendant la pagination.
 Les 27 tests M3 couvrent notamment les filtres et leurs frontières de permissions.
+
+## Supprimer un brouillon
+
+Le capitaine utilise Supprimer le brouillon sur une page de version, puis confirme
+sur une page dédiée. Le brouillon est retiré des listes et du compteur de versions,
+sans supprimer ses fichiers ni réutiliser son numéro. Il reste restaurable depuis
+Brouillons supprimés sur le tableau ou une autre version. La suppression et la
+restauration sont historisées et sérialisées avec les autres opérations M3.
+Les soumissions officielles, y compris historiques, restent protégées. Une version
+officielle courante n’empêche pas de retirer un autre brouillon inutilisé.
+Les changements restent réservés au capitaine pendant une période de modification
+ouverte ; les éditions archivées sont en lecture seule. Les 29 tests M3 couvrent
+le cycle suppression/restauration, les permissions, le CSRF et la conservation
+des numéros et livrables.
