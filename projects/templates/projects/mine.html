@@ -1,8 +1,39 @@
 {% extends 'projects/shell.html' %}{% load i18n ui %}
 {% block title %}{% translate 'Mes projets' %} — HackFlow{% endblock %}
 {% block workspace %}
-<header class="page-head"><div><h1>{% translate 'Mes projets' %}</h1><p class="muted">{% translate 'De l’idée au dépôt officiel, gardez le cap avec votre équipe.' %}</p></div></header>
-{% for team in available_teams %}<section class="panel"><h2>{{ team }}</h2><p>{{ team.hackathon }}</p>{% if team.is_ready %}<a class="button" href="{% url 'projects:create' team.pk %}">{% icon 'add' %}{% translate 'Créer le projet' %}</a>{% else %}<p class="muted">{% translate 'Complétez votre équipe avant de créer un projet.' %}</p><a href="{{ team.get_absolute_url }}">{% translate 'Ouvrir l’équipe' %}</a>{% endif %}</section>{% endfor %}
-<div class="m3-grid">{% for project in projects %}<article class="panel"><span class="chip">{{ project.get_status_display }}</span><h2><a href="{{ project.get_absolute_url }}">{{ project }}</a></h2><p class="muted">{{ project.team }} · {{ project.team.hackathon }}</p><p>{{ project.solution|truncatewords:25 }}</p><p>{% translate 'Progression' %} · {{ project.progress }} %</p>{% if project.official_submission %}<p>{% translate 'Version officielle' %} · v{{ project.official_submission.version }}</p>{% endif %}</article>{% empty %}<section class="panel"><h2>{% translate 'Votre prochain projet commence ici' %}</h2><p>{% translate 'Rejoignez une équipe valide, puis créez sa fiche pendant le développement.' %}</p><a href="{% url 'teams:mine' %}">{% translate 'Mes inscriptions' %}</a></section>{% endfor %}</div>
-{% include 'projects/pagination.html' %}
+<div class="m3-tracker m3-projects-page">
+  <header class="m3-project-head"><div><p class="m3-eyebrow">{% translate 'Votre espace de travail' %}</p><h1>{% translate 'Mes projets' %}</h1><p class="m3-page-description">{% translate 'Planifiez la suite, suivez votre progression et préparez votre prochain dépôt.' %}</p></div><a class="button secondary" href="{% url 'projects:gallery' %}">{% icon 'view' 16 %}{% translate 'Explorer la galerie' %}{% icon 'arrow-right' 16 %}</a></header>
+
+  <nav class="m3-workspace-filters" aria-label="{% translate 'Filtrer mes projets' %}">
+    <a href="?status=all&amp;q={{ search_query|urlencode }}"{% if status_filter == 'all' %} aria-current="page"{% endif %}><span>{% icon 'code' 17 %}{% translate 'Tous les projets' %}</span><strong>{{ counts.total }}</strong></a>
+    <a href="?status=working&amp;q={{ search_query|urlencode }}"{% if status_filter == 'working' %} aria-current="page"{% endif %}><span>{% icon 'edit' 17 %}{% translate 'En préparation' %}</span><strong>{{ counts.working }}</strong></a>
+    <a href="?status=submitted&amp;q={{ search_query|urlencode }}"{% if status_filter == 'submitted' %} aria-current="page"{% endif %}><span>{% icon 'check' 17 %}{% translate 'Soumis officiellement' %}</span><strong>{{ counts.submitted }}</strong></a>
+    <a href="?status=published&amp;q={{ search_query|urlencode }}"{% if status_filter == 'published' %} aria-current="page"{% endif %}><span>{% icon 'globe' 17 %}{% translate 'Publiés' %}</span><strong>{{ counts.published }}</strong></a>
+  </nav>
+
+  {% for team in available_teams %}<section class="m3-start-project"><span class="m3-start-icon">{% icon 'add' 23 %}</span><div><h2>{{ team }}</h2><p>{{ team.hackathon }} · {% if team.is_ready %}{% translate 'Votre équipe est prête à créer son projet.' %}{% else %}{% translate 'Complétez votre équipe avant de créer un projet.' %}{% endif %}</p></div>{% if team.is_ready %}<a class="button small" href="{% url 'projects:create' team.pk %}">{% translate 'Créer le projet' %}{% icon 'arrow-right' 15 %}</a>{% else %}<a class="button secondary small" href="{{ team.get_absolute_url }}">{% translate 'Ouvrir l’équipe' %}</a>{% endif %}</section>{% endfor %}
+
+  <div class="m3-list-toolbar"><h2>{% translate 'Vos projets' %}<span class="m3-column-count">{{ projects.paginator.count }}</span></h2><form method="get" class="m3-project-search"><input type="hidden" name="status" value="{{ status_filter }}"><label class="visually-hidden" for="my-project-search">{% translate 'Rechercher un projet' %}</label><span aria-hidden="true">{% icon 'search' 17 %}</span><input id="my-project-search" type="search" name="q" value="{{ search_query }}" placeholder="{% translate 'Projet, équipe ou hackathon…' %}"><button class="secondary small" type="submit">{% translate 'Rechercher' %}</button></form></div>
+
+  <div class="m3-workspace-list">
+    {% for project in projects %}
+    <article class="m3-workspace-card">
+      <div class="m3-workspace-card-main">
+        <div class="m3-workspace-card-head"><span class="m3-project-mark" aria-hidden="true">{{ project.title|slice:':1'|upper }}</span><div><p class="m3-card-event">{{ project.team.hackathon }}</p><h2><a href="{{ project.get_absolute_url }}">{{ project }}</a></h2></div></div>
+        <p class="m3-workspace-solution">{{ project.solution|truncatewords:30 }}</p>
+        <div class="m3-workspace-meta"><span>{% icon 'users' 14 %}{{ project.team }}</span><span>{% icon 'check' 14 %}{{ project.milestone_done }}/{{ project.milestone_total }} {% translate 'étapes terminées' %}</span><span>{% icon 'history' 14 %}{{ project.version_total }} {% translate 'versions' %}</span></div>
+      </div>
+      <div class="m3-workspace-card-side">
+        <span class="m3-project-badge{% if project.official_submission %} is-submitted{% endif %}">{% if project.published %}{% icon 'globe' 13 %}{% translate 'Publié dans la galerie' %}{% elif project.official_submission %}{% icon 'check' 13 %}{% translate 'Soumis officiellement' %}{% else %}{{ project.get_status_display }}{% endif %}</span>
+        <div class="m3-project-progress"><label for="project-progress-{{ project.pk }}">{% translate 'Progression' %}<strong>{{ project.list_progress }} %</strong></label><progress id="project-progress-{{ project.pk }}" max="100" value="{{ project.list_progress }}">{{ project.list_progress }} %</progress></div>
+        <p class="m3-card-deadline">{% icon 'calendar' 14 %}{% translate 'Date limite' %}<strong>{{ project.team.hackathon.submission_deadline|date:'j M Y' }}</strong></p>
+      </div>
+      <footer class="m3-workspace-card-footer"><span class="m3-workspace-note">{% if project.official_submission %}{% icon 'shield' 14 %}{% translate 'Version officielle' %} · v{{ project.official_submission.version }}{% else %}{% icon 'edit' 14 %}{% translate 'Votre projet est en préparation.' %}{% endif %}</span><div class="m3-workspace-actions">{% if project.official_submission %}<a class="button secondary small" href="{% url 'projects:version' project.pk project.official_submission.version %}">{% translate 'Voir la soumission' %}</a>{% endif %}<a class="button small" href="{{ project.get_absolute_url }}">{% translate 'Ouvrir le tableau' %}{% icon 'arrow-right' 15 %}</a></div></footer>
+    </article>
+    {% empty %}
+    <section class="m3-workspace-empty">{% icon 'code' 34 %}<h2>{% if search_query or status_filter != 'all' %}{% translate 'Aucun projet ne correspond' %}{% else %}{% translate 'Votre prochain projet commence ici' %}{% endif %}</h2><p>{% if search_query or status_filter != 'all' %}{% translate 'Essayez un autre filtre ou une recherche plus courte.' %}{% else %}{% translate 'Rejoignez une équipe valide, puis créez sa fiche pendant le développement.' %}{% endif %}</p>{% if search_query or status_filter != 'all' %}<a class="button secondary small" href="{% url 'projects:mine' %}">{% translate 'Réinitialiser les filtres' %}</a>{% else %}<a class="button secondary small" href="{% url 'teams:mine' %}">{% translate 'Mes inscriptions' %}{% icon 'arrow-right' 15 %}</a>{% endif %}</section>
+    {% endfor %}
+  </div>
+  {% include 'projects/pagination.html' %}
+</div>
 {% endblock %}

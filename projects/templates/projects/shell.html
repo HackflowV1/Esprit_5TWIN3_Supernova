@@ -1,5 +1,5 @@
 {% extends 'base.html' %}{% load i18n static %}
-{% block extra_css %}<link rel="stylesheet" href="{% static 'css/projects.css' %}?v=submission-3">{% endblock %}
+{% block extra_css %}<link rel="stylesheet" href="{% static 'css/projects.css' %}?v=workspace-4">{% endblock %}
 {% block breadcrumbs %}<nav class="breadcrumbs" aria-label="{% translate 'Fil d’Ariane' %}"><ol><li><a href="{% url 'core:home' %}">{% translate 'Accueil' %}</a></li>{% if ui_page == 'public' or ui_page == 'gallery' %}<li><a href="{% url 'projects:gallery' %}">{% translate 'Galerie des projets' %}</a></li>{% else %}<li><a href="{% url 'projects:mine' %}">{% translate 'Mes projets' %}</a></li>{% endif %}{% if project %}<li aria-current="page">{% if snapshot %}{{ snapshot.title }}{% else %}{{ project }}{% endif %}</li>{% endif %}</ol></nav>{% endblock %}
 {% block content %}
 <nav class="m3-nav" aria-label="{% translate 'Navigation projets' %}">

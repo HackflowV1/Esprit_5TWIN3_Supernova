@@ -262,6 +262,37 @@ class ProjectFlowTests(ProjectSetup, TestCase):
 
 
 class ScreenTests(ProjectSetup, TestCase):
+    def test_workspace_filters_preserve_project_access(self):
+        project = self.project()
+        self.client.force_login(self.a)
+        url = reverse('projects:mine')
+        response = self.client.get(url, {'q': 'Campus', 'status': 'working'})
+        self.assertEqual(response.context['projects'].paginator.count, 1)
+        self.assertEqual(response.context['counts']['working'], 1)
+        self.assertEqual(self.client.get(url, {'q': 'missing'}).context['projects'].paginator.count, 0)
+        self.official(project)
+        self.assertEqual(self.client.get(url, {'status': 'submitted'}).context['projects'].paginator.count, 1)
+        self.assertEqual(self.client.get(url, {'status': 'working'}).context['projects'].paginator.count, 0)
+        self.client.force_login(self.c)
+        response = self.client.get(url, {'q': 'Campus', 'status': 'submitted'})
+        self.assertEqual(response.context['projects'].paginator.count, 0)
+        self.assertEqual(response.context['counts']['total'], 0)
+
+    def test_gallery_filters_use_only_approved_snapshot_content(self):
+        project = self.project()
+        self.official(project)
+        url = reverse('projects:gallery')
+        self.assertEqual(self.client.get(url, {'q': 'Django'}).context['projects'].paginator.count, 0)
+        services.publication(actor=self.a, project=project, action='request')
+        services.publication(actor=self.owner, project=project, action='publish')
+        Project.objects.filter(pk=project.pk).update(title='Private unpublished revision', solution='Private unpublished revision')
+        response = self.client.get(url, {'q': 'Django', 'event': self.event.slug})
+        self.assertEqual(response.context['projects'].paginator.count, 1)
+        self.assertContains(response, 'Campus Care')
+        self.assertNotContains(response, 'Private unpublished revision')
+        self.assertEqual(self.client.get(url, {'q': 'Private unpublished revision'}).context['projects'].paginator.count, 0)
+        self.assertEqual(self.client.get(url, {'event': 'unknown-event'}).context['projects'].paginator.count, 0)
+
     def test_percentage_edit_automatically_updates_milestone_state(self):
         project = self.project()
         milestone = services.save_milestone(actor=self.a, project=project, data={

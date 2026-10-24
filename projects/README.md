@@ -165,3 +165,16 @@ copie automatique entre versions n’est effectuée.
 
 Après cette amélioration, les 25 tests M3 passent, la syntaxe JavaScript est
 vérifiée, et les pages de version et livrables publics répondent HTTP 200.
+
+## Liste des projets et galerie
+
+Mes projets présente des compteurs filtrables (tous, en préparation, soumis,
+publiés), une recherche par projet/équipe/hackathon et des cartes avec progression,
+étapes, versions, échéance et accès direct au tableau ou à la soumission officielle.
+Les projets sont triés par dernière modification. Le badge de soumission reflète
+la présence d’une version officielle, même si le statut de préparation est READY.
+
+La galerie affiche les technologies et les contenus du snapshot officiel,
+avec recherche et filtre par hackathon. Aucun contenu privé courant n’est inclus
+dans la recherche publique. Les filtres sont conservés pendant la pagination.
+Les 27 tests M3 couvrent notamment les filtres et leurs frontières de permissions.

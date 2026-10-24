@@ -3,7 +3,7 @@ from django.contrib.auth.decorators import login_required
 from django.core.exceptions import PermissionDenied, ValidationError
 from django.core.paginator import Paginator
 from django.db import IntegrityError
-from django.db.models import Count
+from django.db.models import Avg, Count, Q
 from django.http import FileResponse, Http404
 from django.shortcuts import get_object_or_404, redirect, render
 from django.utils import timezone
@@ -46,9 +46,34 @@ def mine(request):
     managed = Project.objects.filter(team__hackathon__role_assignments__user=request.user,
         team__hackathon__role_assignments__role='ORGANIZER', team__hackathon__role_assignments__status='ACTIVE')
     projects = Project.objects.all() if request.user.is_superuser else (projects | managed).distinct()
+    counts = projects.aggregate(total=Count('pk', distinct=True), submitted=Count('pk', filter=Q(official_submission__isnull=False), distinct=True),
+        published=Count('pk', filter=Q(published=True), distinct=True))
+    counts['working'] = counts['total'] - counts['submitted']
+    status = request.GET.get('status', 'all')
+    if status not in ('all', 'working', 'submitted', 'published'):
+        status = 'all'
+    if status == 'working':
+        projects = projects.filter(official_submission__isnull=True)
+    elif status == 'submitted':
+        projects = projects.filter(official_submission__isnull=False)
+    elif status == 'published':
+        projects = projects.filter(published=True)
+    query = request.GET.get('q', '').strip()[:200]
+    if query:
+        projects = projects.filter(Q(title__icontains=query) | Q(team__name__icontains=query) | Q(team__hackathon__title__icontains=query))
+    projects = projects.select_related('team__hackathon', 'official_submission').annotate(
+        average_progress=Avg('milestones__progress'), milestone_total=Count('milestones', distinct=True),
+        milestone_done=Count('milestones', filter=Q(milestones__state=Milestone.State.DONE), distinct=True),
+        version_total=Count('submissions', distinct=True)).order_by('-updated_at', 'pk')
+    page = Paginator(projects, 24).get_page(request.GET.get('page'))
+    for item in page:
+        item.list_progress = round(item.average_progress or 0)
     available_teams = Team.objects.filter(memberships__registration__user=request.user, memberships__ended_at__isnull=True,
         memberships__registration__status='ACCEPTED', closed_at__isnull=True, project__isnull=True).select_related('hackathon')
-    return render(request, 'projects/mine.html', {'projects': Paginator(projects.select_related('team__hackathon', 'official_submission'), 24).get_page(request.GET.get('page')), 'available_teams': available_teams})
+    pagination = request.GET.copy()
+    pagination.pop('page', None)
+    return render(request, 'projects/mine.html', {'projects': page, 'available_teams': available_teams,
+        'counts': counts, 'status_filter': status, 'search_query': query, 'pagination_query': pagination.urlencode()})
 
 
 @login_required
@@ -235,10 +260,25 @@ def publication(request, pk, action):
 
 def gallery(request):
     projects = services.gallery().order_by('-official_submission__submitted_at')
-    if request.GET.get('q'):
-        # Search frozen content; live project fields are not public content.
-        projects = projects.filter(official_submission__snapshot__title__icontains=request.GET['q'][:200])
-    return render(request, 'projects/gallery.html', {'projects': Paginator(projects, 24).get_page(request.GET.get('page'))})
+    public_total = projects.count()
+    events = list(projects.order_by('team__hackathon__title').values_list('team__hackathon__slug', 'team__hackathon__title').distinct())
+    query = request.GET.get('q', '').strip()[:200]
+    event_filter = request.GET.get('event', '')[:220]
+    if query:
+        # Search only the approved frozen content, never private live fields.
+        projects = projects.filter(Q(official_submission__snapshot__title__icontains=query) |
+            Q(official_submission__snapshot__solution__icontains=query) | Q(official_submission__snapshot__stack__icontains=query) |
+            Q(official_submission__snapshot__team__icontains=query))
+    if event_filter:
+        projects = projects.filter(team__hackathon__slug=event_filter)
+    page = Paginator(projects, 24).get_page(request.GET.get('page'))
+    for item in page:
+        snapshot = item.official_submission.snapshot
+        item.gallery_stack = [part.strip() for part in snapshot.get('stack', '').split(',') if part.strip()][:4]
+    pagination = request.GET.copy()
+    pagination.pop('page', None)
+    return render(request, 'projects/gallery.html', {'projects': page, 'public_total': public_total,
+        'event_options': events, 'event_filter': event_filter, 'search_query': query, 'pagination_query': pagination.urlencode()})
 
 
 def public_detail(request, pk):

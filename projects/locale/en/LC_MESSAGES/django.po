@@ -579,3 +579,102 @@ msgstr "Your deliverables are saved. Official submission is a separate step."
 
 msgid "livrables"
 msgstr "deliverables"
+
+msgid "Aucun projet ne correspond"
+msgstr "No matching projects"
+
+msgid "Créés en équipe, partagés avec tous"
+msgstr "Built together, shared with everyone"
+
+msgid ""
+"Découvrez les idées, les prototypes et les versions officielles des équipes."
+msgstr ""
+"Explore the ideas, prototypes and official submissions built by teams."
+
+msgid "Découvrir le projet"
+msgstr "Explore project"
+
+msgid "En préparation"
+msgstr "In preparation"
+
+msgid "Essayez un autre filtre ou une recherche plus courte."
+msgstr "Try a different filter or a shorter search."
+
+msgid "Explorer la galerie"
+msgstr "Explore gallery"
+
+msgid "Filtrer mes projets"
+msgstr "Filter my projects"
+
+msgid "Hackathon"
+msgstr "Hackathon"
+
+msgid ""
+"Les projets apparaissent ici après une soumission officielle, l’accord de "
+"l’équipe et la validation de l’organisateur."
+msgstr ""
+"Projects appear here after official submission, team consent and organizer "
+"approval."
+
+msgid "Officielle"
+msgstr "Official"
+
+msgid "Ouvrir le tableau"
+msgstr "Open board"
+
+msgid ""
+"Planifiez la suite, suivez votre progression et préparez votre prochain "
+"dépôt."
+msgstr ""
+"Plan your next steps, track progress and prepare your next submission."
+
+msgid "Projet, équipe ou hackathon…"
+msgstr "Project, team or hackathon…"
+
+msgid "Publication approuvée par les organisateurs"
+msgstr "Publication approved by organizers"
+
+msgid "Publiés"
+msgstr "Published"
+
+msgid "Réinitialiser les filtres"
+msgstr "Clear filters"
+
+msgid "Soumis officiellement"
+msgstr "Officially submitted"
+
+msgid "Tous les hackathons"
+msgstr "All hackathons"
+
+msgid "Tous les projets"
+msgstr "All projects"
+
+msgid "Une idée, une technologie, une équipe…"
+msgstr "An idea, technology or team…"
+
+msgid "Versions officielles"
+msgstr "Official submissions"
+
+msgid "Voir la soumission"
+msgstr "View submission"
+
+msgid "Vos projets"
+msgstr "Your projects"
+
+msgid "Votre espace de travail"
+msgstr "Your workspace"
+
+msgid "Votre projet est en préparation."
+msgstr "Your project is in preparation."
+
+msgid "Votre équipe est prête à créer son projet."
+msgstr "Your team is ready to create its project."
+
+msgid "projets publiés"
+msgstr "published projects"
+
+msgid "projets trouvés"
+msgstr "projects found"
+
+msgid "versions"
+msgstr "versions"
