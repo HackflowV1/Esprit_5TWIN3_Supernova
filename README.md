@@ -84,13 +84,32 @@ l’événement et un partenariat confirmé. L’organisateur valide puis publie
 - Administration réservée au superutilisateur technique, avec recherches, filtres,
   inlines et actions de publication/archivage réutilisant les règles métier.
 
-Les domaines M3, M4, M5 et les moteurs IA ne sont pas implémentés dans cette livraison.
+- M4 : assistance, mentorat et ateliers : demandes d'aide des équipes, expertises et créneaux
+  des mentors, réservation sans double réservation, séance avec compte rendu, retour de l'équipe
+  et résolution, ateliers publiés par l'organisateur avec inscriptions individuelles, capacité
+  garantie et relevé de présence.
+
+Les domaines M3, M5 et les moteurs IA ne sont pas implémentés dans cette livraison.
+La suggestion de mentors (moteur commun `intelligence/`) n'est pas livrée : le choix du mentor est manuel.
 Leurs données apparaissent comme indisponibles tant que leurs fournisseurs ne sont pas connectés.
 
 Pour essayer M2, lancer les migrations puis `uv run python manage.py seed_demo`
 en développement et ouvrir **Mes inscriptions** ou une édition ouverte. La phase
 **Constitution des équipes** doit être configurée pour autoriser le recrutement.
 Voir [le parcours M2](docs/USER_M2.md) et [les contrats M3/M4](docs/M2_CONTRACTS.md).
+
+Pour essayer M4, après `migrate`, lancer en développement :
+
+```powershell
+uv run python manage.py seed_demo                          # comptes, compétences, éditions historiques (+ M2)
+uv run python manage.py seed_m4_demo --user VOTRE_COMPTE   # édition « Mentoring Lab 2026 » ouverte aujourd'hui
+```
+
+La seconde commande crée deux équipes complètes (Nova Live, Horizon Live), des mentors avec
+expertises et créneaux, des demandes d'aide, un rendez-vous réservé, une séance terminée qui attend
+le retour de l'équipe et deux ateliers (un complet). Elle est idempotente. Les comptes de démonstration
+partagent le mot de passe annoncé par `seed_demo`. Voir [le parcours M4](docs/USER_M4.md) et
+[les contrats M4](docs/M4_CONTRACTS.md). Les tests de M4 sont dans `mentoring/tests/`.
 
 ## Intégration et validation
 

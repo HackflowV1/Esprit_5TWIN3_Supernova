@@ -1,0 +1,98 @@
+{% extends 'mentoring/shell.html' %}{% load i18n ui %}
+{% block title %}{{ support_request.subject }} — HackFlow{% endblock %}
+{% block workspace %}
+<header class="page-head">
+<div>
+<p class="m4-eyebrow">{{ session.slot.hackathon }}</p>
+<h1>{{ support_request.subject }}</h1>
+<p class="m4-info"><span class="badge badge--{{ session.status_badge }}">{{ session.get_status_display }}</span>
+<time datetime="{{ session.slot.start|date:'c' }}">{{ session.slot.start|date:'l j F Y · H:i'|capfirst }}</time></p>
+</div>
+{% if can_cancel %}<a class="button secondary" href="{% url 'mentoring:session-cancel' session.pk %}">{% icon 'close' %}{% translate 'Annuler le rendez-vous' %}</a>{% endif %}
+</header>
+
+<div class="m4-detail">
+<div>
+{% if session.status == 'BOOKED' %}
+<section class="panel" aria-labelledby="prepare-title">
+<h2 id="prepare-title">{% translate 'Prochaine étape' %}</h2>
+{% if is_mentor_of %}
+<p><strong>{% if not_started %}{% translate 'Le rendez-vous n’a pas encore commencé.' %}{% else %}{% translate 'Terminez la séance en écrivant le compte rendu.' %}{% endif %}</strong></p>
+{% else %}
+<p><strong>{% translate 'Un rendez-vous est réservé : préparez vos questions.' %}</strong></p>
+{% endif %}
+</section>
+{% endif %}
+
+<section class="panel" aria-labelledby="problem-title">
+<h2 id="problem-title">{% translate 'Description du blocage' %}</h2>
+<div class="prose">{{ support_request.description|linebreaks }}</div>
+<p><a href="{{ support_request.get_absolute_url }}">{% icon 'arrow-right' 16 %}{% translate 'Voir la demande d’aide' %}</a></p>
+</section>
+
+{% if report_form %}
+<section class="panel" aria-labelledby="report-title">
+<h2 id="report-title">{% if can_complete %}{% translate 'Terminer la séance' %}{% else %}{% translate 'Modifier le compte rendu' %}{% endif %}</h2>
+<form method="post" novalidate>{% csrf_token %}
+<input type="hidden" name="action" value="{% if can_complete %}complete{% else %}update_report{% endif %}">
+{% include 'shared/form_errors.html' with form=report_form %}
+{% for field in report_form %}{% render_field field %}{% endfor %}
+<div class="form-actions"><button type="submit">{% icon 'check' %}{% if can_complete %}{% translate 'Terminer la séance' %}{% else %}{% translate 'Enregistrer le compte rendu' %}{% endif %}</button></div>
+</form>
+</section>
+{% endif %}
+
+{% if session.status == 'COMPLETED' %}
+<section class="panel" aria-labelledby="result-title">
+<h2 id="result-title">{% translate 'Compte rendu du mentor' %}</h2>
+<div class="prose">{{ session.report|linebreaks }}</div>
+{% if show_private and session.private_notes %}
+<h3>{% translate 'Notes privées' %}</h3>
+<p class="muted">{% translate 'Visibles seulement par le mentor et les organisateurs.' %}</p>
+<div class="prose">{{ session.private_notes|linebreaks }}</div>
+{% endif %}
+</section>
+{% endif %}
+
+{% if feedback_form %}
+<section class="panel" aria-labelledby="feedback-title">
+<h2 id="feedback-title">{% translate 'Votre retour' %}</h2>
+<p class="muted">{% translate 'La séance est terminée : dites-nous si elle a réglé votre problème.' %}</p>
+<form method="post" novalidate>{% csrf_token %}
+<input type="hidden" name="action" value="feedback">
+{% include 'shared/form_errors.html' with form=feedback_form %}
+<fieldset class="field m4-radios{% if feedback_form.rating.errors %} has-error{% endif %}"><legend>{{ feedback_form.rating.label }}<span class="required-mark" aria-hidden="true"> *</span></legend>{{ feedback_form.rating }}{% if feedback_form.rating.errors %}<div class="field-error">{{ feedback_form.rating.errors }}</div>{% endif %}</fieldset>
+{% render_field feedback_form.comment %}
+<fieldset class="field m4-radios{% if feedback_form.resolved.errors %} has-error{% endif %}"><legend>{{ feedback_form.resolved.label }}<span class="required-mark" aria-hidden="true"> *</span></legend>{{ feedback_form.resolved }}<div class="helptext">{{ feedback_form.resolved.help_text }}</div>{% if feedback_form.resolved.errors %}<div class="field-error">{{ feedback_form.resolved.errors }}</div>{% endif %}</fieldset>
+<div class="form-actions"><button type="submit">{% icon 'check' %}{% translate 'Envoyer mon retour' %}</button></div>
+</form>
+</section>
+{% elif session.feedback_at %}
+<section class="panel" aria-labelledby="given-title">
+<h2 id="given-title">{% translate 'Retour de l’équipe' %}</h2>
+<p><strong>{% blocktranslate with rating=session.feedback_rating %}Utilité : {{ rating }}/5{% endblocktranslate %}</strong></p>
+{% if session.feedback_comment %}<div class="prose">{{ session.feedback_comment|linebreaks }}</div>{% endif %}
+<p class="muted">{{ support_request.get_status_display }}</p>
+</section>
+{% endif %}
+
+<section class="panel" aria-labelledby="history-title">
+<h2 id="history-title">{% translate 'Historique' %}</h2>
+<ol class="m4-timeline">{% for entry in history %}
+<li><strong>{{ entry.label }}</strong> <span class="muted">· {{ entry.actor.get_full_name|default:entry.actor.username|default:'—' }} · <time datetime="{{ entry.timestamp|date:'c' }}">{{ entry.timestamp|date:'d/m/Y H:i' }}</time></span></li>
+{% empty %}<li class="muted">{% translate 'Aucune opération.' %}</li>{% endfor %}</ol>
+</section>
+</div>
+
+<aside class="side-card" aria-labelledby="facts-title">
+<h2 id="facts-title">{% translate 'Informations' %}</h2>
+<dl class="m4-facts">
+<div><dt>{% translate 'Mentor' %}</dt><dd>{{ session.slot.mentor.get_full_name|default:session.slot.mentor.username }}</dd></div>
+<div><dt>{% translate 'Équipe' %}</dt><dd><a href="{{ support_request.team.get_absolute_url }}">{{ support_request.team }}</a></dd></div>
+<div><dt>{% translate 'Horaire' %}</dt><dd><time datetime="{{ session.slot.start|date:'c' }}">{{ session.slot.start|date:'H:i' }}</time> → <time datetime="{{ session.slot.end|date:'c' }}">{{ session.slot.end|date:'H:i' }}</time> ({{ session.slot.duration_minutes }} min)</dd></div>
+<div><dt>{% translate 'Demande' %}</dt><dd><span class="badge badge--{{ support_request.status_badge }}">{{ support_request.get_status_display }}</span></dd></div>
+</dl>
+<p class="muted small-text">{% translate 'Heure de Tunis.' %}</p>
+</aside>
+</div>
+{% endblock %}

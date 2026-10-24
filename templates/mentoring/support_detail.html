@@ -10,7 +10,10 @@
 <span class="m4-prio m4-prio--{{ support_request.priority_badge }}"><span class="visually-hidden">{% translate 'Priorité :' %} </span>{{ support_request.get_priority_display }}</span>
 </p>
 </div>
+<div class="actions">
+{% if can_book %}<a class="button" href="{% url 'mentoring:support-book' support_request.pk %}">{% icon 'calendar' %}{% translate 'Réserver un mentor' %}</a>{% endif %}
 {% if can_cancel %}<a class="button secondary" href="{% url 'mentoring:support-cancel' support_request.pk %}">{% icon 'close' %}{% translate 'Annuler la demande' %}</a>{% endif %}
+</div>
 </header>
 
 <div class="m4-detail">
@@ -19,11 +22,14 @@
 <h2 id="next-title">{% translate 'Prochaine étape' %}</h2>
 {% if support_request.status == 'OPEN' %}
 <p><strong>{% translate 'Choisir un mentor et un créneau.' %}</strong></p>
-<p class="muted">{% translate 'La réservation d’un mentor sera disponible prochainement. Votre demande est enregistrée et visible par votre équipe.' %}</p>
+{% if can_book %}<p><a class="button small" href="{% url 'mentoring:support-book' support_request.pk %}">{% translate 'Voir les créneaux disponibles' %}</a></p>
+{% else %}<p class="muted">{% translate 'Le capitaine de l’équipe réserve le mentor.' %}</p>{% endif %}
 {% elif support_request.status == 'BOOKED' %}
 <p><strong>{% translate 'Un rendez-vous est réservé : préparez vos questions.' %}</strong></p>
+{% if active_session %}<p><a class="button small" href="{{ active_session.get_absolute_url }}">{% translate 'Voir le rendez-vous' %}</a></p>{% endif %}
 {% elif support_request.status == 'IN_PROGRESS' %}
 <p><strong>{% translate 'Le mentor a terminé la séance : dites-nous si le problème est résolu.' %}</strong></p>
+{% if awaiting_feedback %}<p><a class="button small" href="{{ awaiting_feedback.get_absolute_url }}">{% translate 'Donner mon retour' %}</a></p>{% endif %}
 {% elif support_request.status == 'RESOLVED' %}
 <p><strong>{% translate 'Problème résolu. Merci pour votre retour !' %}</strong></p>
 {% else %}
@@ -40,7 +46,7 @@
 <h2 id="sessions-title">{% translate 'Rendez-vous' %}</h2>
 {% if sessions %}
 <ul class="m4-list">{% for session in sessions %}
-<li class="m4-item"><div class="m4-time"><time datetime="{{ session.slot.start|date:'c' }}">{{ session.slot.start|date:'d/m/Y H:i' }}</time></div><div class="m4-info"><span>{{ session.slot.mentor.get_full_name|default:session.slot.mentor.username }}</span><span class="badge badge--{% if session.status == 'COMPLETED' %}published{% elif session.status == 'CANCELLED' %}withdrawn{% else %}ongoing{% endif %}">{{ session.get_status_display }}</span></div></li>
+<li class="m4-item"><div class="m4-time"><a href="{{ session.get_absolute_url }}"><time datetime="{{ session.slot.start|date:'c' }}">{{ session.slot.start|date:'d/m/Y H:i' }}</time></a></div><div class="m4-info"><span>{{ session.slot.mentor.get_full_name|default:session.slot.mentor.username }}</span><span class="badge badge--{{ session.status_badge }}">{{ session.get_status_display }}</span></div></li>
 {% endfor %}</ul>
 {% else %}
 <p class="muted">{% translate 'Aucun rendez-vous pour l’instant.' %}</p>

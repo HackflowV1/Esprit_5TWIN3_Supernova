@@ -1,0 +1,18 @@
+{% extends 'base.html' %}{% load i18n ui %}
+{% block title %}{% translate 'Annuler le rendez-vous' %} — HackFlow{% endblock %}
+{% block content %}
+<section class="panel m4-confirm" aria-labelledby="cancel-title">
+<h1 id="cancel-title">{% translate 'Annuler ce rendez-vous ?' %}</h1>
+<p>
+<strong>{{ session.slot.start|date:'l j F Y'|capfirst }}</strong>, {% blocktranslate with start=session.slot.start|date:'H:i' end=session.slot.end|date:'H:i' %}de {{ start }} à {{ end }}{% endblocktranslate %}<br>
+<span class="muted">{{ session.slot.mentor.get_full_name|default:session.slot.mentor.username }} · {{ session.request.team }}</span>
+</p>
+<p class="muted">{% translate 'Le créneau redevient disponible et la demande d’aide est rouverte. Le rendez-vous annulé reste dans l’historique.' %}</p>
+<form method="post">{% csrf_token %}
+<div class="form-actions">
+<button type="submit" class="danger">{% icon 'delete' %}{% translate 'Oui, annuler le rendez-vous' %}</button>
+<a class="button secondary" href="{{ session.get_absolute_url }}">{% icon 'arrow-left' %}{% translate 'Garder le rendez-vous' %}</a>
+</div>
+</form>
+</section>
+{% endblock %}

@@ -103,9 +103,21 @@
 .m4-steps { margin: 4px 0; padding-left: 22px; display: grid; gap: 8px; }
 .m4-soon { display: inline-block; padding: 0 8px; border: 1px solid var(--control); border-radius: 999px; font-size: .75rem; font-weight: 700; color: var(--muted); vertical-align: middle; }
 
+/* Booking, sessions, workshops */
+.m4-filter { display: flex; gap: 12px; align-items: end; flex-wrap: wrap; margin: 0 0 24px; }
+.m4-filter .field { margin: 0; min-width: 240px; }
+.m4-pick { grid-template-columns: minmax(150px, auto) minmax(0, 1fr) auto; align-items: start; }
+.m4-mentor { display: grid; gap: 6px; min-width: 0; }
+.m4-mentor .chips { margin: 0; }
+.m4-radios { border: 0; padding: 0; margin: 0 0 16px; }
+.m4-radios legend { font-weight: 600; margin-bottom: 8px; padding: 0; }
+.m4-radios label { display: flex; gap: 10px; align-items: center; padding: 6px 0; font-weight: 400; }
+.m4-inline { display: inline-flex; gap: 8px; }
+.m4-attend { grid-template-columns: minmax(0, 1.5fr) auto auto; }
+
 @media (max-width: 860px) {
   .m4-detail { grid-template-columns: minmax(0, 1fr); }
   .m4-item { grid-template-columns: minmax(0, 1fr); }
-  .m4-request { grid-template-columns: minmax(0, 1fr); }
+  .m4-request, .m4-pick, .m4-attend { grid-template-columns: minmax(0, 1fr); }
   .m4-actions { justify-content: flex-start; }
 }

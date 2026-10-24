@@ -4551,3 +4551,555 @@ msgstr "You are in a team"
 #: mentoring/home.html
 msgid "Vous êtes mentor"
 msgstr "You are a mentor"
+
+# --- M4 : réservation, séances, inscriptions aux ateliers (application mentoring) ---
+
+#: mentoring/workshop_list.html
+#, python-format
+msgid "%(registered)s/%(capacity)s inscrits"
+msgstr "%(registered)s/%(capacity)s registered"
+
+#: mentoring/workshop_list.html
+#, python-format
+msgid "%(total)s inscrit"
+msgid_plural "%(total)s inscrits"
+msgstr[0] "%(total)s registered"
+msgstr[1] "%(total)s registered"
+
+#: mentoring/workshop_list.html
+#, python-format
+msgid "%(total)s place restante"
+msgid_plural "%(total)s places restantes"
+msgstr[0] "%(total)s seat left"
+msgstr[1] "%(total)s seats left"
+
+#: mentoring/workshop_detail.html
+#, python-format
+msgid "%(total)s place restante."
+msgid_plural "%(total)s places restantes."
+msgstr[0] "%(total)s seat left."
+msgstr[1] "%(total)s seats left."
+
+#: mentoring/forms.py
+msgid "1 – Pas utile"
+msgstr "1 – Not useful"
+
+#: mentoring/forms.py
+msgid "2 – Peu utile"
+msgstr "2 – Slightly useful"
+
+#: mentoring/forms.py
+msgid "3 – Moyen"
+msgstr "3 – Average"
+
+#: mentoring/forms.py
+msgid "4 – Utile"
+msgstr "4 – Useful"
+
+#: mentoring/forms.py
+msgid "5 – Très utile"
+msgstr "5 – Very useful"
+
+#: mentoring/appointments.html
+msgid "Aller à l’assistance"
+msgstr "Go to assistance"
+
+#: mentoring/session_cancel.html
+msgid "Annuler ce rendez-vous ?"
+msgstr "Cancel this appointment?"
+
+#: mentoring/context_processors.py mentoring/session_cancel.html mentoring/session_detail.html
+msgid "Annuler le rendez-vous"
+msgstr "Cancel the appointment"
+
+#: mentoring/workshop_detail.html
+msgid "Annuler mon inscription"
+msgstr "Cancel my registration"
+
+#: mentoring/workshop_list.html
+msgid "Aucun atelier dans vos éditions pour l’instant."
+msgstr "No workshop in your editions yet."
+
+#: mentoring/support_book.html
+msgid "Aucun créneau disponible pour l’instant"
+msgstr "No slot available yet"
+
+#: mentoring/support_book.html
+msgid "Aucun mentor disponible n’a déclaré cette compétence. Retirez le filtre pour voir tous les créneaux."
+msgstr "No available mentor has declared this skill. Remove the filter to see all slots."
+
+#: mentoring/appointments.html
+msgid "Aucun rendez-vous à venir"
+msgstr "No upcoming appointment"
+
+#: mentoring/services.py
+msgid "Ce créneau appartient à un autre hackathon."
+msgstr "This slot belongs to another hackathon."
+
+#: mentoring/services.py
+msgid "Ce créneau est déjà commencé ou passé."
+msgstr "This slot has already started or passed."
+
+#: mentoring/services.py
+msgid "Ce créneau vient d’être réservé par une autre équipe."
+msgstr "This slot has just been booked by another team."
+
+#: mentoring/models.py
+msgid "Ce mentor anime un atelier à cette heure-là."
+msgstr "This mentor leads a workshop at that time."
+
+#: mentoring/services.py
+msgid "Ce mentor n’est plus actif dans ce hackathon."
+msgstr "This mentor is no longer active in this hackathon."
+
+#: mentoring/views.py
+msgid "Ce rendez-vous ne peut pas être annulé par vous, ou il n’est plus possible de l’annuler."
+msgstr "You cannot cancel this appointment, or it can no longer be cancelled."
+
+#: mentoring/services.py
+msgid "Cet atelier est annulé."
+msgstr "This workshop is cancelled."
+
+#: mentoring/services.py
+msgid "Cet atelier est complet."
+msgstr "This workshop is full."
+
+#: mentoring/services.py
+msgid "Cette demande n’attend pas de rendez-vous."
+msgstr "This request is not waiting for an appointment."
+
+#: mentoring/forms.py
+msgid "Choisir un mentor"
+msgstr "Choose a mentor"
+
+#: mentoring/workshop_detail.html mentoring/workshop_list.html
+msgid "Complet"
+msgstr "Full"
+
+#: mentoring/forms.py
+msgid "Compte rendu"
+msgstr "Report"
+
+#: mentoring/session_detail.html
+msgid "Compte rendu du mentor"
+msgstr "Mentor’s report"
+
+#: mentoring/models.py
+msgid "Compte rendu mis à jour"
+msgstr "Report updated"
+
+#: mentoring/views.py
+msgid "Compte rendu mis à jour."
+msgstr "Report updated."
+
+#: mentoring/forms.py
+msgid "Compétence du mentor"
+msgstr "Mentor’s skill"
+
+#: mentoring/support_book.html
+msgid "Créneaux disponibles"
+msgstr "Available slots"
+
+#: mentoring/session_detail.html
+msgid "Demande"
+msgstr "Request"
+
+#: mentoring/models.py
+msgid "Demande rouverte"
+msgstr "Request reopened"
+
+#: mentoring/support_detail.html
+msgid "Donner mon retour"
+msgstr "Give my feedback"
+
+#: mentoring/services.py
+msgid "Donnez une note entre 1 et 5."
+msgstr "Give a rating between 1 and 5."
+
+#: mentoring/forms.py
+#, python-brace-format
+msgid "Durée : de {min} minutes à {max} heures, pendant la phase de développement."
+msgstr "Duration: from {min} minutes to {max} hours, during the development phase."
+
+#: mentoring/session_detail.html
+msgid "Enregistrer le compte rendu"
+msgstr "Save the report"
+
+#: mentoring/session_detail.html
+msgid "Envoyer mon retour"
+msgstr "Send my feedback"
+
+#: mentoring/support_book.html
+msgid "Expertises non précisées"
+msgstr "Expertise not specified"
+
+#: mentoring/support_book.html
+msgid "Filtrer les créneaux"
+msgstr "Filter slots"
+
+#: mentoring/session_cancel.html
+msgid "Garder le rendez-vous"
+msgstr "Keep the appointment"
+
+#: mentoring/workshop_detail.html
+msgid "Inscription"
+msgstr "Registration"
+
+#: mentoring/views.py
+msgid "Inscription confirmée."
+msgstr "Registration confirmed."
+
+#: mentoring/models.py
+msgid "Inscription à l’atelier"
+msgstr "Workshop registration"
+
+#: mentoring/workshop_detail.html
+msgid "Inscrits"
+msgstr "Registered people"
+
+#: mentoring/session_detail.html
+msgid "La séance est terminée : dites-nous si elle a réglé votre problème."
+msgstr "The session is over: tell us whether it solved your problem."
+
+#: mentoring/services.py
+msgid "La séance n’a pas encore commencé."
+msgstr "The session has not started yet."
+
+#: mentoring/support_detail.html
+msgid "Le capitaine de l’équipe réserve le mentor."
+msgstr "The team captain books the mentor."
+
+#: mentoring/services.py
+msgid "Le compte rendu est obligatoire pour terminer la séance."
+msgstr "The report is required to finish the session."
+
+#: mentoring/services.py
+msgid "Le compte rendu ne peut plus être modifié."
+msgstr "The report can no longer be edited."
+
+#: mentoring/session_cancel.html
+msgid "Le créneau redevient disponible et la demande d’aide est rouverte. Le rendez-vous annulé reste dans l’historique."
+msgstr "The slot becomes available again and the help request is reopened. The cancelled appointment stays in the history."
+
+#: mentoring/models.py
+msgid "Le formateur a déjà un rendez-vous de mentorat à cette heure-là."
+msgstr "The trainer already has a mentoring appointment at that time."
+
+#: mentoring/models.py
+msgid "Le formateur anime déjà un autre atelier à cette heure-là."
+msgstr "The trainer is already leading another workshop at that time."
+
+#: mentoring/forms.py
+msgid "Le problème est-il résolu ?"
+msgstr "Is the problem solved?"
+
+#: mentoring/services.py mentoring/workshop_detail.html
+msgid "Le relevé de présence s’ouvre au début de l’atelier."
+msgstr "Attendance opens when the workshop starts."
+
+#: mentoring/session_detail.html
+msgid "Le rendez-vous n’a pas encore commencé."
+msgstr "The appointment has not started yet."
+
+#: mentoring/services.py
+msgid "Le retour se donne après la fin de la séance."
+msgstr "Feedback is given after the session ends."
+
+#: mentoring/workshop_list.html
+msgid "Les ateliers de mes éditions"
+msgstr "Workshops of my editions"
+
+#: mentoring/services.py
+msgid "Les inscriptions sont closes : l’atelier a commencé."
+msgstr "Registration is closed: the workshop has started."
+
+#: mentoring/workshop_detail.html
+msgid "Les inscriptions à cet atelier sont closes."
+msgstr "Registration for this workshop is closed."
+
+#: mentoring/support_book.html
+msgid "Les mentors publient leurs créneaux pendant la phase de développement. Revenez un peu plus tard."
+msgstr "Mentors publish their slots during the development phase. Come back a little later."
+
+#: mentoring/appointments.html
+msgid "Les séances de mentorat de votre équipe, ou celles que vous animez."
+msgstr "The mentoring sessions of your team, or the ones you lead."
+
+#: mentoring/workshop_detail.html
+msgid "L’inscription aux ateliers est réservée aux participants inscrits à ce hackathon."
+msgstr "Workshop registration is reserved for participants registered in this hackathon."
+
+#: mentoring/views.py
+msgid "Merci pour votre retour."
+msgstr "Thank you for your feedback."
+
+#: mentoring/appointments.html mentoring/breadcrumbs.html mentoring/context_processors.py mentoring/shell.html
+msgid "Mes rendez-vous"
+msgstr "My appointments"
+
+#: mentoring/session_detail.html
+msgid "Modifier le compte rendu"
+msgstr "Edit the report"
+
+#: mentoring/workshop_detail.html
+msgid "M’inscrire à cet atelier"
+msgstr "Register for this workshop"
+
+#: mentoring/forms.py
+msgid "Non, nous avons encore besoin d’aide"
+msgstr "No, we still need help"
+
+#: mentoring/forms.py mentoring/session_detail.html
+msgid "Notes privées"
+msgstr "Private notes"
+
+#: mentoring/session_cancel.html
+msgid "Oui, annuler le rendez-vous"
+msgstr "Yes, cancel the appointment"
+
+#: mentoring/forms.py
+msgid "Oui, c’est résolu"
+msgstr "Yes, it is solved"
+
+#: mentoring/_session_row.html mentoring/workshop_list.html
+msgid "Ouvrir"
+msgstr "Open"
+
+#: mentoring/workshop_detail.html
+msgid "Personne n’est inscrit pour l’instant."
+msgstr "Nobody is registered yet."
+
+#: mentoring/support_book.html
+#, python-format
+msgid "Pour votre demande : %(subject)s"
+msgstr "For your request: %(subject)s"
+
+#: mentoring/models.py
+msgid "Problème résolu"
+msgstr "Problem solved"
+
+#: mentoring/workshop_detail.html
+#, python-format
+msgid "Présence : %(state)s"
+msgstr "Attendance: %(state)s"
+
+#: mentoring/views.py
+msgid "Présence enregistrée."
+msgstr "Attendance recorded."
+
+#: mentoring/services.py
+msgid "Présence invalide."
+msgstr "Invalid attendance."
+
+#: mentoring/models.py
+msgid "Présence relevée"
+msgstr "Attendance recorded"
+
+#: mentoring/models.py
+msgid "Rendez-vous annulé"
+msgstr "Appointment cancelled"
+
+#: mentoring/views.py
+msgid "Rendez-vous annulé."
+msgstr "Appointment cancelled."
+
+#: mentoring/views.py
+msgid "Rendez-vous réservé."
+msgstr "Appointment booked."
+
+#: mentoring/models.py mentoring/session_detail.html
+msgid "Retour de l’équipe"
+msgstr "Team feedback"
+
+#: mentoring/support_book.html
+msgid "Retour à la demande"
+msgstr "Back to the request"
+
+#: mentoring/support_book.html
+msgid "Réserver"
+msgstr "Book"
+
+#: mentoring/context_processors.py mentoring/support_book.html mentoring/support_detail.html
+msgid "Réserver un mentor"
+msgstr "Book a mentor"
+
+#: mentoring/views.py
+msgid "Rôle organisateur requis."
+msgstr "Organizer role required."
+
+#: mentoring/services.py
+msgid "Seul le capitaine de l’équipe (ou un organisateur) peut réserver un mentor."
+msgstr "Only the team captain (or an organizer) can book a mentor."
+
+#: mentoring/support_book.html
+msgid "Seul le capitaine de l’équipe réserve un mentor, et seulement pour une demande ouverte pendant la phase de développement."
+msgstr "Only the team captain books a mentor, and only for an open request during the development phase."
+
+#: mentoring/services.py
+msgid "Seul le mentor de la séance peut la terminer."
+msgstr "Only the session mentor can finish it."
+
+#: mentoring/services.py
+msgid "Seul le mentor de la séance peut modifier son compte rendu."
+msgstr "Only the session mentor can edit its report."
+
+#: mentoring/services.py
+msgid "Seul un rendez-vous réservé peut être annulé."
+msgstr "Only a booked appointment can be cancelled."
+
+#: mentoring/services.py
+msgid "Seule une inscription active peut recevoir une présence."
+msgstr "Only an active registration can receive an attendance."
+
+#: mentoring/services.py
+msgid "Seule une séance réservée peut être terminée."
+msgstr "Only a booked session can be finished."
+
+#: mentoring/services.py
+msgid "Seuls le capitaine, le mentor ou un organisateur peuvent annuler ce rendez-vous."
+msgstr "Only the captain, the mentor or an organizer can cancel this appointment."
+
+#: mentoring/services.py
+msgid "Seuls le formateur ou un organisateur peuvent relever la présence."
+msgstr "Only the trainer or an organizer can record attendance."
+
+#: mentoring/services.py
+msgid "Seuls les membres actifs de l’équipe peuvent donner leur retour."
+msgstr "Only active members of the team can give feedback."
+
+#: mentoring/forms.py
+msgid "Si non, la demande est rouverte pour réserver un nouveau rendez-vous."
+msgstr "If not, the request is reopened so you can book a new appointment."
+
+#: mentoring/models.py
+msgid "Séance terminée"
+msgstr "Session finished"
+
+#: mentoring/views.py
+msgid "Séance terminée."
+msgstr "Session finished."
+
+#: mentoring/session_detail.html
+msgid "Terminer la séance"
+msgstr "Finish the session"
+
+#: mentoring/session_detail.html
+msgid "Terminez la séance en écrivant le compte rendu."
+msgstr "Finish the session by writing the report."
+
+#: mentoring/forms.py
+msgid "Tous les mentors"
+msgstr "All mentors"
+
+#: mentoring/workshop_detail.html
+msgid "Toutes les places sont prises. Si quelqu’un se désiste, une place se libère."
+msgstr "All seats are taken. If someone withdraws, a seat becomes available."
+
+#: mentoring/forms.py
+msgid "Un commentaire ?"
+msgstr "A comment?"
+
+#: mentoring/forms.py
+msgid "Un mentor de ce hackathon."
+msgstr "A mentor of this hackathon."
+
+#: mentoring/appointments.html
+msgid "Un rendez-vous apparaît ici dès que le capitaine de votre équipe réserve un mentor pour une demande d’aide."
+msgstr "An appointment appears here as soon as your team captain books a mentor for a help request."
+
+#: mentoring/services.py
+msgid "Un rendez-vous commencé ne peut plus être annulé."
+msgstr "An appointment that has started can no longer be cancelled."
+
+#: mentoring/services.py
+msgid "Une inscription acceptée au hackathon est requise pour s’inscrire à un atelier."
+msgstr "An accepted hackathon registration is required to register for a workshop."
+
+#: mentoring/services.py
+msgid "Une inscription ne peut plus être annulée une fois l’atelier commencé."
+msgstr "A registration can no longer be cancelled once the workshop has started."
+
+#: mentoring/session_detail.html
+#, python-format
+msgid "Utilité : %(rating)s/5"
+msgstr "Usefulness: %(rating)s/5"
+
+#: mentoring/forms.py
+msgid "Utilité de la séance"
+msgstr "Usefulness of the session"
+
+#: mentoring/forms.py
+msgid "Visible par l’équipe : ce qui a été vu, les pistes, les prochaines étapes."
+msgstr "Visible to the team: what was covered, leads, next steps."
+
+#: mentoring/session_detail.html
+msgid "Visibles seulement par le mentor et les organisateurs."
+msgstr "Visible only to the mentor and the organizers."
+
+#: mentoring/forms.py
+msgid "Visibles seulement par vous et les organisateurs."
+msgstr "Visible only to you and the organizers."
+
+#: mentoring/session_detail.html
+msgid "Voir la demande d’aide"
+msgstr "View the help request"
+
+#: mentoring/support_detail.html
+msgid "Voir le rendez-vous"
+msgstr "View the appointment"
+
+#: mentoring/support_detail.html
+msgid "Voir les créneaux disponibles"
+msgstr "View available slots"
+
+#: mentoring/session_detail.html
+msgid "Votre retour"
+msgstr "Your feedback"
+
+#: mentoring/services.py
+msgid "Votre équipe a déjà donné son retour sur cette séance."
+msgstr "Your team has already given its feedback on this session."
+
+#: mentoring/models.py
+msgid "Votre équipe a déjà un rendez-vous à cette heure-là."
+msgstr "Your team already has an appointment at that time."
+
+#: mentoring/services.py
+msgid "Votre équipe a un rendez-vous de mentorat à cette heure-là."
+msgstr "Your team has a mentoring appointment at that time."
+
+#: mentoring/models.py
+msgid "Vous animez un atelier à cette heure-là."
+msgstr "You are leading a workshop at that time."
+
+#: mentoring/support_book.html
+msgid "Vous ne pouvez pas réserver pour le moment."
+msgstr "You cannot book right now."
+
+#: mentoring/services.py
+msgid "Vous n’êtes pas inscrit à cet atelier."
+msgstr "You are not registered for this workshop."
+
+#: mentoring/services.py
+msgid "Vous êtes déjà inscrit à cet atelier."
+msgstr "You are already registered for this workshop."
+
+#: mentoring/services.py
+msgid "Vous êtes déjà inscrit à un autre atelier à cette heure-là."
+msgstr "You are already registered for another workshop at that time."
+
+#: mentoring/workshop_detail.html mentoring/workshop_list.html
+msgid "Vous êtes inscrit"
+msgstr "You are registered"
+
+#: mentoring/support_book.html
+#, python-format
+msgid "le créneau de %(hour)s avec %(mentor)s"
+msgstr "the %(hour)s slot with %(mentor)s"
+
+#: mentoring/home.html
+#, python-format
+msgid "%(total)s rendez-vous à venir."
+msgid_plural "%(total)s rendez-vous à venir."
+msgstr[0] "%(total)s upcoming appointment."
+msgstr[1] "%(total)s upcoming appointments."

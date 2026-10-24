@@ -13,10 +13,56 @@
 {% if workshop.status == 'CANCELLED' %}<div class="notice notice--warning" role="status"><strong>{% translate 'Cet atelier a été annulé.' %}</strong></div>{% endif %}
 
 <div class="m4-detail">
+<div>
 <section class="panel" aria-labelledby="about-title">
 <h2 id="about-title">{% translate 'À propos de l’atelier' %}</h2>
 {% if workshop.description %}<p>{{ workshop.description|linebreaksbr }}</p>{% else %}<p class="muted">{% translate 'Aucune description fournie.' %}</p>{% endif %}
 </section>
+
+{% if workshop.status == 'PUBLISHED' %}
+<section class="panel" aria-labelledby="register-title">
+<h2 id="register-title">{% translate 'Inscription' %}</h2>
+{% if is_registered %}
+<p><span class="badge badge--published">{% icon 'check' 14 %}{% translate 'Vous êtes inscrit' %}</span></p>
+{% if my_row.attendance != 'UNKNOWN' %}<p class="muted">{% blocktranslate with state=my_row.get_attendance_display %}Présence : {{ state }}{% endblocktranslate %}</p>{% endif %}
+{% if can_unregister %}<form method="post" action="{% url 'mentoring:workshop-unregister' workshop.pk %}">{% csrf_token %}<button type="submit" class="secondary">{% icon 'close' %}{% translate 'Annuler mon inscription' %}</button></form>{% endif %}
+{% elif can_register %}
+<p>{% blocktranslate count total=seats_left %}{{ total }} place restante.{% plural %}{{ total }} places restantes.{% endblocktranslate %}</p>
+<form method="post" action="{% url 'mentoring:workshop-register' workshop.pk %}">{% csrf_token %}<button type="submit">{% icon 'check' %}{% translate 'M’inscrire à cet atelier' %}</button></form>
+{% elif seats_left == 0 %}
+<p><span class="badge badge--withdrawn">{% translate 'Complet' %}</span></p>
+<p class="muted">{% translate 'Toutes les places sont prises. Si quelqu’un se désiste, une place se libère.' %}</p>
+{% elif not has_registration %}
+<p class="muted">{% translate 'L’inscription aux ateliers est réservée aux participants inscrits à ce hackathon.' %}</p>
+{% else %}
+<p class="muted">{% translate 'Les inscriptions à cet atelier sont closes.' %}</p>
+{% endif %}
+</section>
+{% endif %}
+
+{% if show_participants %}
+<section class="panel" aria-labelledby="participants-title">
+<h2 id="participants-title">{% translate 'Inscrits' %} <span class="m4-count">{{ registered }}/{{ workshop.capacity }}</span></h2>
+{% if not attendance_open and workshop.status == 'PUBLISHED' %}<p class="muted">{% translate 'Le relevé de présence s’ouvre au début de l’atelier.' %}</p>{% endif %}
+<ul class="m4-list">
+{% for row in rows %}
+<li class="m4-item m4-attend">
+<div class="m4-time">{{ row.registration.user.get_full_name|default:row.registration.user.username }}</div>
+<div class="m4-info"><span class="badge badge--{% if row.attendance == 'PRESENT' %}published{% elif row.attendance == 'ABSENT' %}withdrawn{% else %}finished{% endif %}">{{ row.get_attendance_display }}</span></div>
+{% if attendance_open %}
+<div class="m4-actions">
+<form method="post" action="{% url 'mentoring:workshop-attendance' workshop.pk row.pk %}" class="m4-inline">{% csrf_token %}
+<button type="submit" name="attendance" value="PRESENT" class="small secondary" aria-pressed="{% if row.attendance == 'PRESENT' %}true{% else %}false{% endif %}">{% translate 'Présent' %}<span class="visually-hidden"> {{ row.registration.user.username }}</span></button>
+<button type="submit" name="attendance" value="ABSENT" class="small secondary" aria-pressed="{% if row.attendance == 'ABSENT' %}true{% else %}false{% endif %}">{% translate 'Absent' %}<span class="visually-hidden"> {{ row.registration.user.username }}</span></button>
+</form>
+</div>
+{% endif %}
+</li>
+{% empty %}<li class="m4-empty">{% translate 'Personne n’est inscrit pour l’instant.' %}</li>{% endfor %}
+</ul>
+</section>
+{% endif %}
+</div>
 <aside class="side-card" aria-labelledby="practical-title">
 <h2 id="practical-title">{% translate 'Informations pratiques' %}</h2>
 <dl class="m4-facts">
@@ -25,7 +71,7 @@
 <div><dt>{% translate 'Formateur' %}</dt><dd>{{ workshop.trainer.get_full_name|default:workshop.trainer.username }}</dd></div>
 {% if workshop.location %}<div><dt>{% translate 'Salle' %}</dt><dd>{{ workshop.location }}</dd></div>{% endif %}
 {% if workshop.url %}<div><dt>{% translate 'Lien en ligne' %}</dt><dd><a href="{{ workshop.url }}" rel="noopener noreferrer">{% icon 'link' %}{% translate 'Rejoindre l’atelier' %}</a></dd></div>{% endif %}
-<div><dt>{% translate 'Places' %}</dt><dd>{{ workshop.capacity }}</dd></div>
+<div><dt>{% translate 'Places' %}</dt><dd>{{ registered }}/{{ workshop.capacity }}</dd></div>
 </dl>
 <p class="muted small-text">{% translate 'Heure de Tunis.' %}</p>
 </aside>

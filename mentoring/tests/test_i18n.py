@@ -58,9 +58,10 @@ class EnglishInterfaceTests(TestCase):
         self.english(self.mentor)
         self.assertEnglishPage(reverse('mentoring:expertise-add'), 'Add an expertise', 'Choose a skill', '3 – Intermediate')
         self.assertEnglishPage(reverse('mentoring:slot-add'), 'Publish a slot', 'Tunis time.', 'Duration: from 15 minutes to 2 hours, during the event.')
-        self.assertEnglishPage(reverse('mentoring:workshop-add'), 'Publish a workshop', 'Workshop topic', 'Number of seats', 'Provide a room, a link, or both.')
         self.assertEnglishPage(reverse('mentoring:expertise-delete', args=[self.expertise.pk]), 'Remove the expertise “Django”?')
         self.assertEnglishPage(reverse('mentoring:slot-cancel', args=[self.slot.pk]), 'Cancel this slot?', 'Keep the slot')
+        self.english(self.owner)  # workshops are published by the organizer
+        self.assertEnglishPage(reverse('mentoring:workshop-add'), 'Publish a workshop', 'Workshop topic', 'Number of seats', 'Provide a room, a link, or both.', 'Choose a mentor')
         self.assertEnglishPage(reverse('mentoring:workshop-cancel', args=[self.workshop.pk]), 'Cancel this workshop?', 'Yes, cancel the workshop')
 
     def test_participant_sees_english_workshops(self):
@@ -74,7 +75,8 @@ class EnglishInterfaceTests(TestCase):
         self.assertContains(response, 'overlaps another one of your slots')
         response = self.client.post(reverse('mentoring:slot-cancel', args=[self.slot.pk]), follow=True)
         self.assertContains(response, 'Slot cancelled.')
-        response = self.client.post(reverse('mentoring:workshop-add'), {'hackathon': self.event.pk, 'title': 'X', 'capacity': 5,
+        self.english(self.owner)
+        response = self.client.post(reverse('mentoring:workshop-add'), {'hackathon': self.event.pk, 'trainer': self.mentor.pk, 'title': 'X', 'capacity': 5,
             'start': local(self.workshop.start + timedelta(days=1)), 'end': local(self.workshop.end + timedelta(days=1))})
         self.assertContains(response, 'Provide a room, an online link, or both.')
 

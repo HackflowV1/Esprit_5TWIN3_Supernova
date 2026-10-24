@@ -127,6 +127,9 @@ class MentorSlot(ValidatedModel):
         if MentorSlot.objects.published().filter(mentor_id=self.mentor_id, start__lt=self.end, end__gt=self.start).exclude(
                 pk=self.pk).exists():
             raise ValidationError(_('Ce créneau chevauche un autre de vos créneaux.'))
+        if Workshop.objects.filter(trainer_id=self.mentor_id, status=Workshop.Status.PUBLISHED,
+                start__lt=self.end, end__gt=self.start).exists():
+            raise ValidationError(_('Vous animez un atelier à cette heure-là.'))
 
     def __str__(self):
         return f'{self.mentor} · {local_label(self.start)}–{timezone.localtime(self.end):%H:%M}'
@@ -191,7 +194,10 @@ class Workshop(ValidatedModel):
             raise ValidationError(_('Le formateur doit avoir le rôle mentor actif dans ce hackathon.'))
         if Workshop.objects.filter(trainer_id=self.trainer_id, start__lt=self.end, end__gt=self.start).exclude(
                 status=self.Status.CANCELLED).exclude(pk=self.pk).exists():
-            raise ValidationError(_('Vous animez déjà un autre atelier à cette heure-là.'))
+            raise ValidationError(_('Le formateur anime déjà un autre atelier à cette heure-là.'))
+        if MentoringSession.objects.filter(slot__mentor_id=self.trainer_id, status=MentoringSession.Status.BOOKED,
+                slot__start__lt=self.end, slot__end__gt=self.start).exists():
+            raise ValidationError(_('Le formateur a déjà un rendez-vous de mentorat à cette heure-là.'))
 
     def get_absolute_url(self):
         return reverse('mentoring:workshop-detail', kwargs={'pk': self.pk})
@@ -304,6 +310,13 @@ class MentoringSession(ValidatedModel):
         return self.slot.mentor
 
     @property
+    def status_badge(self):
+        return {'BOOKED': 'ongoing', 'COMPLETED': 'published', 'CANCELLED': 'withdrawn'}[self.status]
+
+    def get_absolute_url(self):
+        return reverse('mentoring:session-detail', kwargs={'pk': self.pk})
+
+    @property
     def hackathon(self):
         return self.slot.hackathon
 
@@ -319,6 +332,12 @@ class MentoringSession(ValidatedModel):
             raise ValidationError(_('Ce créneau n’est plus proposé.'))
         if self.request.team.memberships.filter(ended_at__isnull=True, registration__user_id=self.slot.mentor_id).exists():
             raise ValidationError(_('Un mentor ne peut pas accompagner sa propre équipe.'))
+        if MentoringSession.objects.filter(request__team_id=self.request.team_id, status=self.Status.BOOKED,
+                slot__start__lt=self.slot.end, slot__end__gt=self.slot.start).exclude(pk=self.pk).exists():
+            raise ValidationError(_('Votre équipe a déjà un rendez-vous à cette heure-là.'))
+        if Workshop.objects.filter(trainer_id=self.slot.mentor_id, status=Workshop.Status.PUBLISHED,
+                start__lt=self.slot.end, end__gt=self.slot.start).exists():
+            raise ValidationError(_('Ce mentor anime un atelier à cette heure-là.'))
 
     def __str__(self):
         return f'{self.request} · {self.slot}'
@@ -387,6 +406,12 @@ class M4History(models.Model):
         'request.opened': _('Demande ouverte'), 'request.cancelled': _('Demande annulée'),
         'slot.published': _('Créneau publié'), 'slot.updated': _('Créneau modifié'), 'slot.withdrawn': _('Créneau annulé'),
         'workshop.published': _('Atelier publié'), 'workshop.updated': _('Atelier modifié'), 'workshop.cancelled': _('Atelier annulé'),
+        'request.resolved': _('Problème résolu'), 'request.reopened': _('Demande rouverte'),
+        'session.booked': _('Rendez-vous réservé'), 'session.cancelled': _('Rendez-vous annulé'),
+        'session.completed': _('Séance terminée'), 'session.report_updated': _('Compte rendu mis à jour'),
+        'session.feedback': _('Retour de l’équipe'),
+        'workshop.registered': _('Inscription à l’atelier'), 'workshop.unregistered': _('Inscription annulée'),
+        'workshop.attendance': _('Présence relevée'),
     }
 
     @property

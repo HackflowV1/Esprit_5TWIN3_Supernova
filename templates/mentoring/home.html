@@ -18,13 +18,14 @@
 {% if has_team %}<p class="m4-yours">{% translate 'C’est votre cas' %}</p>{% endif %}
 <ol class="m4-steps">
 <li>{% translate 'Décrivez votre blocage dans une demande d’aide.' %}</li>
-<li>{% translate 'Choisissez un mentor et un créneau libre.' %} <span class="m4-soon">{% translate 'Bientôt' %}</span></li>
-<li>{% translate 'Après la séance, dites si le problème est résolu.' %} <span class="m4-soon">{% translate 'Bientôt' %}</span></li>
+<li>{% translate 'Choisissez un mentor et un créneau libre.' %}</li>
+<li>{% translate 'Après la séance, dites si le problème est résolu.' %}</li>
 </ol>
-{% if has_team %}<p class="muted">{% blocktranslate count total=active_requests %}{{ total }} demande en cours.{% plural %}{{ total }} demandes en cours.{% endblocktranslate %}</p>{% endif %}
+{% if has_team %}<p class="muted">{% blocktranslate count total=active_requests %}{{ total }} demande en cours.{% plural %}{{ total }} demandes en cours.{% endblocktranslate %} {% blocktranslate count total=appointment_count %}{{ total }} rendez-vous à venir.{% plural %}{{ total }} rendez-vous à venir.{% endblocktranslate %}</p>{% endif %}
 <div class="actions">
 {% if can_ask %}<a class="button small" href="{% url 'mentoring:support-new' %}">{% icon 'help' %}{% translate 'Demander de l’aide' %}</a>{% endif %}
 <a class="button small secondary" href="{% url 'mentoring:support-list' %}">{% translate 'Mes demandes' %}</a>
+<a class="button small secondary" href="{% url 'mentoring:appointments' %}">{% translate 'Mes rendez-vous' %}</a>
 </div>
 </article>
 
@@ -34,7 +35,7 @@
 <ol class="m4-steps">
 <li>{% translate 'Déclarez vos expertises.' %}</li>
 <li>{% translate 'Publiez vos créneaux de disponibilité.' %}</li>
-<li>{% translate 'Accompagnez les équipes et écrivez un compte rendu.' %} <span class="m4-soon">{% translate 'Bientôt' %}</span></li>
+<li>{% translate 'Accompagnez les équipes et écrivez un compte rendu.' %}</li>
 </ol>
 {% if is_trainer %}
 <p class="muted">{% blocktranslate count total=slot_count %}{{ total }} créneau à venir.{% plural %}{{ total }} créneaux à venir.{% endblocktranslate %}</p>
@@ -52,8 +53,8 @@
 {% if has_role %}<p class="m4-yours">{% translate 'Ouvert à votre hackathon' %}</p>{% endif %}
 <ol class="m4-steps">
 <li>{% translate 'Consultez les ateliers de votre hackathon.' %}</li>
-<li>{% translate 'Inscrivez-vous à ceux qui vous intéressent.' %} <span class="m4-soon">{% translate 'Bientôt' %}</span></li>
-<li>{% translate 'Participez : le formateur note la présence.' %} <span class="m4-soon">{% translate 'Bientôt' %}</span></li>
+<li>{% translate 'Inscrivez-vous à ceux qui vous intéressent.' %}</li>
+<li>{% translate 'Participez : le formateur note la présence.' %}</li>
 </ol>
 <p class="muted">{% blocktranslate count total=workshop_count %}{{ total }} atelier à venir.{% plural %}{{ total }} ateliers à venir.{% endblocktranslate %}</p>
 <div class="actions"><a class="button small secondary" href="{% url 'mentoring:workshop-list' %}">{% icon 'view' %}{% translate 'Voir les ateliers' %}</a></div>
@@ -67,6 +68,7 @@
 <p class="muted">{% translate 'Suivez les blocages des équipes, les compétences les plus demandées et les ateliers de votre édition.' %}</p>
 <div class="actions">
 <a class="button small" href="{% url 'mentoring:support-list' %}">{% icon 'dashboard' %}{% translate 'Pilotage de l’assistance' %}</a>
+{% if can_publish_workshop %}<a class="button small secondary" href="{% url 'mentoring:workshop-add' %}">{% icon 'add' %}{% translate 'Publier un atelier' %}</a>{% endif %}
 <a class="button small secondary" href="{% url 'mentoring:workshop-list' %}">{% translate 'Ateliers' %}</a>
 </div>
 </section>

@@ -225,11 +225,11 @@ class HistoryTests(PlanBase):
         self.assertEqual(entries[1].details['after']['start'][:10], timezone.localtime(self.at(2)).isoformat()[:10])
 
     def test_workshop_actions_are_recorded(self):
-        workshop = services.create_workshop(actor=self.mentor, hackathon=self.event, title='API', description='', capacity=4,
+        workshop = services.create_workshop(actor=self.owner, trainer=self.mentor, hackathon=self.event, title='API', description='', capacity=4,
             start=self.at(1), end=self.at(2), location='Salle A', url='')
-        services.update_workshop(actor=self.mentor, workshop=workshop, title='API 2', description='', capacity=6,
+        services.update_workshop(actor=self.owner, trainer=self.mentor, workshop=workshop, title='API 2', description='', capacity=6,
             start=self.at(1), end=self.at(2), location='Salle A', url='')
-        services.cancel_workshop(actor=self.mentor, workshop=workshop)
+        services.cancel_workshop(actor=self.owner, workshop=workshop)
         actions = list(M4History.objects.filter(object_type='Workshop', object_id=workshop.pk).order_by('id').values_list('action', flat=True))
         self.assertEqual(actions, ['workshop.published', 'workshop.updated', 'workshop.cancelled'])
 
@@ -238,12 +238,12 @@ class HistoryTests(PlanBase):
         for name in ('p1', 'p2'):
             WorkshopRegistration.objects.create(workshop=workshop, registration=Registration.objects.create(user=make_user(name), hackathon=self.event))
         with self.assertRaises(ValidationError):
-            services.update_workshop(actor=self.mentor, workshop=workshop, title='API', description='', capacity=1,
+            services.update_workshop(actor=self.owner, trainer=self.mentor, workshop=workshop, title='API', description='', capacity=1,
                 start=workshop.start, end=workshop.end, location='Salle A', url='')
         with self.assertRaises(ValidationError):
-            services.update_workshop(actor=self.mentor, workshop=workshop, title='API', description='', capacity=3,
+            services.update_workshop(actor=self.owner, trainer=self.mentor, workshop=workshop, title='API', description='', capacity=3,
                 start=self.at(4), end=self.at(5), location='Salle A', url='')
-        services.update_workshop(actor=self.mentor, workshop=workshop, title='API+', description='', capacity=2,
+        services.update_workshop(actor=self.owner, trainer=self.mentor, workshop=workshop, title='API+', description='', capacity=2,
             start=workshop.start, end=workshop.end, location='Salle B', url='')
         workshop.refresh_from_db()
         self.assertEqual((workshop.title, workshop.capacity, workshop.location), ('API+', 2, 'Salle B'))

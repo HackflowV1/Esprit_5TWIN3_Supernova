@@ -56,17 +56,21 @@ class SeedM4Tests(TestCase):
             self.assertTrue(MentorExpertise.objects.filter(user=user).exists(), username)
             self.assertTrue(MentorSlot.objects.published().filter(mentor=user, hackathon=self.event).exists(), username)
             self.assertTrue(RoleAssignment.objects.filter(user=user, hackathon=self.event, role=Role.MENTOR, status='ACTIVE').exists())
-        self.assertEqual(MentorSlot.objects.published().filter(hackathon=self.event).count(), 6)
+        self.assertEqual(MentorSlot.objects.published().filter(hackathon=self.event).count(), 7)  # 6 to come + 1 already held
 
     def test_requests_follow_the_confidentiality_rules(self):
         ahmed, sami = User.objects.get(username='ahmed'), User.objects.get(username='sami')
-        self.assertEqual([r.subject for r in services.visible_requests(ahmed).filter(hackathon=self.event)], ['Erreur 500 sur notre API Django'])
+        self.assertEqual({r.subject for r in services.visible_requests(ahmed).filter(hackathon=self.event)},
+            {'Erreur 500 sur notre API Django', 'Mise en page responsive'})
         self.assertEqual(services.visible_requests(sami).filter(hackathon=self.event).count(), 2)
-        self.assertFalse(services.visible_requests(User.objects.get(username='mentor.django')).filter(hackathon=self.event).exists())
+        # A mentor only sees the requests he is booked on: mentor.django has one appointment, mentor.data none.
+        self.assertEqual([r.subject for r in services.visible_requests(User.objects.get(username='mentor.django')).filter(hackathon=self.event)],
+            ['Erreur 500 sur notre API Django'])
+        self.assertFalse(services.visible_requests(User.objects.get(username='mentor.data')).filter(hackathon=self.event).exists())
 
     def test_the_organizer_overview_has_real_critical_and_recurring_data(self):
         insights = services.support_insights(self.event)
-        self.assertEqual(insights['active_count'], 3)
+        self.assertEqual(insights['active_count'], 4)
         self.assertEqual([r.subject for r in insights['critical']], ['Déploiement bloqué'])
         self.assertEqual([(row['skill__name'], row['teams']) for row in insights['recurring']], [('Django', 2)])
 
@@ -91,3 +95,29 @@ class SeedM4Tests(TestCase):
             run('seed_m4_demo')
         with self.assertRaises(CommandError):
             run('seed_m4_demo', user='nobody')
+
+    def test_the_demo_has_a_booked_appointment_and_a_finished_session_waiting_for_feedback(self):
+        from ..models import MentoringSession
+        booked = MentoringSession.objects.get(request__subject='Erreur 500 sur notre API Django')
+        self.assertEqual((booked.status, booked.slot.mentor.username, booked.request.status), ('BOOKED', 'mentor.django', 'BOOKED'))
+        done = MentoringSession.objects.get(request__subject='Mise en page responsive')
+        self.assertEqual((done.status, done.slot.mentor.username, done.request.status), ('COMPLETED', 'mentor.front', 'IN_PROGRESS'))
+        self.assertIn('points de rupture', done.report)
+        ahmed = User.objects.get(username='ahmed')
+        self.assertTrue(services.can_give_feedback(ahmed, done))
+        self.assertTrue(services.can_cancel_session(ahmed, booked))
+
+    def test_the_demo_has_an_open_workshop_and_a_full_one_with_real_registrations(self):
+        from ..models import Workshop, WorkshopRegistration
+        open_workshop = Workshop.objects.get(hackathon=self.event, title='Atelier API Django')
+        full = Workshop.objects.get(hackathon=self.event, title='Atelier UI/UX en 1 heure')
+        self.assertEqual((open_workshop.trainer.username, services.workshop_seats(open_workshop)), ('mentor.django', (2, 2)))
+        self.assertEqual((full.trainer.username, services.workshop_seats(full)), ('mentor.front', (2, 0)))
+        self.assertEqual(WorkshopRegistration.objects.filter(status='REGISTERED').count(), 4)
+        sami = User.objects.get(username='sami')
+        from django.core.exceptions import ValidationError
+        outsider_team_member = User.objects.get(username='mariem')
+        with self.assertRaises(ValidationError):
+            services.register_to_workshop(actor=outsider_team_member, workshop=full)  # full: nobody else gets in
+        self.assertEqual(services.workshop_seats(full), (2, 0))
+        self.assertTrue(sami)

@@ -1,11 +1,12 @@
 {% extends 'base.html' %}{% load static i18n ui %}
-{% block extra_css %}{{ block.super }}<link rel="stylesheet" href="{% static 'css/mentoring.css' %}?v=2">{% endblock %}
+{% block extra_css %}{{ block.super }}<link rel="stylesheet" href="{% static 'css/mentoring.css' %}?v=3">{% endblock %}
 {% block title %}{{ title|default:page_title }} — HackFlow{% endblock %}
 {% block content %}
 <div class="m4-workspace">
 <nav class="m4-nav" aria-label="{% translate 'Mentorat et ateliers' %}">
 <a href="{% url 'mentoring:hub' %}"{% if ui_page == 'hub' %} aria-current="page"{% endif %}>{% icon 'home' %}{% translate 'Vue d’ensemble' %}</a>
 <a href="{% url 'mentoring:support-list' %}"{% if ui_page|slice:':7' == 'support' %} aria-current="page"{% endif %}>{% icon 'help' %}{% translate 'Assistance' %}</a>
+<a href="{% url 'mentoring:appointments' %}"{% if ui_page == 'appointments' or ui_page|slice:':7' == 'session' %} aria-current="page"{% endif %}>{% icon 'users' %}{% translate 'Mes rendez-vous' %}</a>
 <a href="{% url 'mentoring:workshop-list' %}"{% if ui_page|slice:':8' == 'workshop' %} aria-current="page"{% endif %}>{% icon 'calendar' %}{% translate 'Ateliers' %}</a>
 {% if is_mentor %}
 <a href="{% url 'mentoring:expertise-list' %}"{% if ui_page|slice:':9' == 'expertise' %} aria-current="page"{% endif %}>{% icon 'award' %}{% translate 'Mes expertises' %}</a>

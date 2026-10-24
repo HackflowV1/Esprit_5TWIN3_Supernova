@@ -31,12 +31,12 @@ class HubTests(TestCase):
         self.assertEqual(response.status_code, 302)
         self.assertIn(reverse('accounts:login'), response['Location'])
 
-    def test_the_page_always_explains_the_three_roles_and_marks_what_is_not_built_yet(self):
+    def test_the_page_always_explains_the_three_roles(self):
         self.client.force_login(self.outsider)
         page = self.client.get(self.url)
         for text in ('Comment ça marche', 'Vous êtes dans une équipe', 'Vous êtes mentor', 'Vous voulez apprendre'):
             self.assertContains(page, text)
-        self.assertContains(page, 'Bientôt')
+        self.assertNotContains(page, 'Bientôt')  # every step shown on the page exists now
         self.assertContains(page, '<h1', count=1)
 
     def test_a_team_member_is_told_it_is_his_case_and_can_ask_for_help(self):
@@ -87,7 +87,7 @@ class HubTests(TestCase):
         self.client.post(reverse('set_language'), {'language': 'en', 'next': '/'})
         self.addCleanup(translation.deactivate)
         page = self.client.get(self.url)
-        for text in ('Mentoring and workshops', 'How it works', 'You are in a team', 'Coming soon', 'This is you', 'Ask for help'):
+        for text in ('Mentoring and workshops', 'How it works', 'You are in a team', 'This is you', 'Ask for help'):
             self.assertContains(page, text)
         html = page.content.decode()
         for word in ('Comment', 'Bientôt', 'équipe', 'atelier', 'Demander'):

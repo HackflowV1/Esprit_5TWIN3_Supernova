@@ -19,11 +19,15 @@
 <article class="card">
 <p class="m4-eyebrow">{{ workshop.hackathon }}</p>
 <h4 class="m4-card-title"><a href="{{ workshop.get_absolute_url }}">{{ workshop.title }}</a></h4>
+<p class="m4-info">
+{% if workshop.is_registered %}<span class="badge badge--published">{% icon 'check' 14 %}{% translate 'Vous êtes inscrit' %}</span>
+{% elif workshop.seats_left == 0 %}<span class="badge badge--withdrawn">{% translate 'Complet' %}</span>
+{% else %}<span class="badge badge--ongoing">{% blocktranslate count total=workshop.seats_left %}{{ total }} place restante{% plural %}{{ total }} places restantes{% endblocktranslate %}</span>{% endif %}
+</p>
 <ul class="m4-meta">
 <li>{% icon 'clock' %}<span><time datetime="{{ workshop.start|date:'c' }}">{{ workshop.start|date:'H:i' }}</time> <span aria-hidden="true">→</span><span class="visually-hidden"> {% translate 'jusqu’à' %} </span> <time datetime="{{ workshop.end|date:'c' }}">{{ workshop.end|date:'H:i' }}</time> · {{ workshop.duration_minutes }} min</span></li>
 <li>{% icon 'user' %}<span><span class="visually-hidden">{% translate 'Formateur :' %} </span>{{ workshop.trainer.get_full_name|default:workshop.trainer.username }}</span></li>
 <li>{% icon 'building' %}<span>{% if workshop.location %}{{ workshop.location }}{% endif %}{% if workshop.location and workshop.url %} · {% endif %}{% if workshop.url %}{% translate 'En ligne' %}{% endif %}</span></li>
-<li>{% icon 'users' %}<span>{% blocktranslate count total=workshop.capacity %}{{ total }} place{% plural %}{{ total }} places{% endblocktranslate %}</span></li>
 </ul>
 <a class="button small secondary" href="{{ workshop.get_absolute_url }}">{% icon 'view' %}{% translate 'Voir les détails' %}<span class="visually-hidden"> {{ workshop.title }}</span></a>
 </article>
@@ -42,12 +46,32 @@
 {% if is_trainer %}
 <section aria-labelledby="mine-title">
 <h2 id="mine-title">{% translate 'Les ateliers que j’anime' %}</h2>
-{% if not can_create %}<p class="muted">{% translate 'Aucun hackathon ouvert : vous ne pouvez pas publier de nouvel atelier pour le moment.' %}</p>{% endif %}
 <ul class="m4-list">
-{% for workshop in mine %}
+{% for workshop in led %}
 <li class="m4-item">
 <div class="m4-time"><a href="{{ workshop.get_absolute_url }}">{{ workshop.title }}</a><br><span class="muted"><time datetime="{{ workshop.start|date:'c' }}">{{ workshop.start|date:'d/m/Y H:i' }}</time></span></div>
 <div class="m4-info"><span>{{ workshop.hackathon }}</span>
+<span class="muted">{% blocktranslate count total=workshop.registered %}{{ total }} inscrit{% plural %}{{ total }} inscrits{% endblocktranslate %}</span>
+{% if workshop.status == 'CANCELLED' %}<span class="badge badge--withdrawn">{% translate 'Annulé' %}</span>
+{% elif workshop.end <= now %}<span class="badge badge--finished">{% translate 'Passé' %}</span>
+{% else %}<span class="badge badge--published">{% translate 'Publié' %}</span>{% endif %}
+</div>
+<div class="m4-actions"><a class="button small secondary" href="{{ workshop.get_absolute_url }}">{% translate 'Ouvrir' %}<span class="visually-hidden"> {{ workshop.title }}</span></a></div>
+</li>
+{% empty %}<li class="m4-empty">{% translate 'Vous n’animez aucun atelier pour l’instant.' %}</li>{% endfor %}
+</ul>
+</section>
+{% endif %}
+
+{% if is_organizer %}
+<section aria-labelledby="managed-title">
+<h2 id="managed-title">{% translate 'Les ateliers de mes éditions' %}</h2>
+<ul class="m4-list">
+{% for workshop in managed %}
+<li class="m4-item">
+<div class="m4-time"><a href="{{ workshop.get_absolute_url }}">{{ workshop.title }}</a><br><span class="muted"><time datetime="{{ workshop.start|date:'c' }}">{{ workshop.start|date:'d/m/Y H:i' }}</time> · {{ workshop.trainer.get_full_name|default:workshop.trainer.username }}</span></div>
+<div class="m4-info"><span>{{ workshop.hackathon }}</span>
+<span class="muted">{% blocktranslate with registered=workshop.registered capacity=workshop.capacity %}{{ registered }}/{{ capacity }} inscrits{% endblocktranslate %}</span>
 {% if workshop.status == 'CANCELLED' %}<span class="badge badge--withdrawn">{% translate 'Annulé' %}</span>
 {% elif workshop.end <= now %}<span class="badge badge--finished">{% translate 'Passé' %}</span>
 {% else %}<span class="badge badge--published">{% translate 'Publié' %}</span>{% endif %}
@@ -59,7 +83,7 @@
 </div>
 {% endif %}
 </li>
-{% empty %}<li class="m4-empty">{% translate 'Vous n’animez aucun atelier pour l’instant.' %}</li>{% endfor %}
+{% empty %}<li class="m4-empty">{% translate 'Aucun atelier dans vos éditions pour l’instant.' %}</li>{% endfor %}
 </ul>
 </section>
 {% endif %}

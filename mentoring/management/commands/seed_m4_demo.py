@@ -7,7 +7,7 @@ so the data respects the rules. It never moves the dates of an existing edition:
 from datetime import timedelta
 
 from django.conf import settings
-from django.core.exceptions import ValidationError
+from django.core.exceptions import PermissionDenied, ValidationError
 from django.core.management.base import BaseCommand, CommandError
 from django.db import transaction
 from django.utils import timezone
@@ -17,7 +17,7 @@ from accounts.services import set_role
 from hackathons.models import Challenge, EventPhase, Hackathon, Track
 from hackathons.services import create_hackathon, phase_is_open, review_challenge, save_resource, transition
 from mentoring import services
-from mentoring.models import MentorExpertise, MentorSlot, SupportRequest
+from mentoring.models import MentoringSession, MentorExpertise, MentorSlot, SupportRequest, Workshop
 from teams import services as team_services
 from teams.models import Decision, Registration, Team
 
@@ -61,6 +61,8 @@ class Command(BaseCommand):
                 self.expertises()
                 self.slots(event, users)
                 self.requests(nova, horizon, users)
+                self.scenario(event, nova, users)
+                self.workshops(event, users)
         self.report(event, own)
 
     # ------------------------------------------------------------------ data
@@ -150,6 +152,57 @@ class Command(BaseCommand):
                 description='Nous hésitons entre onglets et menu latéral pour les écrans principaux.',
                 skill=Skill.objects.get(name='Mobile'), priority=SupportRequest.Priority.LOW)
 
+    def first_slot_time(self):
+        now = timezone.now().replace(second=0, microsecond=0)
+        first = now + timedelta(hours=1)
+        return first + timedelta(minutes=(30 - first.minute % 30) % 30)
+
+    def scenario(self, event, nova, users):
+        """One booked appointment, and one finished session waiting for the team's feedback."""
+        now = timezone.now()
+        django = Skill.objects.get(name='Django')
+        booked = SupportRequest.objects.filter(team=nova, skill=django).first()
+        if booked and booked.status == SupportRequest.Status.OPEN:
+            slot = MentorSlot.objects.available().filter(mentor=users['mentor.django'], hackathon=event, start__gt=now).order_by('start').first()
+            if slot:
+                services.book_session(actor=users['ahmed'], request=booked, slot=slot)
+        if SupportRequest.objects.filter(team=nova, subject='Mise en page responsive').exists():
+            return
+        request = services.open_request(actor=users['mariem'], team=nova, subject='Mise en page responsive',
+            description='Notre interface ne s’adapte pas aux petits écrans. Par où commencer ?',
+            skill=Skill.objects.get(name='React'), priority=SupportRequest.Priority.NORMAL)
+        # The services only book future slots: this appointment already took place, so it is built directly.
+        start = event.start_date + timedelta(minutes=5)
+        slot = MentorSlot.objects.create(hackathon=event, mentor=users['mentor.front'], start=start, end=start + timedelta(minutes=45))
+        session = MentoringSession.objects.create(request=request, slot=slot, booked_by=users['ahmed'])
+        SupportRequest.objects.filter(pk=request.pk).update(status=SupportRequest.Status.BOOKED)
+        services.complete_session(actor=users['mentor.front'], session=session,
+            report='Nous avons vu la grille CSS et les points de rupture. À faire : tester sur mobile et corriger la barre de navigation.',
+            private_notes='Équipe motivée, bon niveau en React.')
+
+    def workshops(self, event, users):
+        """An open workshop and a full one, published by the organizer, with real registrations."""
+        first = self.first_slot_time()
+        organizer = users['organisatrice']
+        plan = [
+            ('Atelier API Django', users['mentor.django'], 4, first + timedelta(hours=3), 90, 'Salle A101', '', ('ahmed', 'mariem')),
+            ('Atelier UI/UX en 1 heure', users['mentor.front'], 2, first + timedelta(hours=5), 60, '', 'https://meet.example.com/ui-ux', ('sami', 'ines')),
+        ]
+        for title, trainer, capacity, start, minutes, room, link, attendees in plan:
+            if Workshop.objects.filter(hackathon=event, title=title).exists():
+                continue
+            try:
+                workshop = services.create_workshop(actor=organizer, hackathon=event, trainer=trainer, title=title,
+                    description='Un atelier pratique : apportez votre ordinateur.', capacity=capacity, start=start,
+                    end=start + timedelta(minutes=minutes), location=room, url=link)
+            except ValidationError:
+                continue
+            for username in attendees:
+                try:
+                    services.register_to_workshop(actor=users[username], workshop=workshop)
+                except (ValidationError, PermissionDenied):
+                    pass
+
     # ---------------------------------------------------------------- output
     def report(self, event, own):
         write = self.stdout.write
@@ -165,4 +218,9 @@ class Command(BaseCommand):
         if own:
             write(f'  {own.username:<20} organisateur et mentor de l’édition (vos droits ont été ajoutés)')
         write('')
-        write('À essayer : connectez-vous avec « ahmed », ouvrez « Mentorat » dans le menu, puis « Mes demandes ».')
+        write('Parcours déjà préparés :')
+        write('  ahmed (capitaine de Nova)  une séance réservée avec mentor.django ; une séance terminée qui attend son retour')
+        write('                             → « Mentorat » > « Mes rendez-vous » > ouvrir la séance terminée > donner son retour')
+        write('  sami, ines (Horizon)       deux demandes ouvertes : réservez un mentor (sami est capitaine)')
+        write('  mentor.django              ouvrez « Mes rendez-vous » : la séance de Nova vous attend')
+        write('  ateliers                   « Atelier API Django » (places libres) et « Atelier UI/UX » (complet)')

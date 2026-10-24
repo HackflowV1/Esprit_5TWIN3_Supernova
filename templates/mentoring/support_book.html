@@ -1,0 +1,64 @@
+{% extends 'mentoring/shell.html' %}{% load i18n ui %}
+{% block workspace %}
+<header class="page-head">
+<div>
+<p class="m4-eyebrow">{{ support_request.hackathon }}</p>
+<h1>{% translate 'Réserver un mentor' %}</h1>
+<p class="muted">{% blocktranslate with subject=support_request.subject %}Pour votre demande : {{ subject }}{% endblocktranslate %}</p>
+</div>
+<a class="button secondary" href="{{ support_request.get_absolute_url }}">{% icon 'arrow-left' %}{% translate 'Retour à la demande' %}</a>
+</header>
+
+{% if not can_book %}
+<div class="notice notice--warning" role="status">
+<strong>{% translate 'Vous ne pouvez pas réserver pour le moment.' %}</strong>
+{% translate 'Seul le capitaine de l’équipe réserve un mentor, et seulement pour une demande ouverte pendant la phase de développement.' %}
+</div>
+{% endif %}
+
+<form method="get" class="m4-filter" role="search" aria-label="{% translate 'Filtrer les créneaux' %}">
+<div class="field">
+<label for="{{ filter_form.skill.id_for_label }}">{{ filter_form.skill.label }}</label>
+{{ filter_form.skill }}
+</div>
+<button type="submit" class="secondary">{% icon 'filter' %}{% translate 'Filtrer' %}</button>
+{% if filtered %}<a href="{% url 'mentoring:support-book' support_request.pk %}">{% translate 'Réinitialiser' %}</a>{% endif %}
+</form>
+
+<section aria-labelledby="slots-title">
+<h2 id="slots-title">{% translate 'Créneaux disponibles' %} <span class="m4-count">{{ slot_count }}</span></h2>
+{% for group in days %}
+<section class="m4-day" aria-labelledby="day-{{ group.day|date:'Ymd' }}">
+<h3 id="day-{{ group.day|date:'Ymd' }}">{{ group.day|date:'l j F Y'|capfirst }}</h3>
+<ul class="m4-list">
+{% for slot in group.slots %}
+<li class="m4-item m4-pick">
+<div class="m4-time">
+<time datetime="{{ slot.start|date:'c' }}">{{ slot.start|date:'H:i' }}</time>
+<span aria-hidden="true">→</span><span class="visually-hidden"> {% translate 'jusqu’à' %} </span>
+<time datetime="{{ slot.end|date:'c' }}">{{ slot.end|date:'H:i' }}</time>
+<span class="muted">· {{ slot.duration_minutes }} min</span>
+</div>
+<div class="m4-mentor">
+<strong>{{ slot.mentor.get_full_name|default:slot.mentor.username }}</strong>
+<ul class="chips">{% for expertise in slot.mentor.mentor_expertises.all %}<li class="chip">{{ expertise.skill }} · {{ expertise.level }}/5</li>{% empty %}<li class="muted">{% translate 'Expertises non précisées' %}</li>{% endfor %}</ul>
+</div>
+{% if can_book %}
+<div class="m4-actions">
+<form method="post" action="{% url 'mentoring:support-book-slot' support_request.pk slot.pk %}">{% csrf_token %}
+<button type="submit" class="small">{% icon 'check' %}{% translate 'Réserver' %}<span class="visually-hidden"> {% blocktranslate with hour=slot.start|date:'H:i' mentor=slot.mentor.username %}le créneau de {{ hour }} avec {{ mentor }}{% endblocktranslate %}</span></button>
+</form>
+</div>
+{% endif %}
+</li>
+{% endfor %}
+</ul>
+</section>
+{% empty %}
+<div class="m4-empty">
+<h3>{% translate 'Aucun créneau disponible pour l’instant' %}</h3>
+<p>{% if filtered %}{% translate 'Aucun mentor disponible n’a déclaré cette compétence. Retirez le filtre pour voir tous les créneaux.' %}{% else %}{% translate 'Les mentors publient leurs créneaux pendant la phase de développement. Revenez un peu plus tard.' %}{% endif %}</p>
+</div>
+{% endfor %}
+</section>
+{% endblock %}

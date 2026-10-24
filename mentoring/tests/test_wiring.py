@@ -23,7 +23,7 @@ class WiringTests(TestCase):
     def test_mentor_screens_use_the_shared_layout_and_the_mentoring_stylesheet(self):
         self.client.force_login(self.mentor)
         for name, args in (('expertise-list', []), ('slot-list', []), ('workshop-list', []), ('expertise-add', []),
-                           ('slot-add', []), ('workshop-add', []), ('expertise-edit', [self.item.pk]), ('expertise-delete', [self.item.pk])):
+                           ('slot-add', []), ('expertise-edit', [self.item.pk]), ('expertise-delete', [self.item.pk])):
             with self.subTest(name=name):
                 page = self.client.get(reverse('mentoring:' + name, args=args))
                 self.assertEqual(page.status_code, 200)
@@ -55,8 +55,18 @@ class WiringTests(TestCase):
 
     def test_cancel_button_of_shared_forms_returns_to_the_mentoring_list(self):
         self.client.force_login(self.mentor)
-        for name, target in (('expertise-add', 'expertise-list'), ('slot-add', 'slot-list'), ('workshop-add', 'workshop-list')):
+        for name, target in (('expertise-add', 'expertise-list'), ('slot-add', 'slot-list')):
             with self.subTest(name=name):
                 page = self.client.get(reverse('mentoring:' + name))
                 self.assertContains(page, f'href="{reverse("mentoring:" + target)}"')
                 self.assertContains(page, 'Annuler</a>')
+
+    def test_the_organizer_workshop_form_uses_the_layout_and_cancels_back_to_the_list(self):
+        self.client.force_login(self.owner)
+        page = self.client.get(reverse('mentoring:workshop-add'))
+        self.assertEqual(page.status_code, 200)
+        self.assertContains(page, 'class="breadcrumbs"')
+        self.assertContains(page, '<h1', count=1)
+        self.assertContains(page, f'href="{reverse("mentoring:workshop-list")}"')
+        self.client.force_login(self.mentor)
+        self.assertEqual(self.client.get(reverse('mentoring:workshop-add')).status_code, 403)

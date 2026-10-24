@@ -1,0 +1,9 @@
+{% load i18n %}
+<li class="m4-item m4-request">
+<div class="m4-request-main">
+<a class="m4-request-title" href="{{ item.get_absolute_url }}">{{ item.request.subject }}</a>
+<span class="muted"><time datetime="{{ item.slot.start|date:'c' }}">{{ item.slot.start|date:'l j F · H:i'|capfirst }}</time> · {{ item.request.team }} · {{ item.slot.mentor.get_full_name|default:item.slot.mentor.username }}</span>
+</div>
+<div class="m4-info"><span class="badge badge--{{ item.status_badge }}">{{ item.get_status_display }}</span></div>
+<div class="m4-actions"><a class="button small secondary" href="{{ item.get_absolute_url }}">{% translate 'Ouvrir' %}<span class="visually-hidden"> {{ item.request.subject }}</span></a></div>
+</li>
