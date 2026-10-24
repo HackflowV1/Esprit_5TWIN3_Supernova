@@ -93,11 +93,49 @@ class ProjectSetup(SetupMixin):
         version = self.version(project)
         self.repo(version)
         services.submit(actor=self.a, submission=version, confirm_requirements=True)
+        version.refresh_from_db()
         project.refresh_from_db()
         return version
 
 
 class ProjectFlowTests(ProjectSetup, TestCase):
+    def test_live_board_moves_keep_official_snapshot_frozen(self):
+        project = self.project()
+        milestone = services.save_milestone(actor=self.a, project=project, data={
+            'title': 'Build UI', 'due_at': self.at+timedelta(hours=1), 'progress': 25})
+        official = self.official(project)
+        snapshot = official.snapshot.copy()
+        for state, progress in [('DONE', 100), ('DOING', 1), ('TODO', 0)]:
+            moved = services.move_milestone(actor=self.b, project=project, milestone=milestone, state=state)
+            self.assertEqual((moved.state, moved.progress), (state, progress))
+        official.refresh_from_db()
+        self.assertEqual(official.snapshot, snapshot)
+        self.assertEqual(official.snapshot['progress'], 25)
+        self.assertEqual(project.activities.filter(action='MOVE_MILESTONE').count(), 3)
+        with self.assertRaises(ValidationError):
+            services.save_project(actor=self.a, team=self.nova, project=project, data=self.data)
+
+    def test_board_moves_reject_invalid_unauthorized_and_closed_actions(self):
+        project = self.project()
+        milestone = services.save_milestone(actor=self.a, project=project, data={
+            'title': 'API', 'due_at': self.at+timedelta(hours=1), 'progress': 30})
+        for actor in (self.c, self.owner):
+            with self.assertRaises(PermissionDenied):
+                services.move_milestone(actor=actor, project=project, milestone=milestone, state='DONE')
+        with self.assertRaises(ValidationError):
+            services.move_milestone(actor=self.a, project=project, milestone=milestone, state='INVALID')
+        moved = services.move_milestone(actor=self.a, project=project, milestone=milestone, state='DOING')
+        self.assertEqual(moved.progress, 30)
+        self.assertFalse(project.activities.filter(action='MOVE_MILESTONE').exists())
+        with patch('projects.services.timezone.now', return_value=self.event.submission_deadline):
+            with self.assertRaises(ValidationError):
+                services.move_milestone(actor=self.a, project=project, milestone=milestone, state='DONE')
+        Hackathon.objects.filter(pk=self.event.pk).update(status='ARCHIVED')
+        with self.assertRaises(ValidationError):
+            services.move_milestone(actor=self.a, project=project, milestone=milestone, state='DONE')
+        milestone.refresh_from_db()
+        self.assertEqual(milestone.progress, 30)
+
     def test_discard_restore_preserves_deliverables_and_version_numbers(self):
         project = self.project()
         first = self.version(project)
@@ -290,6 +328,33 @@ class ProjectFlowTests(ProjectSetup, TestCase):
 
 
 class ScreenTests(ProjectSetup, TestCase):
+    def test_move_endpoint_updates_board_and_supports_regular_forms(self):
+        project = self.project()
+        milestone = services.save_milestone(actor=self.a, project=project, data={
+            'title': 'Work UI', 'due_at': self.at+timedelta(hours=1), 'progress': 20})
+        self.client.force_login(self.a)
+        url = reverse('projects:milestone-move', args=[project.pk, milestone.pk])
+        self.assertEqual(self.client.get(url).status_code, 405)
+        csrf_client = Client(enforce_csrf_checks=True)
+        csrf_client.force_login(self.a)
+        self.assertEqual(csrf_client.post(url, {'state': 'DONE'}).status_code, 403)
+        response = self.client.post(url, {'state': 'DONE'}, HTTP_X_REQUESTED_WITH='XMLHttpRequest')
+        self.assertEqual(response.status_code, 200)
+        data = response.json()
+        self.assertIn('100 %', data['board_html'])
+        self.assertIn('data-move-url=', data['board_html'])
+        self.assertIn('Work UI', data['board_html'])
+        self.assertIn('Étape déplacée', data['activity_html'])
+        self.assertEqual(self.client.post(url, {'state': 'INVALID'}, HTTP_X_REQUESTED_WITH='XMLHttpRequest').status_code, 400)
+        self.assertRedirects(self.client.post(url, {'state': 'TODO'}), project.get_absolute_url()+'#board')
+        milestone.refresh_from_db()
+        self.assertEqual(milestone.progress, 0)
+        self.client.force_login(self.c)
+        self.assertEqual(self.client.post(url, {'state': 'DONE'}, HTTP_X_REQUESTED_WITH='XMLHttpRequest').status_code, 403)
+        self.client.force_login(self.a)
+        other = self.client.post(reverse('projects:milestone-move', args=[project.pk, 999999]), {'state': 'DONE'})
+        self.assertEqual(other.status_code, 404)
+
     def test_delete_draft_requires_confirmation_and_can_be_restored(self):
         project = self.project()
         draft = self.version(project)

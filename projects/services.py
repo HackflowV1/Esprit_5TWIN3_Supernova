@@ -33,7 +33,11 @@ def can_submit(actor, project):
 
 
 def editing_open(project):
-    if project.official_submission_id or project.team.hackathon.status not in ('PUBLISHED', 'ONGOING'):
+    return not project.official_submission_id and board_editing_open(project)
+
+
+def board_editing_open(project):
+    if project.team.hackathon.status not in ('PUBLISHED', 'ONGOING'):
         return False
     try:
         _window(project.team.hackathon, project)
@@ -144,6 +148,27 @@ def save_milestone(*, actor, project, data, milestone=None, delete=False):
     milestone.save()
     _log(project, actor, 'SAVE_MILESTONE', milestone=milestone.pk, state=milestone.state, progress=milestone.progress)
     return milestone
+
+
+@transaction.atomic
+def move_milestone(*, actor, project, milestone, state):
+    """Move live progress only; official submission snapshots remain immutable."""
+    actor, event, team, project = _lock(actor, project.team, project)
+    _editor(actor, project)
+    _window(event, project)
+    if state not in Milestone.State.values:
+        raise ValidationError(_('État de destination invalide.'))
+    record = Milestone.objects.get(pk=milestone.pk, project=project)
+    if record.state == state:
+        return record
+    previous_state, previous_progress = record.state, record.progress
+    record.progress = 0 if state == Milestone.State.TODO else 100 if state == Milestone.State.DONE else (
+        record.progress if 0 < record.progress < 100 else 1)
+    record.full_clean()
+    record.save(update_fields=['state', 'progress'])
+    _log(project, actor, 'MOVE_MILESTONE', milestone=record.pk, previous_state=previous_state,
+        previous_progress=previous_progress, state=record.state, progress=record.progress)
+    return record
 
 
 def project_snapshot(project):

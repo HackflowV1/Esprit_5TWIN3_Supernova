@@ -718,3 +718,38 @@ msgstr ""
 
 msgid "Votre version officielle restera inchangée."
 msgstr "Your official version will remain unchanged."
+
+msgid "État de destination invalide."
+msgstr "Invalid destination state."
+
+msgid "Étape déplacée"
+msgstr "Milestone moved"
+
+msgid "Vous ne pouvez pas déplacer cette étape."
+msgstr "You cannot move this milestone."
+
+#, python-format
+msgid "Étape déplacée vers %(state)s."
+msgstr "Milestone moved to %(state)s."
+
+msgid "Enregistrement du déplacement…"
+msgstr "Saving move…"
+
+msgid ""
+"Impossible de confirmer le déplacement. Actualisez le tableau avant de "
+"réessayer."
+msgstr "Could not confirm the move. Refresh the board before trying again."
+
+msgid ""
+"Glissez une étape vers une autre colonne ou utilisez son menu. Le "
+"déplacement est enregistré automatiquement."
+msgstr ""
+"Drag a milestone to another column or use its menu. Moves are saved "
+"automatically."
+
+msgid "La version officielle reste figée."
+msgstr "The official submission stays frozen."
+
+#, python-format
+msgid "Déplacer vers %(state)s"
+msgstr "Move to %(state)s"

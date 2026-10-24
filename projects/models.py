@@ -177,4 +177,5 @@ class ProjectActivity(models.Model):
             'DELETE_DELIVERABLE': _('Livrable retiré'), 'SUBMIT': _('Version officialisée'),
             'REOPEN': _('Dépôt réouvert par dérogation'), 'PUBLICATION': _('Visibilité modifiée'),
             'DISCARD_VERSION': _('Brouillon supprimé'), 'RESTORE_VERSION': _('Brouillon restauré'),
+            'MOVE_MILESTONE': _('Étape déplacée'),
         }.get(self.action, _('Activité du projet'))

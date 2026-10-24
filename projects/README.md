@@ -192,3 +192,25 @@ Les changements restent réservés au capitaine pendant une période de modifica
 ouverte ; les éditions archivées sont en lecture seule. Les 29 tests M3 couvrent
 le cycle suppression/restauration, les permissions, le CSRF et la conservation
 des numéros et livrables.
+
+## Déplacer une étape
+
+Le tableau permet de glisser une carte entre les trois colonnes. Terminé fixe la
+progression à 100 %, À faire à 0 %, et En cours conserve un pourcentage intermédiaire
+ou commence à 1 %. Le serveur enregistre le changement avant de remplacer le
+tableau et l’activité par leurs rendus à jour. Une erreur laisse la carte en place.
+Le menu de chaque carte propose aussi Déplacer vers, au clavier, sur écran tactile
+et sans JavaScript. Les écritures POST exigent CSRF, membre actif et période ouverte.
+
+Le déplacement met à jour uniquement la progression du tableau vivant. Il peut
+continuer après un dépôt officiel pendant la période autorisée : le snapshot
+officiel, son pourcentage enregistré, sa fiche et ses livrables ne changent pas.
+La modification complète de la fiche, des étapes ou du dépôt reste soumise aux
+règles de réouverture existantes. Le mouvement est historisé avec l’état et le
+pourcentage précédents.
+
+Validation : 32 tests M3 passent, dont les transitions, permissions, CSRF,
+frontières de deadline, POST classique/AJAX et immutabilité du snapshot officiel.
+La syntaxe JavaScript et la disponibilité des contrôles français/anglais sont
+vérifiées. Le geste de glissement reste à essayer manuellement dans le navigateur,
+aucun navigateur n’étant connecté aux outils de cette session.

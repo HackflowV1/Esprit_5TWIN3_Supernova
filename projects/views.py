@@ -4,7 +4,8 @@ from django.core.exceptions import PermissionDenied, ValidationError
 from django.core.paginator import Paginator
 from django.db import IntegrityError
 from django.db.models import Avg, Count, Q
-from django.http import FileResponse, Http404
+from django.http import FileResponse, Http404, JsonResponse
+from django.template.loader import render_to_string
 from django.shortcuts import get_object_or_404, redirect, render
 from django.utils import timezone
 from django.utils.translation import gettext as _
@@ -28,6 +29,7 @@ def _context(request, project):
     return {'project': project, 'team': project.team, 'event': event,
         'editor': services.is_member(request.user, project), 'captain': services.can_submit(request.user, project),
         'editable': services.is_member(request.user, project) and services.editing_open(project),
+        'board_movable': services.is_member(request.user, project) and services.board_editing_open(project),
         'draft_manager': services.can_manage_drafts(request.user, project),
         'discarded_versions': project.submissions.filter(status=Submission.Status.DISCARDED),
         'organizer': can_manage(request.user, event)}
@@ -97,18 +99,46 @@ def edit(request, pk=None, team_pk=None):
     return _form(request, form, _('Modifier le projet') if project else _('Créer le projet'), project, team=team, event=team.hackathon)
 
 
-@login_required
-def detail(request, pk):
-    project = _project(request, pk)
+def _board_context(request, project):
     milestones = list(project.milestones.all())
     for item in milestones:
         item.overdue = item.state != Milestone.State.DONE and item.due_at < timezone.now()
-    return render(request, 'projects/detail.html', {**_context(request, project),
+    return {**_context(request, project),
         'columns': [{'state': state, 'label': label, 'items': [item for item in milestones if item.state == state]}
             for state, label in Milestone.State.choices],
         'milestone_count': len(milestones),
         'completed_count': sum(item.state == Milestone.State.DONE for item in milestones),
-        'submissions': project.submissions.exclude(status=Submission.Status.DISCARDED), 'activities': project.activities.select_related('actor')[:30]})
+        'submissions': project.submissions.exclude(status=Submission.Status.DISCARDED), 'activities': project.activities.select_related('actor')[:30]}
+
+
+@login_required
+def detail(request, pk):
+    return render(request, 'projects/detail.html', _board_context(request, _project(request, pk)))
+
+
+@login_required
+@require_POST
+def milestone_move(request, pk, milestone_pk):
+    project = _project(request, pk)
+    record = get_object_or_404(Milestone, project=project, pk=milestone_pk)
+    ajax = request.headers.get('X-Requested-With') == 'XMLHttpRequest'
+    try:
+        record = services.move_milestone(actor=request.user, project=project, milestone=record, state=request.POST.get('state'))
+    except (ValidationError, PermissionDenied) as exc:
+        error = ' '.join(exc.messages) if isinstance(exc, ValidationError) else _('Vous ne pouvez pas déplacer cette étape.')
+        if ajax:
+            return JsonResponse({'error': error}, status=400 if isinstance(exc, ValidationError) else 403)
+        if isinstance(exc, PermissionDenied):
+            raise
+        messages.error(request, error)
+    else:
+        message = _('Étape déplacée vers %(state)s.') % {'state': record.get_state_display()}
+        if ajax:
+            context = _board_context(request, project)
+            return JsonResponse({'board_html': render_to_string('projects/board.html', context, request=request),
+                'activity_html': render_to_string('projects/activity.html', context, request=request), 'message': message})
+        messages.success(request, message)
+    return redirect(project.get_absolute_url() + '#board')
 
 
 @login_required

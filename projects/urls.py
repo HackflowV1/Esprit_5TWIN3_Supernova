@@ -13,6 +13,7 @@ urlpatterns = [
     path('<int:pk>/milestones/add/', views.milestone, name='milestone-add'),
     path('<int:pk>/milestones/<int:milestone_pk>/edit/', views.milestone, name='milestone-edit'),
     path('<int:pk>/milestones/<int:milestone_pk>/delete/', views.milestone_delete, name='milestone-delete'),
+    path('<int:pk>/milestones/<int:milestone_pk>/move/', views.milestone_move, name='milestone-move'),
     path('<int:pk>/versions/create/', views.version_create, name='version-create'),
     path('<int:pk>/versions/<int:version>/', views.version, name='version'),
     path('<int:pk>/versions/<int:version>/submit/', views.submit, name='submit'),
