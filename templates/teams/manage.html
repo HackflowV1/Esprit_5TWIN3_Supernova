@@ -1,0 +1,62 @@
+{% extends 'teams/shell.html' %}{% load i18n ui %}
+{% block workspace %}<header class="page-head">
+<div>
+<p class="m2-eyebrow">{% translate 'Pilotage · Participation' %}</p>
+<h1>{% translate 'Inscriptions et équipes' %}</h1>
+<p class="muted">{% translate 'Les inscriptions réelles de cette édition, distinctes des rôles attribués manuellement.' %}</p>
+</div>
+<a class="button secondary" href="{% url 'hackathons:manage' event.slug %}">{% icon 'arrow-left' %}{% translate 'Retour au pilotage' %}</a>
+</header>{% if counts %}<dl class="m2-counts">
+<div>
+<dt>{% translate 'Inscriptions acceptées' %}</dt>
+<dd>{{ counts.registrations }}/{{ event.capacity }}</dd>
+</div>
+<div>
+<dt>{% translate 'Équipes' %}</dt>
+<dd>{{ counts.teams }}</dd>
+</div>
+<div>
+<dt>{% translate 'Équipes incomplètes' %}</dt>
+<dd>{{ counts.incomplete_teams }}</dd>
+</div>
+<div>
+<dt>{% translate 'Participants sans équipe' %}</dt>
+<dd>{{ counts.participants_without_team }}</dd>
+</div>
+</dl>{% else %}<p class="m2-notice">{% translate "Cette archive ne contient pas d’indicateurs M2 enregistrés." %}</p>{% endif %}
+<section class="panel">
+<h2>{% translate 'Les inscriptions' %}</h2>
+<form method="get" class="m2-filters" role="search">
+<div>
+<label for="registration-q">{% translate 'Rechercher un participant' %}</label>
+<input type="search" id="registration-q" name="q" value="{{ request.GET.q }}">
+</div>
+<button type="submit" class="secondary">{% icon 'search' %}{% translate 'Rechercher' %}</button>
+</form>
+<div class="table-wrap">
+<table>
+<caption class="visually-hidden">{% translate 'Inscriptions de cette édition' %}</caption>
+<thead>
+<tr>
+<th scope="col">{% translate 'Participant' %}</th>
+<th scope="col">{% translate 'Statut' %}</th>
+<th scope="col">{% translate 'Équipe' %}</th>
+<th scope="col">{% translate 'Actions' %}</th>
+</tr>
+</thead>
+<tbody>{% for reg in registrations %}<tr>
+<th scope="row">{{ reg.user.get_full_name|default:reg.user.username }}</th>
+<td>{{ reg.get_status_display }}</td>
+<td>{% if reg.current_team %}<a href="{{ reg.current_team.get_absolute_url }}">{{ reg.current_team }}</a>{% else %}—{% endif %}</td>
+<td>{% if reg.status == 'ACCEPTED' and event.status != 'ARCHIVED' %}<a href="{% url 'teams:cancel' event.slug reg.pk %}">{% icon 'close' 16 %}{% translate 'Annuler l’inscription' %}<span class="visually-hidden"> · {{ reg.user }}</span>
+</a>{% endif %}</td>
+</tr>{% empty %}<tr>
+<td colspan="4">{% translate 'Aucune inscription correspondante.' %}</td>
+</tr>{% endfor %}</tbody>
+</table>
+</div>
+</section>
+<section>
+<h2>{% translate 'Les équipes' %}</h2>
+<div class="m2-team-grid">{% for item in teams %}{% include 'teams/team_card.html' %}{% empty %}<p class="muted">{% translate 'Aucune équipe créée.' %}</p>{% endfor %}</div>
+</section>{% endblock %}

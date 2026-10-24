@@ -29,6 +29,16 @@ def translate_label(value):
     return gettext(str(value)) if value else value
 
 
+@register.filter
+def metric_label(value):
+    labels = {
+        'registrations': gettext_noop('Inscriptions acceptées'), 'teams': gettext_noop('Équipes'),
+        'incomplete_teams': gettext_noop('Équipes incomplètes'),
+        'participants_without_team': gettext_noop('Participants sans équipe'),
+    }
+    return gettext(labels.get(value, value))
+
+
 @register.inclusion_tag('shared/field.html')
 def render_field(field):
     descriptions = []

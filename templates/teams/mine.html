@@ -1,0 +1,22 @@
+{% extends 'teams/shell.html' %}{% load i18n ui %}
+{% block workspace %}<header class="page-head">
+<div>
+<p class="m2-eyebrow">{% translate 'Mon parcours' %}</p>
+<h1>{% translate 'Mes inscriptions' %}</h1>
+<p class="muted">{% translate 'Vos hackathons, vos équipes et la prochaine étape.' %}</p>
+</div>
+<a class="button secondary" href="{% url 'hackathons:list' %}">{% icon 'search' %}{% translate 'Explorer les hackathons' %}</a>
+</header>
+<div class="m2-registration-list">{% for reg in registrations %}<article class="panel m2-registration">
+<div>
+<span class="chip">{{ reg.get_status_display }}</span>
+<h2>
+<a href="{{ reg.hackathon.get_absolute_url }}">{{ reg.hackathon }}</a>
+</h2>
+<p class="muted">{% icon 'calendar' 16 %}{{ reg.hackathon.start_date|date:'SHORT_DATE_FORMAT' }} · {{ reg.hackathon.get_format_display }}</p>{% if reg.current_team %}<p>{% translate 'Votre équipe :' %} <strong>{{ reg.current_team }}</strong>
+</p>{% elif reg.status == 'ACCEPTED' %}<p class="muted">{% translate 'Vous n’avez pas encore d’équipe.' %}</p>{% endif %}</div>
+<div class="actions">{% if reg.status == 'ACCEPTED' %}{% if reg.current_team %}<a class="button" href="{{ reg.current_team.get_absolute_url }}">{% icon 'users' %}{% translate 'Mon équipe' %}</a>{% else %}<a class="button" href="{% url 'teams:list' reg.hackathon.slug %}">{% translate 'Trouver mon équipe' %}{% icon 'arrow-right' %}</a>{% endif %}<a class="button secondary" href="{% url 'teams:inbox' reg.hackathon.slug %}">{% translate 'Mes demandes' %}</a>{% if reg.hackathon.status != 'ARCHIVED' %}<a class="m2-subtle-link" href="{% url 'teams:cancel' reg.hackathon.slug reg.pk %}">{% translate 'Annuler l’inscription' %}</a>{% endif %}{% else %}<a class="button secondary" href="{% url 'teams:register' reg.hackathon.slug %}">{% translate 'Me réinscrire' %}</a>{% endif %}</div>
+</article>{% empty %}<section class="m2-empty">{% icon 'calendar' 36 %}<h2>{% translate 'Votre prochain hackathon vous attend.' %}</h2>
+<p>{% translate 'Choisissez une édition pour vous inscrire et rencontrer votre équipe.' %}</p>
+<a class="button" href="{% url 'hackathons:list' %}">{% translate 'Découvrir les hackathons' %}</a>
+</section>{% endfor %}</div>{% endblock %}

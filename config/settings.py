@@ -35,6 +35,7 @@ INSTALLED_APPS = [
     'accounts',
     'core',
     'hackathons',
+    'teams',
 ]
 
 MIDDLEWARE = [
@@ -111,3 +112,5 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 # AI services — environment variables prepared for future integration
 GOOGLE_API_KEY = os.environ.get('GOOGLE_API_KEY', '')
+
+HACKFLOW_METRIC_PROVIDERS = {'M2': 'teams.services.metrics'}

@@ -61,6 +61,9 @@ class Command(BaseCommand):
             ongoing = self.event(organizer, users, own, 'hackflow-demo-2026', ongoing=True)
             upcoming = self.event(organizer, users, own, 'ai-challenge-2026', ongoing=False)
         self.report(users, own, ongoing, upcoming)
+        if settings.DEBUG:
+            from django.core.management import call_command
+            call_command('seed_m2_demo', stdout=self.stdout)
 
     # ---------------------------------------------------------------- data
     def skills(self):

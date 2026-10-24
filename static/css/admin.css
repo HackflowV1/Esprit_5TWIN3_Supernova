@@ -13,10 +13,10 @@
   --selected-bg:var(--brand-active);
   --link-fg:var(--brand-accent);
   --link-selected-fg:var(--brand-ink);
-  --button-bg:var(--brand-primary);
-  --button-hover-bg:var(--brand-primary-hover);
-  --default-button-bg:var(--brand-primary);
-  --default-button-hover-bg:var(--brand-primary-hover);
+  --button-bg:var(--brand-button);
+  --button-hover-bg:var(--brand-button-hover);
+  --default-button-bg:var(--brand-button);
+  --default-button-hover-bg:var(--brand-button-hover);
   --breadcrumbs-bg:var(--brand-raised);
   --breadcrumbs-fg:var(--brand-muted);
   --breadcrumbs-link-fg:var(--brand-ink);
@@ -26,10 +26,10 @@
   --body-loud-color:var(--brand-ink);
   --selected-row:var(--brand-soft);
   --close-button-bg:var(--brand-muted);
-  --on-button:var(--brand-on-primary);
+  --on-button:var(--brand-on-button);
   --surface:var(--brand-surface);
   --focus:var(--brand-focus);
-  --button-fg:var(--brand-on-primary);
+  --button-fg:var(--brand-on-button);
   --link-hover-color:var(--brand-accent);
   color-scheme:light
 }
@@ -49,10 +49,10 @@ html[data-theme="dark"] {
   --selected-bg:var(--brand-active);
   --link-fg:var(--brand-accent);
   --link-selected-fg:var(--brand-ink);
-  --button-bg:var(--brand-primary);
-  --button-hover-bg:var(--brand-primary-hover);
-  --default-button-bg:var(--brand-primary);
-  --default-button-hover-bg:var(--brand-primary-hover);
+  --button-bg:var(--brand-button);
+  --button-hover-bg:var(--brand-button-hover);
+  --default-button-bg:var(--brand-button);
+  --default-button-hover-bg:var(--brand-button-hover);
   --breadcrumbs-bg:var(--brand-raised);
   --breadcrumbs-fg:var(--brand-muted);
   --breadcrumbs-link-fg:var(--brand-ink);
@@ -60,14 +60,14 @@ html[data-theme="dark"] {
   --border-color:var(--brand-control);
   --body-loud-color:var(--brand-ink);
   --selected-row:var(--brand-soft);
-  --button-bg:var(--brand-primary);
-  --button-hover-bg:var(--brand-primary-hover);
-  --default-button-bg:var(--brand-primary);
-  --default-button-hover-bg:var(--brand-primary-hover);
-  --on-button:var(--brand-on-primary);
+  --button-bg:var(--brand-button);
+  --button-hover-bg:var(--brand-button-hover);
+  --default-button-bg:var(--brand-button);
+  --default-button-hover-bg:var(--brand-button-hover);
+  --on-button:var(--brand-on-button);
   --surface:var(--brand-surface);
   --focus:var(--brand-focus);
-  --button-fg:var(--brand-on-primary);
+  --button-fg:var(--brand-on-button);
   --link-hover-color:var(--brand-accent);
   --error-fg:var(--brand-danger);
   --message-success-bg:var(--brand-success-soft);

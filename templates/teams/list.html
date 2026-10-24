@@ -1,0 +1,35 @@
+{% extends 'teams/shell.html' %}{% load i18n ui %}
+{% block workspace %}
+<header class="page-head">
+<div>
+<p class="m2-eyebrow">{% translate 'À plusieurs, plus loin' %}</p>
+<h1>{% translate 'Trouvez votre équipe' %}</h1>
+<p class="muted">{% translate 'Une idée vous parle ? Découvrez les membres et proposez de les rejoindre.' %}</p>
+</div>{% if registration and formation_open and not my_team %}<a class="button" href="{% url 'teams:create' event.slug %}">{% icon 'add' %}{% translate 'Créer mon équipe' %}</a>{% endif %}</header>
+{% if registration and not my_team %}<div class="m2-guide">
+<span class="m2-guide-icon">{% icon 'check' 22 %}</span>
+<div>
+<strong>{% translate 'Votre inscription est confirmée.' %}</strong>
+<p>{% translate 'Prochaine étape : rejoindre une équipe ou lancer la vôtre. Une seule équipe par hackathon.' %}</p>
+</div>
+<a href="{% url 'accounts:profile' %}#skills">{% translate 'Compléter mes compétences' %}{% icon 'arrow-right' 16 %}</a>
+</div>{% endif %}
+<form class="m2-filters" method="get" role="search">
+<div>
+<label for="team-q">{% translate 'Rechercher une équipe' %}</label>
+<input type="search" name="q" id="team-q" value="{{ request.GET.q }}" placeholder="{% translate 'Nom ou idée…' %}">
+</div>
+<div>
+<label for="team-skill">{% translate 'Compétence recherchée' %}</label>
+<select id="team-skill" name="skill">
+<option value="">{% translate 'Toutes les compétences' %}</option>{% for skill in skills %}<option value="{{ skill.pk }}"{% if request.GET.skill == skill.pk|stringformat:'s' %} selected{% endif %}>{{ skill }}</option>{% endfor %}</select>
+</div>
+<label class="m2-checkbox">
+<input type="checkbox" name="open" value="1"{% if request.GET.open %} checked{% endif %}>{% translate 'Avec des places libres' %}</label>
+<button class="secondary" type="submit">{% icon 'filter' %}{% translate 'Filtrer' %}</button>{% if request.GET %}<a href="{% url 'teams:list' event.slug %}">{% translate 'Réinitialiser' %}</a>{% endif %}</form>
+<div class="m2-team-grid">{% for item in page_obj %}{% include 'teams/team_card.html' with item=item %}{% empty %}<section class="m2-empty">
+<span class="m2-empty-icon">{% icon 'users' 36 %}</span>
+<h2>{% translate 'La prochaine équipe pourrait être la vôtre.' %}</h2>
+<p>{% translate 'Aucune équipe ne correspond à cette recherche. Essayez un autre filtre ou rassemblez vos premiers coéquipiers.' %}</p>{% if registration and formation_open and not my_team %}<a class="button" href="{% url 'teams:create' event.slug %}">{% icon 'add' %}{% translate 'Créer mon équipe' %}</a>{% endif %}</section>{% endfor %}</div>
+{% include 'teams/pagination.html' %}
+{% endblock %}

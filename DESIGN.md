@@ -46,9 +46,9 @@ dans le profil.
 
 La source commune est `static/css/palette.css`, chargée par l’application et
 l’administration. `base.css` et `admin.css` adaptent ses tokens à leurs composants.
-Clair : fond `#F8F9FB`, surfaces blanches, texte `#111418`, action `#F95721`
-avec texte foncé pour le contraste, fond secondaire orange `#FFF4EE`. Sombre :
-fond `#0D0F12`, surfaces `#15181E`, texte `#F4F5F7`, action `#FF6B35` avec texte foncé.
+Clair : fond `#F8F9FB`, surfaces blanches, texte `#111418`, accents `#F95721` ; boutons `#C64010`
+avec texte blanc (contraste 5,07:1), fond secondaire orange `#FFF4EE`. Sombre :
+fond `#0D0F12`, surfaces `#15181E`, texte `#F4F5F7`, accents `#FF6B35` ; boutons `#C64010` avec texte blanc.
 L’orange accompagne une action importante, un lien ou un focus ; les titres restent
 en couleur de texte. Les états erreur/succès conservent leurs couleurs sémantiques.
 Ne pas employer les teintes d’illustration, plus vives, pour du petit texte.
@@ -61,7 +61,8 @@ Toujours utiliser les variables CSS. Les mêmes noms fonctionnent dans les deux 
 | `--ink`, `--muted` | Texte principal, texte secondaire |
 | `--line` | Séparation discrète entre contenus |
 | `--control` | Contour visible des champs et contrôles |
-| `--primary`, `--on-primary` | Action principale et son texte |
+| `--primary`, `--on-primary` | Accent de marque et son texte |
+| `--brand-button`, `--brand-button-hover`, `--brand-on-button` | Bouton principal, survol et texte blanc |
 | `--danger`, `--success`, `--warning` | États qui ont un sens métier |
 | `--focus` | Contour du focus clavier |
 
@@ -221,3 +222,11 @@ uv run python manage.py test --keepdb
 
 Les tests utilisent uniquement `test_hackflow_db`. Un changement visuel ne doit pas
 changer les règles des rôles, la logique des phases ou les données de `hackflow_db`.
+
+## Navigation M2
+
+`teams/shell.html` et `teams.css` définissent une barre commune pour les équipes,
+mon équipe, les invitations/candidatures et la gestion organisateur. Les liens
+occupent des sections de largeur égale ; l’actif a un fond doux, un texte renforcé
+et un soulignement orange. Ce sont des pages distinctes : utiliser `aria-current`,
+pas des rôles d’onglets JavaScript qui masqueraient du contenu.

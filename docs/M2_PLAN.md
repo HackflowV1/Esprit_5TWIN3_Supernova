@@ -1,10 +1,15 @@
 # Plan M2 — inscriptions, équipes et compétences
 
-Statut : proposition à discuter, avant implémentation.
+Statut : V1 implémentée sur `codex/module-2` (24 octobre 2026).
+
+Les propositions V1 ci-dessous ont été retenues pour cette implémentation à la
+demande du responsable M2. Le moteur IA partagé reste une intégration future :
+le classement livré est déterministe et expliqué. Voir `docs/USER_M2.md` pour
+le parcours et `docs/M2_CONTRACTS.md` pour les contrats M3/M4.
 
 Références : dossier clarifié, pages 2, 4, 8 et 9 ; code actuel de accounts/,
-hackathons/ ; docs/USER_M1.md et DESIGN.md. Les propositions ci-dessous ne sont
-pas des décisions déjà validées par le groupe.
+hackathons/ ; docs/USER_M1.md et DESIGN.md. Les règles V1 ci-dessous sont appliquées ; le groupe peut les faire évoluer
+ensemble avant d’étendre le périmètre.
 
 ## Objectif et limites
 
@@ -16,7 +21,7 @@ accounts garde User, Skill, UserSkill et les rôles contextualisés.
 M3 réutilise les équipes pour ses projets ; M4 les réutilise pour l’assistance.
 Le mentor ne devient pas membre de l’équipe qu’il accompagne.
 
-## Décisions à discuter
+## Décisions V1 retenues
 
 | Sujet | Proposition simple pour V1 |
 | --- | --- |
@@ -152,4 +157,5 @@ Ahmed accepte. L’effectif atteint le minimum configuré, Team Skills affiche l
 compétences complémentaires. M3 pourra créer le projet de cette équipe et M4
 permettra à ses membres autorisés de demander une aide, selon leurs contrats.
 
-Le plan ne lance pas encore le développement et ne fixe pas les décisions proposées.
+Les règles d’admission, de gel et de transfert ci-dessus sont maintenant appliquées.
+Toute évolution décidée par le groupe devra modifier les services et leurs tests.

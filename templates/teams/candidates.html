@@ -1,0 +1,29 @@
+{% extends 'teams/shell.html' %}{% load i18n ui %}
+{% block workspace %}<header class="page-head">
+<div>
+<p class="m2-eyebrow">{{ team }}</p>
+<h1>{% translate 'Rencontrez vos coéquipiers' %}</h1>
+<p class="muted">{% translate 'Des participants inscrits à cette édition, encore sans équipe.' %}</p>
+</div>{% if formation_open and team.recruiting and team.places_left %}<a class="button" href="{% url 'teams:invite' event.slug team.pk %}">{% icon 'add' %}{% translate 'Inviter un participant' %}</a>{% endif %}</header>
+<div class="m2-guide">{% icon 'filter' 24 %}<div>
+<strong>{% translate 'Des suggestions expliquées, la décision vous appartient.' %}</strong>
+<p>{% translate 'Classement par besoins non couverts, compétences déclarées et niveau souhaité. Aucun recrutement automatique, aucun score IA.' %}</p>
+</div>
+<a href="{% url 'teams:need-add' event.slug team.pk %}">{% translate 'Préciser nos besoins' %}</a>
+</div>
+<form method="get" class="m2-filters" role="search">
+<div>
+<label for="candidate-q">{% translate 'Nom ou compétence' %}</label>
+<input id="candidate-q" name="q" type="search" value="{{ request.GET.q }}">
+</div>
+<button class="secondary" type="submit">{% icon 'search' %}{% translate 'Rechercher' %}</button>
+</form>
+<div class="m2-team-grid">{% for candidate in page_obj %}<article class="m2-team-card">
+<div class="m2-card-top">
+<span class="m2-avatar" aria-hidden="true">{{ candidate.registration.user.username|slice:':1'|upper }}</span>{% if candidate.matches %}<span class="chip">{% icon 'check' 14 %}{% translate 'Compétences en commun avec vos besoins' %}</span>{% endif %}</div>
+<h2>{{ candidate.registration.user.get_full_name|default:candidate.registration.user.username }}</h2>
+<div class="m2-tags">{% for skill in candidate.registration.user.user_skills.all %}<span class="chip">{{ skill.skill }} {{ skill.level }}/5</span>{% empty %}<p class="muted">{% translate 'Compétences à compléter' %}</p>{% endfor %}</div>{% if candidate.matches %}<ul class="m2-match-reasons">{% for match in candidate.matches %}<li>{{ match.skill }} · {{ match.level }}/5 {% if match.meets %}— {% translate 'niveau souhaité atteint' %}{% else %}— {% translate 'niveau souhaité :' %} {{ match.requested }}/5{% endif %}</li>{% endfor %}</ul>{% else %}<p class="muted">{% translate 'Pas de correspondance déclarée avec vos besoins actuels.' %}</p>{% endif %}{% if candidate.pending_application %}<a href="{{ team.get_absolute_url }}">{% icon 'clock' 16 %}{% translate 'Candidature reçue' %}</a>{% elif candidate.pending_invitation %}<p class="muted">{% icon 'clock' 16 %}{% translate 'Invitation en attente' %}</p>{% elif formation_open and team.recruiting and team.places_left %}<a class="button secondary" href="{% url 'teams:invite' event.slug team.pk %}?participant={{ candidate.registration.pk }}">{% icon 'add' 16 %}{% translate 'Inviter' %}<span class="visually-hidden"> {{ candidate.registration.user }}</span>
+</a>{% endif %}</article>{% empty %}<div class="m2-empty">
+<h2>{% translate 'Aucun participant disponible pour cette recherche.' %}</h2>
+<p>{% translate 'Essayez une autre compétence ou revenez après de nouvelles inscriptions.' %}</p>
+</div>{% endfor %}</div>{% include 'teams/pagination.html' %}{% endblock %}

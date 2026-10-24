@@ -272,6 +272,17 @@
 
         <p class="passport-timezone">{% translate 'Fin des inscriptions et heure limite de dépôt exclues · fuseau Africa/Tunis.' %}</p>
 
+        <div class="passport-actions">
+          {% if registration %}
+          <p>{% icon 'check' 16 %} {% translate 'Votre inscription est confirmée.' %}</p>
+          {% if my_team %}<a class="button passport-btn" href="{{ my_team.get_absolute_url }}">{% icon 'users' %}{% translate 'Mon équipe' %}</a>{% else %}<a class="button passport-btn" href="{% url 'teams:list' event.slug %}">{% icon 'users' %}{% translate 'Trouver mon équipe' %}</a>{% endif %}
+          {% elif registration_open and registration_count < event.capacity %}
+          <a class="button passport-btn" href="{% url 'teams:register' event.slug %}">{% icon 'add' %}{% translate 'M’inscrire au hackathon' %}</a>
+          {% elif registration_open %}<p class="muted">{% translate 'Ce hackathon est complet.' %}</p>
+          {% else %}<p class="muted">{% translate 'Les inscriptions sont fermées pour le moment.' %}</p>{% endif %}
+          {% if can_manage %}<a class="button secondary passport-btn" href="{% url 'teams:manage' event.slug %}">{% icon 'users' %}{% translate 'Inscriptions et équipes' %}</a>{% endif %}
+        </div>
+
         {% if can_manage or can_propose %}
         <div class="passport-actions">
           {% if can_manage %}

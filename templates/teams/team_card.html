@@ -1,0 +1,16 @@
+{% load i18n ui %}
+<article class="m2-team-card">
+<div class="m2-card-top">
+<span class="m2-team-mark" aria-hidden="true">{{ item.name|slice:':1'|upper }}</span>
+<span class="chip">{% if item.is_ready %}{% icon 'check' 14 %}{% translate 'Équipe prête' %}{% else %}{% icon 'users' 14 %}{% translate 'En formation' %}{% endif %}</span>
+</div>
+<h2>
+<a href="{{ item.get_absolute_url }}">{{ item.name }}</a>
+</h2>
+<p class="muted">{{ item.description|default:_('Une nouvelle équipe à découvrir.')|truncatewords:25 }}</p>
+<div class="m2-tags">{% for need in item.skill_needs.all %}<span class="chip">{{ need.skill }}</span>{% empty %}<span class="muted">{% translate 'Besoins à préciser' %}</span>{% endfor %}</div>
+<footer>
+<span>{% icon 'users' 16 %}{{ item.member_count }}/{{ event.max_team_size }} {% translate 'membres' %}</span>
+<span>{% if item.recruiting and item.places_left and formation_open %}{% translate 'Recrute' %} · {{ item.places_left }} {% translate 'places' %}{% else %}{% translate 'Recrutement fermé' %}{% endif %}</span>
+</footer>
+</article>

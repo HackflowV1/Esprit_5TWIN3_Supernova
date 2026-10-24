@@ -1,0 +1,77 @@
+{% extends 'teams/shell.html' %}{% load i18n ui %}
+{% block workspace %}
+<header class="page-head">
+<div>
+<div class="m2-tags">
+<span class="chip">{% if team.closed_at %}{% translate 'Équipe fermée' %}{% elif team.is_ready %}{% icon 'check' 14 %}{% translate 'Équipe prête' %}{% else %}{% translate 'En formation' %}{% endif %}</span>
+<span class="muted">{{ team.member_count }}/{{ event.max_team_size }} {% translate 'membres' %}</span>
+</div>
+<h1>{{ team }}</h1>
+<p class="muted">{% translate 'Capitaine :' %} {{ team.captain.user.get_full_name|default:team.captain.user.username }}</p>
+</div>
+<div class="actions">{% if formation_open and not team.closed_at %}{% if team_manager %}<a class="button" href="{% url 'teams:candidates' event.slug team.pk %}">{% icon 'search' %}{% translate 'Trouver des coéquipiers' %}</a>
+<a class="button secondary" href="{% url 'teams:edit' event.slug team.pk %}">{% icon 'edit' %}{% translate 'Modifier' %}</a>{% elif registration and not my_team and team.recruiting and team.places_left %}{% if applied %}<a class="button secondary" href="{% url 'teams:inbox' event.slug %}">{% icon 'clock' %}{% translate 'Candidature en attente' %}</a>{% else %}<a class="button" href="{% url 'teams:apply' event.slug team.pk %}">{% icon 'add' %}{% translate 'Rejoindre cette équipe' %}</a>{% endif %}{% endif %}{% endif %}</div>
+</header>
+{% if not team.is_ready and not team.closed_at %}<div class="m2-guide">
+<span class="m2-guide-icon">{% icon 'users' 24 %}</span>
+<div>
+<strong>{% translate 'Votre équipe prend forme.' %}</strong>
+<p>{% blocktranslate with minimum=event.min_team_size %}Il faut au moins {{ minimum }} membres pour que cette équipe soit prête. Ajoutez vos besoins pour faciliter les rencontres.{% endblocktranslate %}</p>
+</div>
+</div>{% endif %}
+<div class="m2-columns m2-team-layout">
+<div>
+<section class="panel">
+<h2>{% translate 'Notre idée' %}</h2>
+<div class="prose">{{ team.description|default:_('L’équipe prépare sa présentation.')|linebreaks }}</div>
+</section>
+<section class="panel">
+<div class="m2-section-head">
+<h2>{% translate 'Les membres' %}</h2>
+<span class="muted">{{ team.member_count }}/{{ event.max_team_size }}</span>
+</div>
+<ul class="m2-members">{% for member in members %}<li>
+<div class="m2-member-top">
+<span class="m2-avatar" aria-hidden="true">{{ member.registration.user.username|slice:':1'|upper }}</span>
+<div>
+<strong>{{ member.registration.user.get_full_name|default:member.registration.user.username }}</strong>
+<p class="muted">{% if member.registration_id == team.captain_id %}{% icon 'award' 14 %}{% translate 'Capitaine' %}{% else %}{% translate 'Membre' %}{% endif %}</p>
+</div>
+</div>
+<div class="m2-tags">{% for skill in member.registration.user.user_skills.all %}<span class="chip">{{ skill.skill }} <span class="muted">{{ skill.level }}/5</span>
+</span>{% empty %}<span class="muted">{% translate 'Compétences à compléter' %}</span>{% endfor %}</div>{% if team_manager and formation_open and member.registration_id != team.captain_id %}<div class="m2-member-actions">
+<a href="{% url 'teams:member-action' event.slug team.pk member.pk 'transfer' %}">{% icon 'award' 15 %}{% translate 'Nommer capitaine' %}</a>
+<a href="{% url 'teams:member-action' event.slug team.pk member.pk 'leave' %}">{% icon 'close' 15 %}{% translate 'Retirer' %}</a>
+</div>{% endif %}</li>{% empty %}<li class="muted">{% translate 'Aucun membre actif.' %}</li>{% endfor %}</ul>
+</section>
+{% if team_manager %}<section class="panel">
+<h2>{% translate 'Candidatures reçues' %}</h2>{% for record in join_requests %}{% include 'teams/request_row.html' with kind='application' manager=True %}{% empty %}<p class="muted">{% translate 'Pas encore de candidature. Partagez votre idée et précisez les talents recherchés.' %}</p>{% endfor %}</section>
+<section class="panel">
+<div class="m2-section-head">
+<h2>{% translate 'Invitations envoyées' %}</h2>{% if formation_open and team.recruiting and team.places_left %}<a class="button secondary small" href="{% url 'teams:invite' event.slug team.pk %}">{% icon 'add' 16 %}{% translate 'Inviter' %}</a>{% endif %}</div>{% for record in invitations %}{% include 'teams/request_row.html' with kind='invitation' manager=True %}{% empty %}<p class="muted">{% translate 'Aucune invitation envoyée.' %}</p>{% endfor %}</section>{% endif %}
+</div>
+<aside>
+<section class="panel m2-skills">
+<div class="m2-section-head">
+<h2>{% translate 'Les talents recherchés' %}</h2>{% if team_manager and formation_open and not team.closed_at %}<a class="button secondary small" href="{% url 'teams:need-add' event.slug team.pk %}">{% icon 'add' 16 %}{% translate 'Ajouter' %}</a>{% endif %}</div>
+<p class="muted">{% translate 'Les compétences qui compléteraient notre équipe.' %}</p>
+<ul class="m2-needs">{% for need in needs %}<li>
+<div>
+<strong>{{ need.skill }}</strong>
+<p class="muted">{{ need.get_priority_display }} · {{ need.level }}/5</p>{% if need.covered_by %}<p class="m2-coverage">{% icon 'check' 14 %}{% translate 'Couvert par' %} {% for person in need.covered_by %}{{ person.get_full_name|default:person.username }}{% if not forloop.last %}, {% endif %}{% endfor %}</p>{% else %}<p class="muted">{% translate 'À compléter' %}</p>{% endif %}</div>{% if team_manager and formation_open and not team.closed_at %}<div class="actions">
+<a class="icon-button" href="{% url 'teams:need-edit' event.slug team.pk need.pk %}" aria-label="{% blocktranslate with skill=need.skill %}Modifier le besoin {{ skill }}{% endblocktranslate %}">{% icon 'edit' 16 %}</a>
+<a class="icon-button" href="{% url 'teams:need-delete' event.slug team.pk need.pk %}" aria-label="{% blocktranslate with skill=need.skill %}Retirer le besoin {{ skill }}{% endblocktranslate %}">{% icon 'delete' 16 %}</a>
+</div>{% endif %}</li>{% empty %}<li class="muted">{% translate 'Aucun besoin précisé pour le moment.' %}</li>{% endfor %}</ul>
+</section>
+<section class="panel">
+<h2>{% translate 'Le recrutement' %}</h2>
+<p>{% if team.recruiting and team.places_left and formation_open and not team.closed_at %}{% icon 'check' %}{% translate 'Ouvert' %} · {{ team.places_left }} {% translate 'places disponibles' %}{% else %}{% icon 'close' %}{% translate 'Fermé' %}{% endif %}</p>
+<p class="muted">{% translate 'Les invitations ne réservent pas de place. Le premier accord confirmé rejoint l’équipe.' %}</p>{% if own_member and formation_open and not team.closed_at %}<a class="m2-subtle-link" href="{% url 'teams:member-action' event.slug team.pk own_member.pk 'leave' %}">{% icon 'logout' 16 %}{% translate 'Quitter l’équipe' %}</a>{% endif %}</section>
+{% if team_manager %}<details class="panel m2-history">
+<summary>{% icon 'history' %}{% translate 'Historique de l’équipe' %}</summary>
+<ol>{% for entry in history %}<li>
+<strong>{{ entry.get_action_display }}</strong>{% if entry.registration %} · {{ entry.registration.user }}{% endif %}<p class="muted">{{ entry.timestamp|date:'SHORT_DATETIME_FORMAT' }} · {{ entry.actor|default:'—' }}</p>
+</li>{% empty %}<li>{% translate 'Aucune activité.' %}</li>{% endfor %}</ol>
+</details>{% endif %}
+</aside>
+</div>{% endblock %}
