@@ -1,11 +1,11 @@
-{% extends 'base.html' %}
-{% block title %}Confirmer la suppression — HackFlow{% endblock %}
+{% extends 'base.html' %}{% load i18n ui %}
+{% block title %}{% translate 'Confirmer la suppression — HackFlow' %}{% endblock %}
 {% block content %}
 <section class="panel form-panel" aria-labelledby="delete-title">
-    <h1 id="delete-title">Supprimer {{ object }} ?</h1>
-    <p class="muted">Cette action est définitive.{% if event %} Seuls les brouillons non référencés peuvent être supprimés.{% endif %}</p>
-    <form method="post">{% csrf_token %}{{ form.as_div }}
-        <div class="actions"><button type="submit" class="danger">Confirmer la suppression</button><a class="button secondary" href="javascript:history.back()">Annuler</a></div>
+    <h1 id="delete-title">{% translate 'Supprimer' %} {{ object }} ?</h1>
+    <p class="muted">{% translate 'Cette action est définitive. Seuls les brouillons non référencés peuvent être supprimés.' %}</p>
+    <form method="post">{% csrf_token %}{% include 'shared/form_errors.html' %}{% for field in form %}{% render_field field %}{% endfor %}
+        <div class="actions"><button type="submit" class="danger">{% icon 'delete' %}{% translate 'Confirmer la suppression' %}</button><a class="button secondary" href="{{ cancel_url }}">{% icon 'close' %}{% translate 'Annuler' %}</a></div>
     </form>
 </section>
 {% endblock %}

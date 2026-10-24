@@ -1,0 +1,18 @@
+{% extends 'base.html' %}{% load static i18n ui %}
+{% block extra_css %}{{ block.super }}<link rel="stylesheet" href="{% static 'css/profile.css' %}?v=2">{% endblock %}
+{% block title %}{% translate 'Mon profil — HackFlow' %}{% endblock %}
+{% block content %}
+<header class="page-head"><div><h1>{% translate 'Mon espace' %}</h1><p class="muted">{% translate 'Votre profil, vos compétences et vos préférences.' %}</p></div></header>
+<div class="profile-layout">
+  <aside class="profile-sidebar"><nav class="profile-nav" aria-label="{% translate 'Navigation du profil' %}" data-profile-nav>
+    <a href="{% url 'accounts:profile' %}#information" data-profile-link="information">{% icon 'user' %}{% translate 'Informations' %}</a>
+    <a href="{% url 'accounts:profile' %}#skills" data-profile-link="skills">{% icon 'code' %}{% translate 'Mes compétences' %}</a>
+    <a href="{% url 'accounts:profile' %}#roles" data-profile-link="roles">{% icon 'users' %}{% translate 'Rôles et organisations' %}</a>
+    <a href="{% url 'accounts:profile' %}#preferences" data-profile-link="preferences">{% icon 'settings' %}{% translate 'Préférences' %}</a>
+    <a href="{% url 'accounts:profile' %}#accessibility" data-profile-link="accessibility">{% icon 'accessibility' %}{% translate 'Accessibilité' %}</a>
+    <a href="{% url 'accounts:profile' %}#security" data-profile-link="security">{% icon 'shield' %}{% translate 'Sécurité' %}</a>
+  </nav></aside>
+  <div class="profile-content">{% block profile_content %}{% endblock %}</div>
+</div>
+{% endblock %}
+{% block extra_js %}{{ block.super }}<script src="{% static 'js/profile.js' %}?v=2" defer></script>{% endblock %}

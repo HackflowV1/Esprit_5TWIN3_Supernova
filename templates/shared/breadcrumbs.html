@@ -1,0 +1,16 @@
+{% load i18n ui %}{% if ui_page != 'home' %}
+<nav class="breadcrumbs" aria-label="{% translate 'Fil d’Ariane' %}"><ol><li><a href="{% url 'core:home' %}">{% icon 'home' 15 %}<span>{% translate 'Accueil' %}</span></a></li>
+{% if ui_app == 'accounts' %}
+{% if user.is_authenticated and ui_page != 'profile' %}<li><a href="{% url 'accounts:profile' %}">{% translate 'Mon profil' %}</a></li>{% endif %}<li aria-current="page">{{ page_title }}</li>
+{% elif ui_app == 'teams' %}
+<li><a href="{% url 'hackathons:list' %}">{% translate 'Hackathons' %}</a></li>
+{% if event %}<li><a href="{{ event.get_absolute_url }}">{{ event }}</a></li>{% if ui_page != 'list' %}{% if registration or organizer %}<li><a href="{% url 'teams:list' event.slug %}">{% translate 'Les équipes' %}</a></li>{% endif %}{% endif %}{% endif %}
+{% if team and ui_page != 'detail' %}<li><a href="{{ team.get_absolute_url }}">{{ team }}</a></li>{% endif %}
+<li aria-current="page">{% if ui_page == 'detail' %}{{ team }}{% else %}{{ page_title }}{% endif %}</li>
+{% elif ui_app == 'hackathons' %}
+{% if ui_page != 'list' %}<li><a href="{% url 'hackathons:list' %}">{% translate 'Hackathons' %}</a></li>{% endif %}
+{% if ui_page == 'compare' %}<li><a href="{% url 'hackathons:dashboard' %}">{% translate 'Control Tower' %}</a></li>{% endif %}
+{% if event and ui_page != 'detail' %}<li><a href="{{ event.get_absolute_url }}">{{ event }}</a></li>{% endif %}
+{% if event and ui_page != 'detail' and ui_page != 'manage' and ui_page != 'propose' %}<li><a href="{% url 'hackathons:manage' event.slug %}">{% translate 'Pilotage' %}</a></li>{% endif %}
+<li aria-current="page">{% if ui_page == 'detail' %}{{ event }}{% else %}{{ page_title }}{% endif %}</li>
+{% else %}<li aria-current="page">{% translate 'Page indisponible' %}</li>{% endif %}</ol></nav>{% endif %}

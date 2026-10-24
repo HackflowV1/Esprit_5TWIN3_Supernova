@@ -1,4 +1,5 @@
 """M1 business operations. Consumers reuse these checks; never replicate calendar logic."""
+from django.utils.translation import gettext as _
 from django.conf import settings
 from django.core.exceptions import PermissionDenied, ValidationError
 from django.db import transaction
@@ -25,7 +26,7 @@ def record(event, actor, action, target, **details):
 @transaction.atomic
 def create_hackathon(*, actor, event):
     if not can_create_hackathon(actor):
-        raise PermissionDenied('Autorisation technique de création requise.')
+        raise PermissionDenied(_('Autorisation technique de création requise.'))
     event.created_by = actor
     event.status = Hackathon.Status.DRAFT
     event.save()
@@ -42,6 +43,12 @@ def save_configuration(*, actor, event):
     before = resource_snapshot(current)
     for name in CONFIGURATION_FIELDS:
         setattr(current, name, getattr(event, name))
+    from teams.models import Registration
+    from django.db.models import Count
+    if current.registrations.filter(status=Registration.Status.ACCEPTED).count() > current.capacity:
+        raise ValidationError(_('La capacité ne peut pas être inférieure au nombre d’inscriptions acceptées.'))
+    if current.teams.filter(closed_at__isnull=True).annotate(size=Count('memberships', filter=Q(memberships__ended_at__isnull=True))).filter(size__gt=current.max_team_size).exists():
+        raise ValidationError(_('La taille maximale ne peut pas être inférieure à une équipe existante.'))
     current.save()
     record(current, actor, 'Configuration', current, before=before, after=resource_snapshot(current))
     return current
@@ -63,11 +70,11 @@ def configuration_errors(event):
     required = {EventPhase.Kind.REGISTRATION, EventPhase.Kind.DEVELOPMENT, EventPhase.Kind.SUBMISSION, EventPhase.Kind.EVALUATION}
     missing = required - set(event.phases.values_list('kind', flat=True))
     if missing:
-        errors.append('Phases manquantes : ' + ', '.join(sorted(missing)))
+        errors.append(_('Phases manquantes : %(phases)s') % {'phases': ', '.join(str(EventPhase.Kind(kind).label) for kind in sorted(missing))})
     if not event.tracks.filter(active=True).exists():
-        errors.append('Un track actif est requis.')
+        errors.append(_('Un track actif est requis.'))
     if not event.tracks.filter(active=True, challenges__status=Challenge.Status.PUBLISHED).exists():
-        errors.append('Un challenge validé et publié est requis.')
+        errors.append(_('Un challenge validé et publié est requis.'))
     return errors
 
 
@@ -82,18 +89,18 @@ def transition(*, actor, event, target):
         Hackathon.Status.FINISHED: [Hackathon.Status.ARCHIVED],
     }
     if target not in allowed.get(event.status, []):
-        raise ValidationError('Transition de statut interdite.')
+        raise ValidationError(_('Transition de statut interdite.'))
     now = timezone.now()
     if target == Hackathon.Status.PUBLISHED:
         errors = configuration_errors(event)
         if event.end_date <= now:
-            errors.append('Événement déjà terminé.')
+            errors.append(_('Événement déjà terminé.'))
         if errors:
             raise ValidationError(errors)
     if target == Hackathon.Status.ONGOING and not event.start_date <= now < event.end_date:
-        raise ValidationError('Le démarrage exige une date dans la période de l’événement.')
+        raise ValidationError(_('Le démarrage exige une date dans la période de l’événement.'))
     if target == Hackathon.Status.FINISHED and now < event.end_date:
-        raise ValidationError('La date de fin n’est pas atteinte.')
+        raise ValidationError(_('La date de fin n’est pas atteinte.'))
     previous = event.status
     if target == Hackathon.Status.ARCHIVED:
         event.archive_metrics = metrics(event)
@@ -117,7 +124,7 @@ def phase_is_open(event, kind, at=None):
 
 def require_open_phase(event, kind, at=None):
     if not phase_is_open(event, kind, at):
-        raise ValidationError('Cette période est fermée.')
+        raise ValidationError(_('Cette période est fermée.'))
 
 
 @transaction.atomic
@@ -128,10 +135,10 @@ def save_resource(*, actor, resource, action='Modification'):
     if resource.pk:
         original = type(resource).objects.select_for_update().get(pk=resource.pk)
         if original.get_hackathon().pk != event.pk:
-            raise PermissionDenied('Une ressource ne peut pas changer de hackathon.')
+            raise PermissionDenied(_('Une ressource ne peut pas changer de hackathon.'))
         before = resource_snapshot(original)
         if isinstance(resource, Sponsorship) and original.organization_id != resource.organization_id:
-            raise ValidationError('L’organisation d’un partenariat existant ne peut pas changer.')
+            raise ValidationError(_('L’organisation d’un partenariat existant ne peut pas changer.'))
     # Lock the parent even when another request changes dates or archives it.
     if hasattr(resource, 'hackathon'):
         resource.hackathon = event
@@ -140,13 +147,13 @@ def save_resource(*, actor, resource, action='Modification'):
         if resource.sponsorship_id:
             resource.sponsorship = Sponsorship.objects.get(pk=resource.sponsorship_id)
             if resource.sponsorship.hackathon_id != event.pk or resource.sponsorship.status != Sponsorship.Status.CONFIRMED:
-                raise ValidationError('Un partenariat confirmé du hackathon est requis.')
+                raise ValidationError(_('Un partenariat confirmé du hackathon est requis.'))
         resource.status = Challenge.Status.DRAFT
         resource.approved_by = None
         resource.approved_at = None
     if isinstance(resource, Sponsorship) and resource.status != Sponsorship.Status.CONFIRMED:
         if resource.pk and resource.challenges.filter(status__in=[Challenge.Status.APPROVED, Challenge.Status.PUBLISHED]).exists():
-            raise ValidationError('Retirez les challenges validés avant de désactiver le partenariat.')
+            raise ValidationError(_('Retirez les challenges validés avant de désactiver le partenariat.'))
     resource.save()
     record(event, actor, action, resource, model=resource._meta.label, pk=resource.pk,
         before=before, after=resource_snapshot(resource))
@@ -159,13 +166,13 @@ def propose_challenge(*, actor, challenge):
     if event.status == Hackathon.Status.ARCHIVED:
         raise PermissionDenied
     if not has_role(actor, event, Role.SPONSOR_REPRESENTATIVE):
-        raise PermissionDenied('Rôle représentant sponsor requis dans cet événement.')
+        raise PermissionDenied(_('Rôle représentant sponsor requis dans cet événement.'))
     partnership = Sponsorship.objects.filter(pk=challenge.sponsorship_id, hackathon=event).first()
     if not partnership or partnership.hackathon_id != event.pk or partnership.status != Sponsorship.Status.CONFIRMED:
-        raise ValidationError('Un partenariat confirmé du hackathon est requis.')
+        raise ValidationError(_('Un partenariat confirmé du hackathon est requis.'))
     if not SponsorMembership.objects.select_for_update().filter(user=actor, organization=partnership.organization,
             status=AssignmentStatus.ACTIVE, can_propose_challenges=True).exists():
-        raise PermissionDenied('Mandat de représentation actif requis.')
+        raise PermissionDenied(_('Mandat de représentation actif requis.'))
     challenge.sponsorship = partnership
     challenge.proposed_by = actor
     challenge.approved_by = None
@@ -190,7 +197,7 @@ def review_challenge(*, actor, challenge, action):
     elif action == 'withdraw' and challenge.status in (Challenge.Status.PROPOSED, Challenge.Status.APPROVED, Challenge.Status.PUBLISHED):
         challenge.status = Challenge.Status.WITHDRAWN
     else:
-        raise ValidationError('Transition de challenge interdite.')
+        raise ValidationError(_('Transition de challenge interdite.'))
     challenge.save()
     label = {'approve': 'validation', 'publish': 'publication', 'withdraw': 'retrait'}[action]
     record(event, actor, 'Challenge : ' + label, challenge, pk=challenge.pk)
@@ -217,7 +224,7 @@ def metrics(event):
                     raise ValueError('Invalid metric contract')
                 item = {'available': True, 'counts': counts}
             except Exception:
-                item['error'] = 'Indicateurs indisponibles ; vérifier le fournisseur.'
+                item['error'] = _('Indicateurs indisponibles ; vérifier le fournisseur.')
         result['modules'][module] = item
     return result
 
@@ -234,7 +241,7 @@ def operational_alerts(event):
             raise ValueError('Invalid alert contract')
         return {'available': True, 'items': items}
     except Exception:
-        return {'available': False, 'items': [], 'error': 'Fournisseur d’alertes indisponible.'}
+        return {'available': False, 'items': [], 'error': _('Fournisseur d’alertes indisponible.')}
 
 
 def intelligence_context(*, actor, event):

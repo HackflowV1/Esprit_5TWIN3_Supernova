@@ -1,51 +1,50 @@
-{% extends 'base.html' %}
-{% block title %}{{ title|default:'Configuration' }} — HackFlow{% endblock %}
+{% extends 'base.html' %}{% load i18n ui %}
+{% block title %}{{ title|default:page_title }} {% translate '— HackFlow' %}{% endblock %}
 {% block content %}
 {% with page=request.resolver_match.url_name %}
-{% if event %}<p class="breadcrumb"><a href="{% url 'hackathons:manage' event.slug %}">← Retour au pilotage</a> · <a href="{{ event.get_absolute_url }}">{{ event }}</a></p>{% endif %}
 <div class="form-layout{% if event %} has-aside{% endif %}">
     <section class="panel form-panel" aria-labelledby="form-title">
-        <h1 id="form-title">{{ title|default:'Configuration' }}</h1>
-        {% if event %}<p class="muted">Édition : <strong>{{ event }}</strong> · Horaires : Africa/Tunis</p>{% endif %}
+        <h1 id="form-title">{{ title|default:page_title }}</h1>
+        {% if event %}<p class="muted">{% translate 'Édition :' %} <strong>{{ event }}</strong> {% translate '· Horaires : Africa/Tunis' %}</p>{% endif %}
         <form method="post" enctype="multipart/form-data" novalidate>{% csrf_token %}
-            {{ form.as_div }}
+            {% include 'shared/form_errors.html' %}{% for field in form %}{% render_field field %}{% endfor %}
             {% if next %}<input type="hidden" name="next" value="{{ next }}">{% endif %}
             <div class="form-actions">
-                <button type="submit">{{ button_label|default:'Enregistrer' }}</button>
-                {% if event %}<a class="button secondary" href="{% url 'hackathons:manage' event.slug %}">Annuler</a>{% endif %}
+                <button type="submit">{% icon 'save' %}{{ button_label|default:_('Enregistrer') }}</button>
+                <a class="button secondary" href="{{ cancel_url }}">{% icon 'close' %}{% translate 'Annuler' %}</a>
             </div>
         </form>
-        {% if page == 'login' %}<p class="form-aside">Pas encore de compte ? <a href="{% url 'accounts:signup' %}">Créer mon compte</a></p>
-        {% elif page == 'signup' %}<p class="form-aside">Déjà inscrit·e ? <a href="{% url 'accounts:login' %}">Se connecter</a></p>{% endif %}
+        {% if page == 'login' %}<p class="form-aside">{% translate 'Pas encore de compte ?' %} <a href="{% url 'accounts:signup' %}">{% icon 'add' %}{% translate 'Créer mon compte' %}</a></p>
+        {% elif page == 'signup' %}<p class="form-aside">{% translate 'Déjà inscrit·e ?' %} <a href="{% url 'accounts:login' %}">{% translate 'Se connecter' %}</a></p>{% endif %}
     </section>
 
     {% if event %}
-    <aside class="form-help" aria-label="Aide">
+    <aside class="form-help" aria-label="{% translate 'Aide' %}">
         <div class="side-card">
             {% if page == 'edit' %}
-            <h2>Bien configurer l’édition</h2>
+            <h2>{% translate 'Bien configurer l’édition' %}</h2>
             <ul class="tips">
-                <li>Le <strong>début</strong> doit précéder la <strong>fin</strong>.</li>
-                <li>La <strong>clôture des inscriptions</strong> ne peut pas dépasser la fin de l’événement.</li>
-                <li>La <strong>deadline de soumission</strong> doit se situer pendant l’événement.</li>
-                <li>La capacité doit couvrir au moins la taille maximale d’une équipe.</li>
+                <li>{% translate 'Le début doit précéder la fin de l’événement.' %}</li>
+                <li>{% translate 'La clôture des inscriptions ne peut pas dépasser la fin de l’événement.' %}</li>
+                <li>{% translate 'La date limite de soumission doit se situer pendant l’événement.' %}</li>
+                <li>{% translate 'La capacité doit couvrir au moins la taille maximale d’une équipe.' %}</li>
             </ul>
             {% elif page == 'roles' %}
-            <h2>Rôles de cette édition</h2>
-            <p class="muted">Un rôle s’applique uniquement à ce hackathon. Un participant ne peut pas être juré dans la même édition.</p>
+            <h2>{% translate 'Rôles de cette édition' %}</h2>
+            <p class="muted">{% translate 'Un rôle s’applique uniquement à ce hackathon. Un participant ne peut pas être juré dans la même édition.' %}</p>
             <ul class="role-list">
-                {% for item in event.role_assignments.all %}<li><span>{{ item.user }}</span><span class="chip">{{ item.get_role_display }}</span>{% if item.status != 'ACTIVE' %}<span class="badge badge--draft">{{ item.get_status_display }}</span>{% endif %}</li>{% empty %}<li class="muted">Aucune affectation.</li>{% endfor %}
+                {% for item in event.role_assignments.all %}<li><span>{{ item.user }}</span><span class="chip">{{ item.get_role_display }}</span>{% if item.status != 'ACTIVE' %}<span class="badge badge--draft">{{ item.get_status_display }}</span>{% endif %}</li>{% empty %}<li class="muted">{% translate 'Aucune affectation.' %}</li>{% endfor %}
             </ul>
             {% elif page == 'organization-add' %}
-            <h2>À quoi sert une organisation ?</h2>
+            <h2>{% translate 'À quoi sert une organisation ?' %}</h2>
             <ul class="tips">
-                <li>Elle représente un sponsor ou un partenaire.</li>
-                <li>Pour l’associer à cette édition, ajoutez ensuite un <strong>partenariat</strong> depuis la page de pilotage.</li>
-                <li>Les contacts restent privés ; seule la description publique est affichée.</li>
+                <li>{% translate 'Elle représente un sponsor ou un partenaire.' %}</li>
+                <li>{% translate 'Pour l’associer à cette édition, ajoutez ensuite un partenariat depuis la page de pilotage.' %}</li>
+                <li>{% translate 'Les contacts restent privés ; seule la description publique est affichée.' %}</li>
             </ul>
             {% else %}
-            <h2>Besoin d’aide ?</h2>
-            <p class="muted">Les champs obligatoires sont contrôlés côté serveur. Les erreurs s’affichent sous chaque champ.</p>
+            <h2>{% translate 'Besoin d’aide ?' %}</h2>
+            <p class="muted">{% translate 'Les champs obligatoires sont contrôlés côté serveur. Les erreurs s’affichent sous chaque champ.' %}</p>
             {% endif %}
         </div>
     </aside>

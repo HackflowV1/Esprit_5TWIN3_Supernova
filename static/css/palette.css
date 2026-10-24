@@ -1,0 +1,90 @@
+/* HackFlow Modern Signal Orange & Mist Palette. Shared by application & Django admin. */
+:root {
+  --brand-primary-rgb:249,87,33;
+  /* Filled actions use a deeper orange so white labels meet 4.5:1. */
+  --brand-button:#c64010;
+  --brand-button-hover:#a9320b;
+  --brand-on-button:#fff;
+  --brand-gradient-start:#ff6b35;
+  --brand-gradient-end:#ff8557;
+  --brand-gradient-hover-start:#ff7a48;
+  --brand-close-highlight-start:#ff7a48;
+  --brand-close-highlight-end:#ffaa82;
+  --brand-highlight:#ff8557;
+  --brand-bg: #f8f9fb;
+  --brand-surface: #ffffff;
+  --brand-raised: #f1f3f7;
+  --brand-active: #e6e9ef;
+  --brand-ink: #111418;
+  --brand-muted: #565f6c;
+  --brand-faint: #626c7a;
+  --brand-line: #e3e6ec;
+  --brand-control: #8e97a4;
+  --brand-primary: #f95721;
+  --brand-on-primary: #08090c;
+  --brand-primary-hover: #e04410;
+  --brand-accent: #b83c0a;
+  --brand-soft: #fff4ee;
+  --brand-soft-border: rgba(249, 87, 33, 0.18);
+  --brand-illustration-paper: #f0f2f6;
+  --brand-focus: #f95721;
+  --brand-danger: #be123c;
+  --brand-danger-soft: #fff1f2;
+  --brand-success: #047857;
+  --brand-success-soft: #ecfdf5;
+  --brand-warning: #92400e;
+  --brand-warning-soft: #fffbeb;
+}
+:root[data-theme="dark"] {
+  --brand-bg: #0d0f12;
+  --brand-surface: #15181e;
+  --brand-raised: #1c2028;
+  --brand-active: #272d38;
+  --brand-ink: #f4f5f7;
+  --brand-muted: #9aa2af;
+  --brand-faint: #9aa2af;
+  --brand-line: #252a35;
+  --brand-control: #7b8593;
+  --brand-primary: #ff6b35;
+  --brand-on-primary: #0d0f12;
+  --brand-primary-hover: #ff8557;
+  --brand-accent: #ff6b35;
+  --brand-soft: #231713;
+  --brand-soft-border: rgba(255, 107, 53, 0.25);
+  --brand-illustration-paper: #181b22;
+  --brand-focus: #ff6b35;
+  --brand-danger: #fb7185;
+  --brand-danger-soft: #271418;
+  --brand-success: #34d399;
+  --brand-success-soft: #0f241a;
+  --brand-warning: #fbbf24;
+  --brand-warning-soft: #261f0e;
+}
+
+@media (prefers-color-scheme:dark) {
+  :root:not([data-theme]) {
+    --brand-bg: #0d0f12;
+    --brand-surface: #15181e;
+    --brand-raised: #1c2028;
+    --brand-active: #272d38;
+    --brand-ink: #f4f5f7;
+    --brand-muted: #9aa2af;
+    --brand-faint: #9aa2af;
+    --brand-line: #252a35;
+    --brand-control: #7b8593;
+    --brand-primary: #ff6b35;
+    --brand-on-primary: #0d0f12;
+    --brand-primary-hover: #ff8557;
+    --brand-accent: #ff6b35;
+    --brand-soft: #231713;
+    --brand-soft-border: rgba(255, 107, 53, 0.25);
+    --brand-illustration-paper: #181b22;
+    --brand-focus: #ff6b35;
+    --brand-danger: #fb7185;
+    --brand-danger-soft: #271418;
+    --brand-success: #34d399;
+    --brand-success-soft: #0f241a;
+    --brand-warning: #fbbf24;
+    --brand-warning-soft: #261f0e;
+  }
+}

@@ -1,3 +1,4 @@
+from django.utils.translation import gettext_lazy as _
 from django.contrib import messages
 from django.contrib.auth import login
 from django.contrib.auth.mixins import LoginRequiredMixin
@@ -13,15 +14,15 @@ class SignupView(SuccessMessageMixin, CreateView):
     form_class = SignupForm
     template_name = 'accounts/auth.html'
     success_url = reverse_lazy('accounts:profile')
-    success_message = 'Votre compte a été créé.'
-    extra_context = {'title': 'Créer mon compte', 'button_label': 'Créer mon compte'}
+    success_message = _('Votre compte a été créé.')
+    extra_context = {'title': _('Créer mon compte'), 'button_label': _('Créer mon compte')}
 
     def form_valid(self, form):
         try:
             with transaction.atomic():
                 response = super().form_valid(form)
         except IntegrityError:
-            form.add_error(None, 'Identifiant ou email déjà utilisé.')
+            form.add_error(None, _('Identifiant ou email déjà utilisé.'))
             return self.form_invalid(form)
         login(self.request, self.object)
         return response
@@ -41,10 +42,10 @@ class ProfileView(LoginRequiredMixin, TemplateView):
 
 class ProfileUpdateView(LoginRequiredMixin, SuccessMessageMixin, UpdateView):
     form_class = ProfileForm
-    template_name = 'shared/form.html'
+    template_name = 'accounts/profile_form.html'
     success_url = reverse_lazy('accounts:profile')
-    success_message = 'Profil mis à jour.'
-    extra_context = {'title': 'Modifier mon profil'}
+    success_message = _('Profil mis à jour.')
+    extra_context = {'title': _('Modifier mon profil')}
 
     def get_object(self, queryset=None):
         return Profile.objects.get_or_create(user=self.request.user)[0]
@@ -54,16 +55,16 @@ class ProfileUpdateView(LoginRequiredMixin, SuccessMessageMixin, UpdateView):
             with transaction.atomic():
                 return super().form_valid(form)
         except IntegrityError:
-            form.add_error(None, 'Cet email est déjà utilisé.')
+            form.add_error(None, _('Cet email est déjà utilisé.'))
             return self.form_invalid(form)
 
 
 class SkillCreateView(LoginRequiredMixin, SuccessMessageMixin, CreateView):
     form_class = UserSkillForm
-    template_name = 'shared/form.html'
+    template_name = 'accounts/profile_form.html'
     success_url = reverse_lazy('accounts:profile')
-    success_message = 'Compétence ajoutée.'
-    extra_context = {'title': 'Ajouter une compétence'}
+    success_message = _('Compétence ajoutée.')
+    extra_context = {'title': _('Ajouter une compétence')}
 
     def get_form_kwargs(self):
         kwargs = super().get_form_kwargs()
@@ -75,15 +76,15 @@ class SkillCreateView(LoginRequiredMixin, SuccessMessageMixin, CreateView):
             with transaction.atomic():
                 return super().form_valid(form)
         except IntegrityError:
-            form.add_error(None, 'Cette compétence existe déjà sur votre profil.')
+            form.add_error(None, _('Cette compétence existe déjà sur votre profil.'))
             return self.form_invalid(form)
 
 
 class SkillUpdateView(LoginRequiredMixin, SuccessMessageMixin, UpdateView):
     form_class = UserSkillForm
-    template_name = 'shared/form.html'
+    template_name = 'accounts/profile_form.html'
     success_url = reverse_lazy('accounts:profile')
-    success_message = 'Compétence modifiée.'
+    success_message = _('Compétence modifiée.')
 
     def get_queryset(self):
         return UserSkill.objects.filter(user=self.request.user)
@@ -93,12 +94,12 @@ class SkillUpdateView(LoginRequiredMixin, SuccessMessageMixin, UpdateView):
             with transaction.atomic():
                 return super().form_valid(form)
         except IntegrityError:
-            form.add_error(None, 'Cette compétence existe déjà sur votre profil.')
+            form.add_error(None, _('Cette compétence existe déjà sur votre profil.'))
             return self.form_invalid(form)
 
 
 class SkillDeleteView(LoginRequiredMixin, DeleteView):
-    template_name = 'shared/confirm_delete.html'
+    template_name = 'accounts/profile_delete.html'
     success_url = reverse_lazy('accounts:profile')
 
     def get_queryset(self):

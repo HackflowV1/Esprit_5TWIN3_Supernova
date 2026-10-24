@@ -1,0 +1,5 @@
+{% load i18n ui %}{% get_current_language as LANGUAGE_CODE %}
+<details class="dropdown language-menu hf-menu hf-language" data-dropdown>
+  <summary class="hf-control" aria-label="{% translate 'Langue' %}">{% icon 'globe' %}<span>{{ LANGUAGE_CODE|upper }}</span>{% icon 'chevron-down' 14 %}</summary>
+  <div class="hf-panel hf-language-panel" role="group" aria-label="{% translate 'Langue' %}">{% include 'shared/nav_language_choices.html' %}</div>
+</details>

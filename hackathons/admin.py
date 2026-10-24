@@ -1,3 +1,4 @@
+from django.utils.translation import gettext_lazy as _
 from django.contrib import admin, messages
 from django.core.exceptions import ValidationError, PermissionDenied
 from core.admin import SuperuserAdmin
@@ -31,9 +32,9 @@ class HackathonAdmin(SuperuserAdmin):
     prepopulated_fields = {'slug': ('title',)}
     inlines = [TrackInline, PhaseInline]
     fieldsets = (
-        ('Événement', {'fields': ('title', 'slug', 'description', 'rules', 'participation_conditions', 'image', 'location', 'format')}),
+        (_('Événement'), {'fields': ('title', 'slug', 'description', 'rules', 'participation_conditions', 'image', 'location', 'format')}),
         ('Calendrier', {'fields': ('start_date', 'end_date', 'registration_open', 'registration_close', 'submission_deadline')}),
-        ('Capacités', {'fields': ('capacity', 'min_team_size', 'max_team_size')}),
+        (_('Capacités'), {'fields': ('capacity', 'min_team_size', 'max_team_size')}),
         ('Cycle de vie', {'fields': readonly_fields}),
     )
     actions = ('publish', 'archive')
@@ -55,11 +56,11 @@ class HackathonAdmin(SuperuserAdmin):
                 detail = ' '.join(exc.messages) if isinstance(exc, ValidationError) else str(exc)
                 self.message_user(request, f'{event}: {detail}', messages.ERROR)
 
-    @admin.action(description='Publier après validation métier')
+    @admin.action(description=_('Publier après validation métier'))
     def publish(self, request, queryset):
         self.run_transition(request, queryset, Hackathon.Status.PUBLISHED)
 
-    @admin.action(description='Archiver les éditions terminées')
+    @admin.action(description=_('Archiver les éditions terminées'))
     def archive(self, request, queryset):
         self.run_transition(request, queryset, Hackathon.Status.ARCHIVED)
 

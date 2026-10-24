@@ -35,12 +35,13 @@ INSTALLED_APPS = [
     'accounts',
     'core',
     'hackathons',
-    'mentoring',
+    'teams',
 ]
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
+    'core.middleware.PreferredLanguageMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
@@ -61,7 +62,7 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
-                'mentoring.context_processors.mentor_menu',
+                'core.context_processors.interface',
             ],
         },
     },
@@ -88,7 +89,11 @@ AUTH_PASSWORD_VALIDATORS = [
 ]
 
 # Internationalization
-LANGUAGE_CODE = 'fr-fr'
+LANGUAGE_CODE = 'fr'
+LANGUAGES = [('fr', 'Français'), ('en', 'English')]
+LOCALE_PATHS = [BASE_DIR / 'locale']
+LANGUAGE_COOKIE_NAME = 'hackflow_language'
+LANGUAGE_COOKIE_SAMESITE = 'Lax'
 TIME_ZONE = 'Africa/Tunis'
 USE_I18N = True
 USE_TZ = True
@@ -107,3 +112,5 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 # AI services — environment variables prepared for future integration
 GOOGLE_API_KEY = os.environ.get('GOOGLE_API_KEY', '')
+
+HACKFLOW_METRIC_PROVIDERS = {'M2': 'teams.services.metrics'}

@@ -3,6 +3,11 @@
 Monolithe Django 5.2 (MVT), Templates, ModelForms, vues génériques et PostgreSQL.
 Le modèle original `accounts.User(AbstractUser)` et sa migration initiale sont conservés.
 
+**Interface commune aux cinq modules : [DESIGN.md](DESIGN.md).**
+L’application démarre en français. Le menu « Langue et apparence » propose l’anglais
+et les thèmes clair, sombre ou système. Les icônes Hugeicons et les images sont locales.
+Après modification des traductions, lancer `uv run python scripts/compile_translations.py`.
+
 ## Démarrage local
 
 Dans le dépôt existant, avec Python 3.11+ et `uv` :
@@ -70,6 +75,8 @@ l’événement et un partenariat confirmé. L’organisateur valide puis publie
   compétences de niveau 1–5, rôles contextualisés et historique d’affectation.
 - M1 : événements, recherche et filtres, calendrier, tracks, challenges,
   organisations sponsors, partenariats et workflow de validation.
+- M2 : inscriptions réelles, équipes, invitations/candidatures, capitaine,
+  compétences recherchées et suggestions explicables de coéquipiers.
 - Cycle : brouillon → publié → en cours → terminé → archivé ; un événement publié
   dont la date de fin est passée peut aussi être terminé directement.
 - Control Tower : compteurs issus de la base, échéances, phases et alertes de configuration.
@@ -77,8 +84,13 @@ l’événement et un partenariat confirmé. L’organisateur valide puis publie
 - Administration réservée au superutilisateur technique, avec recherches, filtres,
   inlines et actions de publication/archivage réutilisant les règles métier.
 
-Les domaines M2, M3, M4, M5 et les moteurs IA ne sont pas implémentés dans cette livraison.
+Les domaines M3, M4, M5 et les moteurs IA ne sont pas implémentés dans cette livraison.
 Leurs données apparaissent comme indisponibles tant que leurs fournisseurs ne sont pas connectés.
+
+Pour essayer M2, lancer les migrations puis `uv run python manage.py seed_demo`
+en développement et ouvrir **Mes inscriptions** ou une édition ouverte. La phase
+**Constitution des équipes** doit être configurée pour autoriser le recrutement.
+Voir [le parcours M2](docs/USER_M2.md) et [les contrats M3/M4](docs/M2_CONTRACTS.md).
 
 ## Intégration et validation
 

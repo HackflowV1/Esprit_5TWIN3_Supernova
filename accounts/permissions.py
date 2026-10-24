@@ -1,3 +1,4 @@
+from django.utils.translation import gettext_lazy as _
 from django.core.exceptions import PermissionDenied
 from .models import Role, RoleAssignment, AssignmentStatus
 
@@ -23,9 +24,9 @@ def can_manage(user, hackathon):
 
 def require_organizer(user, hackathon, *, mutable=True):
     if not can_manage(user, hackathon):
-        raise PermissionDenied('Rôle organisateur requis dans ce hackathon.')
+        raise PermissionDenied(_('Rôle organisateur requis dans ce hackathon.'))
     if mutable and hackathon.status == 'ARCHIVED':
-        raise PermissionDenied('Édition archivée : consultation uniquement.')
+        raise PermissionDenied(_('Édition archivée : consultation uniquement.'))
 
 
 class HackathonRoleMixin:

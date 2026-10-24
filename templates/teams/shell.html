@@ -1,0 +1,21 @@
+{% extends 'base.html' %}{% load static i18n ui %}
+{% block extra_css %}{{ block.super }}<link rel="stylesheet" href="{% static 'css/teams.css' %}?v=2">{% endblock %}
+{% block title %}{{ title|default:page_title }} — HackFlow{% endblock %}
+{% block content %}
+<div class="m2-workspace">
+{% if event %}
+<div class="m2-event">
+<a href="{{ event.get_absolute_url }}">{% icon 'arrow-left' 16 %}{{ event }}</a>
+<span class="muted">{{ event.min_team_size }}–{{ event.max_team_size }} {% translate 'personnes par équipe' %}</span>
+</div>
+<nav class="m2-nav" aria-label="{% translate 'Participation au hackathon' %}">
+<a href="{% url 'teams:list' event.slug %}"{% if ui_page == 'list' or ui_page == 'create' or team and team.pk != my_team.pk %} aria-current="page"{% endif %}>{% icon 'users' %}{% translate 'Les équipes' %}</a>
+{% if my_team %}<a href="{{ my_team.get_absolute_url }}"{% if team.pk == my_team.pk and ui_page != 'list' and ui_page != 'inbox' %} aria-current="page"{% endif %}>{% icon 'code' %}{% translate 'Mon équipe' %}</a>{% endif %}
+{% if registration %}<a href="{% url 'teams:inbox' event.slug %}"{% if ui_page == 'inbox' %} aria-current="page"{% endif %}>{% icon 'check' %}{% translate 'Invitations et candidatures' %}</a>{% endif %}
+{% if organizer %}<a href="{% url 'teams:manage' event.slug %}"{% if ui_page == 'manage' %} aria-current="page"{% endif %}>{% icon 'settings' %}{% translate 'Gestion des participants' %}</a>{% endif %}
+</nav>
+{% if not formation_open and ui_page != 'register' and ui_page != 'cancel' %}<p class="m2-notice">{% icon 'clock' %}{% translate 'La formation des équipes est fermée. Les équipes restent consultables.' %}</p>{% endif %}
+{% endif %}
+{% block workspace %}{% endblock %}
+</div>
+{% endblock %}

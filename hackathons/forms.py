@@ -1,3 +1,4 @@
+from django.utils.translation import gettext_lazy as _
 from django import forms
 from .models import Hackathon, Track, Challenge, EventPhase, SponsorOrganization, Sponsorship
 
@@ -5,16 +6,18 @@ from .models import Hackathon, Track, Challenge, EventPhase, SponsorOrganization
 class FrenchModelForm(forms.ModelForm):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        labels = {'title': 'Titre', 'rules': 'Règlement', 'participation_conditions': 'Conditions de participation',
-            'location': 'Lieu', 'start_date': 'Début de l’événement', 'end_date': 'Fin de l’événement',
-            'registration_open': 'Ouverture des inscriptions', 'registration_close': 'Clôture des inscriptions',
-            'submission_deadline': 'Date limite de soumission', 'capacity': 'Capacité maximale',
-            'min_team_size': 'Taille minimale des équipes', 'max_team_size': 'Taille maximale des équipes',
-            'name': 'Nom', 'active': 'Actif', 'kind': 'Type de phase', 'start': 'Début', 'end': 'Fin',
-            'problem': 'Problématique', 'objectives': 'Objectifs', 'deliverables': 'Livrables attendus',
-            'sponsorship': 'Partenariat sponsor', 'organization': 'Organisation', 'contribution_type': 'Type de contribution',
-            'estimated_value': 'Valeur estimée', 'currency': 'Devise', 'status': 'Statut', 'prize_information': 'Informations pour les prix (M5)',
-            'sector': 'Secteur', 'website': 'Site web', 'contact_name': 'Nom du contact', 'contact_email': 'Email du contact'}
+        labels = {'title': _('Titre'), 'rules': _('Règlement'), 'participation_conditions': _('Conditions de participation'),
+            'description': _('Description'), 'image': _('Image'), 'slug': _('Identifiant dans l’URL'),
+            'format': _('Format'), 'track': _('Track'), 'logo': _('Logo'),
+            'location': _('Lieu'), 'start_date': _('Début de l’événement'), 'end_date': _('Fin de l’événement'),
+            'registration_open': _('Ouverture des inscriptions'), 'registration_close': _('Clôture des inscriptions'),
+            'submission_deadline': _('Date limite de soumission'), 'capacity': _('Capacité maximale'),
+            'min_team_size': _('Taille minimale des équipes'), 'max_team_size': _('Taille maximale des équipes'),
+            'name': _('Nom'), 'active': _('Actif'), 'kind': _('Type de phase'), 'start': _('Début'), 'end': _('Fin'),
+            'problem': _('Problématique'), 'objectives': _('Objectifs'), 'deliverables': _('Livrables attendus'),
+            'sponsorship': _('Partenariat sponsor'), 'organization': _('Organisation'), 'contribution_type': _('Type de contribution'),
+            'estimated_value': _('Valeur estimée'), 'currency': _('Devise'), 'status': _('Statut'), 'prize_information': _('Informations pour les prix (M5)'),
+            'sector': _('Secteur'), 'website': _('Site web'), 'contact_name': _('Nom du contact'), 'contact_email': _('Email du contact')}
         for name, field in self.fields.items():
             field.label = labels.get(name, field.label)
             if isinstance(field, forms.DateTimeField):

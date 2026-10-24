@@ -1,36 +1,30 @@
-{% extends 'base.html' %}
-{% block title %}{{ title }} — HackFlow{% endblock %}
+{% extends 'base.html' %}{% load static i18n ui %}
+{% block title %}{{ title }} {% translate '— HackFlow' %}{% endblock %}
 {% block content %}
 {% with page=request.resolver_match.url_name %}
 <div class="auth">
-    <aside class="auth-side" aria-label="Pourquoi rejoindre HackFlow">
-        <p class="eyebrow">{% if page == 'login' %}Bon retour{% else %}Rejoignez la communauté{% endif %}</p>
-        <h2>{% if page == 'login' %}Prêt·e à reprendre là où vous vous êtes arrêté·e ?{% else %}Un compte, tous les hackathons.{% endif %}</h2>
+    <aside class="auth-side" aria-label="{% translate 'Pourquoi rejoindre HackFlow' %}">
+        <img class="auth-illustration ink-illustration" src="{% static 'images/hackflow-project-orange.webp' %}" width="1254" height="1254" alt="" aria-hidden="true">
+        <h2>{% if page == 'login' %}{% translate 'Retrouvez votre espace.' %}{% else %}{% translate 'Un compte, tous les hackathons.' %}{% endif %}</h2>
         <ul class="auth-points">
-            <li><span aria-hidden="true">◆</span> Un seul compte, des rôles différents selon chaque événement.</li>
-            <li><span aria-hidden="true">◆</span> Constituez votre équipe grâce à vos compétences.</li>
-            <li><span aria-hidden="true">◆</span> Suivez votre projet, vos mentors et vos échéances.</li>
+            <li>{% icon 'check' 17 %} {% translate 'Un seul compte, des rôles différents selon chaque événement.' %}</li>
+            <li>{% icon 'check' 17 %} {% translate 'Présentez votre profil et vos compétences.' %}</li>
+            <li>{% icon 'check' 17 %} {% translate 'Retrouvez les dates et les consignes de chaque édition.' %}</li>
         </ul>
     </aside>
 
     <section class="auth-card" aria-labelledby="auth-title">
         <h1 id="auth-title">{{ title }}</h1>
-        <p class="muted">{% if page == 'login' %}Connectez-vous pour accéder à votre espace.{% else %}Créez votre compte en moins d’une minute.{% endif %}</p>
+        <p class="muted">{% if page == 'login' %}{% translate 'Connectez-vous pour accéder à votre espace.' %}{% else %}{% translate 'Créez votre compte pour découvrir les éditions.' %}{% endif %}</p>
         <form method="post" class="auth-form" novalidate>{% csrf_token %}
-            {% if form.non_field_errors %}<div class="errorlist" role="alert">{{ form.non_field_errors }}</div>{% endif %}
-            {% for field in form %}
-            <div class="field field--{{ field.name }}{% if field.errors %} has-error{% endif %}">
-                <label for="{{ field.id_for_label }}">{{ field.label }}{% if not field.field.required %} <span class="optional">(facultatif)</span>{% endif %}</label>
-                {{ field }}
-                {% if field.errors %}<div class="field-error" role="alert">{{ field.errors }}</div>{% endif %}
-            </div>
-            {% endfor %}
+            {% include 'shared/form_errors.html' %}
+            {% for field in form %}{% render_field field %}{% endfor %}
             {% if next %}<input type="hidden" name="next" value="{{ next }}">{% endif %}
             <button type="submit" class="auth-submit">{{ button_label }}</button>
         </form>
         <p class="form-aside">
-            {% if page == 'login' %}Pas encore de compte ? <a href="{% url 'accounts:signup' %}">Créer mon compte</a>
-            {% else %}Déjà inscrit ? <a href="{% url 'accounts:login' %}">Se connecter</a>{% endif %}
+            {% if page == 'login' %}{% translate 'Pas encore de compte ?' %} <a href="{% url 'accounts:signup' %}">{% icon 'add' %}{% translate 'Créer mon compte' %}</a>
+            {% else %}{% translate 'Déjà inscrit ?' %} <a href="{% url 'accounts:login' %}">{% translate 'Se connecter' %}</a>{% endif %}
         </p>
     </section>
 </div>

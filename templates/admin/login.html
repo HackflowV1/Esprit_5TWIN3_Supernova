@@ -1,0 +1,15 @@
+{% extends 'admin/login.html' %}{% load i18n static %}
+{% block nav-global %}{% include 'admin/preferences.html' %}{% endblock %}
+{% block content %}
+<div class="admin-login-layout">
+  <aside class="admin-login-intro">
+    <img src="{% static 'images/hackflow-admin-orange.webp' %}" width="1254" height="1254" alt="" aria-hidden="true">
+    <h2>{% translate 'Administration' %}</h2>
+    <p>{% translate 'Hackathons' %} · {% translate 'Utilisateurs' %}</p>
+  </aside>
+  <section class="admin-login-card" aria-labelledby="admin-login-title">
+    <h1 id="admin-login-title">{% translate 'Log in' %}</h1>
+    {{ block.super }}
+  </section>
+</div>
+{% endblock %}
