@@ -1,0 +1,11 @@
+{% extends 'base.html' %}{% load i18n ui %}
+{% block title %}{% translate 'Retirer une expertise' %} — HackFlow{% endblock %}
+{% block content %}
+<section class="panel form-panel" aria-labelledby="delete-title">
+<h1 id="delete-title">{% blocktranslate with skill=object.skill %}Retirer l’expertise « {{ skill }} » ?{% endblocktranslate %}</h1>
+<p class="muted">{% translate 'Vous pourrez la déclarer à nouveau plus tard.' %}</p>
+<form method="post">{% csrf_token %}{% include 'shared/form_errors.html' %}
+<div class="actions"><button type="submit" class="danger">{% icon 'delete' %}{% translate 'Retirer l’expertise' %}</button><a class="button secondary" href="{% url 'mentoring:expertise-list' %}">{% icon 'close' %}{% translate 'Annuler' %}</a></div>
+</form>
+</section>
+{% endblock %}

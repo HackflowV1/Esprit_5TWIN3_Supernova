@@ -12,6 +12,7 @@ urlpatterns = [
     path('accounts/', include('accounts.urls')),
     path('hackathons/', include('hackathons.urls')),
     path('participation/', include('teams.urls')),
+    path('mentoring/', include('mentoring.urls')),
     path('', include('core.urls')),
 ]
 

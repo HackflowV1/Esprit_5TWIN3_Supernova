@@ -65,7 +65,7 @@ class ExpertiseUpdateView(OwnExpertiseMixin, SuccessMessageMixin, UpdateView):
 
 
 class ExpertiseDeleteView(OwnExpertiseMixin, DeleteView):
-    template_name = 'shared/confirm_delete.html'
+    template_name = 'mentoring/expertise_delete.html'
 
     def form_valid(self, form):
         response = super().form_valid(form)

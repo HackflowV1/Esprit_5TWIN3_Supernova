@@ -37,7 +37,19 @@ def interface(request):
             'member-action': _('Composition de l’équipe'), 'need-add': _('Ajouter un besoin'),
             'need-edit': _('Modifier un besoin'), 'need-delete': _('Retirer un besoin'),
         }.get(page, _('Participation'))
+    if app == 'mentoring':
+        title = {
+            'expertise-list': _('Mes expertises'), 'expertise-add': _('Ajouter une expertise'),
+            'expertise-edit': _('Modifier mon niveau'), 'expertise-delete': _('Retirer une expertise'),
+            'slot-list': _('Mes créneaux'), 'slot-add': _('Publier un créneau'),
+            'slot-edit': _('Modifier le créneau'), 'slot-cancel': _('Annuler le créneau'),
+            'workshop-list': _('Ateliers'), 'workshop-add': _('Publier un atelier'), 'workshop-detail': _('Atelier'),
+            'workshop-edit': _('Modifier l’atelier'), 'workshop-cancel': _('Annuler l’atelier'),
+        }.get(page, _('Mentorat'))
     cancel_url = reverse('hackathons:list')
+    if app == 'mentoring':
+        cancel_url = reverse('mentoring:slot-list' if page.startswith('slot') else
+            'mentoring:workshop-list' if page.startswith('workshop') else 'mentoring:expertise-list')
     if app == 'accounts':
         cancel_url = reverse('accounts:profile')
     elif match and match.kwargs.get('slug'):

@@ -36,6 +36,7 @@ INSTALLED_APPS = [
     'core',
     'hackathons',
     'teams',
+    'mentoring',
 ]
 
 MIDDLEWARE = [
@@ -63,6 +64,7 @@ TEMPLATES = [
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
                 'core.context_processors.interface',
+                'mentoring.context_processors.mentor_menu',
             ],
         },
     },

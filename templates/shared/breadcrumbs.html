@@ -7,6 +7,13 @@
 {% if event %}<li><a href="{{ event.get_absolute_url }}">{{ event }}</a></li>{% if ui_page != 'list' %}{% if registration or organizer %}<li><a href="{% url 'teams:list' event.slug %}">{% translate 'Les équipes' %}</a></li>{% endif %}{% endif %}{% endif %}
 {% if team and ui_page != 'detail' %}<li><a href="{{ team.get_absolute_url }}">{{ team }}</a></li>{% endif %}
 <li aria-current="page">{% if ui_page == 'detail' %}{{ team }}{% else %}{{ page_title }}{% endif %}</li>
+{% elif ui_app == 'mentoring' %}
+{% if ui_page == 'workshop-list' %}<li aria-current="page">{{ page_title }}</li>
+{% elif ui_page == 'workshop-detail' or ui_page == 'workshop-add' or ui_page == 'workshop-edit' or ui_page == 'workshop-cancel' %}<li><a href="{% url 'mentoring:workshop-list' %}">{% translate 'Ateliers' %}</a></li><li aria-current="page">{% if ui_page == 'workshop-detail' %}{{ workshop }}{% else %}{{ page_title }}{% endif %}</li>
+{% elif ui_page == 'slot-list' %}<li><a href="{% url 'mentoring:expertise-list' %}">{% translate 'Espace mentor' %}</a></li><li aria-current="page">{{ page_title }}</li>
+{% elif ui_page == 'slot-add' or ui_page == 'slot-edit' or ui_page == 'slot-cancel' %}<li><a href="{% url 'mentoring:expertise-list' %}">{% translate 'Espace mentor' %}</a></li><li><a href="{% url 'mentoring:slot-list' %}">{% translate 'Mes créneaux' %}</a></li><li aria-current="page">{{ page_title }}</li>
+{% elif ui_page == 'expertise-list' %}<li><a href="{% url 'mentoring:expertise-list' %}">{% translate 'Espace mentor' %}</a></li><li aria-current="page">{{ page_title }}</li>
+{% else %}<li><a href="{% url 'mentoring:expertise-list' %}">{% translate 'Espace mentor' %}</a></li><li><a href="{% url 'mentoring:expertise-list' %}">{% translate 'Mes expertises' %}</a></li><li aria-current="page">{{ page_title }}</li>{% endif %}
 {% elif ui_app == 'hackathons' %}
 {% if ui_page != 'list' %}<li><a href="{% url 'hackathons:list' %}">{% translate 'Hackathons' %}</a></li>{% endif %}
 {% if ui_page == 'compare' %}<li><a href="{% url 'hackathons:dashboard' %}">{% translate 'Control Tower' %}</a></li>{% endif %}

@@ -1,0 +1,15 @@
+{% extends 'base.html' %}{% load static i18n ui %}
+{% block extra_css %}{{ block.super }}<link rel="stylesheet" href="{% static 'css/mentoring.css' %}?v=1">{% endblock %}
+{% block title %}{{ title|default:page_title }} — HackFlow{% endblock %}
+{% block content %}
+<div class="m4-workspace">
+{% if is_mentor %}
+<nav class="m4-nav" aria-label="{% translate 'Espace mentor' %}">
+<a href="{% url 'mentoring:expertise-list' %}"{% if ui_page == 'expertise-list' %} aria-current="page"{% endif %}>{% icon 'award' %}{% translate 'Mes expertises' %}</a>
+<a href="{% url 'mentoring:slot-list' %}"{% if ui_page == 'slot-list' %} aria-current="page"{% endif %}>{% icon 'clock' %}{% translate 'Mes créneaux' %}</a>
+<a href="{% url 'mentoring:workshop-list' %}"{% if ui_page == 'workshop-list' %} aria-current="page"{% endif %}>{% icon 'calendar' %}{% translate 'Ateliers' %}</a>
+</nav>
+{% endif %}
+{% block workspace %}{% endblock %}
+</div>
+{% endblock %}

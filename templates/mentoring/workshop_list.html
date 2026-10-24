@@ -1,68 +1,66 @@
-{% extends 'base.html' %}
-{% block title %}Ateliers — HackFlow{% endblock %}
-{% block content %}
-{% if is_trainer %}{% include 'mentoring/_mentor_nav.html' %}{% endif %}
-<header class="page-banner">
-    <div>
-        <p class="eyebrow">Apprendre pendant l’événement</p>
-        <h1>Ateliers</h1>
-        <p class="lead">Des sessions animées par les mentors pour monter en compétence sur les sujets clés de votre hackathon.</p>
-    </div>
-    {% if can_create %}<a class="button" href="{% url 'mentoring:workshop-add' %}">+ Publier un atelier</a>{% endif %}
+{% extends 'mentoring/shell.html' %}{% load i18n ui %}
+{% block workspace %}
+<header class="page-head">
+<div>
+<p class="m4-eyebrow">{% translate 'Apprendre pendant l’événement' %}</p>
+<h1>{% translate 'Ateliers' %}</h1>
+<p class="muted">{% translate 'Des sessions animées par les mentors pour monter en compétence sur les sujets clés de votre hackathon.' %}</p>
+</div>
+{% if can_create %}<a class="button" href="{% url 'mentoring:workshop-add' %}">{% icon 'add' %}{% translate 'Publier un atelier' %}</a>{% endif %}
 </header>
 
 <section aria-labelledby="upcoming-title">
-    <h2 id="upcoming-title">À venir <span class="count-pill">{{ upcoming_count }}</span></h2>
-    {% for group in days %}
-    <section class="day-group" aria-labelledby="day-{{ group.day|date:'Ymd' }}">
-        <h3 id="day-{{ group.day|date:'Ymd' }}">{{ group.day|date:'l j F Y'|capfirst }}</h3>
-        <div class="grid">
-            {% for workshop in group.workshops %}
-            <article class="card card-link">
-                <p class="eyebrow">{{ workshop.hackathon }}</p>
-                <h4 class="card-title"><a href="{{ workshop.get_absolute_url }}">{{ workshop.title }}</a></h4>
-                <ul class="meta-list">
-                    <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg><span><time datetime="{{ workshop.start|date:'c' }}">{{ workshop.start|date:'H:i' }}</time> <span aria-hidden="true">→</span><span class="visually-hidden"> jusqu’à </span> <time datetime="{{ workshop.end|date:'c' }}">{{ workshop.end|date:'H:i' }}</time> · {{ workshop.duration_minutes }} min</span></li>
-                    <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="8" r="3.5"/><path d="M5 20c0-3.6 3.1-6 7-6s7 2.4 7 6"/></svg><span><span class="visually-hidden">Formateur : </span>{{ workshop.trainer.get_full_name|default:workshop.trainer.username }}</span></li>
-                    <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 21s7-6.1 7-11a7 7 0 1 0-14 0c0 4.9 7 11 7 11z"/><circle cx="12" cy="10" r="2.5"/></svg><span>{% if workshop.location %}{{ workshop.location }}{% endif %}{% if workshop.location and workshop.url %} · {% endif %}{% if workshop.url %}En ligne{% endif %}</span></li>
-                    <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="9" cy="8" r="3.5"/><path d="M2.5 20c0-3.6 2.9-6 6.5-6s6.5 2.4 6.5 6M17 11a3 3 0 1 0 0-6M21.5 20c0-2.6-1.6-4.5-4-5.3"/></svg><span>{{ workshop.capacity }} places</span></li>
-                </ul>
-                <span class="card-cta" aria-hidden="true">Voir les détails →</span>
-            </article>
-            {% endfor %}
-        </div>
-    </section>
-    {% empty %}
-    <div class="empty-state">
-        <h3>Aucun atelier à venir</h3>
-        <p>Les ateliers des hackathons auxquels vous participez apparaîtront ici dès qu’ils seront publiés.</p>
-        {% if can_create %}<div class="actions"><a class="button" href="{% url 'mentoring:workshop-add' %}">Publier un atelier</a></div>{% endif %}
-    </div>
-    {% endfor %}
+<h2 id="upcoming-title">{% translate 'À venir' %} <span class="m4-count">{{ upcoming_count }}</span></h2>
+{% for group in days %}
+<section class="m4-day" aria-labelledby="day-{{ group.day|date:'Ymd' }}">
+<h3 id="day-{{ group.day|date:'Ymd' }}">{{ group.day|date:'l j F Y'|capfirst }}</h3>
+<div class="grid">
+{% for workshop in group.workshops %}
+<article class="card">
+<p class="m4-eyebrow">{{ workshop.hackathon }}</p>
+<h4 class="m4-card-title"><a href="{{ workshop.get_absolute_url }}">{{ workshop.title }}</a></h4>
+<ul class="m4-meta">
+<li>{% icon 'clock' %}<span><time datetime="{{ workshop.start|date:'c' }}">{{ workshop.start|date:'H:i' }}</time> <span aria-hidden="true">→</span><span class="visually-hidden"> {% translate 'jusqu’à' %} </span> <time datetime="{{ workshop.end|date:'c' }}">{{ workshop.end|date:'H:i' }}</time> · {{ workshop.duration_minutes }} min</span></li>
+<li>{% icon 'user' %}<span><span class="visually-hidden">{% translate 'Formateur :' %} </span>{{ workshop.trainer.get_full_name|default:workshop.trainer.username }}</span></li>
+<li>{% icon 'building' %}<span>{% if workshop.location %}{{ workshop.location }}{% endif %}{% if workshop.location and workshop.url %} · {% endif %}{% if workshop.url %}{% translate 'En ligne' %}{% endif %}</span></li>
+<li>{% icon 'users' %}<span>{% blocktranslate count total=workshop.capacity %}{{ total }} place{% plural %}{{ total }} places{% endblocktranslate %}</span></li>
+</ul>
+<a class="button small secondary" href="{{ workshop.get_absolute_url }}">{% icon 'view' %}{% translate 'Voir les détails' %}<span class="visually-hidden"> {{ workshop.title }}</span></a>
+</article>
+{% endfor %}
+</div>
+</section>
+{% empty %}
+<div class="m4-empty">
+<h3>{% translate 'Aucun atelier à venir' %}</h3>
+<p>{% translate 'Les ateliers des hackathons auxquels vous participez apparaîtront ici dès qu’ils seront publiés.' %}</p>
+{% if can_create %}<a class="button" href="{% url 'mentoring:workshop-add' %}">{% icon 'add' %}{% translate 'Publier un atelier' %}</a>{% endif %}
+</div>
+{% endfor %}
 </section>
 
 {% if is_trainer %}
 <section aria-labelledby="mine-title">
-    <h2 id="mine-title">Les ateliers que j’anime</h2>
-    {% if not can_create %}<p class="muted">Aucun hackathon ouvert : vous ne pouvez pas publier de nouvel atelier pour le moment.</p>{% endif %}
-    <ul class="slot-list">
-        {% for workshop in mine %}
-        <li class="slot-item">
-            <div class="slot-time"><a href="{{ workshop.get_absolute_url }}">{{ workshop.title }}</a><br><span class="muted"><time datetime="{{ workshop.start|date:'c' }}">{{ workshop.start|date:'d/m/Y H:i' }}</time></span></div>
-            <div class="slot-info"><span>{{ workshop.hackathon }}</span>
-                {% if workshop.status == 'CANCELLED' %}<span class="badge badge--cancelled">Annulé</span>
-                {% elif workshop.end <= now %}<span class="badge badge--finished">Passé</span>
-                {% else %}<span class="badge badge--published">Publié</span>{% endif %}
-            </div>
-            {% if workshop.status == 'PUBLISHED' and workshop.start > now %}
-            <div class="row-actions">
-                <a class="button small secondary" href="{% url 'mentoring:workshop-edit' workshop.pk %}">Modifier<span class="visually-hidden"> l’atelier {{ workshop.title }}</span></a>
-                <a class="link-danger" href="{% url 'mentoring:workshop-cancel' workshop.pk %}">Annuler<span class="visually-hidden"> l’atelier {{ workshop.title }}</span></a>
-            </div>
-            {% endif %}
-        </li>
-        {% empty %}<li class="empty">Vous n’animez aucun atelier pour l’instant.</li>{% endfor %}
-    </ul>
+<h2 id="mine-title">{% translate 'Les ateliers que j’anime' %}</h2>
+{% if not can_create %}<p class="muted">{% translate 'Aucun hackathon ouvert : vous ne pouvez pas publier de nouvel atelier pour le moment.' %}</p>{% endif %}
+<ul class="m4-list">
+{% for workshop in mine %}
+<li class="m4-item">
+<div class="m4-time"><a href="{{ workshop.get_absolute_url }}">{{ workshop.title }}</a><br><span class="muted"><time datetime="{{ workshop.start|date:'c' }}">{{ workshop.start|date:'d/m/Y H:i' }}</time></span></div>
+<div class="m4-info"><span>{{ workshop.hackathon }}</span>
+{% if workshop.status == 'CANCELLED' %}<span class="badge badge--withdrawn">{% translate 'Annulé' %}</span>
+{% elif workshop.end <= now %}<span class="badge badge--finished">{% translate 'Passé' %}</span>
+{% else %}<span class="badge badge--published">{% translate 'Publié' %}</span>{% endif %}
+</div>
+{% if workshop.status == 'PUBLISHED' and workshop.start > now %}
+<div class="m4-actions">
+<a class="button small secondary" href="{% url 'mentoring:workshop-edit' workshop.pk %}">{% icon 'edit' %}{% translate 'Modifier' %}<span class="visually-hidden"> {{ workshop.title }}</span></a>
+<a class="link-danger" href="{% url 'mentoring:workshop-cancel' workshop.pk %}">{% translate 'Annuler' %}<span class="visually-hidden"> {{ workshop.title }}</span></a>
+</div>
+{% endif %}
+</li>
+{% empty %}<li class="m4-empty">{% translate 'Vous n’animez aucun atelier pour l’instant.' %}</li>{% endfor %}
+</ul>
 </section>
 {% endif %}
 {% endblock %}

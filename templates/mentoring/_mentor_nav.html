@@ -1,5 +1,0 @@
-<nav class="subnav" aria-label="Espace mentor">
-    <a href="{% url 'mentoring:expertise-list' %}"{% if request.resolver_match.url_name|slice:':9' == 'expertise' %} aria-current="page"{% endif %}>Mes expertises</a>
-    <a href="{% url 'mentoring:slot-list' %}"{% if request.resolver_match.url_name|slice:':4' == 'slot' %} aria-current="page"{% endif %}>Mes créneaux</a>
-    <a href="{% url 'mentoring:workshop-list' %}"{% if request.resolver_match.url_name|slice:':8' == 'workshop' %} aria-current="page"{% endif %}>Ateliers</a>
-</nav>
