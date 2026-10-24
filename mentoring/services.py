@@ -1,6 +1,6 @@
 from django.core.exceptions import PermissionDenied, ValidationError
 from django.db import transaction
-from django.db.models import Q
+from django.db.models import Case, Count, IntegerField, Q, When
 from django.utils import timezone
 from django.utils.translation import gettext_lazy as _
 
@@ -235,3 +235,62 @@ def visible_requests(user):
 
 def can_view_request(user, request):
     return visible_requests(user).filter(pk=request.pk).exists()
+
+
+# ------------------------------------------------- support center: reading
+PRIORITY_RANK = Case(When(priority='CRITICAL', then=0), When(priority='HIGH', then=1), When(priority='NORMAL', then=2),
+    default=3, output_field=IntegerField())
+
+
+def requestable_teams(user):
+    """Teams in which the user may open a help request right now (active member, development phase open)."""
+    if not (user.is_authenticated and user.is_active):
+        return []
+    teams = Team.objects.filter(closed_at__isnull=True, memberships__ended_at__isnull=True,
+        memberships__registration__user=user, memberships__registration__status=Registration.Status.ACCEPTED,
+        hackathon__status__in=OPEN_STATUSES).select_related('hackathon').distinct().order_by('hackathon__title', 'name')
+    return [team for team in teams if phase_is_open(team.hackathon, EventPhase.Kind.DEVELOPMENT)]
+
+
+def organized_hackathons(user):
+    if not (user.is_authenticated and user.is_active):
+        return Hackathon.objects.none()
+    if user.is_superuser:
+        return Hackathon.objects.all()
+    return Hackathon.objects.filter(role_assignments__user=user, role_assignments__role=Role.ORGANIZER,
+        role_assignments__status=AssignmentStatus.ACTIVE).distinct()
+
+
+def team_requests(user):
+    """The requests of the teams the user is an active member of."""
+    return visible_requests(user).filter(team__closed_at__isnull=True, team__memberships__ended_at__isnull=True,
+        team__memberships__registration__user=user,
+        team__memberships__registration__status=Registration.Status.ACCEPTED).distinct()
+
+
+def coached_requests(user):
+    """The requests the user follows as a mentor (booked or completed session on one of his slots)."""
+    return visible_requests(user).filter(sessions__slot__mentor=user, sessions__status__in=['BOOKED', 'COMPLETED']).distinct()
+
+
+def support_insights(event):
+    """Real figures for the organizers of an edition: what is blocked, and what keeps coming back."""
+    requests = SupportRequest.objects.filter(hackathon=event)
+    active = requests.filter(status__in=SupportRequest.ACTIVE_STATUSES)
+    recurring = (requests.filter(skill__isnull=False).values('skill__name')
+        .annotate(teams=Count('team', distinct=True), total=Count('id')).filter(teams__gte=2)
+        .order_by('-teams', '-total', 'skill__name'))
+    return {
+        'event': event,
+        'active_count': active.count(),
+        'critical': list(active.filter(priority=SupportRequest.Priority.CRITICAL).select_related('team').order_by('created_at')[:10]),
+        'recurring': list(recurring),
+        'requests': list(requests.select_related('team', 'skill').annotate(rank=PRIORITY_RANK).order_by('rank', '-created_at')[:50]),
+    }
+
+
+def can_cancel_request(user, request):
+    if request.status != SupportRequest.Status.OPEN or request.hackathon.status == Hackathon.Status.ARCHIVED:
+        return False
+    return bool(team_services.is_captain(user, request.team)
+        or (request.author_id == user.pk and _is_active_member(user, request.team)) or can_manage(user, request.hackathon))

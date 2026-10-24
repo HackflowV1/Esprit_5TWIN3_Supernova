@@ -1,0 +1,15 @@
+{% extends 'base.html' %}{% load i18n ui %}
+{% block title %}{% translate 'Annuler la demande' %} — HackFlow{% endblock %}
+{% block content %}
+<section class="panel m4-confirm" aria-labelledby="cancel-title">
+<h1 id="cancel-title">{% translate 'Annuler cette demande ?' %}</h1>
+<p><strong>{{ support_request.subject }}</strong><br><span class="muted">{{ support_request.team }} · {{ support_request.hackathon }}</span></p>
+<p class="muted">{% translate 'La demande sera fermée pour votre équipe. Vous pourrez en ouvrir une nouvelle si le blocage revient.' %}</p>
+<form method="post">{% csrf_token %}
+<div class="form-actions">
+<button type="submit" class="danger">{% icon 'delete' %}{% translate 'Oui, annuler la demande' %}</button>
+<a class="button secondary" href="{{ support_request.get_absolute_url }}">{% icon 'arrow-left' %}{% translate 'Garder la demande' %}</a>
+</div>
+</form>
+</section>
+{% endblock %}

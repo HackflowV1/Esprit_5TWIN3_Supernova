@@ -1,0 +1,12 @@
+{% load i18n %}
+<li class="m4-item m4-request">
+<div class="m4-request-main">
+<a class="m4-request-title" href="{{ item.get_absolute_url }}">{{ item.subject }}</a>
+<span class="muted">{{ item.team }}{% if item.skill %} · {{ item.skill }}{% endif %} · <time datetime="{{ item.created_at|date:'c' }}">{{ item.created_at|date:'d/m/Y H:i' }}</time></span>
+</div>
+<div class="m4-info">
+<span class="badge badge--{{ item.status_badge }}">{{ item.get_status_display }}</span>
+<span class="m4-prio m4-prio--{{ item.priority_badge }}"><span class="visually-hidden">{% translate 'Priorité :' %} </span>{{ item.get_priority_display }}</span>
+</div>
+<div class="m4-actions"><a class="button small secondary" href="{{ item.get_absolute_url }}">{% translate 'Suivre' %}<span class="visually-hidden"> {{ item.subject }}</span></a></div>
+</li>

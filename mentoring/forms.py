@@ -4,8 +4,9 @@ from django.utils.text import format_lazy
 
 from accounts.models import Skill
 from hackathons.models import Hackathon
-from .models import MentorExpertise, MentorSlot, Workshop
-from .services import mentor_open_hackathons
+from teams.models import Team
+from .models import MentorExpertise, MentorSlot, SupportRequest, Workshop
+from .services import mentor_open_hackathons, requestable_teams
 
 LEVELS = [(1, _('1 – Débutant')), (2, _('2 – Notions solides')), (3, _('3 – Intermédiaire')), (4, _('4 – Avancé')), (5, _('5 – Expert'))]
 DATETIME = forms.DateTimeInput(format='%Y-%m-%dT%H:%M', attrs={'type': 'datetime-local'})
@@ -72,3 +73,22 @@ class WorkshopForm(forms.Form):
             self.fields['hackathon'].disabled = True
             self.initial = {name: getattr(workshop, name) for name in
                 ('hackathon', 'title', 'description', 'capacity', 'start', 'end', 'location', 'url')}
+
+
+class SupportRequestForm(forms.Form):
+    """Open a help request. Authorization and the open development phase are checked by the service."""
+
+    team = forms.ModelChoiceField(label=_('Équipe'), queryset=Team.objects.none(), empty_label=None)
+    subject = forms.CharField(label=_('Sujet'), max_length=200, help_text=_('Résumez le blocage en une phrase.'))
+    description = forms.CharField(label=_('Décrivez le blocage'), widget=forms.Textarea(attrs={'rows': 6}),
+        help_text=_('Ce que vous avez essayé, le message d’erreur, ce que vous attendez…'))
+    skill = forms.ModelChoiceField(label=_('Compétence concernée'), queryset=Skill.objects.all(), required=False,
+        empty_label=_('Je ne sais pas / autre'), help_text=_('Elle aide à trouver le bon mentor.'))
+    priority = forms.ChoiceField(label=_('Priorité'), choices=SupportRequest.Priority.choices,
+        initial=SupportRequest.Priority.NORMAL,
+        help_text=_('Critique : tout est bloqué. Élevée : vous avancez très lentement. Normale : une question précise.'))
+
+    def __init__(self, *args, user, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.fields['team'].queryset = Team.objects.filter(pk__in=[team.pk for team in requestable_teams(user)]).select_related('hackathon')
+        self.fields['team'].label_from_instance = lambda team: f'{team.name} — {team.hackathon.title}'

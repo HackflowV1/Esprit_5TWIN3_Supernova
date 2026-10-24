@@ -1,0 +1,30 @@
+{% extends 'mentoring/shell.html' %}{% load i18n ui %}
+{% block workspace %}
+<header class="page-head">
+<div>
+<p class="m4-eyebrow">{% translate 'Assistance' %}</p>
+<h1>{% translate 'Demander de l’aide' %}</h1>
+<p class="muted">{% translate 'Plus votre description est précise, plus le mentor pourra vous aider vite.' %}</p>
+</div>
+</header>
+
+{% if not can_ask %}
+<div class="m4-empty">
+<h3>{% translate 'Vous ne pouvez pas demander d’aide pour le moment' %}</h3>
+<p>{% translate 'Il faut faire partie d’une équipe, pendant la phase de développement d’un hackathon publié ou en cours.' %}</p>
+<a class="button secondary" href="{% url 'mentoring:support-list' %}">{% icon 'arrow-left' %}{% translate 'Retour à l’assistance' %}</a>
+</div>
+{% else %}
+<section class="panel form-panel" aria-labelledby="form-title">
+<h2 id="form-title">{% translate 'Votre demande' %}</h2>
+<form method="post" novalidate>{% csrf_token %}
+{% include 'shared/form_errors.html' %}
+{% for field in form %}{% render_field field %}{% endfor %}
+<div class="form-actions">
+<button type="submit">{% icon 'check' %}{% translate 'Envoyer la demande' %}</button>
+<a class="button secondary" href="{% url 'mentoring:support-list' %}">{% icon 'close' %}{% translate 'Annuler' %}</a>
+</div>
+</form>
+</section>
+{% endif %}
+{% endblock %}

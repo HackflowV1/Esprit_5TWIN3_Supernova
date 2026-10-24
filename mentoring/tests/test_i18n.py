@@ -8,7 +8,7 @@ from django.utils import translation
 from accounts.models import Role, Skill, User
 from accounts.services import set_role
 from hackathons.test_helpers import make_owner
-from .models import MentorExpertise, MentorSlot, Workshop
+from ..models import MentorExpertise, MentorSlot, Workshop
 from .test_slots import local, published_event
 
 FRENCH_MARKERS = ('créneau', 'Créneau', 'atelier', 'Mes ', 'Ajouter', 'Modifier', 'Annuler', 'Publier', 'À venir', 'Aucun ', 'Retirer', 'Espace mentor')

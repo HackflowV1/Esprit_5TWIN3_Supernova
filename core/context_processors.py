@@ -45,10 +45,12 @@ def interface(request):
             'slot-edit': _('Modifier le créneau'), 'slot-cancel': _('Annuler le créneau'),
             'workshop-list': _('Ateliers'), 'workshop-add': _('Publier un atelier'), 'workshop-detail': _('Atelier'),
             'workshop-edit': _('Modifier l’atelier'), 'workshop-cancel': _('Annuler l’atelier'),
+            'support-list': _('Assistance'), 'support-new': _('Demander de l’aide'),
+            'support-detail': _('Demande d’aide'), 'support-cancel': _('Annuler la demande'),
         }.get(page, _('Mentorat'))
     cancel_url = reverse('hackathons:list')
     if app == 'mentoring':
-        cancel_url = reverse('mentoring:slot-list' if page.startswith('slot') else
+        cancel_url = reverse('mentoring:support-list' if page.startswith('support') else 'mentoring:slot-list' if page.startswith('slot') else
             'mentoring:workshop-list' if page.startswith('workshop') else 'mentoring:expertise-list')
     if app == 'accounts':
         cancel_url = reverse('accounts:profile')

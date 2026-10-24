@@ -4164,3 +4164,267 @@ msgstr "An accepted hackathon registration is required."
 #: mentoring/models.py
 msgid "Élevée"
 msgstr "High"
+
+# --- M4 : Support Center (application mentoring) ---
+
+#: mentoring/support_list.html
+#, python-format
+msgid "%(teams)s équipes · %(total)s demandes"
+msgstr "%(teams)s teams · %(total)s requests"
+
+#: mentoring/support_cancel.html
+msgid "Annuler cette demande ?"
+msgstr "Cancel this request?"
+
+#: mentoring/base.html mentoring/breadcrumbs.html mentoring/context_processors.py mentoring/support_form.html mentoring/support_list.html
+msgid "Assistance"
+msgstr "Assistance"
+
+#: mentoring/models.py
+msgid "Atelier annulé"
+msgstr "Workshop cancelled"
+
+#: mentoring/models.py
+msgid "Atelier modifié"
+msgstr "Workshop updated"
+
+#: mentoring/models.py
+msgid "Atelier publié"
+msgstr "Workshop published"
+
+#: mentoring/support_detail.html
+msgid "Aucun rendez-vous pour l’instant."
+msgstr "No appointment yet."
+
+#: mentoring/support_list.html
+msgid "Aucune demande pour cette édition."
+msgstr "No request for this edition."
+
+#: mentoring/support_list.html
+msgid "Aucune demande pour l’instant"
+msgstr "No request yet"
+
+#: mentoring/support_list.html
+msgid "Aucune demande à accompagner"
+msgstr "No request to coach"
+
+#: mentoring/support_list.html
+msgid "Blocages critiques"
+msgstr "Critical blockers"
+
+#: mentoring/support_list.html
+msgid "Bloqué sur un point technique ou une décision ? Vos mentors sont là pour ça."
+msgstr "Stuck on a technical point or a decision? Your mentors are here for that."
+
+#: mentoring/forms.py
+msgid "Ce que vous avez essayé, le message d’erreur, ce que vous attendez…"
+msgstr "What you tried, the error message, what you expect…"
+
+#: mentoring/support_list.html
+msgid "Ce qui revient souvent"
+msgstr "What keeps coming back"
+
+#: mentoring/support_detail.html
+msgid "Cette demande a été annulée."
+msgstr "This request has been cancelled."
+
+#: mentoring/views.py
+msgid "Cette demande ne peut pas être annulée par vous, ou elle n’est plus ouverte."
+msgstr "You cannot cancel this request, or it is no longer open."
+
+#: mentoring/support_detail.html
+msgid "Choisir un mentor et un créneau."
+msgstr "Choose a mentor and a slot."
+
+#: mentoring/forms.py
+msgid "Compétence concernée"
+msgstr "Related skill"
+
+#: mentoring/support_list.html
+msgid "Compétences redemandées"
+msgstr "Skills asked again"
+
+#: mentoring/forms.py
+msgid "Critique : tout est bloqué. Élevée : vous avancez très lentement. Normale : une question précise."
+msgstr "Critical: everything is blocked. High: you are moving very slowly. Normal: a specific question."
+
+#: mentoring/models.py
+msgid "Créneau annulé"
+msgstr "Slot cancelled"
+
+#: mentoring/models.py
+msgid "Créneau modifié"
+msgstr "Slot updated"
+
+#: mentoring/models.py
+msgid "Créneau publié"
+msgstr "Slot published"
+
+#: mentoring/views.py
+msgid "Demande annulée."
+msgstr "Request cancelled."
+
+#: mentoring/models.py
+msgid "Demande ouverte"
+msgstr "Request opened"
+
+#: mentoring/context_processors.py mentoring/support_form.html mentoring/support_list.html
+msgid "Demander de l’aide"
+msgstr "Ask for help"
+
+#: mentoring/support_list.html
+msgid "Demandes critiques"
+msgstr "Critical requests"
+
+#: mentoring/support_list.html
+msgid "Demandes en cours"
+msgstr "Ongoing requests"
+
+#: mentoring/support_detail.html
+msgid "Demandé par"
+msgstr "Requested by"
+
+#: mentoring/support_detail.html
+msgid "Description du blocage"
+msgstr "Description of the blockage"
+
+#: mentoring/forms.py
+msgid "Décrivez le blocage"
+msgstr "Describe the blockage"
+
+#: mentoring/forms.py
+msgid "Elle aide à trouver le bon mentor."
+msgstr "It helps find the right mentor."
+
+#: mentoring/support_form.html
+msgid "Envoyer la demande"
+msgstr "Send the request"
+
+#: mentoring/support_cancel.html
+msgid "Garder la demande"
+msgstr "Keep the request"
+
+#: mentoring/support_form.html
+msgid "Il faut faire partie d’une équipe, pendant la phase de développement d’un hackathon publié ou en cours."
+msgstr "You must be part of a team, during the development phase of a published or ongoing hackathon."
+
+#: mentoring/forms.py
+msgid "Je ne sais pas / autre"
+msgstr "I don’t know / other"
+
+#: mentoring/support_cancel.html
+msgid "La demande sera fermée pour votre équipe. Vous pourrez en ouvrir une nouvelle si le blocage revient."
+msgstr "The request will be closed for your team. You can open a new one if the blockage comes back."
+
+#: mentoring/support_detail.html
+msgid "La réservation d’un mentor sera disponible prochainement. Votre demande est enregistrée et visible par votre équipe."
+msgstr "Booking a mentor will be available soon. Your request is saved and visible to your team."
+
+#: mentoring/support_detail.html
+msgid "Le mentor a terminé la séance : dites-nous si le problème est résolu."
+msgstr "The mentor has finished the session: tell us whether the problem is solved."
+
+#: mentoring/support_list.html
+msgid "Les demandes apparaîtront ici quand une équipe réservera l’un de vos créneaux."
+msgstr "Requests will appear here when a team books one of your slots."
+
+#: mentoring/support_list.html
+msgid "Les demandes de mon équipe"
+msgstr "My team’s requests"
+
+#: mentoring/support_list.html
+msgid "Les demandes que j’accompagne"
+msgstr "Requests I coach"
+
+#: mentoring/support_list.html
+msgid "L’assistance, c’est pour les équipes"
+msgstr "Assistance is for teams"
+
+#: mentoring/support_cancel.html
+msgid "Oui, annuler la demande"
+msgstr "Yes, cancel the request"
+
+#: mentoring/support_detail.html
+msgid "Ouverte le"
+msgstr "Opened on"
+
+#: mentoring/support_list.html
+#, python-format
+msgid "Pilotage de l’assistance · %(title)s"
+msgstr "Assistance overview · %(title)s"
+
+#: mentoring/support_form.html
+msgid "Plus votre description est précise, plus le mentor pourra vous aider vite."
+msgstr "The more precise your description, the faster the mentor can help."
+
+#: mentoring/_request_row.html mentoring/support_detail.html
+msgid "Priorité :"
+msgstr "Priority:"
+
+#: mentoring/support_detail.html
+msgid "Problème résolu. Merci pour votre retour !"
+msgstr "Problem solved. Thank you for your feedback!"
+
+#: mentoring/support_detail.html
+msgid "Prochaine étape"
+msgstr "Next step"
+
+#: mentoring/support_list.html
+msgid "Rejoignez une équipe dans un hackathon pour pouvoir demander l’aide d’un mentor."
+msgstr "Join a team in a hackathon to be able to ask a mentor for help."
+
+#: mentoring/support_detail.html
+msgid "Rendez-vous"
+msgstr "Appointments"
+
+#: mentoring/support_form.html
+msgid "Retour à l’assistance"
+msgstr "Back to assistance"
+
+#: mentoring/forms.py
+msgid "Résumez le blocage en une phrase."
+msgstr "Sum up the blockage in one sentence."
+
+#: mentoring/_request_row.html
+msgid "Suivre"
+msgstr "Follow"
+
+#: mentoring/forms.py
+msgid "Sujet"
+msgstr "Subject"
+
+#: mentoring/support_list.html
+msgid "Support Center"
+msgstr "Support Center"
+
+#: mentoring/support_list.html
+msgid "Toutes les demandes"
+msgstr "All requests"
+
+#: mentoring/support_list.html
+msgid "Un blocage ? Décrivez-le : un mentor vous aide à avancer."
+msgstr "Blocked? Describe it: a mentor helps you move forward."
+
+#: mentoring/support_detail.html
+msgid "Un rendez-vous est réservé : préparez vos questions."
+msgstr "An appointment is booked: prepare your questions."
+
+#: mentoring/support_form.html
+msgid "Votre demande"
+msgstr "Your request"
+
+#: mentoring/views.py
+msgid "Votre demande d’aide est ouverte."
+msgstr "Your help request is open."
+
+#: mentoring/support_form.html
+msgid "Vous ne pouvez pas demander d’aide pour le moment"
+msgstr "You cannot ask for help right now"
+
+#: mentoring/support_list.html
+msgid "Vous pourrez demander de l’aide pendant la phase de développement de votre hackathon."
+msgstr "You will be able to ask for help during the development phase of your hackathon."
+
+#: mentoring/support_detail.html
+msgid "Édition"
+msgstr "Edition"

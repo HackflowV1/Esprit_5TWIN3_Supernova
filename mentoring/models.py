@@ -240,6 +240,17 @@ class SupportRequest(ValidatedModel):
     def is_active(self):
         return self.status in self.ACTIVE_STATUSES
 
+    @property
+    def status_badge(self):
+        return {'OPEN': 'proposed', 'BOOKED': 'ongoing', 'IN_PROGRESS': 'approved', 'RESOLVED': 'published', 'CANCELLED': 'withdrawn'}[self.status]
+
+    @property
+    def priority_badge(self):
+        return self.priority.lower()
+
+    def get_absolute_url(self):
+        return reverse('mentoring:support-detail', kwargs={'pk': self.pk})
+
     def clean(self):
         super().clean()
         if self.team_id and self.hackathon_id and self.team.hackathon_id != self.hackathon_id:
@@ -371,6 +382,16 @@ class M4History(models.Model):
         verbose_name_plural = _('Historique M4')
         indexes = [models.Index(fields=['hackathon', 'timestamp'], name='m4hist_event_time_idx'),
                    models.Index(fields=['object_type', 'object_id'], name='m4hist_object_idx')]
+
+    ACTION_LABELS = {
+        'request.opened': _('Demande ouverte'), 'request.cancelled': _('Demande annulée'),
+        'slot.published': _('Créneau publié'), 'slot.updated': _('Créneau modifié'), 'slot.withdrawn': _('Créneau annulé'),
+        'workshop.published': _('Atelier publié'), 'workshop.updated': _('Atelier modifié'), 'workshop.cancelled': _('Atelier annulé'),
+    }
+
+    @property
+    def label(self):
+        return self.ACTION_LABELS.get(self.action, self.action)
 
     def __str__(self):
         return f'{self.action} · {self.object_type}#{self.object_id}'

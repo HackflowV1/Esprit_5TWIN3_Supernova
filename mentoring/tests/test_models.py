@@ -9,9 +9,9 @@ from django.utils import timezone, translation
 from accounts.models import Role, Skill, User
 from accounts.services import set_role
 from hackathons.test_helpers import make_event, make_owner
-from . import services
-from .models import M4History, MentoringSession, MentorExpertise, MentorSlot, SupportRequest, Workshop, WorkshopRegistration
-from .test_helpers import book_slot, make_request, make_team, make_user
+from .. import services
+from ..models import M4History, MentoringSession, MentorExpertise, MentorSlot, SupportRequest, Workshop, WorkshopRegistration
+from .helpers import book_slot, make_request, make_team, make_user
 from .test_slots import published_event
 from teams.models import Registration
 

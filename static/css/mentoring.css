@@ -72,8 +72,31 @@
 
 .m4-confirm { max-width: 640px; margin: 0 auto; }
 
+/* Support Center. Priority is always written in words: the dot only reinforces it. */
+.m4-request { grid-template-columns: minmax(0, 2fr) auto auto; }
+.m4-request-main { display: grid; gap: 2px; min-width: 0; }
+.m4-request-title { font-weight: 700; overflow-wrap: anywhere; }
+.m4-prio { display: inline-flex; align-items: center; gap: 6px; padding: 2px 10px; border: 1px solid var(--control); border-radius: 999px; font-size: .85rem; font-weight: 600; color: var(--ink); }
+.m4-prio::before { content: ""; width: 8px; height: 8px; border-radius: 50%; background: var(--muted); }
+.m4-prio--high { border-color: var(--warning); }
+.m4-prio--high::before { background: var(--warning); }
+.m4-prio--critical { border-color: var(--danger); }
+.m4-prio--critical::before { background: var(--danger); }
+
+.m4-insight { margin-top: 40px; padding-top: 8px; border-top: 1px solid var(--line); }
+.m4-stats { list-style: none; margin: 16px 0; padding: 0; display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 12px; }
+.m4-stats li { padding: 16px 20px; background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius); display: grid; }
+.m4-stats strong { font-size: 1.8rem; line-height: 1.1; }
+.m4-stats span { color: var(--muted); }
+.m4-recurring { margin: 0 0 16px; padding-left: 20px; display: grid; gap: 4px; }
+
+.m4-timeline { list-style: none; margin: 0; padding: 0; display: grid; gap: 12px; border-left: 2px solid var(--line); padding-left: 18px; }
+.m4-timeline li { position: relative; }
+.m4-timeline li::before { content: ""; position: absolute; left: -24px; top: .55em; width: 10px; height: 10px; border-radius: 50%; background: var(--surface); border: 2px solid var(--primary); }
+
 @media (max-width: 860px) {
   .m4-detail { grid-template-columns: minmax(0, 1fr); }
   .m4-item { grid-template-columns: minmax(0, 1fr); }
+  .m4-request { grid-template-columns: minmax(0, 1fr); }
   .m4-actions { justify-content: flex-start; }
 }

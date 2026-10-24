@@ -4,7 +4,7 @@ import itertools
 
 from accounts.models import User
 from teams.models import Registration, Team, TeamMembership
-from .models import MentoringSession, SupportRequest
+from ..models import MentoringSession, SupportRequest
 
 _counter = itertools.count(1)
 

@@ -14,9 +14,9 @@ from accounts.services import set_role
 from hackathons.models import Hackathon
 from hackathons.services import transition
 from hackathons.test_helpers import make_event, make_owner
-from . import services
-from .test_helpers import book_slot
-from .models import MentorSlot
+from .. import services
+from .helpers import book_slot
+from ..models import MentorSlot
 
 FORMAT = '%Y-%m-%dT%H:%M'
 

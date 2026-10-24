@@ -9,9 +9,9 @@ from accounts.models import Role, Skill, User
 from accounts.services import set_role
 from hackathons.test_helpers import make_event, make_owner
 from teams.models import Team, TeamMembership
-from . import services
-from .models import M4History, MentoringSession, MentorSlot, SupportRequest
-from .test_helpers import book_slot, make_ongoing_event, make_request, make_team, make_user
+from .. import services
+from ..models import M4History, MentoringSession, MentorSlot, SupportRequest
+from .helpers import book_slot, make_ongoing_event, make_request, make_team, make_user
 from .test_slots import published_event
 
 

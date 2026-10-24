@@ -5,7 +5,7 @@ from django.urls import reverse
 from accounts.models import Role, Skill, User
 from accounts.services import set_role
 from hackathons.test_helpers import make_owner
-from .models import MentorExpertise
+from ..models import MentorExpertise
 from .test_slots import published_event
 
 

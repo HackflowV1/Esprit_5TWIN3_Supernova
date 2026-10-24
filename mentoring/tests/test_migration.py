@@ -8,7 +8,7 @@ from django.test import TransactionTestCase
 from accounts.models import Role
 from accounts.services import set_role
 from hackathons.test_helpers import make_owner
-from .test_helpers import make_user
+from .helpers import make_user
 from .test_slots import published_event
 
 BEFORE = [('mentoring', '0003_workshop')]

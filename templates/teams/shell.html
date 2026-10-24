@@ -11,6 +11,7 @@
 <nav class="m2-nav" aria-label="{% translate 'Participation au hackathon' %}">
 <a href="{% url 'teams:list' event.slug %}"{% if ui_page == 'list' or ui_page == 'create' or team and team.pk != my_team.pk %} aria-current="page"{% endif %}>{% icon 'users' %}{% translate 'Les équipes' %}</a>
 {% if my_team %}<a href="{{ my_team.get_absolute_url }}"{% if team.pk == my_team.pk and ui_page != 'list' and ui_page != 'inbox' %} aria-current="page"{% endif %}>{% icon 'code' %}{% translate 'Mon équipe' %}</a>{% endif %}
+{% if my_team %}<a href="{% url 'mentoring:support-list' %}">{% icon 'help' %}{% translate 'Assistance' %}</a>{% endif %}
 {% if registration %}<a href="{% url 'teams:inbox' event.slug %}"{% if ui_page == 'inbox' %} aria-current="page"{% endif %}>{% icon 'check' %}{% translate 'Invitations et candidatures' %}</a>{% endif %}
 {% if organizer %}<a href="{% url 'teams:manage' event.slug %}"{% if ui_page == 'manage' %} aria-current="page"{% endif %}>{% icon 'settings' %}{% translate 'Gestion des participants' %}</a>{% endif %}
 </nav>

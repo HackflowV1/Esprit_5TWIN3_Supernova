@@ -13,8 +13,8 @@ from accounts.models import AssignmentStatus, Role, User
 from accounts.services import set_role
 from hackathons.models import Hackathon
 from hackathons.test_helpers import make_event, make_owner
-from . import services
-from .models import Workshop
+from .. import services
+from ..models import Workshop
 from .test_slots import local, published_event
 
 

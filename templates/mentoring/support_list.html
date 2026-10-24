@@ -1,0 +1,77 @@
+{% extends 'mentoring/shell.html' %}{% load i18n ui %}
+{% block workspace %}
+<header class="page-head">
+<div>
+<p class="m4-eyebrow">{% translate 'Assistance' %}</p>
+<h1>{% translate 'Support Center' %}</h1>
+<p class="muted">{% translate 'Un blocage ? Décrivez-le : un mentor vous aide à avancer.' %}</p>
+</div>
+{% if can_ask %}<a class="button" href="{% url 'mentoring:support-new' %}">{% icon 'help' %}{% translate 'Demander de l’aide' %}</a>{% endif %}
+</header>
+
+{% if has_team or my_requests %}
+<section aria-labelledby="mine-title">
+<h2 id="mine-title">{% translate 'Les demandes de mon équipe' %} <span class="m4-count">{{ my_requests|length }}</span></h2>
+{% if my_requests %}
+<ul class="m4-list">{% for item in my_requests %}{% include 'mentoring/_request_row.html' %}{% endfor %}</ul>
+{% else %}
+<div class="m4-empty">
+<h3>{% translate 'Aucune demande pour l’instant' %}</h3>
+{% if can_ask %}
+<p>{% translate 'Bloqué sur un point technique ou une décision ? Vos mentors sont là pour ça.' %}</p>
+<a class="button" href="{% url 'mentoring:support-new' %}">{% icon 'help' %}{% translate 'Demander de l’aide' %}</a>
+{% else %}
+<p>{% translate 'Vous pourrez demander de l’aide pendant la phase de développement de votre hackathon.' %}</p>
+{% endif %}
+</div>
+{% endif %}
+</section>
+{% endif %}
+
+{% if is_trainer %}
+<section aria-labelledby="coached-title">
+<h2 id="coached-title">{% translate 'Les demandes que j’accompagne' %} <span class="m4-count">{{ coached_requests|length }}</span></h2>
+{% if coached_requests %}
+<ul class="m4-list">{% for item in coached_requests %}{% include 'mentoring/_request_row.html' %}{% endfor %}</ul>
+{% else %}
+<div class="m4-empty"><h3>{% translate 'Aucune demande à accompagner' %}</h3><p>{% translate 'Les demandes apparaîtront ici quand une équipe réservera l’un de vos créneaux.' %}</p></div>
+{% endif %}
+</section>
+{% endif %}
+
+{% for block in insights %}
+<section class="m4-insight" aria-labelledby="insight-{{ block.event.pk }}">
+<h2 id="insight-{{ block.event.pk }}">{% blocktranslate with title=block.event.title %}Pilotage de l’assistance · {{ title }}{% endblocktranslate %}</h2>
+<ul class="m4-stats">
+<li><strong>{{ block.active_count }}</strong><span>{% translate 'Demandes en cours' %}</span></li>
+<li><strong>{{ block.critical|length }}</strong><span>{% translate 'Demandes critiques' %}</span></li>
+<li><strong>{{ block.recurring|length }}</strong><span>{% translate 'Compétences redemandées' %}</span></li>
+</ul>
+
+{% if block.critical %}
+<h3>{% translate 'Blocages critiques' %}</h3>
+<ul class="m4-list">{% for item in block.critical %}{% include 'mentoring/_request_row.html' %}{% endfor %}</ul>
+{% endif %}
+
+{% if block.recurring %}
+<h3>{% translate 'Ce qui revient souvent' %}</h3>
+<ul class="m4-recurring">{% for row in block.recurring %}<li><strong>{{ row.skill__name }}</strong> <span class="muted">{% blocktranslate with teams=row.teams total=row.total %}{{ teams }} équipes · {{ total }} demandes{% endblocktranslate %}</span></li>{% endfor %}</ul>
+{% endif %}
+
+<h3>{% translate 'Toutes les demandes' %}</h3>
+{% if block.requests %}
+<ul class="m4-list">{% for item in block.requests %}{% include 'mentoring/_request_row.html' %}{% endfor %}</ul>
+{% else %}
+<p class="muted">{% translate 'Aucune demande pour cette édition.' %}</p>
+{% endif %}
+</section>
+{% endfor %}
+
+{% if not has_team and not my_requests and not is_trainer and not insights %}
+<div class="m4-empty">
+<h3>{% translate 'L’assistance, c’est pour les équipes' %}</h3>
+<p>{% translate 'Rejoignez une équipe dans un hackathon pour pouvoir demander l’aide d’un mentor.' %}</p>
+<a class="button" href="{% url 'hackathons:list' %}">{% icon 'search' %}{% translate 'Découvrir les hackathons' %}</a>
+</div>
+{% endif %}
+{% endblock %}

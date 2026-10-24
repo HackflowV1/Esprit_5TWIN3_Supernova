@@ -1,0 +1,69 @@
+{% extends 'mentoring/shell.html' %}{% load i18n ui %}
+{% block title %}{{ support_request.subject }} — HackFlow{% endblock %}
+{% block workspace %}
+<header class="page-head">
+<div>
+<p class="m4-eyebrow">{{ support_request.hackathon }}</p>
+<h1>{{ support_request.subject }}</h1>
+<p class="m4-info">
+<span class="badge badge--{{ support_request.status_badge }}">{{ support_request.get_status_display }}</span>
+<span class="m4-prio m4-prio--{{ support_request.priority_badge }}"><span class="visually-hidden">{% translate 'Priorité :' %} </span>{{ support_request.get_priority_display }}</span>
+</p>
+</div>
+{% if can_cancel %}<a class="button secondary" href="{% url 'mentoring:support-cancel' support_request.pk %}">{% icon 'close' %}{% translate 'Annuler la demande' %}</a>{% endif %}
+</header>
+
+<div class="m4-detail">
+<div>
+<section class="panel" aria-labelledby="next-title">
+<h2 id="next-title">{% translate 'Prochaine étape' %}</h2>
+{% if support_request.status == 'OPEN' %}
+<p><strong>{% translate 'Choisir un mentor et un créneau.' %}</strong></p>
+<p class="muted">{% translate 'La réservation d’un mentor sera disponible prochainement. Votre demande est enregistrée et visible par votre équipe.' %}</p>
+{% elif support_request.status == 'BOOKED' %}
+<p><strong>{% translate 'Un rendez-vous est réservé : préparez vos questions.' %}</strong></p>
+{% elif support_request.status == 'IN_PROGRESS' %}
+<p><strong>{% translate 'Le mentor a terminé la séance : dites-nous si le problème est résolu.' %}</strong></p>
+{% elif support_request.status == 'RESOLVED' %}
+<p><strong>{% translate 'Problème résolu. Merci pour votre retour !' %}</strong></p>
+{% else %}
+<p><strong>{% translate 'Cette demande a été annulée.' %}</strong></p>
+{% endif %}
+</section>
+
+<section class="panel" aria-labelledby="description-title">
+<h2 id="description-title">{% translate 'Description du blocage' %}</h2>
+<div class="prose">{{ support_request.description|linebreaks }}</div>
+</section>
+
+<section class="panel" aria-labelledby="sessions-title">
+<h2 id="sessions-title">{% translate 'Rendez-vous' %}</h2>
+{% if sessions %}
+<ul class="m4-list">{% for session in sessions %}
+<li class="m4-item"><div class="m4-time"><time datetime="{{ session.slot.start|date:'c' }}">{{ session.slot.start|date:'d/m/Y H:i' }}</time></div><div class="m4-info"><span>{{ session.slot.mentor.get_full_name|default:session.slot.mentor.username }}</span><span class="badge badge--{% if session.status == 'COMPLETED' %}published{% elif session.status == 'CANCELLED' %}withdrawn{% else %}ongoing{% endif %}">{{ session.get_status_display }}</span></div></li>
+{% endfor %}</ul>
+{% else %}
+<p class="muted">{% translate 'Aucun rendez-vous pour l’instant.' %}</p>
+{% endif %}
+</section>
+
+<section class="panel" aria-labelledby="history-title">
+<h2 id="history-title">{% translate 'Historique' %}</h2>
+<ol class="m4-timeline">{% for entry in history %}
+<li><strong>{{ entry.label }}</strong> <span class="muted">· {{ entry.actor.get_full_name|default:entry.actor.username|default:'—' }} · <time datetime="{{ entry.timestamp|date:'c' }}">{{ entry.timestamp|date:'d/m/Y H:i' }}</time></span></li>
+{% empty %}<li class="muted">{% translate 'Aucune opération.' %}</li>{% endfor %}</ol>
+</section>
+</div>
+
+<aside class="side-card" aria-labelledby="facts-title">
+<h2 id="facts-title">{% translate 'Informations' %}</h2>
+<dl class="m4-facts">
+<div><dt>{% translate 'Équipe' %}</dt><dd><a href="{{ support_request.team.get_absolute_url }}">{{ support_request.team }}</a></dd></div>
+<div><dt>{% translate 'Demandé par' %}</dt><dd>{{ support_request.author.get_full_name|default:support_request.author.username }}</dd></div>
+<div><dt>{% translate 'Compétence' %}</dt><dd>{{ support_request.skill|default:'—' }}</dd></div>
+<div><dt>{% translate 'Ouverte le' %}</dt><dd><time datetime="{{ support_request.created_at|date:'c' }}">{{ support_request.created_at|date:'d/m/Y H:i' }}</time></dd></div>
+<div><dt>{% translate 'Édition' %}</dt><dd><a href="{{ support_request.hackathon.get_absolute_url }}">{{ support_request.hackathon }}</a></dd></div>
+</dl>
+</aside>
+</div>
+{% endblock %}
