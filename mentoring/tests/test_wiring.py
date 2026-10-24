@@ -35,18 +35,17 @@ class WiringTests(TestCase):
         self.client.force_login(self.mentor)
         page = self.client.get(reverse('mentoring:slot-list'))
         self.assertContains(page, 'css/mentoring.css')
-        self.assertContains(page, 'class="m4-nav" aria-label="Espace mentor"')
+        self.assertContains(page, 'class="m4-nav" aria-label="Mentorat et ateliers"')
         self.assertContains(page, f'<a href="{reverse("mentoring:slot-list")}" aria-current="page">')
-        main_nav = self.client.get(reverse('core:home'))
-        self.assertContains(main_nav, 'Espace mentor')
-        self.assertContains(main_nav, '>Ateliers</a>')
+        self.assertContains(self.client.get(reverse('core:home')), f'href="{reverse("mentoring:hub")}"')
 
     def test_participant_sees_workshops_but_no_mentor_workspace(self):
         self.client.force_login(self.member)
         page = self.client.get(reverse('mentoring:workshop-list'))
         self.assertEqual(page.status_code, 200)
-        self.assertNotContains(page, 'class="m4-nav"')
+        self.assertContains(page, 'class="m4-nav"')
         self.assertNotContains(page, reverse('mentoring:expertise-list'))
+        self.assertNotContains(page, reverse('mentoring:slot-list'))
 
     def test_breadcrumbs_name_the_parent_and_the_current_page(self):
         self.client.force_login(self.mentor)

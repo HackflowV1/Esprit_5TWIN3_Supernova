@@ -4,6 +4,7 @@ from . import views
 
 app_name = 'mentoring'
 urlpatterns = [
+    path('', views.MentoringHomeView.as_view(), name='hub'),
     path('expertise/', views.ExpertiseListView.as_view(), name='expertise-list'),
     path('expertise/add/', views.ExpertiseCreateView.as_view(), name='expertise-add'),
     path('expertise/<int:pk>/edit/', views.ExpertiseUpdateView.as_view(), name='expertise-edit'),

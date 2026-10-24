@@ -87,5 +87,5 @@ class EnglishInterfaceTests(TestCase):
     def test_workspace_navigation_is_english(self):
         self.english(self.mentor)
         page = self.client.get(reverse('mentoring:expertise-list'))
-        self.assertContains(page, 'aria-label="Mentor space"')
-        self.assertContains(page, '>Workshops</a>')
+        self.assertContains(page, 'aria-label="Mentoring and workshops"')
+        self.assertContains(page, 'Workshops</a>')

@@ -145,8 +145,12 @@ class MentorSpaceTests(TestCase):
         self.assertContains(response, 'Expertise retirée')
         self.assertFalse(MentorExpertise.objects.exists())
 
-    def test_navigation_shows_mentor_space_only_to_mentors(self):
+    def test_mentor_tabs_are_shown_only_to_mentors(self):
         self.client.force_login(self.member)
-        self.assertNotContains(self.client.get(reverse('core:home')), 'Espace mentor')
+        page = self.client.get(reverse('mentoring:hub'))
+        self.assertNotContains(page, reverse('mentoring:expertise-list'))
+        self.assertNotContains(page, reverse('mentoring:slot-list'))
         self.client.force_login(self.mentor)
-        self.assertContains(self.client.get(reverse('core:home')), 'Espace mentor')
+        page = self.client.get(reverse('mentoring:hub'))
+        self.assertContains(page, reverse('mentoring:expertise-list'))
+        self.assertContains(page, reverse('mentoring:slot-list'))

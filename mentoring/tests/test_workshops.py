@@ -321,13 +321,14 @@ class WorkshopViewTests(WorkshopBase):
         self.assertEqual(workshop.title, 'Atelier API Django')
 
     def test_navigation_links(self):
-        self.assertNotContains(self.client.get(reverse('core:home')), '>Ateliers</a>')
+        hub = reverse('mentoring:hub')
+        self.assertNotContains(self.client.get(reverse('core:home')), f'href="{hub}"')
         self.client.force_login(self.member)
-        self.assertContains(self.client.get(reverse('core:home')), '>Ateliers</a>')
+        self.assertContains(self.client.get(reverse('core:home')), f'href="{hub}"')
         self.client.force_login(self.trainer)
         page = self.client.get(self.list_url)
-        self.assertContains(page, 'aria-label="Espace mentor"')
-        self.assertContains(page, '>Ateliers</a>')
+        self.assertContains(page, 'aria-label="Mentorat et ateliers"')
+        self.assertContains(page, reverse('mentoring:slot-list'))
 
 
 class WorkshopConcurrencyTests(TransactionTestCase):

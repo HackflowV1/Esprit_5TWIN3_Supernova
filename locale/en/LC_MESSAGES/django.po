@@ -4428,3 +4428,126 @@ msgstr "You will be able to ask for help during the development phase of your ha
 #: mentoring/support_detail.html
 msgid "Édition"
 msgstr "Edition"
+
+# --- M4 : page d’accueil Mentorat (application mentoring) ---
+
+#: mentoring/home.html
+#, python-format
+msgid "%(total)s atelier à venir."
+msgid_plural "%(total)s ateliers à venir."
+msgstr[0] "%(total)s upcoming workshop."
+msgstr[1] "%(total)s upcoming workshops."
+
+#: mentoring/home.html
+#, python-format
+msgid "%(total)s créneau à venir."
+msgid_plural "%(total)s créneaux à venir."
+msgstr[0] "%(total)s upcoming slot."
+msgstr[1] "%(total)s upcoming slots."
+
+#: mentoring/home.html
+#, python-format
+msgid "%(total)s demande en cours."
+msgid_plural "%(total)s demandes en cours."
+msgstr[0] "%(total)s ongoing request."
+msgstr[1] "%(total)s ongoing requests."
+
+#: mentoring/home.html
+msgid "Accompagnez les équipes et écrivez un compte rendu."
+msgstr "Coach the teams and write a report."
+
+#: mentoring/home.html
+msgid "Après la séance, dites si le problème est résolu."
+msgstr "After the session, say whether the problem is solved."
+
+#: mentoring/home.html
+msgid "Bientôt"
+msgstr "Coming soon"
+
+#: mentoring/home.html
+msgid "Bloqué sur un point ? Un mentor vous aide. Envie d’apprendre ? Suivez un atelier. Vous maîtrisez un sujet ? Aidez les équipes."
+msgstr "Stuck on something? A mentor helps you. Want to learn? Join a workshop. Master a topic? Help the teams."
+
+#: mentoring/home.html
+msgid "Choisissez un mentor et un créneau libre."
+msgstr "Choose a mentor and a free slot."
+
+#: mentoring/home.html
+msgid "Comment ça marche"
+msgstr "How it works"
+
+#: mentoring/home.html
+msgid "Consultez les ateliers de votre hackathon."
+msgstr "Browse the workshops of your hackathon."
+
+#: mentoring/home.html
+msgid "C’est votre cas"
+msgstr "This is you"
+
+#: mentoring/home.html
+msgid "Déclarez vos expertises."
+msgstr "Declare your expertise."
+
+#: mentoring/home.html
+msgid "Décrivez votre blocage dans une demande d’aide."
+msgstr "Describe your blockage in a help request."
+
+#: mentoring/home.html
+msgid "Inscrivez-vous à ceux qui vous intéressent."
+msgstr "Sign up for the ones you like."
+
+#: mentoring/home.html
+msgid "Inscrivez-vous à un hackathon et rejoignez une équipe : l’assistance s’ouvre pendant la phase de développement."
+msgstr "Register for a hackathon and join a team: assistance opens during the development phase."
+
+#: mentoring/home.html
+msgid "Le rôle de mentor est attribué par l’organisateur du hackathon."
+msgstr "The mentor role is assigned by the hackathon organizer."
+
+#: mentoring/context_processors.py mentoring/home.html mentoring/shell.html
+msgid "Mentorat et ateliers"
+msgstr "Mentoring and workshops"
+
+#: mentoring/home.html
+msgid "Ouvert à votre hackathon"
+msgstr "Open to your hackathon"
+
+#: mentoring/home.html
+msgid "Participez : le formateur note la présence."
+msgstr "Take part: the trainer records attendance."
+
+#: mentoring/home.html
+msgid "Pas encore dans une équipe ?"
+msgstr "Not in a team yet?"
+
+#: mentoring/home.html
+msgid "Pilotage de l’assistance"
+msgstr "Assistance overview"
+
+#: mentoring/home.html
+msgid "Publiez vos créneaux de disponibilité."
+msgstr "Publish your availability slots."
+
+#: mentoring/home.html
+msgid "Suivez les blocages des équipes, les compétences les plus demandées et les ateliers de votre édition."
+msgstr "Follow the teams’ blockers, the most requested skills and the workshops of your edition."
+
+#: mentoring/home.html
+msgid "Voir les ateliers"
+msgstr "View workshops"
+
+#: mentoring/home.html
+msgid "Vous organisez un hackathon"
+msgstr "You organize a hackathon"
+
+#: mentoring/home.html
+msgid "Vous voulez apprendre"
+msgstr "You want to learn"
+
+#: mentoring/home.html
+msgid "Vous êtes dans une équipe"
+msgstr "You are in a team"
+
+#: mentoring/home.html
+msgid "Vous êtes mentor"
+msgstr "You are a mentor"

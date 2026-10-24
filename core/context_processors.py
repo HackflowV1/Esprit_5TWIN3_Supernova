@@ -39,7 +39,7 @@ def interface(request):
         }.get(page, _('Participation'))
     if app == 'mentoring':
         title = {
-            'expertise-list': _('Mes expertises'), 'expertise-add': _('Ajouter une expertise'),
+            'hub': _('Mentorat et ateliers'), 'expertise-list': _('Mes expertises'), 'expertise-add': _('Ajouter une expertise'),
             'expertise-edit': _('Modifier mon niveau'), 'expertise-delete': _('Retirer une expertise'),
             'slot-list': _('Mes créneaux'), 'slot-add': _('Publier un créneau'),
             'slot-edit': _('Modifier le créneau'), 'slot-cancel': _('Annuler le créneau'),

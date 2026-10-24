@@ -94,6 +94,15 @@
 .m4-timeline li { position: relative; }
 .m4-timeline li::before { content: ""; position: absolute; left: -24px; top: .55em; width: 10px; height: 10px; border-radius: 50%; background: var(--surface); border: 2px solid var(--primary); }
 
+/* Hub page */
+.m4-roles { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 16px; }
+.m4-role { padding: 24px; background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius); display: grid; gap: 8px; align-content: start; }
+.m4-role--yours { border-color: var(--primary); }
+.m4-role h3 { margin: 0; display: flex; align-items: center; gap: 8px; font-size: 1.1rem; }
+.m4-yours { margin: 0; font-size: .85rem; font-weight: 700; color: var(--accent); text-transform: uppercase; letter-spacing: .05em; }
+.m4-steps { margin: 4px 0; padding-left: 22px; display: grid; gap: 8px; }
+.m4-soon { display: inline-block; padding: 0 8px; border: 1px solid var(--control); border-radius: 999px; font-size: .75rem; font-weight: 700; color: var(--muted); vertical-align: middle; }
+
 @media (max-width: 860px) {
   .m4-detail { grid-template-columns: minmax(0, 1fr); }
   .m4-item { grid-template-columns: minmax(0, 1fr); }

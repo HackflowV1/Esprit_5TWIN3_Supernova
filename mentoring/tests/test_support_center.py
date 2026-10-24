@@ -273,10 +273,13 @@ class CancelTests(CenterBase):
 
 
 class NavigationAndLanguageTests(CenterBase):
-    def test_the_menu_offers_assistance_to_signed_in_users_only(self):
-        self.assertNotContains(self.client.get(reverse('core:home')), self.list_url)
+    def test_the_main_menu_has_one_mentoring_entry_for_signed_in_users_only(self):
+        hub = reverse('mentoring:hub')
+        self.assertNotContains(self.client.get(reverse('core:home')), f'href="{hub}"')
         self.client.force_login(self.member)
-        self.assertContains(self.client.get(reverse('core:home')), f'href="{self.list_url}"')
+        page = self.client.get(reverse('core:home'))
+        self.assertContains(page, f'href="{hub}"')
+        self.assertNotContains(page, f'href="{self.list_url}"')  # assistance, workshops... live inside the module tabs
 
     def test_breadcrumbs_and_titles(self):
         request = self.mine(subject='API Django')

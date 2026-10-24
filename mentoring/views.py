@@ -10,7 +10,7 @@ from django.utils.translation import gettext_lazy as _
 from django.views import View
 from django.views.generic import CreateView, DeleteView, DetailView, FormView, TemplateView, UpdateView
 
-from accounts.models import AssignmentStatus, Role
+from accounts.models import AssignmentStatus, Role, RoleAssignment
 from teams.models import Team
 from . import services
 from .forms import MentorExpertiseForm, SlotForm, SupportRequestForm, WorkshopForm
@@ -352,3 +352,27 @@ class SupportCancelView(VisibleRequestMixin, View):
         except (ValidationError, PermissionDenied) as exc:
             messages.error(request, ' '.join(exc.messages) if isinstance(exc, ValidationError) else (str(exc) or _('Action non autorisée.')))
         return redirect(support_request)
+
+
+# -------------------------------------------------------------- hub (home)
+class MentoringHomeView(LoginRequiredMixin, TemplateView):
+    """One page that explains what the module is for, whatever the role, and what to do next."""
+    template_name = 'mentoring/home.html'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        user, now = self.request.user, timezone.now()
+        mentor = is_mentor(user)
+        context.update(
+            is_trainer=mentor,
+            can_ask=bool(services.requestable_teams(user)),
+            has_team=Team.objects.filter(closed_at__isnull=True, memberships__ended_at__isnull=True,
+                memberships__registration__user=user).exists(),
+            is_organizer=services.organized_hackathons(user).exists(),
+            has_role=user.is_superuser or RoleAssignment.objects.filter(user=user, status=AssignmentStatus.ACTIVE).exists(),
+            active_requests=services.team_requests(user).filter(status__in=SupportRequest.ACTIVE_STATUSES).count(),
+            coached_count=services.coached_requests(user).count() if mentor else 0,
+            slot_count=MentorSlot.objects.published().filter(mentor=user, end__gt=now).count() if mentor else 0,
+            workshop_count=services.visible_workshops(user).filter(status=Workshop.Status.PUBLISHED, end__gt=now).count(),
+        )
+        return context

@@ -234,7 +234,7 @@ class SlotViewTests(SlotBase):
         page = self.client.get(self.list_url)
         self.assertContains(page, 'Créneau publié')
         self.assertContains(page, '<time datetime=')
-        self.assertContains(page, 'aria-label="Espace mentor"')
+        self.assertContains(page, 'aria-label="Mentorat et ateliers"')
         self.assertEqual(MentorSlot.objects.get().duration_minutes, 30)
 
     def test_overlap_is_reported_under_the_form(self):
