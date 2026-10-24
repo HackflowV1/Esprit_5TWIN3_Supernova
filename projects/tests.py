@@ -4,6 +4,12 @@ from tempfile import TemporaryDirectory
 from threading import Barrier
 from unittest.mock import patch
 from io import StringIO
+from unittest import SkipTest
+from django.apps import apps
+
+if not apps.is_installed('projects'):
+    raise SkipTest('M3 tests require --settings=projects.settings_m3.')
+
 from django.core.management import call_command
 from django.core.exceptions import PermissionDenied, ValidationError
 from django.core.files.uploadedfile import SimpleUploadedFile
