@@ -10,10 +10,11 @@
     </div>
     <div class="m3-board-summary">
       <div class="m3-board-completion"><span class="m3-completion-icon">{% icon 'check' 16 %}</span><span><strong>{{ completed_count }}/{{ milestone_count }}</strong> {% translate 'étapes terminées' %}</span></div>
-      <div class="m3-overall-progress"><label for="project-progress">{% translate 'Progression moyenne' %} <strong>{{ project.progress }} %</strong></label><progress id="project-progress" max="100" value="{{ project.progress }}">{{ project.progress }} %</progress></div>
+      <div class="m3-overall-progress"><label for="project-progress">{% translate 'Progression du tableau' %} <strong>{{ project.progress }} %</strong></label><progress id="project-progress" max="100" value="{{ project.progress }}">{{ project.progress }} %</progress></div>
     </div>
 
-    {% if board_movable %}<div class="m3-board-interaction"><p role="status" aria-live="polite" data-board-status>{% translate 'Glissez une étape vers une autre colonne ou utilisez son menu. Le déplacement est enregistré automatiquement.' %}</p>{% if project.official_submission_id %}<span>{% icon 'shield' 13 %}{% translate 'La version officielle reste figée.' %}</span>{% endif %}</div>{% endif %}
+    {% if project.official_submission_id %}<div class="m3-board-frozen-note">{% icon 'shield' 15 %}<a href="{% url 'projects:version' project.pk project.official_submission.version %}">{% translate 'Version officielle' %} v{{ project.official_submission.version }} · {{ project.official_submission.snapshot.progress }} %</a><span>{% translate 'Valeur figée au dépôt, indépendante du tableau actuel.' %}</span></div>{% endif %}
+    {% if board_movable %}<div class="m3-board-interaction"><p role="status" aria-live="polite" data-board-status>{% translate 'Glissez une étape vers une autre colonne ou utilisez son menu. Le déplacement est enregistré automatiquement.' %}</p></div>{% endif %}
     <div class="m3-kanban">
       {% for column in columns %}
       <section class="m3-column" data-state="{{ column.state }}" aria-labelledby="column-{{ column.state }}">

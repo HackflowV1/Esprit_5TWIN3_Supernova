@@ -46,6 +46,7 @@
       <section class="panel m3-submit-panel">
         <div class="m3-submit-icon">{% if submission.status == 'OFFICIAL' %}{% icon 'shield' 24 %}{% else %}{% icon 'upload' 24 %}{% endif %}</div>
         <h2 id="submission-action-title">{% if submission.status == 'OFFICIAL' %}{% translate 'Version officielle' %}{% else %}{% translate 'Officialiser cette version' %}{% endif %}</h2>
+        {% if submission.status == 'OFFICIAL' %}<div class="m3-frozen-metric"><span>{% icon 'shield' 16 %}{% translate 'Progression au dépôt (figée)' %}</span><strong>{{ submission.snapshot.progress }} %</strong><p>{% translate 'Cette valeur est enregistrée dans la soumission. Déplacer les tâches du tableau ne la modifie pas.' %}</p></div>{% endif %}
         <p class="muted">{% if submission.status == 'OFFICIAL' %}{% translate 'Le contenu et les livrables de cette version sont figés pour le jury.' %}{% else %}{% translate 'Ajouter un livrable ne soumet pas le projet. Cette étape fige la version pour le jury.' %}{% endif %}</p>
         <div class="m3-deadline"><span>{% icon 'calendar' 16 %}{% translate 'Date limite' %}</span><strong>{{ event.submission_deadline }}</strong></div>
         <div class="m3-repository-check{% if has_repository %} is-ready{% endif %}">{% if has_repository %}{% icon 'check' 17 %}{% translate 'Dépôt de code enregistré' %}{% else %}{% icon 'code' 17 %}{% translate 'Dépôt de code à ajouter' %}{% endif %}</div>

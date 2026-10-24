@@ -753,3 +753,19 @@ msgstr "The official submission stays frozen."
 #, python-format
 msgid "Déplacer vers %(state)s"
 msgstr "Move to %(state)s"
+
+msgid "Progression du tableau"
+msgstr "Live board progress"
+
+msgid "Progression au dépôt (figée)"
+msgstr "Submitted progress (frozen)"
+
+msgid "Valeur figée au dépôt, indépendante du tableau actuel."
+msgstr "Frozen at submission, separate from the current board."
+
+msgid ""
+"Cette valeur est enregistrée dans la soumission. Déplacer les tâches du "
+"tableau ne la modifie pas."
+msgstr ""
+"This value is saved in the submission. Moving board tasks does not change "
+"it."

@@ -214,3 +214,12 @@ frontières de deadline, POST classique/AJAX et immutabilité du snapshot offici
 La syntaxe JavaScript et la disponibilité des contrôles français/anglais sont
 vérifiées. Le geste de glissement reste à essayer manuellement dans le navigateur,
 aucun navigateur n’étant connecté aux outils de cette session.
+
+## Progression vivante et progression soumise
+
+Mes projets affiche séparément Progression du tableau (calculée sur les tâches
+actuelles) et Progression au dépôt (figée), lue dans le snapshot officiel. Le
+tableau rappelle la valeur de la version officielle et la page de soumission
+l’affiche dans son panneau principal. Exemple testé : dépôt officiel à 36 %,
+tableau porté ensuite à 100 %, soumission toujours enregistrée et affichée à 36 %.
+Les 33 tests M3 couvrent cette distinction jusque dans les réponses HTML.

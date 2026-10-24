@@ -328,6 +328,24 @@ class ProjectFlowTests(ProjectSetup, TestCase):
 
 
 class ScreenTests(ProjectSetup, TestCase):
+    def test_submitted_progress_is_displayed_separately_from_live_board(self):
+        project = self.project()
+        milestone = services.save_milestone(actor=self.a, project=project, data={
+            'title': 'Prototype', 'due_at': self.at+timedelta(hours=1), 'progress': 36})
+        official = self.official(project)
+        services.move_milestone(actor=self.a, project=project, milestone=milestone, state='DONE')
+        self.client.force_login(self.a)
+        self.client.cookies['hackflow_language'] = 'en'
+        response = self.client.get(reverse('projects:mine'))
+        self.assertContains(response, 'Live board progress')
+        self.assertContains(response, 'Submitted progress (frozen)')
+        self.assertContains(response, '100 %')
+        self.assertContains(response, '36 %')
+        response = self.client.get(reverse('projects:version', args=[project.pk, official.version]))
+        self.assertContains(response, 'Submitted progress (frozen)')
+        self.assertContains(response, '36 %')
+        self.assertEqual(response.context['submission'].snapshot['progress'], 36)
+
     def test_move_endpoint_updates_board_and_supports_regular_forms(self):
         project = self.project()
         milestone = services.save_milestone(actor=self.a, project=project, data={
