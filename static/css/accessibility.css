@@ -2,6 +2,7 @@
 html[data-a11y-text="large"] {font-size:112.5%}
 html[data-a11y-text="extra-large"] {font-size:125%}
 html[data-a11y-contrast="true"] {
+  --brand-button:#9b3107; --brand-button-hover:#7c2705; --brand-on-button:#fff;
   --brand-bg:#fff; --brand-surface:#fff; --brand-raised:#f0f0f0; --brand-active:#ddd;
   --brand-ink:#111; --brand-muted:#303030; --brand-faint:#404040; --brand-line:#555; --brand-control:#444;
   --brand-primary:#9b3107; --brand-primary-hover:#7c2705; --brand-on-primary:#fff; --brand-accent:#9b3107; --brand-focus:#111;
@@ -14,7 +15,7 @@ html[data-theme="dark"][data-a11y-contrast="true"] {
 html[data-a11y-contrast="true"] body {background-image:none!important}
 html[data-a11y-contrast="true"] :is(.button,button) {background-image:none!important; box-shadow:none}
 html[data-a11y-contrast="true"] .button,
-html[data-a11y-contrast="true"] button:not(.icon-button):not(.menu-action):not(.theme-toggle):not(.a11y-reset):not([data-a11y-close]) {background-color:var(--brand-primary); color:var(--brand-on-primary)}
+html[data-a11y-contrast="true"] button:not(.icon-button):not(.menu-action):not(.theme-toggle):not(.a11y-reset):not([data-a11y-close]) {background-color:var(--brand-button); color:var(--brand-on-button)}
 html[data-a11y-contrast="true"] :is(.button.secondary,button.secondary) {background-color:var(--brand-surface); color:var(--brand-ink); border-color:var(--brand-control)}
 html[data-a11y-colors="red-green"] {--brand-success:#075985; --brand-success-soft:#e0f2fe; --brand-danger:#9d174d; --brand-danger-soft:#fce7f3; --brand-warning:#854d0e; --brand-warning-soft:#fef9c3}
 html[data-theme="dark"][data-a11y-colors="red-green"] {--brand-success:#7dd3fc; --brand-success-soft:#082f49; --brand-danger:#f9a8d4; --brand-danger-soft:#500724; --brand-warning:#fde68a; --brand-warning-soft:#422006}
@@ -56,6 +57,7 @@ html[data-theme="dark"][data-a11y-colors="monochrome"] {
   --brand-focus:#fff; --brand-primary-rgb:241,242,243;
 }
 html[data-a11y-colors]:not([data-a11y-colors="standard"]) {
+  --brand-button:var(--brand-primary); --brand-button-hover:var(--brand-primary-hover); --brand-on-button:var(--brand-on-primary);
   --brand-gradient-start:var(--brand-primary);
   --brand-gradient-end:var(--brand-primary);
   --brand-gradient-hover-start:var(--brand-primary-hover);

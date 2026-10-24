@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: HackFlow 0.1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-10-23 17:49+0100\n"
+"POT-Creation-Date: 2026-10-24 15:29+0100\n"
 "PO-Revision-Date: 2026-10-23 19:00+0100\n"
 "Last-Translator: HackFlow team\n"
 "Language-Team: HackFlow\n"
@@ -70,11 +70,12 @@ msgid "Rôle"
 msgstr "Role"
 
 #: .\accounts\forms.py:81 .\core\templatetags\ui.py:12
-#: .\hackathons\forms.py:19 .\templates\hackathons\list.html:14
+#: .\hackathons\forms.py:19 .\templates\hackathons\list.html:17
+#: .\templates\teams\manage.html:3
 msgid "Statut"
 msgstr "Status"
 
-#: .\accounts\models.py:16
+#: .\accounts\models.py:16 .\templates\admin\login.html:8
 msgid "Utilisateurs"
 msgstr "Users"
 
@@ -86,7 +87,7 @@ msgstr "Can create a hackathon"
 msgid "Organisateur"
 msgstr "Organizer"
 
-#: .\accounts\models.py:66
+#: .\accounts\models.py:66 .\templates\teams\manage.html:3
 msgid "Participant"
 msgstr "Participant"
 
@@ -110,11 +111,15 @@ msgstr "Active"
 msgid "Retiré"
 msgstr "Removed"
 
-#: .\accounts\models.py:94 .\accounts\services.py:19
+#: .\accounts\models.py:94 .\accounts\services.py:18
+msgid "Annulez d’abord l’inscription depuis la gestion des participants."
+msgstr "Cancel the registration from participant management first."
+
+#: .\accounts\models.py:98 .\accounts\services.py:23
 msgid "Le dernier organisateur actif ne peut pas être retiré."
 msgstr "The last active organizer cannot be removed."
 
-#: .\accounts\models.py:99
+#: .\accounts\models.py:103
 msgid "Participant et juré sont incompatibles dans le même hackathon."
 msgstr ""
 "Participant and jury member roles are incompatible within the same "
@@ -124,16 +129,17 @@ msgstr ""
 msgid "Rôle organisateur requis dans ce hackathon."
 msgstr "An organizer role is required for this hackathon."
 
-#: .\accounts\permissions.py:29
+#: .\accounts\permissions.py:29 .\accounts\services.py:48
+#: .\teams\services.py:79
 msgid "Édition archivée : consultation uniquement."
 msgstr "Archived edition: read-only access."
 
 #: .\accounts\urls.py:9 .\core\context_processors.py:12
-#: .\templates\base.html:23
+#: .\templates\base.html:26
 msgid "Connexion"
 msgstr "Sign in"
 
-#: .\accounts\urls.py:9 .\templates\accounts\auth.html:26
+#: .\accounts\urls.py:9 .\templates\accounts\auth.html:27
 #: .\templates\shared\form.html:18
 msgid "Se connecter"
 msgstr "Sign in"
@@ -147,8 +153,8 @@ msgid "Votre compte a été créé."
 msgstr "Your account has been created."
 
 #: .\accounts\views.py:18 .\core\context_processors.py:12
-#: .\templates\accounts\auth.html:25 .\templates\core\home.html:10
-#: .\templates\core\home.html:50 .\templates\shared\form.html:17
+#: .\templates\accounts\auth.html:26 .\templates\core\home.html:15
+#: .\templates\core\home.html:223 .\templates\shared\form.html:17
 msgid "Créer mon compte"
 msgstr "Create my account"
 
@@ -169,7 +175,7 @@ msgid "Compétence ajoutée."
 msgstr "Skill added."
 
 #: .\accounts\views.py:67 .\core\context_processors.py:13
-#: .\templates\accounts\profile.html:6
+#: .\templates\accounts\profile.html:15
 msgid "Ajouter une compétence"
 msgstr "Add a skill"
 
@@ -181,13 +187,13 @@ msgstr "This skill is already on your profile."
 msgid "Compétence modifiée."
 msgstr "Skill updated."
 
-#: .\core\context_processors.py:10 .\templates\base.html:22
-#: .\templates\shared\breadcrumbs.html:4
+#: .\core\context_processors.py:10 .\templates\shared\breadcrumbs.html:4
+#: .\templates\shared\nav_account.html:9
 msgid "Mon profil"
 msgstr "My profile"
 
-#: .\core\context_processors.py:11 .\templates\accounts\profile.html:6
-#: .\templates\base.html:22
+#: .\core\context_processors.py:11 .\templates\accounts\profile.html:35
+#: .\templates\shared\nav_account.html:11
 msgid "Changer le mot de passe"
 msgstr "Change password"
 
@@ -199,22 +205,23 @@ msgstr "Password changed"
 msgid "Modifier une compétence"
 msgstr "Edit a skill"
 
-#: .\core\context_processors.py:14
+#: .\core\context_processors.py:14 .\templates\accounts\profile_delete.html:2
 msgid "Retirer une compétence"
 msgstr "Remove a skill"
 
-#: .\core\context_processors.py:17 .\templates\hackathons\list.html:6
+#: .\core\context_processors.py:17 .\templates\hackathons\list.html:7
 msgid "Les hackathons"
 msgstr "Browse hackathons"
 
-#: .\core\context_processors.py:17 .\hackathons\views.py:103
-#: .\templates\core\home.html:25 .\templates\hackathons\list.html:9
+#: .\core\context_processors.py:17 .\hackathons\views.py:109
+#: .\templates\core\home.html:96 .\templates\hackathons\list.html:11
 msgid "Créer un hackathon"
 msgstr "Create a hackathon"
 
-#: .\core\context_processors.py:18 .\templates\base.html:15
-#: .\templates\base.html:22 .\templates\hackathons\dashboard.html:4
-#: .\templates\shared\breadcrumbs.html:7
+#: .\core\context_processors.py:18 .\templates\base.html:18
+#: .\templates\base.html:45 .\templates\hackathons\dashboard.html:4
+#: .\templates\shared\breadcrumbs.html:12
+#: .\templates\shared\nav_account.html:12
 msgid "Control Tower"
 msgstr "Control Tower"
 
@@ -222,15 +229,15 @@ msgstr "Control Tower"
 msgid "Comparer les éditions"
 msgstr "Compare editions"
 
-#: .\core\context_processors.py:19 .\hackathons\views.py:126
+#: .\core\context_processors.py:19 .\hackathons\views.py:132
 msgid "Configurer le hackathon"
 msgstr "Configure hackathon"
 
-#: .\core\context_processors.py:19 .\templates\shared\breadcrumbs.html:9
+#: .\core\context_processors.py:19 .\templates\shared\breadcrumbs.html:14
 msgid "Pilotage"
 msgstr "Manage edition"
 
-#: .\core\context_processors.py:20 .\templates\hackathons\manage.html:22
+#: .\core\context_processors.py:20 .\templates\hackathons\manage.html:23
 msgid "Historique"
 msgstr "History"
 
@@ -238,15 +245,16 @@ msgstr "History"
 msgid "Gérer les rôles"
 msgstr "Manage roles"
 
-#: .\core\context_processors.py:21 .\templates\hackathons\manage.html:88
+#: .\core\context_processors.py:21 .\templates\hackathons\manage.html:89
 msgid "Créer une organisation"
 msgstr "Create an organization"
 
-#: .\core\context_processors.py:21
+#: .\core\context_processors.py:21 .\templates\hackathons\detail.html:43
+#: .\templates\hackathons\detail.html:295
 msgid "Proposer un challenge"
 msgstr "Propose a challenge"
 
-#: .\core\context_processors.py:22 .\templates\hackathons\manage.html:95
+#: .\core\context_processors.py:22 .\templates\hackathons\manage.html:96
 msgid "Ajouter un track"
 msgstr "Add a track"
 
@@ -258,7 +266,7 @@ msgstr "Edit a track"
 msgid "Supprimer un track"
 msgstr "Delete a track"
 
-#: .\core\context_processors.py:23 .\templates\hackathons\manage.html:102
+#: .\core\context_processors.py:23 .\templates\hackathons\manage.html:103
 msgid "Ajouter une phase"
 msgstr "Add a phase"
 
@@ -270,7 +278,7 @@ msgstr "Edit a phase"
 msgid "Supprimer une phase"
 msgstr "Delete a phase"
 
-#: .\core\context_processors.py:25 .\templates\hackathons\manage.html:109
+#: .\core\context_processors.py:25 .\templates\hackathons\manage.html:110
 msgid "Ajouter un challenge"
 msgstr "Add a challenge"
 
@@ -282,7 +290,7 @@ msgstr "Edit a challenge"
 msgid "Supprimer un challenge"
 msgstr "Delete a challenge"
 
-#: .\core\context_processors.py:26 .\templates\hackathons\manage.html:130
+#: .\core\context_processors.py:26 .\templates\hackathons\manage.html:131
 msgid "Ajouter un partenariat"
 msgstr "Add a partnership"
 
@@ -297,6 +305,80 @@ msgstr "Delete a partnership"
 #: .\core\context_processors.py:29 .\core\templatetags\ui.py:11
 msgid "Configuration"
 msgstr "Configuration"
+
+#: .\core\context_processors.py:32 .\templates\base.html:18
+#: .\templates\shared\nav_account.html:10 .\templates\teams\mine.html:2
+msgid "Mes inscriptions"
+msgstr "My registrations"
+
+#: .\core\context_processors.py:32 .\templates\shared\breadcrumbs.html:7
+#: .\templates\teams\manage.html:3 .\templates\teams\shell.html:9
+msgid "Les équipes"
+msgstr "Teams"
+
+#: .\core\context_processors.py:32
+msgid "L’équipe"
+msgstr "Team"
+
+#: .\core\context_processors.py:33
+msgid "Participer au hackathon"
+msgstr "Join the hackathon"
+
+#: .\core\context_processors.py:33
+msgid "Annuler une inscription"
+msgstr "Cancel a registration"
+
+#: .\core\context_processors.py:34 .\teams\views.py:139
+#: .\templates\teams\list.html:3 .\templates\teams\list.html:6
+msgid "Créer mon équipe"
+msgstr "Create my team"
+
+#: .\core\context_processors.py:34 .\teams\views.py:157
+msgid "Modifier l’équipe"
+msgstr "Edit team"
+
+#: .\core\context_processors.py:34
+msgid "Rejoindre une équipe"
+msgstr "Join a team"
+
+#: .\core\context_processors.py:35 .\teams\views.py:192
+#: .\templates\teams\candidates.html:2
+msgid "Inviter un participant"
+msgstr "Invite a participant"
+
+#: .\core\context_processors.py:35 .\templates\teams\inbox.html:2
+#: .\templates\teams\shell.html:11
+msgid "Invitations et candidatures"
+msgstr "Invitations and applications"
+
+#: .\core\context_processors.py:36 .\templates\hackathons\detail.html:283
+#: .\templates\hackathons\manage.html:5 .\templates\teams\manage.html:2
+msgid "Inscriptions et équipes"
+msgstr "Registrations and teams"
+
+#: .\core\context_processors.py:36 .\templates\teams\detail.html:3
+msgid "Trouver des coéquipiers"
+msgstr "Find teammates"
+
+#: .\core\context_processors.py:37
+msgid "Composition de l’équipe"
+msgstr "Team membership"
+
+#: .\core\context_processors.py:37
+msgid "Ajouter un besoin"
+msgstr "Add a skill need"
+
+#: .\core\context_processors.py:38 .\teams\views.py:258
+msgid "Modifier un besoin"
+msgstr "Edit a skill need"
+
+#: .\core\context_processors.py:38
+msgid "Retirer un besoin"
+msgstr "Remove a skill need"
+
+#: .\core\context_processors.py:39
+msgid "Participation"
+msgstr "Participation"
 
 #: .\core\templatetags\ui.py:11
 msgid "Création"
@@ -334,6 +416,22 @@ msgstr "Challenge: publication"
 msgid "Challenge : retrait"
 msgstr "Challenge: withdrawal"
 
+#: .\core\templatetags\ui.py:35 .\templates\teams\manage.html:2
+msgid "Inscriptions acceptées"
+msgstr "Accepted registrations"
+
+#: .\core\templatetags\ui.py:35 .\templates\teams\manage.html:2
+msgid "Équipes"
+msgstr "Teams"
+
+#: .\core\templatetags\ui.py:36 .\templates\teams\manage.html:2
+msgid "Équipes incomplètes"
+msgstr "Incomplete teams"
+
+#: .\core\templatetags\ui.py:37 .\templates\teams\manage.html:2
+msgid "Participants sans équipe"
+msgstr "Participants without a team"
+
 #: .\core\validators.py:7
 msgid "Image limitée à 5 Mo."
 msgstr "Images must be no larger than 5 MB."
@@ -358,11 +456,12 @@ msgstr "Archive completed editions"
 msgid "Titre"
 msgstr "Title"
 
-#: .\hackathons\forms.py:9 .\templates\hackathons\detail.html:26
+#: .\hackathons\forms.py:9 .\templates\teams\form.html:4
 msgid "Règlement"
 msgstr "Rules"
 
-#: .\hackathons\forms.py:9 .\templates\hackathons\detail.html:27
+#: .\hackathons\forms.py:9 .\templates\hackathons\detail.html:101
+#: .\templates\teams\form.html:4
 msgid "Conditions de participation"
 msgstr "Participation requirements"
 
@@ -378,8 +477,8 @@ msgstr "Image"
 msgid "Identifiant dans l’URL"
 msgstr "URL identifier"
 
-#: .\hackathons\forms.py:11 .\templates\hackathons\detail.html:53
-#: .\templates\hackathons\list.html:15
+#: .\hackathons\forms.py:11 .\templates\hackathons\detail.html:268
+#: .\templates\hackathons\list.html:18
 msgid "Format"
 msgstr "Format"
 
@@ -431,11 +530,11 @@ msgstr "Maximum team size"
 msgid "Type de phase"
 msgstr "Phase type"
 
-#: .\hackathons\forms.py:16 .\templates\hackathons\detail.html:47
+#: .\hackathons\forms.py:16 .\templates\hackathons\detail.html:244
 msgid "Début"
 msgstr "Start"
 
-#: .\hackathons\forms.py:16 .\templates\hackathons\detail.html:48
+#: .\hackathons\forms.py:16 .\templates\hackathons\detail.html:248
 msgid "Fin"
 msgstr "End"
 
@@ -443,11 +542,11 @@ msgstr "End"
 msgid "Problématique"
 msgstr "Problem statement"
 
-#: .\hackathons\forms.py:17 .\templates\hackathons\detail.html:35
+#: .\hackathons\forms.py:17
 msgid "Objectifs"
 msgstr "Objectives"
 
-#: .\hackathons\forms.py:17
+#: .\hackathons\forms.py:17 .\templates\hackathons\detail.html:175
 msgid "Livrables attendus"
 msgstr "Expected deliverables"
 
@@ -492,25 +591,25 @@ msgid "Email du contact"
 msgstr "Contact email"
 
 #: .\hackathons\models.py:23 .\hackathons\models.py:179
-#: .\templates\hackathons\manage.html:39
+#: .\templates\hackathons\manage.html:40
 msgid "Brouillon"
 msgstr "Draft"
 
 #: .\hackathons\models.py:24 .\hackathons\models.py:182
-#: .\templates\hackathons\manage.html:40
+#: .\templates\hackathons\manage.html:41
 msgid "Publié"
 msgstr "Published"
 
 #: .\hackathons\models.py:25 .\hackathons\models.py:275
-#: .\templates\hackathons\manage.html:41
+#: .\templates\hackathons\manage.html:42
 msgid "En cours"
 msgstr "In progress"
 
-#: .\hackathons\models.py:26 .\templates\hackathons\manage.html:42
+#: .\hackathons\models.py:26 .\templates\hackathons\manage.html:43
 msgid "Terminé"
 msgstr "Finished"
 
-#: .\hackathons\models.py:27 .\templates\hackathons\manage.html:43
+#: .\hackathons\models.py:27 .\templates\hackathons\manage.html:44
 msgid "Archivé"
 msgstr "Archived"
 
@@ -566,11 +665,11 @@ msgstr "Cancelled"
 msgid "Information pour M5 ; aucune attribution de prix dans M1."
 msgstr "Information for M5; M1 does not award prizes."
 
-#: .\hackathons\models.py:164 .\hackathons\services.py:150
+#: .\hackathons\models.py:164 .\hackathons\services.py:156
 msgid "Retirez les challenges validés avant de désactiver le partenariat."
 msgstr "Withdraw approved challenges before deactivating the partnership."
 
-#: .\hackathons\models.py:166 .\hackathons\services.py:135
+#: .\hackathons\models.py:166 .\hackathons\services.py:141
 msgid "L’organisation d’un partenariat existant ne peut pas changer."
 msgstr "The organization of an existing partnership cannot be changed."
 
@@ -598,7 +697,7 @@ msgstr "Organizer approval required."
 msgid "Partenariat confirmé requis."
 msgstr "A confirmed partnership is required."
 
-#: .\hackathons\models.py:219 .\templates\hackathons\detail.html:49
+#: .\hackathons\models.py:219 .\templates\hackathons\detail.html:252
 msgid "Inscriptions"
 msgstr "Registration"
 
@@ -666,119 +765,538 @@ msgstr "Completed"
 msgid "Autorisation technique de création requise."
 msgstr "Technical permission to create a hackathon is required."
 
-#: .\hackathons\services.py:67
+#: .\hackathons\services.py:49
+msgid ""
+"La capacité ne peut pas être inférieure au nombre d’inscriptions acceptées."
+msgstr "Capacity cannot be lower than the number of accepted registrations."
+
+#: .\hackathons\services.py:51
+msgid "La taille maximale ne peut pas être inférieure à une équipe existante."
+msgstr "The maximum team size cannot be smaller than an existing team."
+
+#: .\hackathons\services.py:73
 #, python-format
 msgid "Phases manquantes : %(phases)s"
 msgstr "Missing phases: %(phases)s"
 
-#: .\hackathons\services.py:69
+#: .\hackathons\services.py:75
 msgid "Un track actif est requis."
 msgstr "An active track is required."
 
-#: .\hackathons\services.py:71
+#: .\hackathons\services.py:77
 msgid "Un challenge validé et publié est requis."
 msgstr "An approved and published challenge is required."
 
-#: .\hackathons\services.py:86
+#: .\hackathons\services.py:92
 msgid "Transition de statut interdite."
 msgstr "This status transition is not allowed."
 
-#: .\hackathons\services.py:91
+#: .\hackathons\services.py:97
 msgid "Événement déjà terminé."
 msgstr "The event has already ended."
 
-#: .\hackathons\services.py:95
+#: .\hackathons\services.py:101
 msgid "Le démarrage exige une date dans la période de l’événement."
 msgstr "The event can only be started during its scheduled dates."
 
-#: .\hackathons\services.py:97
+#: .\hackathons\services.py:103
 msgid "La date de fin n’est pas atteinte."
 msgstr "The end date has not been reached."
 
-#: .\hackathons\services.py:121
+#: .\hackathons\services.py:127
 msgid "Cette période est fermée."
 msgstr "This period is closed."
 
-#: .\hackathons\services.py:132
+#: .\hackathons\services.py:138
 msgid "Une ressource ne peut pas changer de hackathon."
 msgstr "A resource cannot be moved to another hackathon."
 
-#: .\hackathons\services.py:144 .\hackathons\services.py:166
+#: .\hackathons\services.py:150 .\hackathons\services.py:172
 msgid "Un partenariat confirmé du hackathon est requis."
 msgstr "A confirmed partnership for this hackathon is required."
 
-#: .\hackathons\services.py:163
+#: .\hackathons\services.py:169
 msgid "Rôle représentant sponsor requis dans cet événement."
 msgstr "A sponsor representative role is required for this event."
 
-#: .\hackathons\services.py:169
+#: .\hackathons\services.py:175
 msgid "Mandat de représentation actif requis."
 msgstr "An active representation mandate is required."
 
-#: .\hackathons\services.py:194
+#: .\hackathons\services.py:200
 msgid "Transition de challenge interdite."
 msgstr "This challenge transition is not allowed."
 
-#: .\hackathons\services.py:221
+#: .\hackathons\services.py:227
 msgid "Indicateurs indisponibles ; vérifier le fournisseur."
 msgstr "Metrics unavailable; check the provider."
 
-#: .\hackathons\services.py:238
+#: .\hackathons\services.py:244
 msgid "Fournisseur d’alertes indisponible."
 msgstr "Alert provider unavailable."
 
-#: .\hackathons\views.py:116
+#: .\hackathons\views.py:122
 msgid "Conflit de données : vérifiez le slug."
 msgstr "Data conflict: check the slug."
 
-#: .\hackathons\views.py:118
+#: .\hackathons\views.py:124
 msgid "Hackathon créé ; rôle organisateur attribué."
 msgstr "Hackathon created; organizer role assigned."
 
-#: .\hackathons\views.py:135
+#: .\hackathons\views.py:141
 msgid "Conflit de données."
 msgstr "Data conflict."
 
-#: .\hackathons\views.py:137 .\hackathons\views.py:208
+#: .\hackathons\views.py:143 .\hackathons\views.py:214
 msgid "Configuration enregistrée."
 msgstr "Configuration saved."
 
-#: .\hackathons\views.py:170
+#: .\hackathons\views.py:176
 msgid "Statut mis à jour."
 msgstr "Status updated."
 
-#: .\hackathons\views.py:206
+#: .\hackathons\views.py:212
 msgid "Conflit : cet élément existe déjà."
 msgstr "Conflict: this item already exists."
 
-#: .\hackathons\views.py:208
+#: .\hackathons\views.py:214
 msgid "Challenge enregistré ; validation requise."
 msgstr "Challenge saved; approval is required."
 
-#: .\hackathons\views.py:233
+#: .\hackathons\views.py:239
 msgid ""
 "Suppression réservée aux brouillons ; utilisez le retrait ou l’archivage."
 msgstr "Only drafts can be deleted; use withdrawal or archiving instead."
 
-#: .\hackathons\views.py:238
+#: .\hackathons\views.py:244
 msgid "Élément référencé : suppression impossible."
 msgstr "Referenced item: deletion is not allowed."
 
-#: .\hackathons\views.py:263
+#: .\hackathons\views.py:269
 msgid "Challenge mis à jour."
 msgstr "Challenge updated."
 
-#: .\hackathons\views.py:278
+#: .\hackathons\views.py:284
 msgid "Organisation créée. Ajoutez maintenant son partenariat."
 msgstr "Organization created. Now add its partnership."
 
-#: .\hackathons\views.py:285
+#: .\hackathons\views.py:291
 msgid "Affecter ou retirer un rôle dans ce hackathon"
 msgstr "Assign or remove a role in this hackathon"
 
-#: .\hackathons\views.py:293
+#: .\hackathons\views.py:299
 msgid "Affectation historisée."
 msgstr "Role assignment recorded."
+
+#: .\teams\admin.py:29
+msgid "Annuler les inscriptions sélectionnées (règles M2)"
+msgstr "Cancel selected registrations (M2 rules)"
+
+#: .\teams\admin.py:37 .\teams\views.py:86
+msgid "Inscription annulée."
+msgstr "Registration cancelled."
+
+#: .\teams\admin.py:46
+msgid "Gestion"
+msgstr "Manage"
+
+#: .\teams\admin.py:48
+msgid "Ouvrir l’équipe"
+msgstr "Open team"
+
+#: .\teams\forms.py:7
+msgid "J’accepte le règlement et les conditions de participation."
+msgstr "I accept the rules and participation requirements."
+
+#: .\teams\forms.py:7
+msgid ""
+"Vérifiez que vous remplissez les conditions indiquées par l’organisateur."
+msgstr "Check that you meet the requirements set by the organizer."
+
+#: .\teams\forms.py:14
+msgid "Une idée, des envies, les profils que vous cherchez…"
+msgstr "Your idea, your goals, the people you are looking for…"
+
+#: .\teams\forms.py:18 .\teams\models.py:97
+msgid "Message"
+msgstr "Message"
+
+#: .\teams\forms.py:18
+msgid "Présentez votre motivation ou votre idée en quelques mots."
+msgstr "Briefly introduce your motivation or idea."
+
+#: .\teams\forms.py:22
+msgid "Participant à inviter"
+msgstr "Participant to invite"
+
+#: .\teams\forms.py:31 .\teams\models.py:129
+msgid "Niveau souhaité"
+msgstr "Desired level"
+
+#: .\teams\forms.py:31
+msgid "1 · Découverte"
+msgstr "1 · Beginner"
+
+#: .\teams\forms.py:31
+msgid "2 · Bases"
+msgstr "2 · Basic"
+
+#: .\teams\forms.py:31
+msgid "3 · Autonome"
+msgstr "3 · Independent"
+
+#: .\teams\forms.py:31
+msgid "4 · Avancé"
+msgstr "4 · Advanced"
+
+#: .\teams\forms.py:31
+msgid "5 · Expert"
+msgstr "5 · Expert"
+
+#: .\teams\forms.py:35 .\templates\teams\list.html:5
+msgid "Compétence recherchée"
+msgstr "Skill needed"
+
+#: .\teams\models.py:15 .\teams\models.py:88
+msgid "Acceptée"
+msgstr "Accepted"
+
+#: .\teams\models.py:16 .\teams\models.py:90
+msgid "Annulée"
+msgstr "Cancelled"
+
+#: .\teams\models.py:36
+msgid "Nom de l’équipe"
+msgstr "Team name"
+
+#: .\teams\models.py:37
+msgid "Votre idée et votre équipe"
+msgstr "Your idea and your team"
+
+#: .\teams\models.py:39
+msgid "Recrutement ouvert"
+msgstr "Open for recruitment"
+
+#: .\teams\models.py:49
+msgid "Le capitaine doit être inscrit au même hackathon."
+msgstr "The captain must be registered for the same hackathon."
+
+#: .\teams\models.py:81
+msgid "L’inscription et l’équipe doivent appartenir au même hackathon."
+msgstr "The registration and team must belong to the same hackathon."
+
+#: .\teams\models.py:83 .\teams\services.py:97
+msgid "Une inscription acceptée est requise."
+msgstr "An accepted registration is required."
+
+#: .\teams\models.py:87
+msgid "En attente"
+msgstr "Pending"
+
+#: .\teams\models.py:89
+msgid "Refusée"
+msgstr "Declined"
+
+#: .\teams\models.py:91 .\templates\teams\request_row.html:2
+msgid "Expirée"
+msgstr "Expired"
+
+#: .\teams\models.py:111
+msgid "La demande doit concerner le même hackathon."
+msgstr "The request must refer to the same hackathon."
+
+#: .\teams\models.py:130
+msgid "Priorité"
+msgstr "Priority"
+
+#: .\teams\models.py:130
+msgid "Utile"
+msgstr "Helpful"
+
+#: .\teams\models.py:130
+msgid "Importante"
+msgstr "Important"
+
+#: .\teams\models.py:130
+msgid "Essentielle"
+msgstr "Essential"
+
+#: .\teams\models.py:143
+msgid "Inscription confirmée"
+msgstr "Registration confirmed"
+
+#: .\teams\models.py:143
+msgid "Inscription annulée"
+msgstr "Registration cancelled"
+
+#: .\teams\models.py:144
+msgid "Équipe créée"
+msgstr "Team created"
+
+#: .\teams\models.py:144
+msgid "Équipe modifiée"
+msgstr "Team updated"
+
+#: .\teams\models.py:145
+msgid "Membre ajouté"
+msgstr "Member added"
+
+#: .\teams\models.py:145
+msgid "Départ d’un membre"
+msgstr "Member left"
+
+#: .\teams\models.py:146
+msgid "Membre retiré"
+msgstr "Member removed"
+
+#: .\teams\models.py:146
+msgid "Capitaine transféré"
+msgstr "Captain transferred"
+
+#: .\teams\models.py:147
+msgid "Invitation envoyée"
+msgstr "Invitation sent"
+
+#: .\teams\models.py:147
+msgid "Candidature envoyée"
+msgstr "Application sent"
+
+#: .\teams\models.py:148
+msgid "Décision de recrutement"
+msgstr "Recruitment decision"
+
+#: .\teams\models.py:148
+msgid "Demande annulée"
+msgstr "Request cancelled"
+
+#: .\teams\models.py:149
+msgid "Besoin de compétence enregistré"
+msgstr "Skill need saved"
+
+#: .\teams\models.py:149
+msgid "Besoin de compétence retiré"
+msgstr "Skill need removed"
+
+#: .\teams\services.py:50
+msgid "Inscrivez-vous à cette édition pour accéder aux équipes."
+msgstr "Register for this edition to access teams."
+
+#: .\teams\services.py:89
+msgid "Seul le capitaine ou un organisateur peut gérer cette équipe."
+msgstr "Only the captain or an organizer can manage this team."
+
+#: .\teams\services.py:91
+msgid "Cette équipe est fermée."
+msgstr "This team is closed."
+
+#: .\teams\services.py:99 .\teams\services.py:110
+msgid "Un juré ne peut pas participer au même hackathon."
+msgstr "A judge cannot participate in the same hackathon."
+
+#: .\teams\services.py:108
+msgid "Acceptez le règlement et les conditions de participation."
+msgstr "Accept the rules and participation requirements."
+
+#: .\teams\services.py:115 .\templates\hackathons\detail.html:281
+msgid "Ce hackathon est complet."
+msgstr "This hackathon is full."
+
+#: .\teams\services.py:136
+msgid "Cette inscription est déjà annulée."
+msgstr "This registration has already been cancelled."
+
+#: .\teams\services.py:141
+msgid "La composition des équipes est figée."
+msgstr "Team membership is now frozen."
+
+#: .\teams\services.py:143
+msgid "Les annulations sont fermées."
+msgstr "Cancellations are closed."
+
+#: .\teams\services.py:145
+msgid "Quittez votre équipe avant d’annuler votre inscription."
+msgstr "Leave your team before cancelling your registration."
+
+#: .\teams\services.py:160
+msgid "Vous avez déjà une équipe dans cette édition."
+msgstr "You already have a team in this edition."
+
+#: .\teams\services.py:197
+msgid "Équipe indisponible pour cette inscription."
+msgstr "This team is unavailable for this registration."
+
+#: .\teams\services.py:200 .\teams\services.py:273
+msgid "Ce participant a déjà une équipe."
+msgstr "This participant already has a team."
+
+#: .\teams\services.py:202
+msgid "Cette équipe est complète."
+msgstr "This team is full."
+
+#: .\teams\services.py:220
+msgid "Cette personne a déjà quitté l’équipe."
+msgstr "This person has already left the team."
+
+#: .\teams\services.py:223
+msgid "Transférez le rôle de capitaine avant ce départ."
+msgstr "Transfer the captain role before leaving."
+
+#: .\teams\services.py:245
+msgid "Choisissez un membre actif de cette équipe."
+msgstr "Choose an active member of this team."
+
+#: .\teams\services.py:260
+msgid "Cette équipe ne recrute pas actuellement."
+msgstr "This team is not recruiting right now."
+
+#: .\teams\services.py:265
+msgid "Inscription d’une autre édition."
+msgstr "This registration belongs to another edition."
+
+#: .\teams\services.py:275
+msgid "Une demande est déjà en attente."
+msgstr "A request is already pending."
+
+#: .\teams\services.py:290
+msgid "Décision invalide."
+msgstr "Invalid decision."
+
+#: .\teams\services.py:303
+msgid "Cette demande a déjà été traitée."
+msgstr "This request has already been processed."
+
+#: .\teams\services.py:305
+msgid "Cette invitation a expiré."
+msgstr "This invitation has expired."
+
+#: .\teams\services.py:308
+msgid "Cette équipe a fermé son recrutement."
+msgstr "This team has closed recruitment."
+
+#: .\teams\views.py:40 .\templates\accounts\profile_form.html:7
+#: .\templates\shared\form.html:13
+msgid "Enregistrer"
+msgstr "Save"
+
+#: .\teams\views.py:44
+msgid "Ces données existent déjà. Actualisez la page et réessayez."
+msgstr "These details already exist. Refresh the page and try again."
+
+#: .\teams\views.py:68
+msgid "Inscription confirmée ! Trouvez votre équipe ou créez la vôtre."
+msgstr "Registration confirmed! Find your team or create your own."
+
+#: .\teams\views.py:70
+msgid "Participer à ce hackathon"
+msgstr "Join this hackathon"
+
+#: .\teams\views.py:70
+msgid "Confirmer mon inscription"
+msgstr "Confirm my registration"
+
+#: .\teams\views.py:88
+msgid "Annuler cette inscription ?"
+msgstr "Cancel this registration?"
+
+#: .\teams\views.py:89
+msgid ""
+"Le rôle participant sera retiré pour cette édition uniquement. Vous devez "
+"d’abord quitter votre équipe."
+msgstr ""
+"The participant role will be removed for this edition only. You must leave "
+"your team first."
+
+#: .\teams\views.py:137
+msgid ""
+"Votre équipe est créée. Ajoutez vos besoins et invitez des coéquipiers."
+msgstr ""
+"Your team is ready to recruit. Add your skill needs and invite teammates."
+
+#: .\teams\views.py:139
+msgid "Vous serez capitaine et premier membre. Vous pourrez recruter ensuite."
+msgstr ""
+"You will be the captain and first member. You can recruit teammates next."
+
+#: .\teams\views.py:155
+msgid "Équipe mise à jour."
+msgstr "Team updated."
+
+#: .\teams\views.py:171
+msgid "Candidature envoyée. Le capitaine pourra vous répondre."
+msgstr "Application sent. The captain can now respond."
+
+#: .\teams\views.py:173 .\templates\teams\detail.html:3
+msgid "Rejoindre cette équipe"
+msgstr "Join this team"
+
+#: .\teams\views.py:173
+msgid "Votre place est confirmée uniquement après acceptation."
+msgstr "Your place is only confirmed once you are accepted."
+
+#: .\teams\views.py:173
+msgid "Envoyer ma candidature"
+msgstr "Send my application"
+
+#: .\teams\views.py:190
+msgid "Invitation envoyée. Aucune place n’est réservée avant acceptation."
+msgstr "Invitation sent. No place is reserved until it is accepted."
+
+#: .\teams\views.py:192
+msgid ""
+"L’invitation expire après 7 jours ou à la fin de la formation des équipes."
+msgstr "The invitation expires after 7 days or when team formation closes."
+
+#: .\teams\views.py:192
+msgid "Envoyer l’invitation"
+msgstr "Send invitation"
+
+#: .\teams\views.py:215
+msgid "Cette équipe vient de changer. Actualisez la page."
+msgstr "This team has just changed. Refresh the page."
+
+#: .\teams\views.py:217
+msgid "Décision enregistrée."
+msgstr "Decision saved."
+
+#: .\teams\views.py:228
+msgid "Transférer le rôle de capitaine ?"
+msgstr "Transfer the captain role?"
+
+#: .\teams\views.py:228
+msgid "Retirer ce membre ?"
+msgstr "Remove this member?"
+
+#: .\teams\views.py:228
+msgid "Quitter cette équipe ?"
+msgstr "Leave this team?"
+
+#: .\teams\views.py:236
+msgid "Composition de l’équipe mise à jour."
+msgstr "Team membership updated."
+
+#: .\teams\views.py:239
+msgid ""
+"Cette action est enregistrée dans l’historique. Un capitaine doit transférer"
+" son rôle avant de quitter une équipe qui compte d’autres membres."
+msgstr ""
+"This action is recorded in the history. A captain must transfer their role "
+"before leaving a team with other members."
+
+#: .\teams\views.py:256
+msgid "Besoin de compétence enregistré."
+msgstr "Skill need saved."
+
+#: .\teams\views.py:258
+msgid "Ajouter un besoin de compétence"
+msgstr "Add a skill need"
+
+#: .\teams\views.py:274
+msgid "Retirer ce besoin ?"
+msgstr "Remove this skill need?"
+
+#: .\teams\views.py:274
+msgid "Les compétences personnelles des membres seront conservées."
+msgstr "Members’ personal skills will be kept."
 
 #: .\templates\403.html:2
 msgid "Accès refusé — HackFlow"
@@ -837,40 +1355,39 @@ msgstr "— HackFlow"
 msgid "Pourquoi rejoindre HackFlow"
 msgstr "Why join HackFlow"
 
-#: .\templates\accounts\auth.html:7
+#: .\templates\accounts\auth.html:8
 msgid "Retrouvez votre espace."
 msgstr "Welcome to your workspace."
 
-#: .\templates\accounts\auth.html:7
+#: .\templates\accounts\auth.html:8
 msgid "Un compte, tous les hackathons."
 msgstr "One account, every hackathon."
 
-#: .\templates\accounts\auth.html:9
+#: .\templates\accounts\auth.html:10
 msgid "Un seul compte, des rôles différents selon chaque événement."
 msgstr "One account, with different roles for each event."
 
-#: .\templates\accounts\auth.html:10
-#| msgid "Constituez votre équipe grâce à vos compétences."
+#: .\templates\accounts\auth.html:11
 msgid "Présentez votre profil et vos compétences."
 msgstr "Introduce yourself and your skills."
 
-#: .\templates\accounts\auth.html:11
+#: .\templates\accounts\auth.html:12
 msgid "Retrouvez les dates et les consignes de chaque édition."
 msgstr "Find the dates and guidelines for each edition."
 
-#: .\templates\accounts\auth.html:17
+#: .\templates\accounts\auth.html:18
 msgid "Connectez-vous pour accéder à votre espace."
 msgstr "Sign in to access your workspace."
 
-#: .\templates\accounts\auth.html:17
+#: .\templates\accounts\auth.html:18
 msgid "Créez votre compte pour découvrir les éditions."
 msgstr "Create an account to discover the editions."
 
-#: .\templates\accounts\auth.html:25 .\templates\shared\form.html:17
+#: .\templates\accounts\auth.html:26 .\templates\shared\form.html:17
 msgid "Pas encore de compte ?"
 msgstr "Don’t have an account yet?"
 
-#: .\templates\accounts\auth.html:26
+#: .\templates\accounts\auth.html:27
 msgid "Déjà inscrit ?"
 msgstr "Already have an account?"
 
@@ -883,94 +1400,196 @@ msgid "Votre mot de passe a bien été mis à jour."
 msgstr "Your password has been updated."
 
 #: .\templates\accounts\password_done.html:5
+#: .\templates\accounts\profile_form.html:7
 msgid "Retour au profil"
 msgstr "Back to profile"
 
 #: .\templates\accounts\profile.html:2
+#: .\templates\accounts\profile_shell.html:3
 msgid "Mon profil — HackFlow"
 msgstr "My profile — HackFlow"
 
-#: .\templates\accounts\profile.html:5
-msgid "Mon profil ·"
-msgstr "My profile ·"
-
 #: .\templates\accounts\profile.html:6
-msgid "Modifier le profil"
-msgstr "Edit profile"
-
-#: .\templates\accounts\profile.html:10
 #, python-format
 msgid "Photo de profil de %(v0)s"
 msgstr "Profile photo of %(v0)s"
 
-#: .\templates\accounts\profile.html:17
+#: .\templates\accounts\profile.html:13
 msgid "Centres d’intérêt :"
 msgstr "Interests:"
 
-#: .\templates\accounts\profile.html:20
+#: .\templates\accounts\profile.html:14
+msgid "Modifier le profil"
+msgstr "Edit profile"
+
+#: .\templates\accounts\profile.html:15
+#: .\templates\accounts\profile_shell.html:9
 msgid "Mes compétences"
 msgstr "My skills"
 
-#: .\templates\accounts\profile.html:23
+#: .\templates\accounts\profile.html:18
 #, python-format
 msgid "Niveau %(v0)s sur 5"
 msgstr "Level %(v0)s out of 5"
 
-#: .\templates\accounts\profile.html:24 .\templates\hackathons\manage.html:97
-#: .\templates\hackathons\manage.html:104
-#: .\templates\hackathons\manage.html:120
-#: .\templates\hackathons\manage.html:132
+#: .\templates\accounts\profile.html:19 .\templates\hackathons\manage.html:98
+#: .\templates\hackathons\manage.html:105
+#: .\templates\hackathons\manage.html:121
+#: .\templates\hackathons\manage.html:133
 #, python-format
 msgid "Modifier %(v0)s"
 msgstr "Edit %(v0)s"
 
-#: .\templates\accounts\profile.html:24 .\templates\hackathons\manage.html:97
-#: .\templates\hackathons\manage.html:104
-#: .\templates\hackathons\manage.html:120
-#: .\templates\hackathons\manage.html:132
+#: .\templates\accounts\profile.html:19 .\templates\hackathons\manage.html:98
+#: .\templates\hackathons\manage.html:105
+#: .\templates\hackathons\manage.html:121
+#: .\templates\hackathons\manage.html:133 .\templates\teams\detail.html:3
 msgid "Modifier"
 msgstr "Edit"
 
-#: .\templates\accounts\profile.html:24
+#: .\templates\accounts\profile.html:19
+#: .\templates\accounts\profile_delete.html:3 .\templates\teams\detail.html:7
 msgid "Retirer"
 msgstr "Remove"
 
-#: .\templates\accounts\profile.html:26
+#: .\templates\accounts\profile.html:21
 msgid ""
 "Aucune compétence déclarée. Le référentiel est géré dans l’administration."
 msgstr "No skills added. The skills directory is managed in administration."
 
-#: .\templates\accounts\profile.html:28
+#: .\templates\accounts\profile.html:23
 msgid "Mes rôles par hackathon"
 msgstr "My roles by hackathon"
 
-#: .\templates\accounts\profile.html:31
+#: .\templates\accounts\profile.html:26
 msgid "Votre compte n’est affecté à aucun hackathon."
 msgstr "Your account is not assigned to any hackathon."
 
-#: .\templates\accounts\profile.html:32
+#: .\templates\accounts\profile.html:27
 msgid "Organisations représentées"
 msgstr "Represented organizations"
 
-#: .\templates\accounts\profile.html:33
+#: .\templates\accounts\profile.html:28
 msgid "Aucune organisation."
 msgstr "No organizations."
 
-#: .\templates\admin\base_site.html:3 .\templates\base.html:22
+#: .\templates\accounts\profile.html:31
+#: .\templates\accounts\profile_shell.html:11
+#: .\templates\shared\nav_account.html:3
+msgid "Préférences"
+msgstr "Preferences"
+
+#: .\templates\accounts\profile.html:32 .\templates\shared\nav_account.html:15
+msgid "Apparence"
+msgstr "Appearance"
+
+#: .\templates\accounts\profile.html:32 .\templates\shared\nav_account.html:15
+msgid "Système"
+msgstr "System"
+
+#: .\templates\accounts\profile.html:32 .\templates\shared\nav_account.html:15
+msgid "Claire"
+msgstr "Light"
+
+#: .\templates\accounts\profile.html:32 .\templates\shared\nav_account.html:15
+msgid "Sombre"
+msgstr "Dark"
+
+#: .\templates\accounts\profile.html:34
+#: .\templates\accounts\profile_shell.html:12
+#: .\templates\shared\accessibility_dialog.html:3
+#: .\templates\shared\nav_account.html:16
+msgid "Accessibilité"
+msgstr "Accessibility"
+
+#: .\templates\accounts\profile.html:35
+#: .\templates\accounts\profile_shell.html:13
+msgid "Sécurité"
+msgstr "Security"
+
+#: .\templates\accounts\profile.html:35
+msgid "Gérez le mot de passe de votre compte."
+msgstr "Manage your account password."
+
+#: .\templates\accounts\profile_delete.html:3
+#: .\templates\shared\confirm_delete.html:8 .\templates\shared\form.html:14
+#: .\templates\teams\confirm.html:2 .\templates\teams\form.html:5
+msgid "Annuler"
+msgstr "Cancel"
+
+#: .\templates\accounts\profile_shell.html:5 .\templates\base.html:47
+#: .\templates\base.html:72 .\templates\core\home.html:13
+msgid "Mon espace"
+msgstr "My workspace"
+
+#: .\templates\accounts\profile_shell.html:5
+msgid "Votre profil, vos compétences et vos préférences."
+msgstr "Your profile, skills and preferences."
+
+#: .\templates\accounts\profile_shell.html:7
+msgid "Navigation du profil"
+msgstr "Profile navigation"
+
+#: .\templates\accounts\profile_shell.html:8
+msgid "Informations"
+msgstr "Information"
+
+#: .\templates\accounts\profile_shell.html:10
+msgid "Rôles et organisations"
+msgstr "Roles and organizations"
+
+#: .\templates\admin\app_list.html:8
+#, python-format
+msgid "Models in the %(name)s application"
+msgstr "Models in the %(name)s application"
+
+#: .\templates\admin\app_list.html:12
+msgid "Model name"
+msgstr "Model name"
+
+#: .\templates\admin\app_list.html:13
+msgid "Add link"
+msgstr "Add link"
+
+#: .\templates\admin\app_list.html:14
+msgid "Change or view list link"
+msgstr "Change or view list link"
+
+#: .\templates\admin\app_list.html:29
+msgid "Add"
+msgstr "Add"
+
+#: .\templates\admin\app_list.html:36
+msgid "View"
+msgstr "View"
+
+#: .\templates\admin\app_list.html:38
+msgid "Change"
+msgstr "Change"
+
+#: .\templates\admin\app_list.html:50
+msgid "You don’t have permission to view or edit anything."
+msgstr "You don’t have permission to view or edit anything."
+
+#: .\templates\admin\base_site.html:14 .\templates\admin\login.html:7
+#: .\templates\shared\nav_account.html:13
 msgid "Administration"
 msgstr "Administration"
 
-#: .\templates\admin\base_site.html:5
+#: .\templates\admin\login.html:8 .\templates\base.html:17
+#: .\templates\base.html:43 .\templates\base.html:71
+#: .\templates\shared\breadcrumbs.html:6
+#: .\templates\shared\breadcrumbs.html:11
+msgid "Hackathons"
+msgstr "Hackathons"
+
+#: .\templates\admin\login.html:11
+msgid "Log in"
+msgstr "Log in"
+
+#: .\templates\admin\preferences.html:3
 msgid "Retour à HackFlow"
 msgstr "Back to HackFlow"
-
-#: .\templates\admin\base_site.html:5 .\templates\base.html:19
-msgid "Langue"
-msgstr "Language"
-
-#: .\templates\admin\base_site.html:5 .\templates\base.html:19
-msgid "Appliquer"
-msgstr "Apply"
 
 #: .\templates\base.html:4
 msgid "Hackathons étudiants"
@@ -984,116 +1603,117 @@ msgstr ""
 "A workspace to organize student hackathons, build teams and move projects "
 "forward."
 
-#: .\templates\base.html:8
+#: .\templates\base.html:11
 msgid "Aller au contenu principal"
 msgstr "Skip to main content"
 
-#: .\templates\base.html:10
+#: .\templates\base.html:13
 msgid "HackFlow, accueil"
 msgstr "HackFlow, home"
 
-#: .\templates\base.html:11
+#: .\templates\base.html:14
 msgid "Ouvrir la navigation"
 msgstr "Open navigation"
 
-#: .\templates\base.html:12
+#: .\templates\base.html:15
 msgid "Navigation principale"
 msgstr "Main navigation"
 
-#: .\templates\base.html:13 .\templates\shared\breadcrumbs.html:2
+#: .\templates\base.html:16 .\templates\base.html:42
+#: .\templates\shared\breadcrumbs.html:2
 msgid "Accueil"
 msgstr "Home"
 
-#: .\templates\base.html:14 .\templates\base.html:26
-#: .\templates\shared\breadcrumbs.html:6
-msgid "Hackathons"
-msgstr "Hackathons"
-
-#: .\templates\base.html:17
-msgid "Langue et apparence"
-msgstr "Language and appearance"
-
-#: .\templates\base.html:18
-msgid "Préférences"
-msgstr "Preferences"
+#: .\templates\base.html:20
+msgid "Changer de thème (clair/sombre)"
+msgstr "Switch theme (light/dark)"
 
 #: .\templates\base.html:20
-msgid "Apparence"
-msgstr "Appearance"
+msgid "Changer de thème"
+msgstr "Switch theme"
 
-#: .\templates\base.html:20
-msgid "Système"
-msgstr "System"
-
-#: .\templates\base.html:20
-msgid "Claire"
-msgstr "Light"
-
-#: .\templates\base.html:20
-msgid "Sombre"
-msgstr "Dark"
-
-#: .\templates\base.html:20
-msgid "Votre choix est conservé sur cet appareil."
-msgstr "Your choice is saved on this device."
-
-#: .\templates\base.html:21
-msgid "Menu du compte"
-msgstr "Account menu"
-
-#: .\templates\base.html:22
-msgid "Déconnexion"
-msgstr "Sign out"
-
-#: .\templates\base.html:23
+#: .\templates\base.html:26
 msgid "Créer un compte"
 msgstr "Create an account"
 
-#: .\templates\base.html:25
+#: .\templates\base.html:28
 msgid "Fermer le message"
 msgstr "Dismiss message"
 
-#: .\templates\base.html:26
-msgid "Des équipes, des idées, des projets."
-msgstr "Teams, ideas, projects."
+#: .\templates\base.html:37
+msgid ""
+"La plateforme moderne pour organiser les hackathons étudiants, former des "
+"équipes et propulser vos projets de l’idée au prototype."
+msgstr ""
+"A modern platform to organize student hackathons, form teams, and take your "
+"projects from idea to prototype."
 
-#: .\templates\base.html:26
-msgid "Liens de pied de page"
-msgstr "Footer links"
+#: .\templates\base.html:40
+msgid "Navigation"
+msgstr "Navigation"
 
-#: .\templates\base.html:26 .\templates\core\home.html:10
-msgid "Mon espace"
-msgstr "My workspace"
+#: .\templates\base.html:41
+msgid "Navigation plateforme"
+msgstr "Platform navigation"
 
-#: .\templates\base.html:26
-msgid "Haut de page"
-msgstr "Back to top"
+#: .\templates\base.html:51
+msgid "Écosystème"
+msgstr "Ecosystem"
 
-#: .\templates\core\home.html:2 .\templates\core\home.html:10
-msgid "Vos idées, en équipe."
-msgstr "Your ideas, together."
+#: .\templates\base.html:52
+msgid "Navigation écosystème"
+msgstr "Ecosystem navigation"
 
-#: .\templates\core\home.html:9
-msgid "Les hackathons étudiants, ensemble."
-msgstr "Student hackathons, together."
+#: .\templates\base.html:53 .\templates\core\home.html:24
+#: .\templates\core\home.html:39
+msgid "Prochains hackathons"
+msgstr "Upcoming hackathons"
 
-#: .\templates\core\home.html:9
-msgid "Découvrir HackFlow"
-msgstr "Discover HackFlow"
+#: .\templates\base.html:54
+msgid "Rôles & Parcours"
+msgstr "Roles & journeys"
 
-#: .\templates\core\home.html:9
-msgid "Pour qui ?"
-msgstr "Who is it for?"
+#: .\templates\base.html:55
+msgid "Méthodologie"
+msgstr "How it works"
 
-#: .\templates\core\home.html:9
-msgid "Le parcours"
-msgstr "The journey"
-
-#: .\templates\core\home.html:9
+#: .\templates\base.html:56 .\templates\core\home.html:27
 msgid "Questions fréquentes"
 msgstr "Frequently asked questions"
 
-#: .\templates\core\home.html:10
+#: .\templates\base.html:60
+msgid "Ressources"
+msgstr "Resources"
+
+#: .\templates\base.html:61
+msgid "Liens ressources"
+msgstr "Resource links"
+
+#: .\templates\base.html:63 .\templates\base.html:73
+msgid "Haut de page"
+msgstr "Back to top"
+
+#: .\templates\base.html:69
+msgid "Des équipes, des idées, des projets."
+msgstr "Teams, ideas, projects."
+
+#: .\templates\base.html:70
+msgid "Liens de pied de page"
+msgstr "Footer links"
+
+#: .\templates\core\home.html:2
+msgid "Vos idées, en équipe."
+msgstr "Your ideas, together."
+
+#: .\templates\core\home.html:8
+msgid "Vos idées,"
+msgstr "Your ideas,"
+
+#: .\templates\core\home.html:8
+msgid "en équipe."
+msgstr "together."
+
+#: .\templates\core\home.html:9
 msgid ""
 "HackFlow rassemble vos hackathons étudiants : les éditions, leurs challenges"
 " et les personnes qui les font vivre."
@@ -1101,31 +1721,56 @@ msgstr ""
 "HackFlow brings your student hackathons together: the editions, their "
 "challenges and the people who make them happen."
 
-#: .\templates\core\home.html:10
+#: .\templates\core\home.html:11 .\templates\teams\mine.html:3
 msgid "Découvrir les hackathons"
 msgstr "Explore hackathons"
 
-#: .\templates\core\home.html:15
-msgid "Prochains hackathons"
-msgstr "Upcoming hackathons"
+#: .\templates\core\home.html:19
+#, python-format
+msgid "100%% Collaboratif"
+msgstr "100%% Collaborative"
 
-#: .\templates\core\home.html:15
+#: .\templates\core\home.html:20
+msgid "Formation d’équipes"
+msgstr "Team formation"
+
+#: .\templates\core\home.html:21
+msgid "Mentorat & Ateliers"
+msgstr "Mentoring & workshops"
+
+#: .\templates\core\home.html:23
+msgid "Découvrir HackFlow"
+msgstr "Discover HackFlow"
+
+#: .\templates\core\home.html:25
+msgid "Pour qui ?"
+msgstr "Who is it for?"
+
+#: .\templates\core\home.html:26
+msgid "Le parcours"
+msgstr "The journey"
+
+#: .\templates\core\home.html:38
+msgid "CALENDRIER DES DÉFIS"
+msgstr "CHALLENGE CALENDAR"
+
+#: .\templates\core\home.html:40
 msgid "Un thème qui vous parle, un challenge à explorer."
 msgstr "A topic that speaks to you, a challenge to explore."
 
-#: .\templates\core\home.html:15
+#: .\templates\core\home.html:42
 msgid "Tout le catalogue"
 msgstr "Full catalogue"
 
-#: .\templates\core\home.html:17
+#: .\templates\core\home.html:55
 msgid "Découvrir cette édition"
 msgstr "Explore this edition"
 
-#: .\templates\core\home.html:18
+#: .\templates\core\home.html:62
 msgid "La prochaine édition arrive bientôt"
 msgstr "The next edition is coming soon"
 
-#: .\templates\core\home.html:18
+#: .\templates\core\home.html:63
 msgid ""
 "Aucun hackathon n’est publié pour le moment. Les prochaines éditions "
 "apparaîtront ici dès leur publication."
@@ -1133,19 +1778,23 @@ msgstr ""
 "No hackathons have been published yet. Upcoming editions will appear here "
 "once published."
 
-#: .\templates\core\home.html:18
+#: .\templates\core\home.html:66
 msgid "Créer la première édition"
 msgstr "Create the first edition"
 
-#: .\templates\core\home.html:18
+#: .\templates\core\home.html:68
 msgid "Explorer le catalogue"
 msgstr "Browse the catalogue"
 
-#: .\templates\core\home.html:23
+#: .\templates\core\home.html:77
+msgid "ÉCOSYSTÈME"
+msgstr "ECOSYSTEM"
+
+#: .\templates\core\home.html:78
 msgid "Un compte.<br>Plusieurs rôles."
 msgstr "One account.<br>Many roles."
 
-#: .\templates\core\home.html:23
+#: .\templates\core\home.html:79
 msgid ""
 "Participant aujourd’hui, mentor demain. Votre compte reste le même ; votre "
 "rôle dépend de chaque hackathon."
@@ -1153,15 +1802,15 @@ msgstr ""
 "A participant today, a mentor tomorrow. Your account stays the same; your "
 "role depends on each hackathon."
 
-#: .\templates\core\home.html:23
+#: .\templates\core\home.html:82
 msgid "Choisissez un rôle pour découvrir sa place dans le parcours."
 msgstr "Choose a role to discover its place in the journey."
 
-#: .\templates\core\home.html:25
+#: .\templates\core\home.html:89
 msgid "Organiser une édition"
 msgstr "Organize an edition"
 
-#: .\templates\core\home.html:25
+#: .\templates\core\home.html:93
 msgid ""
 "Définissez les dates, les phases et les challenges. Gérez les partenaires et"
 " les rôles depuis votre espace de pilotage."
@@ -1169,20 +1818,20 @@ msgstr ""
 "Set dates, phases and challenges. Manage partners and roles from your "
 "organizer workspace."
 
-#: .\templates\core\home.html:25
+#: .\templates\core\home.html:94
 msgid ""
 "La création d’un hackathon nécessite une autorisation de la plateforme."
 msgstr "Creating a hackathon requires permission from the platform."
 
-#: .\templates\core\home.html:25
+#: .\templates\core\home.html:98
 msgid "Ouvrir la Control Tower"
 msgstr "Open the Control Tower"
 
-#: .\templates\core\home.html:26
+#: .\templates\core\home.html:105
 msgid "Participer et créer"
 msgstr "Participate and create"
 
-#: .\templates\core\home.html:26
+#: .\templates\core\home.html:109
 msgid ""
 "Découvrez les éditions et leurs consignes, puis complétez votre profil et "
 "vos compétences pour préparer votre participation."
@@ -1190,22 +1839,21 @@ msgstr ""
 "Discover editions and their guidelines, then complete your profile and "
 "skills to prepare for participation."
 
-#: .\templates\core\home.html:26
+#: .\templates\core\home.html:110
 msgid ""
-"Les inscriptions aux éditions et les équipes arrivent dans la suite du "
-"projet."
-msgstr ""
-"Event registration and teams are coming in the next stages of the project."
+"Inscrivez-vous à une édition ouverte, puis créez votre équipe ou rejoignez-"
+"en une."
+msgstr "Register for an open edition, then create or join a team."
 
-#: .\templates\core\home.html:26
+#: .\templates\core\home.html:111
 msgid "Préparer mon profil"
 msgstr "Prepare my profile"
 
-#: .\templates\core\home.html:27
+#: .\templates\core\home.html:117
 msgid "Accompagner une équipe"
 msgstr "Support a team"
 
-#: .\templates\core\home.html:27
+#: .\templates\core\home.html:121
 msgid ""
 "Le mentor aide les équipes à avancer. Les demandes d’accompagnement, les "
 "séances et les ateliers feront partie du parcours."
@@ -1213,15 +1861,15 @@ msgstr ""
 "Mentors help teams move forward. Support requests, sessions and workshops "
 "will be part of the journey."
 
-#: .\templates\core\home.html:27
+#: .\templates\core\home.html:122
 msgid "Les outils de mentorat arrivent prochainement."
 msgstr "Mentoring tools are coming soon."
 
-#: .\templates\core\home.html:28
+#: .\templates\core\home.html:128
 msgid "Évaluer les projets"
 msgstr "Evaluate projects"
 
-#: .\templates\core\home.html:28
+#: .\templates\core\home.html:132
 msgid ""
 "Le jury examine les projets selon les critères de l’édition. Les évaluations"
 " et les résultats seront regroupés dans cet espace."
@@ -1229,15 +1877,15 @@ msgstr ""
 "Jury members review projects against the edition’s criteria. Evaluations and"
 " results will be brought together in this space."
 
-#: .\templates\core\home.html:28
+#: .\templates\core\home.html:133
 msgid "Les outils d’évaluation arrivent prochainement."
 msgstr "Evaluation tools are coming soon."
 
-#: .\templates\core\home.html:29
+#: .\templates\core\home.html:139
 msgid "Soutenir un challenge"
 msgstr "Support a challenge"
 
-#: .\templates\core\home.html:29
+#: .\templates\core\home.html:143
 msgid ""
 "Un représentant sponsor autorisé peut proposer un challenge dans le cadre "
 "d’un partenariat confirmé. L’organisateur le valide avant sa publication."
@@ -1245,15 +1893,19 @@ msgstr ""
 "An authorized sponsor representative can propose a challenge through a "
 "confirmed partnership. The organizer approves it before publication."
 
-#: .\templates\core\home.html:29
+#: .\templates\core\home.html:144
 msgid "Découvrir les éditions"
 msgstr "Explore editions"
 
-#: .\templates\core\home.html:34
+#: .\templates\core\home.html:153
+msgid "MÉTHODOLOGIE"
+msgstr "HOW IT WORKS"
+
+#: .\templates\core\home.html:154
 msgid "De l’idée au projet."
 msgstr "From idea to project."
 
-#: .\templates\core\home.html:34
+#: .\templates\core\home.html:156
 msgid ""
 "Un cadre pour apprendre, construire et partager. Le parcours s’enrichit au "
 "fil du développement de HackFlow."
@@ -1261,15 +1913,11 @@ msgstr ""
 "A framework to learn, build and share. The journey grows as HackFlow "
 "develops."
 
-#: .\templates\core\home.html:36
-msgid "Des premières maquettes dessinées au crayon dans un carnet."
-msgstr "Early wireframes sketched in pencil in a notebook."
-
-#: .\templates\core\home.html:36
+#: .\templates\core\home.html:166
 msgid "Trouver le déclic"
 msgstr "Find your spark"
 
-#: .\templates\core\home.html:36
+#: .\templates\core\home.html:167
 msgid ""
 "Explorez les thématiques, lisez les challenges et repérez les dates de "
 "l’édition qui vous correspond."
@@ -1277,15 +1925,11 @@ msgstr ""
 "Explore themes, read challenges and check the dates of the edition that "
 "suits you."
 
-#: .\templates\core\home.html:37
-msgid "Un étudiant développe un prototype sur son ordinateur."
-msgstr "A student develops a prototype on a laptop."
-
-#: .\templates\core\home.html:37
+#: .\templates\core\home.html:173
 msgid "Construire ensemble"
 msgstr "Build together"
 
-#: .\templates\core\home.html:37
+#: .\templates\core\home.html:174
 msgid ""
 "Réunir des compétences, confronter ses idées et avancer vers un prototype : "
 "le cœur de chaque hackathon."
@@ -1293,15 +1937,11 @@ msgstr ""
 "Bring skills together, discuss ideas and work towards a prototype: the heart"
 " of every hackathon."
 
-#: .\templates\core\home.html:38
-msgid "Une étudiante présente un prototype à deux autres étudiants."
-msgstr "A student presents a prototype to two fellow students."
-
-#: .\templates\core\home.html:38
+#: .\templates\core\home.html:180
 msgid "Partager le résultat"
 msgstr "Share the result"
 
-#: .\templates\core\home.html:38
+#: .\templates\core\home.html:181
 msgid ""
 "Présenter sa démarche, expliquer ses choix et recevoir des retours pour "
 "aller plus loin."
@@ -1309,15 +1949,23 @@ msgstr ""
 "Present your approach, explain your choices and gather feedback to take it "
 "further."
 
-#: .\templates\core\home.html:43
+#: .\templates\core\home.html:190
+msgid "ASSISTANCE"
+msgstr "HELP"
+
+#: .\templates\core\home.html:191
 msgid "Avant de commencer."
 msgstr "Before you begin."
 
-#: .\templates\core\home.html:44
+#: .\templates\core\home.html:192
+msgid "Tout ce qu’il faut savoir pour démarrer sereinement sur HackFlow."
+msgstr "Everything you need to get started with confidence on HackFlow."
+
+#: .\templates\core\home.html:196
 msgid "Un compte suffit ?"
 msgstr "Is one account enough?"
 
-#: .\templates\core\home.html:44
+#: .\templates\core\home.html:197
 msgid ""
 "Oui. Un seul compte vous permet de découvrir les éditions et de gérer votre "
 "profil. Les rôles sont attribués pour chaque hackathon."
@@ -1325,25 +1973,23 @@ msgstr ""
 "Yes. One account lets you explore editions and manage your profile. Roles "
 "are assigned for each hackathon."
 
-#: .\templates\core\home.html:45
+#: .\templates\core\home.html:200
 msgid "Compte créé, déjà inscrit ?"
 msgstr "Account created, already registered?"
 
-#: .\templates\core\home.html:45
+#: .\templates\core\home.html:201
 msgid ""
-"Créer un compte ne vous inscrit pas automatiquement à un événement. "
-"L’inscription à une édition est une démarche distincte, dont le module est "
-"en préparation."
+"Créer un compte ne vous inscrit pas automatiquement à un événement. Ouvrez "
+"une édition, acceptez son règlement puis confirmez votre inscription."
 msgstr ""
-"Creating an account does not automatically register you for an event. "
-"Registration for an edition is a separate step; its module is being "
-"prepared."
+"Creating an account does not register you for an event automatically. Open "
+"an edition, accept its rules, and confirm your registration."
 
-#: .\templates\core\home.html:46
+#: .\templates\core\home.html:204
 msgid "Qui crée les hackathons ?"
 msgstr "Who creates hackathons?"
 
-#: .\templates\core\home.html:46
+#: .\templates\core\home.html:205
 msgid ""
 "Les personnes autorisées par la plateforme. En créant une édition, elles "
 "deviennent organisatrices de cet événement et gèrent sa configuration."
@@ -1351,27 +1997,34 @@ msgstr ""
 "People authorized by the platform. Creating an edition makes them organizers"
 " of that event, responsible for its configuration."
 
-#: .\templates\core\home.html:47
+#: .\templates\core\home.html:208
 msgid "Que peut-on faire aujourd’hui ?"
 msgstr "What can I do today?"
 
-#: .\templates\core\home.html:47
+#: .\templates\core\home.html:209
 msgid ""
-"Créer son compte et son profil, déclarer ses compétences et consulter les "
-"éditions publiées. Les organisateurs disposent aussi du calendrier, des "
-"challenges, des partenaires et du pilotage. Les équipes, projets, séances de"
-" mentorat et évaluations arrivent progressivement."
+"Créer son compte, déclarer ses compétences, s’inscrire aux éditions ouvertes"
+" et former son équipe. Les organisateurs gèrent les inscriptions et les "
+"équipes depuis le pilotage. Les projets, le mentorat et les évaluations "
+"arriveront avec les modules suivants."
 msgstr ""
-"Create an account and profile, add your skills and browse published "
-"editions. Organizers also have schedules, challenges, partners and "
-"management tools. Teams, projects, mentoring sessions and evaluations are "
-"being added progressively."
+"Create an account, add your skills, register for open editions, and form "
+"your team. Organizers manage registrations and teams from event management. "
+"Projects, mentoring, and evaluation will follow in the next modules."
 
-#: .\templates\core\home.html:50
-msgid "Le prochain déclic ?<br>Peut-être le vôtre."
-msgstr "Your next idea?<br>Start it here."
+#: .\templates\core\home.html:217
+msgid "COMMENCER L’AVENTURE"
+msgstr "GET STARTED"
 
-#: .\templates\core\home.html:50
+#: .\templates\core\home.html:218
+msgid "Le prochain déclic ?"
+msgstr "Your next inspiration?"
+
+#: .\templates\core\home.html:218
+msgid "Peut-être le vôtre."
+msgstr "It could be yours."
+
+#: .\templates\core\home.html:219
 msgid ""
 "Commencez par une édition qui vous inspire. Les bonnes idées prennent une "
 "autre dimension quand on les construit ensemble."
@@ -1379,11 +2032,11 @@ msgstr ""
 "Start with an edition that inspires you. Good ideas take on a new dimension "
 "when you build them together."
 
-#: .\templates\core\home.html:50
+#: .\templates\core\home.html:221
 msgid "Explorer les éditions"
 msgstr "Explore editions"
 
-#: .\templates\core\home.html:51
+#: .\templates\core\home.html:228
 msgid "Visuels d’illustration générés pour HackFlow."
 msgstr "Illustrative images generated for HackFlow."
 
@@ -1486,114 +2139,180 @@ msgstr ""
 "No hackathons to manage. A creation permission or organizer role is "
 "required."
 
-#: .\templates\hackathons\detail.html:15
-msgid "Sur cette page"
-msgstr "On this page"
+#: .\templates\hackathons\detail.html:10
+#, python-format
+msgid "Visuel de couverture %(v0)s"
+msgstr "Cover image for %(v0)s"
 
-#: .\templates\hackathons\detail.html:16 .\templates\hackathons\detail.html:24
+#: .\templates\hackathons\detail.html:22
+msgid "pers. / équipe"
+msgstr "people / team"
+
+#: .\templates\hackathons\detail.html:23 .\templates\teams\team_card.html:2
+msgid "places"
+msgstr "places"
+
+#: .\templates\hackathons\detail.html:32
+msgid "Dépôt des projets jusqu’au"
+msgstr "Project submissions until"
+
+#: .\templates\hackathons\detail.html:38
+msgid "Piloter l’édition"
+msgstr "Manage edition"
+
+#: .\templates\hackathons\detail.html:53
+msgid "Navigation de la page"
+msgstr "Page navigation"
+
+#: .\templates\hackathons\detail.html:54
 msgid "À propos"
 msgstr "About"
 
-#: .\templates\hackathons\detail.html:17
+#: .\templates\hackathons\detail.html:55 .\templates\hackathons\detail.html:83
+msgid "Règlement & Conditions"
+msgstr "Rules & requirements"
+
+#: .\templates\hackathons\detail.html:56
 msgid "Calendrier"
 msgstr "Schedule"
 
-#: .\templates\hackathons\detail.html:18 .\templates\hackathons\manage.html:19
-#: .\templates\hackathons\manage.html:78 .\templates\hackathons\metrics.html:2
+#: .\templates\hackathons\detail.html:57 .\templates\hackathons\manage.html:20
+#: .\templates\hackathons\manage.html:79 .\templates\hackathons\metrics.html:2
 msgid "Challenges"
 msgstr "Challenges"
 
-#: .\templates\hackathons\detail.html:19
+#: .\templates\hackathons\detail.html:58
 msgid "Partenaires"
 msgstr "Partners"
 
-#: .\templates\hackathons\detail.html:30
+#: .\templates\hackathons\detail.html:69
+msgid "À propos de cette édition"
+msgstr "About this edition"
+
+#: .\templates\hackathons\detail.html:70
+msgid "Contexte général et vision de l’événement"
+msgstr "The event’s context and vision"
+
+#: .\templates\hackathons\detail.html:84
+msgid "Modalités de travail, intégrité et éligibilité des participants"
+msgstr "Working rules, integrity, and participant eligibility"
+
+#: .\templates\hackathons\detail.html:91
+msgid "Règlement officiel"
+msgstr "Official rules"
+
+#: .\templates\hackathons\detail.html:116
 msgid "Calendrier des phases"
 msgstr "Phase schedule"
 
-#: .\templates\hackathons\detail.html:31
-msgid "Calendrier en préparation."
-msgstr "The schedule is being prepared."
+#: .\templates\hackathons\detail.html:117
+msgid "Les étapes clés du hackathon, du lancement à la remise des prix"
+msgstr "Key hackathon stages, from kickoff to the awards"
 
-#: .\templates\hackathons\detail.html:34
+#: .\templates\hackathons\detail.html:140
+msgid "Calendrier en préparation par l’équipe d’organisation."
+msgstr "The organizers are preparing the schedule."
+
+#: .\templates\hackathons\detail.html:150
 msgid "Challenges disponibles"
 msgstr "Available challenges"
 
-#: .\templates\hackathons\detail.html:35
-msgid "Livrables"
-msgstr "Deliverables"
+#: .\templates\hackathons\detail.html:151
+msgid "Choisissez une thématique et construisez votre solution"
+msgstr "Choose a theme and build your solution"
 
-#: .\templates\hackathons\detail.html:35
-msgid "Sponsor :"
-msgstr "Sponsor:"
+#: .\templates\hackathons\detail.html:170
+msgid "Objectifs clés"
+msgstr "Key objectives"
 
-#: .\templates\hackathons\detail.html:35
-msgid "Aucun challenge publié."
-msgstr "No published challenges."
+#: .\templates\hackathons\detail.html:188
+msgid "Aucun challenge publié pour le moment."
+msgstr "No challenges published yet."
 
-#: .\templates\hackathons\detail.html:38
+#: .\templates\hackathons\detail.html:198
 msgid "Partenaires confirmés"
 msgstr "Confirmed partners"
 
-#: .\templates\hackathons\detail.html:39
+#: .\templates\hackathons\detail.html:199
+msgid "Entreprises et sponsors qui soutiennent cette édition"
+msgstr "Companies and sponsors supporting this edition"
+
+#: .\templates\hackathons\detail.html:207
 #, python-format
 msgid "Logo %(v0)s"
 msgstr "%(v0)s logo"
 
-#: .\templates\hackathons\detail.html:39
-msgid "Site du partenaire"
-msgstr "Partner website"
+#: .\templates\hackathons\detail.html:222
+msgid "Site officiel"
+msgstr "Official website"
 
-#: .\templates\hackathons\detail.html:39
-msgid "Aucun partenaire confirmé."
-msgstr "No confirmed partners."
+#: .\templates\hackathons\detail.html:228
+msgid "Partenariats en cours de confirmation."
+msgstr "Partnerships are being confirmed."
 
-#: .\templates\hackathons\detail.html:43
-msgid "Informations clés"
-msgstr "Key information"
+#: .\templates\hackathons\detail.html:235
+msgid "Informations clés de l’événement"
+msgstr "Key event information"
 
-#: .\templates\hackathons\detail.html:45
+#: .\templates\hackathons\detail.html:238
+msgid "Fiche d’identité"
+msgstr "EVENT DETAILS"
+
+#: .\templates\hackathons\detail.html:239
 msgid "En un coup d’œil"
 msgstr "At a glance"
 
-#: .\templates\hackathons\detail.html:50
-msgid "Dépôt des projets avant"
-msgstr "Submit projects by"
+#: .\templates\hackathons\detail.html:256
+msgid "Dépôt des projets"
+msgstr "Project submissions"
 
-#: .\templates\hackathons\detail.html:51
+#: .\templates\hackathons\detail.html:260
 msgid "Capacité"
 msgstr "Capacity"
 
-#: .\templates\hackathons\detail.html:51
-msgid "participants"
-msgstr "participants"
+#: .\templates\hackathons\detail.html:261
+msgid "participants max"
+msgstr "participants maximum"
 
-#: .\templates\hackathons\detail.html:52
-msgid "Taille des équipes"
+#: .\templates\hackathons\detail.html:264
+msgid "Taille équipe"
 msgstr "Team size"
 
-#: .\templates\hackathons\detail.html:52 .\templates\hackathons\list.html:34
-msgid "à"
-msgstr "to"
-
-#: .\templates\hackathons\detail.html:52
+#: .\templates\hackathons\detail.html:265
 msgid "personnes"
 msgstr "people"
 
-#: .\templates\hackathons\detail.html:55
+#: .\templates\hackathons\detail.html:273
 msgid ""
 "Fin des inscriptions et heure limite de dépôt exclues · fuseau Africa/Tunis."
 msgstr ""
 "Registration closing and submission deadlines are exclusive · Africa/Tunis "
 "time zone."
 
-#: .\templates\hackathons\detail.html:58
+#: .\templates\hackathons\detail.html:277 .\templates\teams\list.html:4
+msgid "Votre inscription est confirmée."
+msgstr "Your registration is confirmed."
+
+#: .\templates\hackathons\detail.html:278 .\templates\teams\mine.html:3
+#: .\templates\teams\shell.html:10
+msgid "Mon équipe"
+msgstr "My team"
+
+#: .\templates\hackathons\detail.html:278 .\templates\teams\mine.html:3
+msgid "Trouver mon équipe"
+msgstr "Find my team"
+
+#: .\templates\hackathons\detail.html:280
+msgid "M’inscrire au hackathon"
+msgstr "Register for the hackathon"
+
+#: .\templates\hackathons\detail.html:282
+msgid "Les inscriptions sont fermées pour le moment."
+msgstr "Registrations are currently closed."
+
+#: .\templates\hackathons\detail.html:290
 msgid "Piloter cette édition"
 msgstr "Manage this edition"
-
-#: .\templates\hackathons\detail.html:59
-msgid "Proposer un challenge sponsorisé"
-msgstr "Propose a sponsored challenge"
 
 #: .\templates\hackathons\history.html:2
 msgid "Historique —"
@@ -1604,23 +2323,28 @@ msgid "Historique ·"
 msgstr "History ·"
 
 #: .\templates\hackathons\history.html:5
-#: .\templates\hackathons\manage.html:147
+#: .\templates\hackathons\manage.html:148
 msgid "Aucune opération."
 msgstr "No operations."
 
-#: .\templates\hackathons\history.html:6 .\templates\hackathons\list.html:47
+#: .\templates\hackathons\history.html:6 .\templates\hackathons\list.html:58
+#: .\templates\teams\pagination.html:1
 msgid "Pagination"
 msgstr "Pagination"
 
-#: .\templates\hackathons\history.html:6 .\templates\hackathons\list.html:47
+#: .\templates\hackathons\history.html:6 .\templates\hackathons\list.html:60
+#: .\templates\shared\accessibility_controls.html:10
+#: .\templates\teams\pagination.html:1
 msgid "Précédent"
 msgstr "Previous"
 
-#: .\templates\hackathons\history.html:6 .\templates\hackathons\list.html:47
+#: .\templates\hackathons\history.html:6 .\templates\hackathons\list.html:62
 msgid "Page"
 msgstr "Page"
 
-#: .\templates\hackathons\history.html:6 .\templates\hackathons\list.html:47
+#: .\templates\hackathons\history.html:6 .\templates\hackathons\list.html:64
+#: .\templates\shared\accessibility_controls.html:10
+#: .\templates\teams\pagination.html:1
 msgid "Suivant"
 msgstr "Next"
 
@@ -1628,74 +2352,83 @@ msgstr "Next"
 msgid "Les hackathons — HackFlow"
 msgstr "Hackathons — HackFlow"
 
-#: .\templates\hackathons\list.html:7
+#: .\templates\hackathons\list.html:6
+msgid "CATALOGUE DES ÉDITIONS"
+msgstr "EDITION CATALOG"
+
+#: .\templates\hackathons\list.html:8
 msgid ""
 "Trouvez l’édition qui vous correspond, découvrez ses challenges et rejoignez"
 " l’aventure."
 msgstr ""
 "Find the right edition, discover its challenges and join the adventure."
 
-#: .\templates\hackathons\list.html:12
+#: .\templates\hackathons\list.html:15
 msgid "Filtrer les hackathons"
 msgstr "Filter hackathons"
 
-#: .\templates\hackathons\list.html:13
+#: .\templates\hackathons\list.html:16
 msgid "Recherche"
 msgstr "Search"
 
-#: .\templates\hackathons\list.html:13
+#: .\templates\hackathons\list.html:16
 msgid "Titre, lieu, description"
 msgstr "Title, location, description"
 
-#: .\templates\hackathons\list.html:14
+#: .\templates\hackathons\list.html:17
 msgid "Tous les statuts"
 msgstr "All statuses"
 
-#: .\templates\hackathons\list.html:15
+#: .\templates\hackathons\list.html:18
 msgid "Tous les formats"
 msgstr "All formats"
 
-#: .\templates\hackathons\list.html:16
+#: .\templates\hackathons\list.html:19 .\templates\teams\candidates.html:4
+#: .\templates\teams\manage.html:3
 msgid "Rechercher"
 msgstr "Search"
 
-#: .\templates\hackathons\list.html:17
+#: .\templates\hackathons\list.html:21 .\templates\teams\list.html:5
 msgid "Réinitialiser"
 msgstr "Reset"
 
-#: .\templates\hackathons\list.html:20
+#: .\templates\hackathons\list.html:26
 #, python-format
 msgid "%(total)s hackathon trouvé"
 msgid_plural "%(total)s hackathons trouvés"
 msgstr[0] "%(total)s hackathon found"
 msgstr[1] "%(total)s hackathons found"
 
-#: .\templates\hackathons\list.html:31
+#: .\templates\hackathons\list.html:41
 #, python-format
 msgid "Informations sur %(v0)s"
 msgstr "Information about %(v0)s"
 
-#: .\templates\hackathons\list.html:32
+#: .\templates\hackathons\list.html:42
 msgid "Début :"
 msgstr "Starts:"
 
-#: .\templates\hackathons\list.html:34
+#: .\templates\hackathons\list.html:44
 msgid "places · équipes de"
 msgstr "places · teams of"
 
-#: .\templates\hackathons\list.html:36
+#: .\templates\hackathons\list.html:44
+msgid "à"
+msgstr "to"
+
+#: .\templates\hackathons\list.html:46
 msgid "Voir les détails →"
 msgstr "View details →"
 
-#: .\templates\hackathons\list.html:40
+#: .\templates\hackathons\list.html:50
 msgid "Aucun hackathon correspondant"
 msgstr "No matching hackathons"
 
-#: .\templates\hackathons\list.html:41
+#: .\templates\hackathons\list.html:51
 msgid "Essayez d’autres mots-clés ou retirez un filtre."
 msgstr "Try different keywords or remove a filter."
 
-#: .\templates\hackathons\list.html:42
+#: .\templates\hackathons\list.html:52
 msgid "Réinitialiser la recherche"
 msgstr "Reset search"
 
@@ -1703,184 +2436,184 @@ msgstr "Reset search"
 msgid "Pilotage —"
 msgstr "Manage —"
 
-#: .\templates\hackathons\manage.html:14
+#: .\templates\hackathons\manage.html:15
 msgid "Sections du pilotage"
 msgstr "Management sections"
 
-#: .\templates\hackathons\manage.html:16 .\templates\hackathons\manage.html:30
+#: .\templates\hackathons\manage.html:17 .\templates\hackathons\manage.html:31
 msgid "Vue d’ensemble"
 msgstr "Overview"
 
-#: .\templates\hackathons\manage.html:17 .\templates\hackathons\manage.html:76
-#: .\templates\hackathons\manage.html:95 .\templates\hackathons\metrics.html:2
+#: .\templates\hackathons\manage.html:18 .\templates\hackathons\manage.html:77
+#: .\templates\hackathons\manage.html:96 .\templates\hackathons\metrics.html:2
 msgid "Tracks"
 msgstr "Tracks"
 
-#: .\templates\hackathons\manage.html:18 .\templates\hackathons\manage.html:77
-#: .\templates\hackathons\manage.html:102
+#: .\templates\hackathons\manage.html:19 .\templates\hackathons\manage.html:78
+#: .\templates\hackathons\manage.html:103
 msgid "Phases"
 msgstr "Phases"
 
-#: .\templates\hackathons\manage.html:20 .\templates\hackathons\manage.html:79
-#: .\templates\hackathons\manage.html:130
+#: .\templates\hackathons\manage.html:21 .\templates\hackathons\manage.html:80
+#: .\templates\hackathons\manage.html:131
 msgid "Partenariats"
 msgstr "Partnerships"
 
-#: .\templates\hackathons\manage.html:21
+#: .\templates\hackathons\manage.html:22
 msgid "Rôles"
 msgstr "Roles"
 
-#: .\templates\hackathons\manage.html:33
+#: .\templates\hackathons\manage.html:34
 msgid "Édition archivée le"
 msgstr "Edition archived on"
 
-#: .\templates\hackathons\manage.html:33
+#: .\templates\hackathons\manage.html:34
 msgid ". Configuration figée et indicateurs conservés."
 msgstr ". Configuration is frozen and metrics are preserved."
 
-#: .\templates\hackathons\manage.html:36
+#: .\templates\hackathons\manage.html:37
 msgid "Où en est l’événement ?"
 msgstr "Where does the event stand?"
 
-#: .\templates\hackathons\manage.html:38
+#: .\templates\hackathons\manage.html:39
 msgid "Étapes de l’événement"
 msgstr "Event steps"
 
-#: .\templates\hackathons\manage.html:39 .\templates\hackathons\manage.html:40
-#: .\templates\hackathons\manage.html:41
+#: .\templates\hackathons\manage.html:40 .\templates\hackathons\manage.html:41
+#: .\templates\hackathons\manage.html:42
 msgid "(terminé)"
 msgstr "(completed)"
 
-#: .\templates\hackathons\manage.html:45
+#: .\templates\hackathons\manage.html:46
 msgid "Prochaine étape :"
 msgstr "Next step:"
 
-#: .\templates\hackathons\manage.html:46
+#: .\templates\hackathons\manage.html:47
 msgid "terminer la configuration, puis publier l’événement."
 msgstr "finish the configuration, then publish the event."
 
-#: .\templates\hackathons\manage.html:47
+#: .\templates\hackathons\manage.html:48
 msgid "démarrer l’événement à sa date de début."
 msgstr "start the event on its start date."
 
-#: .\templates\hackathons\manage.html:48
+#: .\templates\hackathons\manage.html:49
 msgid "suivre le déroulement ; vous pourrez le terminer après sa date de fin."
 msgstr "follow the event; you can mark it as finished after its end date."
 
-#: .\templates\hackathons\manage.html:49
+#: .\templates\hackathons\manage.html:50
 msgid "archiver l’édition pour figer ses indicateurs."
 msgstr "archive the edition to freeze its metrics."
 
-#: .\templates\hackathons\manage.html:51
+#: .\templates\hackathons\manage.html:52
 msgid "Valider et publier l’événement"
 msgstr "Validate and publish the event"
 
-#: .\templates\hackathons\manage.html:52
+#: .\templates\hackathons\manage.html:53
 msgid "Démarrer l’événement"
 msgstr "Start the event"
 
-#: .\templates\hackathons\manage.html:52
+#: .\templates\hackathons\manage.html:53
 msgid "Terminer une édition échue"
 msgstr "Finish an event whose end date has passed"
 
-#: .\templates\hackathons\manage.html:53
+#: .\templates\hackathons\manage.html:54
 msgid "Terminer l’événement"
 msgstr "Finish the event"
 
-#: .\templates\hackathons\manage.html:54
+#: .\templates\hackathons\manage.html:55
 msgid "Archiver et figer les indicateurs"
 msgstr "Archive and freeze metrics"
 
-#: .\templates\hackathons\manage.html:59
+#: .\templates\hackathons\manage.html:60
 msgid "À corriger avant publication"
 msgstr "To fix before publication"
 
-#: .\templates\hackathons\manage.html:61
+#: .\templates\hackathons\manage.html:62
 msgid "Configuration complète."
 msgstr "Configuration complete."
 
-#: .\templates\hackathons\manage.html:61
+#: .\templates\hackathons\manage.html:62
 msgid "Aucune anomalie détectée."
 msgstr "No issues detected."
 
-#: .\templates\hackathons\manage.html:66
+#: .\templates\hackathons\manage.html:67
 msgid "À traiter"
 msgstr "To review"
 
-#: .\templates\hackathons\manage.html:66
+#: .\templates\hackathons\manage.html:67
 msgid "Proposition de challenge ·"
 msgstr "Challenge proposal ·"
 
-#: .\templates\hackathons\manage.html:68
-#: .\templates\hackathons\manage.html:118
+#: .\templates\hackathons\manage.html:69
+#: .\templates\hackathons\manage.html:119
 msgid "Valider"
 msgstr "Approve"
 
-#: .\templates\hackathons\manage.html:69
+#: .\templates\hackathons\manage.html:70 .\templates\teams\request_row.html:4
 msgid "Refuser"
 msgstr "Reject"
 
-#: .\templates\hackathons\manage.html:74
+#: .\templates\hackathons\manage.html:75
 msgid "En chiffres"
 msgstr "In numbers"
 
-#: .\templates\hackathons\manage.html:80
+#: .\templates\hackathons\manage.html:81
 msgid "Rôles attribués"
 msgstr "Assigned roles"
 
-#: .\templates\hackathons\manage.html:84
+#: .\templates\hackathons\manage.html:85
 msgid "Actions rapides"
 msgstr "Quick actions"
 
-#: .\templates\hackathons\manage.html:86
+#: .\templates\hackathons\manage.html:87
 msgid "Configurer l’événement"
 msgstr "Configure the event"
 
-#: .\templates\hackathons\manage.html:86
+#: .\templates\hackathons\manage.html:87
 msgid "Titre, dates, règlement, capacité et tailles d’équipe."
 msgstr "Title, dates, rules, capacity and team sizes."
 
-#: .\templates\hackathons\manage.html:87
-#: .\templates\hackathons\manage.html:138
+#: .\templates\hackathons\manage.html:88
+#: .\templates\hackathons\manage.html:139
 msgid "Affecter / retirer un rôle"
 msgstr "Assign / remove a role"
 
-#: .\templates\hackathons\manage.html:87
+#: .\templates\hackathons\manage.html:88
 msgid "Participants, mentors, jurés et représentants de sponsor."
 msgstr "Participants, mentors, jury members and sponsor representatives."
 
-#: .\templates\hackathons\manage.html:88
+#: .\templates\hackathons\manage.html:89
 msgid "Ajoutez un sponsor, puis liez-le à l’édition."
 msgstr "Add a sponsor, then link it to the edition."
 
-#: .\templates\hackathons\manage.html:96
+#: .\templates\hackathons\manage.html:97
 msgid "Les tracks regroupent les challenges par thématique."
 msgstr "Tracks group challenges by topic."
 
-#: .\templates\hackathons\manage.html:97
+#: .\templates\hackathons\manage.html:98
 msgid "Actif,Inactif"
 msgstr "Active,Inactive"
 
-#: .\templates\hackathons\manage.html:97
-#: .\templates\hackathons\manage.html:104
-#: .\templates\hackathons\manage.html:122
-#: .\templates\hackathons\manage.html:132
+#: .\templates\hackathons\manage.html:98
+#: .\templates\hackathons\manage.html:105
+#: .\templates\hackathons\manage.html:123
+#: .\templates\hackathons\manage.html:133
 #, python-format
 msgid "Supprimer le brouillon %(v0)s"
 msgstr "Delete draft %(v0)s"
 
-#: .\templates\hackathons\manage.html:97
-#: .\templates\hackathons\manage.html:104
-#: .\templates\hackathons\manage.html:122
-#: .\templates\hackathons\manage.html:132
+#: .\templates\hackathons\manage.html:98
+#: .\templates\hackathons\manage.html:105
+#: .\templates\hackathons\manage.html:123
+#: .\templates\hackathons\manage.html:133
 msgid "Supprimer le brouillon"
 msgstr "Delete draft"
 
-#: .\templates\hackathons\manage.html:97
+#: .\templates\hackathons\manage.html:98
 msgid "Aucun track pour l’instant."
 msgstr "No tracks yet."
 
-#: .\templates\hackathons\manage.html:103
+#: .\templates\hackathons\manage.html:104
 msgid ""
 "Inscriptions, développement, soumission et évaluation sont requises pour "
 "publier."
@@ -1888,85 +2621,85 @@ msgstr ""
 "Registration, development, submission and evaluation phases are required to "
 "publish."
 
-#: .\templates\hackathons\manage.html:104
+#: .\templates\hackathons\manage.html:105
 msgid "Aucune phase pour l’instant."
 msgstr "No phases yet."
 
-#: .\templates\hackathons\manage.html:109
+#: .\templates\hackathons\manage.html:110
 msgid "Challenges et propositions sponsor"
 msgstr "Challenges and sponsor proposals"
 
-#: .\templates\hackathons\manage.html:110
+#: .\templates\hackathons\manage.html:111
 msgid ""
 "Un challenge doit être validé puis publié pour apparaître publiquement."
 msgstr "A challenge must be approved and then published to appear publicly."
 
-#: .\templates\hackathons\manage.html:114
+#: .\templates\hackathons\manage.html:115
 msgid "Track :"
 msgstr "Track:"
 
-#: .\templates\hackathons\manage.html:116
+#: .\templates\hackathons\manage.html:117
 msgid "Voir objectifs et livrables"
 msgstr "View objectives and deliverables"
 
-#: .\templates\hackathons\manage.html:116
+#: .\templates\hackathons\manage.html:117
 msgid "Objectifs :"
 msgstr "Objectives:"
 
-#: .\templates\hackathons\manage.html:116
+#: .\templates\hackathons\manage.html:117
 msgid "Livrables :"
 msgstr "Deliverables:"
 
-#: .\templates\hackathons\manage.html:119
+#: .\templates\hackathons\manage.html:120
 msgid "Publier"
 msgstr "Publish"
 
-#: .\templates\hackathons\manage.html:121
+#: .\templates\hackathons\manage.html:122
 msgid "Retirer / refuser"
 msgstr "Withdraw / reject"
 
-#: .\templates\hackathons\manage.html:125
+#: .\templates\hackathons\manage.html:126
 msgid "Aucun challenge pour l’instant."
 msgstr "No challenges yet."
 
-#: .\templates\hackathons\manage.html:131
+#: .\templates\hackathons\manage.html:132
 msgid ""
 "Un sponsor doit avoir un partenariat confirmé pour proposer des challenges."
 msgstr "A sponsor needs a confirmed partnership to propose challenges."
 
-#: .\templates\hackathons\manage.html:132
+#: .\templates\hackathons\manage.html:133
 msgid "Non renseigné"
 msgstr "Not provided"
 
-#: .\templates\hackathons\manage.html:132
+#: .\templates\hackathons\manage.html:133
 msgid "Aucun partenariat pour l’instant."
 msgstr "No partnerships yet."
 
-#: .\templates\hackathons\manage.html:133
+#: .\templates\hackathons\manage.html:134
 msgid "Créer une nouvelle organisation sponsor"
 msgstr "Create a new sponsor organization"
 
-#: .\templates\hackathons\manage.html:138
+#: .\templates\hackathons\manage.html:139
 msgid "Affectations contextualisées"
 msgstr "Contextual role assignments"
 
-#: .\templates\hackathons\manage.html:139
+#: .\templates\hackathons\manage.html:140
 msgid "Les rôles s’appliquent uniquement à cette édition."
 msgstr "Roles apply only to this edition."
 
-#: .\templates\hackathons\manage.html:140 .\templates\shared\form.html:36
+#: .\templates\hackathons\manage.html:141 .\templates\shared\form.html:36
 msgid "Aucune affectation."
 msgstr "No assignments."
 
-#: .\templates\hackathons\manage.html:145
+#: .\templates\hackathons\manage.html:146
 msgid "Historique (50 dernières opérations)"
 msgstr "History (last 50 operations)"
 
-#: .\templates\hackathons\manage.html:146
+#: .\templates\hackathons\manage.html:147
 msgid "Consulter tout l’historique"
 msgstr "View full history"
 
-#: .\templates\hackathons\manage.html:147
+#: .\templates\hackathons\manage.html:148
 msgid "Compte supprimé"
 msgstr "Deleted account"
 
@@ -1990,11 +2723,132 @@ msgstr "No metrics provided."
 msgid "Module non connecté : indicateurs indisponibles."
 msgstr "Module not connected: metrics unavailable."
 
+#: .\templates\shared\accessibility_controls.html:3
+msgid ""
+"Ces réglages s’appliquent au site et à l’administration. Ils sont conservés "
+"sur cet appareil, sans modifier votre compte."
+msgstr ""
+"These settings apply to the site and admin. They are saved on this device "
+"without changing your account."
+
+#: .\templates\shared\accessibility_controls.html:4
+msgid "Couleurs de l’interface"
+msgstr "Interface colours"
+
+#: .\templates\shared\accessibility_controls.html:4
+msgid ""
+"Adapte les boutons, les liens, la navigation et les statuts dans toute "
+"l’application et l’administration."
+msgstr ""
+"Adapts buttons, links, navigation and statuses throughout the application "
+"and admin."
+
+#: .\templates\shared\accessibility_controls.html:4
+msgid "Palette habituelle"
+msgstr "Standard palette"
+
+#: .\templates\shared\accessibility_controls.html:4
+msgid "Distinction rouge / vert"
+msgstr "Red / green distinction"
+
+#: .\templates\shared\accessibility_controls.html:4
+msgid "Distinction bleu / jaune"
+msgstr "Blue / yellow distinction"
+
+#: .\templates\shared\accessibility_controls.html:4
+msgid "Statuts monochromes"
+msgstr "Monochrome statuses"
+
+#: .\templates\shared\accessibility_controls.html:5
+msgid "Contraste renforcé"
+msgstr "High contrast"
+
+#: .\templates\shared\accessibility_controls.html:5
+msgid "Renforce les textes, les bordures et les contrôles."
+msgstr "Increases the contrast of text, borders and controls."
+
+#: .\templates\shared\accessibility_controls.html:6
+msgid "Taille du texte"
+msgstr "Text size"
+
+#: .\templates\shared\accessibility_controls.html:6
+msgid "Agrandit les textes sans bloquer le zoom du navigateur."
+msgstr "Enlarges text while keeping browser zoom available."
+
+#: .\templates\shared\accessibility_controls.html:6
+msgid "Normale"
+msgstr "Normal"
+
+#: .\templates\shared\accessibility_controls.html:6
+msgid "Grande"
+msgstr "Large"
+
+#: .\templates\shared\accessibility_controls.html:6
+msgid "Très grande"
+msgstr "Extra large"
+
+#: .\templates\shared\accessibility_controls.html:7
+msgid "Animations"
+msgstr "Animations"
+
+#: .\templates\shared\accessibility_controls.html:7
+msgid "Le réglage système respecte déjà votre préférence de mouvement réduit."
+msgstr "The system setting already respects your reduced-motion preference."
+
+#: .\templates\shared\accessibility_controls.html:7
+msgid "Suivre l’appareil"
+msgstr "Follow device settings"
+
+#: .\templates\shared\accessibility_controls.html:7
+msgid "Réduire les animations"
+msgstr "Reduce animations"
+
+#: .\templates\shared\accessibility_controls.html:8
+msgid "Espacement confortable"
+msgstr "Comfortable spacing"
+
+#: .\templates\shared\accessibility_controls.html:8
+msgid "Agrandit les zones cliquables et espace les lignes des listes."
+msgstr "Enlarges click targets and increases spacing between list rows."
+
+#: .\templates\shared\accessibility_controls.html:9
+msgid "Repère clavier renforcé"
+msgstr "Enhanced keyboard focus"
+
+#: .\templates\shared\accessibility_controls.html:9
+msgid ""
+"Ajoute un contour plus visible à l’élément sélectionné au clavier. La "
+"navigation clavier reste toujours disponible."
+msgstr ""
+"Adds a stronger outline to the element focused with the keyboard. Keyboard "
+"navigation is always available."
+
+#: .\templates\shared\accessibility_controls.html:10
+#: .\templates\shared\accessibility_dialog.html:3
+msgid "Fermer"
+msgstr "Close"
+
+#: .\templates\shared\accessibility_controls.html:11
+msgid ""
+"Le stockage est indisponible. Les réglages restent actifs sur cette page, "
+"mais ne seront pas conservés."
+msgstr ""
+"Storage is unavailable. Settings remain active on this page but will not be "
+"saved."
+
+#: .\templates\shared\accessibility_controls.html:12
+msgid "Les réglages d’accessibilité ont été réinitialisés."
+msgstr "Accessibility settings have been reset."
+
+#: .\templates\shared\accessibility_controls.html:12
+msgid "Rétablir les réglages par défaut"
+msgstr "Restore defaults"
+
 #: .\templates\shared\breadcrumbs.html:2
 msgid "Fil d’Ariane"
 msgstr "Breadcrumbs"
 
-#: .\templates\shared\breadcrumbs.html:11
+#: .\templates\shared\breadcrumbs.html:16
 msgid "Page indisponible"
 msgstr "Page unavailable"
 
@@ -2016,10 +2870,6 @@ msgstr "This action is permanent. Only unreferenced drafts can be deleted."
 msgid "Confirmer la suppression"
 msgstr "Confirm deletion"
 
-#: .\templates\shared\confirm_delete.html:8 .\templates\shared\form.html:14
-msgid "Annuler"
-msgstr "Cancel"
-
 #: .\templates\shared\field.html:4
 msgid "obligatoire"
 msgstr "required"
@@ -2035,10 +2885,6 @@ msgstr "Edition:"
 #: .\templates\shared\form.html:8
 msgid "· Horaires : Africa/Tunis"
 msgstr "· Times: Africa/Tunis"
-
-#: .\templates\shared\form.html:13
-msgid "Enregistrer"
-msgstr "Save"
 
 #: .\templates\shared\form.html:18
 msgid "Déjà inscrit·e ?"
@@ -2117,145 +2963,525 @@ msgstr ""
 msgid "Vérifiez les informations saisies"
 msgstr "Check the information you entered"
 
+#: .\templates\shared\nav_account.html:3
+msgid "Menu du compte"
+msgstr "Account menu"
+
+#: .\templates\shared\nav_account.html:17
+msgid "Déconnexion"
+msgstr "Sign out"
+
+#: .\templates\shared\nav_language.html:3
+#: .\templates\shared\nav_language.html:4
+msgid "Langue"
+msgstr "Language"
+
+#: .\templates\teams\candidates.html:2
+msgid "Rencontrez vos coéquipiers"
+msgstr "Meet your teammates"
+
+#: .\templates\teams\candidates.html:2
+msgid "Des participants inscrits à cette édition, encore sans équipe."
+msgstr "Participants registered for this edition who do not have a team yet."
+
+#: .\templates\teams\candidates.html:3
+msgid "Des suggestions expliquées, la décision vous appartient."
+msgstr "Clear suggestions. The decision is yours."
+
+#: .\templates\teams\candidates.html:3
+#| msgid ""
+#| "Classement par compétences déclarées, niveau souhaité et priorité des "
+#| "besoins. Aucun recrutement automatique, aucun score IA."
 msgid ""
-"Ces réglages s’appliquent au site et à l’administration. Ils sont conservés "
-"sur cet appareil, sans modifier votre compte."
+"Classement par besoins non couverts, compétences déclarées et niveau "
+"souhaité. Aucun recrutement automatique, aucun score IA."
 msgstr ""
-"These settings apply to the site and admin. They are saved on this device "
-"without changing your account."
+"Ranked by unmet needs, declared skills, and desired level. No automatic "
+"recruitment or AI score."
 
-msgid "Palette des statuts"
-msgstr "Status colour palette"
+#: .\templates\teams\candidates.html:3
+msgid "Préciser nos besoins"
+msgstr "Define our skill needs"
 
+#: .\templates\teams\candidates.html:4
+msgid "Nom ou compétence"
+msgstr "Name or skill"
+
+#: .\templates\teams\candidates.html:5
+msgid "Compétences en commun avec vos besoins"
+msgstr "Skills matching your needs"
+
+#: .\templates\teams\candidates.html:5 .\templates\teams\detail.html:7
+msgid "Compétences à compléter"
+msgstr "Skills not added yet"
+
+#: .\templates\teams\candidates.html:5
+msgid "niveau souhaité atteint"
+msgstr "desired level met"
+
+#: .\templates\teams\candidates.html:5
+msgid "niveau souhaité :"
+msgstr "desired level:"
+
+#: .\templates\teams\candidates.html:5
+msgid "Pas de correspondance déclarée avec vos besoins actuels."
+msgstr "No declared skills matching your current needs."
+
+#: .\templates\teams\candidates.html:5
+#| msgid "Candidatures reçues"
+msgid "Candidature reçue"
+msgstr "Application received"
+
+#: .\templates\teams\candidates.html:5
+#| msgid "Invitations et candidatures"
+msgid "Invitation en attente"
+msgstr "Invitation pending"
+
+#: .\templates\teams\candidates.html:5 .\templates\teams\detail.html:8
+msgid "Inviter"
+msgstr "Invite"
+
+#: .\templates\teams\candidates.html:5
+msgid "Aucun participant disponible pour cette recherche."
+msgstr "No participants available for this search."
+
+#: .\templates\teams\candidates.html:5
 msgid ""
-"Des couleurs alternatives pour les statuts, sans filtre sur les "
-"illustrations. Les libellés restent visibles."
-msgstr ""
-"Alternative status colours, without filtering illustrations. Text labels "
-"remain visible."
+"Essayez une autre compétence ou revenez après de nouvelles inscriptions."
+msgstr "Try another skill or return when more participants have registered."
 
-msgid "Palette habituelle"
-msgstr "Standard palette"
+#: .\templates\teams\confirm.html:2
+msgid "Confirmer"
+msgstr "Confirm"
 
-msgid "Distinction rouge / vert"
-msgstr "Red / green distinction"
+#: .\templates\teams\detail.html:3
+msgid "Équipe fermée"
+msgstr "Team closed"
 
-msgid "Distinction bleu / jaune"
-msgstr "Blue / yellow distinction"
+#: .\templates\teams\detail.html:3 .\templates\teams\team_card.html:2
+msgid "Équipe prête"
+msgstr "Team ready"
 
-msgid "Statuts monochromes"
-msgstr "Monochrome statuses"
+#: .\templates\teams\detail.html:3 .\templates\teams\team_card.html:2
+msgid "En formation"
+msgstr "Forming"
 
-msgid "Contraste renforcé"
-msgstr "High contrast"
+#: .\templates\teams\detail.html:3 .\templates\teams\team_card.html:2
+msgid "membres"
+msgstr "members"
 
-msgid "Renforce les textes, les bordures et les contrôles."
-msgstr "Increases the contrast of text, borders and controls."
+#: .\templates\teams\detail.html:3
+msgid "Capitaine :"
+msgstr "Captain:"
 
-msgid "Taille du texte"
-msgstr "Text size"
+#: .\templates\teams\detail.html:3
+msgid "Candidature en attente"
+msgstr "Application pending"
 
-msgid "Agrandit les textes sans bloquer le zoom du navigateur."
-msgstr "Enlarges text while keeping browser zoom available."
+#: .\templates\teams\detail.html:4
+msgid "Votre équipe prend forme."
+msgstr "Your team is taking shape."
 
-msgid "Normale"
-msgstr "Normal"
-
-msgid "Grande"
-msgstr "Large"
-
-msgid "Très grande"
-msgstr "Extra large"
-
-msgid "Animations"
-msgstr "Animations"
-
-msgid "Le réglage système respecte déjà votre préférence de mouvement réduit."
-msgstr "The system setting already respects your reduced-motion preference."
-
-msgid "Suivre l’appareil"
-msgstr "Follow device settings"
-
-msgid "Réduire les animations"
-msgstr "Reduce animations"
-
-msgid "Espacement confortable"
-msgstr "Comfortable spacing"
-
-msgid "Agrandit les zones cliquables et espace les lignes des listes."
-msgstr "Enlarges click targets and increases spacing between list rows."
-
-msgid "Repère clavier renforcé"
-msgstr "Enhanced keyboard focus"
-
+#: .\templates\teams\detail.html:4
+#, python-format
 msgid ""
-"Ajoute un contour plus visible à l’élément sélectionné au clavier. La "
-"navigation clavier reste toujours disponible."
+"Il faut au moins %(minimum)s membres pour que cette équipe soit prête. "
+"Ajoutez vos besoins pour faciliter les rencontres."
 msgstr ""
-"Adds a stronger outline to the element focused with the keyboard. Keyboard "
-"navigation is always available."
+"This team needs at least %(minimum)s members to be ready. Add your skill "
+"needs to help find teammates."
 
+#: .\templates\teams\detail.html:6
+msgid "Notre idée"
+msgstr "Our idea"
+
+#: .\templates\teams\detail.html:6
+msgid "L’équipe prépare sa présentation."
+msgstr "The team is preparing its introduction."
+
+#: .\templates\teams\detail.html:7
+msgid "Les membres"
+msgstr "Members"
+
+#: .\templates\teams\detail.html:7
+msgid "Capitaine"
+msgstr "Captain"
+
+#: .\templates\teams\detail.html:7
+msgid "Membre"
+msgstr "Member"
+
+#: .\templates\teams\detail.html:7
+msgid "Nommer capitaine"
+msgstr "Make captain"
+
+#: .\templates\teams\detail.html:7
+msgid "Aucun membre actif."
+msgstr "No active members."
+
+#: .\templates\teams\detail.html:8
+msgid "Candidatures reçues"
+msgstr "Applications received"
+
+#: .\templates\teams\detail.html:8
 msgid ""
-"Le stockage est indisponible. Les réglages restent actifs sur cette page, "
-"mais ne seront pas conservés."
+"Pas encore de candidature. Partagez votre idée et précisez les talents "
+"recherchés."
 msgstr ""
-"Storage is unavailable. Settings remain active on this page but will not be "
-"saved."
+"No applications yet. Share your idea and describe the skills you need."
 
-msgid "Les réglages d’accessibilité ont été réinitialisés."
-msgstr "Accessibility settings have been reset."
+#: .\templates\teams\detail.html:8
+msgid "Invitations envoyées"
+msgstr "Invitations sent"
 
-msgid "Rétablir les réglages par défaut"
-msgstr "Restore defaults"
+#: .\templates\teams\detail.html:8
+msgid "Aucune invitation envoyée."
+msgstr "No invitations sent yet."
 
-msgid "Accessibilité"
-msgstr "Accessibility"
+#: .\templates\teams\detail.html:10
+msgid "Les talents recherchés"
+msgstr "Skills we are looking for"
 
-msgid "Fermer"
-msgstr "Close"
+#: .\templates\teams\detail.html:10
+msgid "Ajouter"
+msgstr "Add"
 
-msgid "Votre profil, vos compétences et vos préférences."
-msgstr "Your profile, skills and preferences."
+#: .\templates\teams\detail.html:10
+msgid "Les compétences qui compléteraient notre équipe."
+msgstr "The skills that would complement our team."
 
-msgid "Navigation du profil"
-msgstr "Profile navigation"
+#: .\templates\teams\detail.html:10
+msgid "Couvert par"
+msgstr "Covered by"
 
-msgid "Informations"
-msgstr "Information"
+#: .\templates\teams\detail.html:10
+#| msgid "Mes compétences"
+msgid "À compléter"
+msgstr "Still needed"
 
-msgid "Rôles et organisations"
-msgstr "Roles and organizations"
+#: .\templates\teams\detail.html:10
+#, python-format
+msgid "Modifier le besoin %(skill)s"
+msgstr "Edit %(skill)s skill need"
 
-msgid "Sécurité"
-msgstr "Security"
+#: .\templates\teams\detail.html:10
+#, python-format
+msgid "Retirer le besoin %(skill)s"
+msgstr "Remove %(skill)s skill need"
 
-msgid "Gérez le mot de passe de votre compte."
-msgstr "Manage your account password."
+#: .\templates\teams\detail.html:10
+msgid "Aucun besoin précisé pour le moment."
+msgstr "No skill needs added yet."
 
-msgid "Aperçu des statuts"
-msgstr "Status preview"
+#: .\templates\teams\detail.html:11
+msgid "Le recrutement"
+msgstr "Recruitment"
 
-msgid "Aperçu"
-msgstr "Preview"
+#: .\templates\teams\detail.html:11
+msgid "Ouvert"
+msgstr "Open"
 
-msgid "Accepté"
-msgstr "Accepted"
+#: .\templates\teams\detail.html:11
+msgid "places disponibles"
+msgstr "places available"
 
-msgid "En attente"
-msgstr "Pending"
+#: .\templates\teams\detail.html:11
+msgid "Fermé"
+msgstr "Closed"
 
-msgid "Refusé"
-msgstr "Declined"
-
-msgid "Voici comment votre texte s’affiche."
-msgstr "This is how your text looks."
-
-msgid "Couleurs de l’interface"
-msgstr "Interface colours"
-
+#: .\templates\teams\detail.html:11
 msgid ""
-"Adapte les boutons, les liens, la navigation et les statuts dans toute "
-"l’application et l’administration."
+"Les invitations ne réservent pas de place. Le premier accord confirmé "
+"rejoint l’équipe."
 msgstr ""
-"Adapts buttons, links, navigation and statuses throughout the application "
-"and admin."
+"Invitations do not reserve places. The first confirmed acceptance joins the "
+"team."
+
+#: .\templates\teams\detail.html:11
+msgid "Quitter l’équipe"
+msgstr "Leave team"
+
+#: .\templates\teams\detail.html:12
+msgid "Historique de l’équipe"
+msgstr "Team history"
+
+#: .\templates\teams\detail.html:12
+msgid "Aucune activité."
+msgstr "No activity yet."
+
+#: .\templates\teams\form.html:4
+msgid ""
+"Les inscriptions sont fermées pour le moment. Consultez le calendrier de "
+"cette édition."
+msgstr "Registrations are currently closed. Check this edition’s schedule."
+
+#: .\templates\teams\form.html:4
+msgid "Avant de rejoindre l’aventure"
+msgstr "Before you join"
+
+#: .\templates\teams\form.html:4
+msgid ""
+"Ces critères sont déclaratifs : l’organisateur reste votre contact en cas de"
+" doute."
+msgstr ""
+"You confirm that you meet these requirements. Contact the organizer if you "
+"are unsure."
+
+#: .\templates\teams\form.html:6
+msgid "Une place pour chaque talent."
+msgstr "A place for every talent."
+
+#: .\templates\teams\form.html:6
+msgid ""
+"Inscrivez-vous, rencontrez vos coéquipiers et construisez une équipe "
+"complémentaire."
+msgstr ""
+"Register, meet your teammates, and build a team with complementary skills."
+
+#: .\templates\teams\form.html:6
+msgid "Une inscription au hackathon"
+msgstr "Register for a hackathon"
+
+#: .\templates\teams\form.html:6
+msgid "Une équipe qui vous ressemble"
+msgstr "Find your team"
+
+#: .\templates\teams\form.html:6
+msgid "Des compétences qui se complètent"
+msgstr "Bring complementary skills together"
+
+#: .\templates\teams\inbox.html:2
+msgid "Les bonnes rencontres commencent ici"
+msgstr "Good connections start here"
+
+#: .\templates\teams\inbox.html:2
+msgid "Répondez aux équipes et suivez vos demandes, au même endroit."
+msgstr "Respond to teams and track your requests in one place."
+
+#: .\templates\teams\inbox.html:3
+msgid "Vous avez rejoint une équipe."
+msgstr "You have joined a team."
+
+#: .\templates\teams\inbox.html:3
+msgid "Vos autres demandes en attente ont été annulées automatiquement."
+msgstr "Your other pending requests were cancelled automatically."
+
+#: .\templates\teams\inbox.html:3
+msgid "Voir mon équipe"
+msgstr "View my team"
+
+#: .\templates\teams\inbox.html:4
+msgid "Invitations reçues"
+msgstr "Invitations received"
+
+#: .\templates\teams\inbox.html:4
+msgid "Aucune invitation pour le moment."
+msgstr "No invitations yet."
+
+#: .\templates\teams\inbox.html:4
+msgid "Ajoutez vos compétences pour être repéré."
+msgstr "Add your skills to help teams find you."
+
+#: .\templates\teams\inbox.html:4
+msgid "Mes candidatures"
+msgstr "My applications"
+
+#: .\templates\teams\inbox.html:4
+msgid "Vous n’avez pas encore envoyé de candidature."
+msgstr "You have not applied to any teams yet."
+
+#: .\templates\teams\inbox.html:4
+msgid "Explorer les équipes"
+msgstr "Explore teams"
+
+#: .\templates\teams\list.html:3
+msgid "À plusieurs, plus loin"
+msgstr "Go further together"
+
+#: .\templates\teams\list.html:3
+msgid "Trouvez votre équipe"
+msgstr "Find your team"
+
+#: .\templates\teams\list.html:3
+msgid ""
+"Une idée vous parle ? Découvrez les membres et proposez de les rejoindre."
+msgstr "An idea speaks to you? Meet the members and apply to join them."
+
+#: .\templates\teams\list.html:4
+msgid ""
+"Prochaine étape : rejoindre une équipe ou lancer la vôtre. Une seule équipe "
+"par hackathon."
+msgstr "Next: join a team or start your own. One team per hackathon."
+
+#: .\templates\teams\list.html:4
+msgid "Compléter mes compétences"
+msgstr "Complete my skills"
+
+#: .\templates\teams\list.html:5
+msgid "Rechercher une équipe"
+msgstr "Search teams"
+
+#: .\templates\teams\list.html:5
+msgid "Nom ou idée…"
+msgstr "Name or idea…"
+
+#: .\templates\teams\list.html:5
+msgid "Toutes les compétences"
+msgstr "All skills"
+
+#: .\templates\teams\list.html:5
+msgid "Avec des places libres"
+msgstr "With places available"
+
+#: .\templates\teams\list.html:5
+msgid "Filtrer"
+msgstr "Filter"
+
+#: .\templates\teams\list.html:6
+msgid "La prochaine équipe pourrait être la vôtre."
+msgstr "The next team could be yours."
+
+#: .\templates\teams\list.html:6
+msgid ""
+"Aucune équipe ne correspond à cette recherche. Essayez un autre filtre ou "
+"rassemblez vos premiers coéquipiers."
+msgstr ""
+"No teams match this search. Try another filter or bring your first teammates"
+" together."
+
+#: .\templates\teams\manage.html:2
+msgid "Pilotage · Participation"
+msgstr "Management · Participation"
+
+#: .\templates\teams\manage.html:2
+msgid ""
+"Les inscriptions réelles de cette édition, distinctes des rôles attribués "
+"manuellement."
+msgstr ""
+"Actual registrations for this edition, separate from manually assigned "
+"roles."
+
+#: .\templates\teams\manage.html:2
+msgid "Retour au pilotage"
+msgstr "Back to event management"
+
+#: .\templates\teams\manage.html:2
+msgid "Cette archive ne contient pas d’indicateurs M2 enregistrés."
+msgstr "This archive has no recorded M2 metrics."
+
+#: .\templates\teams\manage.html:3
+msgid "Les inscriptions"
+msgstr "Registrations"
+
+#: .\templates\teams\manage.html:3
+msgid "Rechercher un participant"
+msgstr "Search participants"
+
+#: .\templates\teams\manage.html:3
+msgid "Inscriptions de cette édition"
+msgstr "Registrations for this edition"
+
+#: .\templates\teams\manage.html:3
+msgid "Équipe"
+msgstr "Team"
+
+#: .\templates\teams\manage.html:3
+msgid "Actions"
+msgstr "Actions"
+
+#: .\templates\teams\manage.html:3 .\templates\teams\mine.html:3
+msgid "Annuler l’inscription"
+msgstr "Cancel registration"
+
+#: .\templates\teams\manage.html:3
+msgid "Aucune inscription correspondante."
+msgstr "No matching registrations."
+
+#: .\templates\teams\manage.html:3
+msgid "Aucune équipe créée."
+msgstr "No teams created yet."
+
+#: .\templates\teams\mine.html:2
+msgid "Mon parcours"
+msgstr "My journey"
+
+#: .\templates\teams\mine.html:2
+msgid "Vos hackathons, vos équipes et la prochaine étape."
+msgstr "Your hackathons, your teams, and what comes next."
+
+#: .\templates\teams\mine.html:2
+msgid "Explorer les hackathons"
+msgstr "Explore hackathons"
+
+#: .\templates\teams\mine.html:3
+msgid "Votre équipe :"
+msgstr "Your team:"
+
+#: .\templates\teams\mine.html:3
+msgid "Vous n’avez pas encore d’équipe."
+msgstr "You do not have a team yet."
+
+#: .\templates\teams\mine.html:3
+msgid "Mes demandes"
+msgstr "My requests"
+
+#: .\templates\teams\mine.html:3
+msgid "Me réinscrire"
+msgstr "Register again"
+
+#: .\templates\teams\mine.html:3
+msgid "Votre prochain hackathon vous attend."
+msgstr "Your next hackathon awaits."
+
+#: .\templates\teams\mine.html:3
+msgid "Choisissez une édition pour vous inscrire et rencontrer votre équipe."
+msgstr "Choose an edition to register and meet your team."
+
+#: .\templates\teams\pagination.html:1
+#, python-format
+msgid "Page %(current)s sur %(total)s"
+msgstr "Page %(current)s of %(total)s"
+
+#: .\templates\teams\request_row.html:2
+msgid "Expire le"
+msgstr "Expires on"
+
+#: .\templates\teams\request_row.html:4
+msgid "Accepter"
+msgstr "Accept"
+
+#: .\templates\teams\request_row.html:4
+msgid "Annuler la demande"
+msgstr "Cancel request"
+
+#: .\templates\teams\shell.html:7
+msgid "personnes par équipe"
+msgstr "people per team"
+
+#: .\templates\teams\shell.html:8
+msgid "Participation au hackathon"
+msgstr "Hackathon participation"
+
+#: .\templates\teams\shell.html:12
+msgid "Gestion des participants"
+msgstr "Participant management"
+
+#: .\templates\teams\shell.html:14
+msgid "La formation des équipes est fermée. Les équipes restent consultables."
+msgstr "Team formation is closed. You can still view teams."
+
+#: .\templates\teams\team_card.html:2
+msgid "Une nouvelle équipe à découvrir."
+msgstr "A new team to discover."
+
+#: .\templates\teams\team_card.html:2
+msgid "Besoins à préciser"
+msgstr "Skill needs not added yet"
+
+#: .\templates\teams\team_card.html:2
+msgid "Recrute"
+msgstr "Recruiting"
+
+#: .\templates\teams\team_card.html:2
+msgid "Recrutement fermé"
+msgstr "Recruitment closed"

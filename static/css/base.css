@@ -330,8 +330,8 @@ pre {
   padding:8px 18px;
   border:1px solid transparent;
   border-radius:10px;
-  background:linear-gradient(135deg, var(--brand-gradient-start) 0%, var(--primary) 100%);
-  color:var(--on-primary);
+  background:var(--brand-button);
+  color:var(--brand-on-button);
   text-decoration:none;
   font-size:0.875rem;
   font-weight:600;
@@ -341,7 +341,7 @@ pre {
 }
 
 .button:hover,button:not(.icon-button):not(.menu-action):not(.theme-toggle):hover {
-  background:linear-gradient(135deg, var(--brand-gradient-hover-start) 0%, var(--primary-hover) 100%);
+  background:var(--brand-button-hover);
   transform:translateY(-1px);
   box-shadow:0 4px 14px rgba(var(--brand-primary-rgb), 0.35), inset 0 1px 0 rgba(255, 255, 255, 0.25);
   text-decoration:none;
@@ -629,8 +629,8 @@ pre {
 }
 
 .signup-link, .button.signup-link {
-  background:linear-gradient(135deg, var(--brand-gradient-start) 0%, var(--brand-primary) 100%)!important;
-  color:#ffffff!important;
+  background:var(--brand-button)!important;
+  color:var(--brand-on-button)!important;
   font-weight:600!important;
   font-size:0.84375rem!important;
   min-height:38px!important;

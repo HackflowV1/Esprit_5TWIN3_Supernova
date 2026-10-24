@@ -27,6 +27,16 @@ def interface(request):
         'sponsorship-edit': _('Modifier un partenariat'), 'sponsorship-delete': _('Supprimer un partenariat'),
     }
     title = (account_titles if app == 'accounts' else event_titles).get(page, _('Configuration'))
+    if app == 'teams':
+        title = {
+            'mine': _('Mes inscriptions'), 'list': _('Les équipes'), 'detail': _('L’équipe'),
+            'register': _('Participer au hackathon'), 'cancel': _('Annuler une inscription'),
+            'create': _('Créer mon équipe'), 'edit': _('Modifier l’équipe'), 'apply': _('Rejoindre une équipe'),
+            'invite': _('Inviter un participant'), 'inbox': _('Invitations et candidatures'),
+            'manage': _('Inscriptions et équipes'), 'candidates': _('Trouver des coéquipiers'),
+            'member-action': _('Composition de l’équipe'), 'need-add': _('Ajouter un besoin'),
+            'need-edit': _('Modifier un besoin'), 'need-delete': _('Retirer un besoin'),
+        }.get(page, _('Participation'))
     cancel_url = reverse('hackathons:list')
     if app == 'accounts':
         cancel_url = reverse('accounts:profile')

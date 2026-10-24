@@ -324,7 +324,7 @@ class M1Tests(TestCase):
         self.assertFalse(data['modules']['M3']['available'])
         self.client.force_login(self.owner)
         response = self.client.get(reverse('hackathons:dashboard'))
-        self.assertContains(response, 'registrations : 17')
+        self.assertContains(response, 'Inscriptions acceptées : 17')
         self.assertContains(response, 'Indicateurs indisponibles')
 
     def test_intelligence_contract_is_read_only_and_authorized(self):

@@ -2,6 +2,7 @@
 {% block title %}{% translate 'Pilotage —' %} {{ event }}{% endblock %}
 {% block content %}
 <header class="manage-head">
+    <a class="button secondary" href="{% url 'teams:manage' event.slug %}">{% icon 'users' %}{% translate 'Inscriptions et équipes' %}</a>
 
     <div class="manage-title">
         <h1>{{ event }}</h1>

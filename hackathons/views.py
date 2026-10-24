@@ -90,6 +90,12 @@ class HackathonDetailView(DetailView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         event = self.object
+        from teams import services as participation
+        from teams.models import Registration
+        context.update(registration=participation.accepted_registration(self.request.user, event),
+            my_team=participation.active_team(self.request.user, event),
+            registration_open=services.phase_is_open(event, EventPhase.Kind.REGISTRATION),
+            registration_count=event.registrations.filter(status=Registration.Status.ACCEPTED).count())
         context.update(challenges=services.public_challenges(event).select_related('track', 'sponsorship__organization'),
             phases=event.phases.all(), partnerships=event.sponsorships.filter(status='CONFIRMED').select_related('organization'),
             can_manage=can_manage(self.request.user, event),

@@ -7,6 +7,7 @@
     {% if user.is_authenticated %}
     <div class="hf-identity"><strong>{{ user.get_full_name|default:user.username }}</strong><span>{{ user.email }}</span></div>
     <a href="{% url 'accounts:profile' %}">{% icon 'user' %}{% translate 'Mon profil' %}</a>
+    <a href="{% url 'teams:mine' %}">{% icon 'calendar' %}{% translate 'Mes inscriptions' %}</a>
     {% if admin_shell %}<a href="{% url 'admin:password_change' %}">{% icon 'shield' %}{% translate 'Changer le mot de passe' %}</a>{% else %}<a href="{% url 'accounts:password' %}">{% icon 'shield' %}{% translate 'Changer le mot de passe' %}</a>{% endif %}
     <a href="{% url 'hackathons:dashboard' %}">{% icon 'dashboard' %}{% translate 'Control Tower' %}</a>
     {% if user.is_superuser and not admin_shell %}<a href="{% url 'admin:index' %}">{% icon 'settings' %}{% translate 'Administration' %}</a>{% endif %}

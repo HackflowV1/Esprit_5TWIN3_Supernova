@@ -1,0 +1,13 @@
+{% load i18n ui %}
+<article class="m2-request">
+<div>
+<strong>{% if manager %}{{ record.registration.user.get_full_name|default:record.registration.user.username }}{% else %}<a href="{{ record.team.get_absolute_url }}">{{ record.team }}</a>{% endif %}</strong>
+<span class="chip">{% if kind == 'invitation' and record.effective_status == 'EXPIRED' %}{% translate 'Expirée' %}{% else %}{{ record.get_status_display }}{% endif %}</span>
+<p class="muted">{{ record.created_at|date:'SHORT_DATETIME_FORMAT' }}{% if kind == 'invitation' %} · {% translate 'Expire le' %} {{ record.expires_at|date:'SHORT_DATETIME_FORMAT' }}{% endif %}</p>{% if record.message %}<p>{{ record.message|linebreaksbr }}</p>{% endif %}</div>
+{% if formation_open and record.status == 'PENDING' %}{% if kind != 'invitation' or record.effective_status != 'EXPIRED' %}<div class="actions">
+{% if manager and kind == 'application' or not manager and kind == 'invitation' %}<form method="post" action="{% url 'teams:decide' event.slug kind record.pk 'ACCEPTED' %}">{% csrf_token %}<button type="submit" class="small">{% icon 'check' 16 %}{% translate 'Accepter' %}</button>
+</form>
+<form method="post" action="{% url 'teams:decide' event.slug kind record.pk 'DECLINED' %}">{% csrf_token %}<button type="submit" class="secondary small">{% icon 'close' 16 %}{% translate 'Refuser' %}</button>
+</form>{% else %}<form method="post" action="{% url 'teams:decide' event.slug kind record.pk 'CANCELLED' %}">{% csrf_token %}<button type="submit" class="secondary small">{% icon 'close' 16 %}{% translate 'Annuler la demande' %}</button>
+</form>{% endif %}
+</div>{% endif %}{% endif %}</article>

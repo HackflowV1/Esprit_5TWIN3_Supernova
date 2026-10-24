@@ -43,6 +43,12 @@ def save_configuration(*, actor, event):
     before = resource_snapshot(current)
     for name in CONFIGURATION_FIELDS:
         setattr(current, name, getattr(event, name))
+    from teams.models import Registration
+    from django.db.models import Count
+    if current.registrations.filter(status=Registration.Status.ACCEPTED).count() > current.capacity:
+        raise ValidationError(_('La capacité ne peut pas être inférieure au nombre d’inscriptions acceptées.'))
+    if current.teams.filter(closed_at__isnull=True).annotate(size=Count('memberships', filter=Q(memberships__ended_at__isnull=True))).filter(size__gt=current.max_team_size).exists():
+        raise ValidationError(_('La taille maximale ne peut pas être inférieure à une équipe existante.'))
     current.save()
     record(current, actor, 'Configuration', current, before=before, after=resource_snapshot(current))
     return current

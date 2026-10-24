@@ -1,0 +1,24 @@
+{% extends 'teams/shell.html' %}{% load i18n ui %}
+{% block workspace %}<header class="page-head">
+<div>
+<p class="m2-eyebrow">{% translate 'Les bonnes rencontres commencent ici' %}</p>
+<h1>{% translate 'Invitations et candidatures' %}</h1>
+<p class="muted">{% translate 'Répondez aux équipes et suivez vos demandes, au même endroit.' %}</p>
+</div>
+</header>
+{% if my_team %}<div class="m2-guide">{% icon 'check' 24 %}<div>
+<strong>{% translate 'Vous avez rejoint une équipe.' %}</strong>
+<p>{% translate 'Vos autres demandes en attente ont été annulées automatiquement.' %}</p>
+</div>
+<a href="{{ my_team.get_absolute_url }}">{% translate 'Voir mon équipe' %}{% icon 'arrow-right' 16 %}</a>
+</div>{% endif %}
+<div class="m2-columns">
+<section class="panel">
+<h2>{% translate 'Invitations reçues' %}</h2>{% for record in invitations %}{% include 'teams/request_row.html' with kind='invitation' manager=False %}{% empty %}<div class="m2-empty-small">{% icon 'users' 28 %}<p>{% translate 'Aucune invitation pour le moment.' %}</p>
+<a href="{% url 'accounts:profile' %}#skills">{% translate 'Ajoutez vos compétences pour être repéré.' %}</a>
+</div>{% endfor %}</section>
+<section class="panel">
+<h2>{% translate 'Mes candidatures' %}</h2>{% for record in join_requests %}{% include 'teams/request_row.html' with kind='application' manager=False %}{% empty %}<div class="m2-empty-small">{% icon 'search' 28 %}<p>{% translate 'Vous n’avez pas encore envoyé de candidature.' %}</p>
+<a href="{% url 'teams:list' event.slug %}">{% translate 'Explorer les équipes' %}{% icon 'arrow-right' 16 %}</a>
+</div>{% endfor %}</section>
+</div>{% endblock %}

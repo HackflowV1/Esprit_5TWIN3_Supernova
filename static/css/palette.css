@@ -1,6 +1,10 @@
 /* HackFlow Modern Signal Orange & Mist Palette. Shared by application & Django admin. */
 :root {
   --brand-primary-rgb:249,87,33;
+  /* Filled actions use a deeper orange so white labels meet 4.5:1. */
+  --brand-button:#c64010;
+  --brand-button-hover:#a9320b;
+  --brand-on-button:#fff;
   --brand-gradient-start:#ff6b35;
   --brand-gradient-end:#ff8557;
   --brand-gradient-hover-start:#ff7a48;

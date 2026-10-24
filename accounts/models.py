@@ -88,6 +88,10 @@ class RoleAssignment(models.Model):
 
     def clean(self):
         super().clean()
+        if self.role == Role.PARTICIPANT and self.status == AssignmentStatus.REVOKED and self.user_id and self.hackathon_id:
+            from teams.models import Registration
+            if Registration.objects.filter(user_id=self.user_id, hackathon_id=self.hackathon_id, status=Registration.Status.ACCEPTED).exists():
+                raise ValidationError(_('Annulez d’abord l’inscription depuis la gestion des participants.'))
         if self.pk and self.role == Role.ORGANIZER and self.status == AssignmentStatus.REVOKED:
             if not RoleAssignment.objects.filter(hackathon_id=self.hackathon_id, role=Role.ORGANIZER,
                     status=AssignmentStatus.ACTIVE).exclude(pk=self.pk).exists():

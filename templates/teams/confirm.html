@@ -1,0 +1,13 @@
+{% extends 'teams/shell.html' %}{% load i18n ui %}
+{% block workspace %}<section class="panel m2-confirm">
+<h1>{{ title }}</h1>
+<p>
+<strong>{{ subject }}</strong>
+</p>
+<p class="muted">{{ explanation }}</p>
+<form method="post">{% csrf_token %}<div class="form-actions">
+<button type="submit"{% if ui_page != 'member-action' %} class="danger"{% endif %}>{% icon 'check' %}{% translate 'Confirmer' %}</button>
+<a class="button secondary" href="{% if team %}{{ team.get_absolute_url }}{% else %}{% url 'teams:mine' %}{% endif %}">{% translate 'Annuler' %}</a>
+</div>
+</form>
+</section>{% endblock %}
