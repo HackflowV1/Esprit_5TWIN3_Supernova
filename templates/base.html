@@ -14,8 +14,8 @@
 <button type="button" class="nav-toggle icon-button" aria-expanded="false" aria-controls="site-nav" aria-label="{% translate 'Ouvrir la navigation' %}">{% icon 'menu' %}</button>
 <nav id="site-nav" class="site-nav" aria-label="{% translate 'Navigation principale' %}">
 <a href="{% url 'core:home' %}"{% if ui_page == 'home' %} aria-current="page"{% endif %}>{% translate 'Accueil' %}</a>
-<a href="{% url 'hackathons:list' %}"{% if ui_app == 'hackathons' and ui_page != 'dashboard' and ui_page != 'compare' %} aria-current="page"{% endif %}>{% translate 'Hackathons' %}</a>
 {% block project_navigation %}{% endblock %}
+<a href="{% url 'hackathons:list' %}"{% if ui_app == 'hackathons' and ui_page != 'dashboard' and ui_page != 'compare' %} aria-current="page"{% endif %}>{% translate 'Hackathons' %}</a>
 {% if user.is_authenticated %}<a href="{% url 'teams:mine' %}"{% if ui_app == 'teams' %} aria-current="page"{% endif %}>{% translate 'Mes inscriptions' %}</a><a href="{% url 'hackathons:dashboard' %}"{% if ui_page == 'dashboard' or ui_page == 'compare' %} aria-current="page"{% endif %}>{% translate 'Control Tower' %}</a>{% endif %}</nav>
 <div class="header-tools">
 <button type="button" class="icon-button theme-toggle" data-theme-toggle aria-label="{% translate 'Changer de thème (clair/sombre)' %}" title="{% translate 'Changer de thème' %}">
