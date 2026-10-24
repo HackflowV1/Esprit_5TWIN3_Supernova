@@ -5,7 +5,7 @@ from django.utils.html import format_html
 from django.utils.translation import gettext, gettext_noop
 
 register = template.Library()
-ICONS = frozenset('add edit delete view search arrow-right arrow-left chevron-down chevron-right home calendar users user logout settings globe sun moon monitor check close menu code dashboard clock archive help shield link filter compare history upload save building award'.split())
+ICONS = frozenset('add edit delete view search arrow-right arrow-left chevron-down chevron-right home calendar users user logout settings globe sun moon monitor check close menu code dashboard clock archive help shield link filter compare history upload save building award accessibility'.split())
 # History keeps stable source labels in the database; translate only their display.
 HISTORY_LABELS = (
     gettext_noop('Création'), gettext_noop('Modification'), gettext_noop('Configuration'),
@@ -20,7 +20,7 @@ HISTORY_LABELS = (
 def icon(name, size=18):
     if name not in ICONS:
         return ''
-    return format_html('<svg class="icon" width="{}" height="{}" viewBox="0 0 24 24" fill="none" aria-hidden="true" focusable="false"><use href="{}#{}"></use></svg>', size, size, static('icons/hugeicons.svg'), name)
+    return format_html('<svg class="icon" width="{}" height="{}" viewBox="0 0 24 24" fill="none" aria-hidden="true" focusable="false"><use href="{}#{}"></use></svg>', size, size, static('icons/hugeicons.svg') + '?v=2', name)
 
 
 @register.filter(name='translate')
