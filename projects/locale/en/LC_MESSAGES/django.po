@@ -502,3 +502,80 @@ msgstr "Open version %(version)s"
 
 msgid "Modifier une étape"
 msgstr "Edit a milestone"
+
+msgid ""
+"Ajouter un livrable ne soumet pas le projet. Cette étape fige la version "
+"pour le jury."
+msgstr ""
+"Adding a deliverable does not submit the project. This step freezes the "
+"version for the jury."
+
+msgid ""
+"Ajoutez votre dépôt, une présentation ou une démo. Consultez les autres "
+"versions avec les liens ci-dessus."
+msgstr ""
+"Add your repository, slides or demo. Use the version links above to find "
+"earlier deliverables."
+
+msgid "Aucun livrable dans cette version"
+msgstr "No deliverables in this version"
+
+msgid ""
+"Chaque version possède ses propres livrables. Ils ne sont pas copiés "
+"automatiquement."
+msgstr ""
+"Each version has its own deliverables. They are not copied automatically."
+
+msgid "Choisir une version"
+msgstr "Choose a version"
+
+msgid "Code, démo, présentation ou vidéo"
+msgstr "Code, demo, slides or video"
+
+msgid "Dépôt de code enregistré"
+msgstr "Code repository saved"
+
+msgid "Dépôt de code à ajouter"
+msgstr "Add a code repository"
+
+msgid "Enregistrer le livrable"
+msgstr "Save deliverable"
+
+msgid "Enregistré"
+msgstr "Saved"
+
+msgid "Enregistrés dans cette version"
+msgstr "Saved in this version"
+
+#, python-format
+msgid ""
+"Livrable enregistré dans la version %(version)s. Cette version reste un "
+"brouillon."
+msgstr ""
+"Deliverable saved in version %(version)s. This version is still a draft."
+
+msgid "L’ajout enregistre le livrable dans ce brouillon uniquement."
+msgstr "This saves the deliverable in this draft only."
+
+msgid "Retour au tableau"
+msgstr "Back to board"
+
+msgid "Seul le capitaine peut soumettre officiellement cette version."
+msgstr "Only the team captain can officially submit this version."
+
+msgid ""
+"Sur GitHub, ouvrez le commit et copiez le SHA complet depuis son URL ou le "
+"bouton de copie. Le code court de 7 caractères ne suffit pas."
+msgstr ""
+"On GitHub, open the commit and copy the full SHA from its URL or copy "
+"button. The short 7-character code is not enough."
+
+msgid "Versions de soumission"
+msgstr "Submission versions"
+
+msgid ""
+"Vos livrables sont enregistrés. La soumission officielle se fait séparément."
+msgstr "Your deliverables are saved. Official submission is a separate step."
+
+msgid "livrables"
+msgstr "deliverables"

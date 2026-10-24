@@ -1,9 +1,61 @@
-{% extends 'projects/shell.html' %}{% load i18n ui %}
+{% extends 'projects/shell.html' %}{% load i18n ui static %}
 {% block title %}Version {{ submission.version }} — {{ project }}{% endblock %}
+{% block extra_js %}<script src="{% static 'js/project-submission.js' %}" defer></script>{% endblock %}
 {% block workspace %}
-<header class="page-head"><div><h1>{{ project }} · v{{ submission.version }}</h1><p>{{ submission.get_status_display }} · {{ submission.created_at }}</p></div></header>
-<div class="m3-grid"><section class="panel"><h2>{% translate 'Contenu enregistré' %}</h2><h3>{{ submission.snapshot.title }}</h3>{{ submission.snapshot.problem|linebreaks }}{{ submission.snapshot.solution|linebreaks }}<p>{{ submission.snapshot.stack }}</p>{{ submission.snapshot.pitch|linebreaks }}<h3>{% translate 'Exigences du challenge' %}</h3>{{ submission.snapshot.requirements|linebreaks }}<p class="muted">{% translate 'Le dépôt officiel capture la fiche actuelle du projet et fige ses livrables.' %}</p></section>
-<section class="panel"><h2>{% translate 'Livrables' %}</h2>{% include 'projects/deliverables.html' %}</section></div>
-{% if editable and submission.status == 'DRAFT' %}<section class="panel m3-form"><h2>{% translate 'Ajouter un livrable' %}</h2><form method="post" enctype="multipart/form-data" novalidate>{% csrf_token %}{% include 'shared/form_errors.html' %}{% for field in form %}{% render_field field %}{% endfor %}<button type="submit">{% icon 'upload' %}{% translate 'Ajouter' %}</button></form></section>
-{% if captain %}<section class="panel"><h2>{% translate 'Officialiser cette version' %}</h2><p>{% translate 'Le dépôt doit inclure un lien vers le code et le hash du commit évalué. Vérifiez aussi les livrables demandés par le challenge.' %}</p><form method="post" action="{% url 'projects:submit' project.pk submission.version %}">{% csrf_token %}{% for field in submit_form %}{% render_field field %}{% endfor %}<button>{% icon 'check' %}{% translate 'Soumettre officiellement' %}</button></form></section>{% endif %}{% endif %}
+<div class="m3-tracker m3-submission-page">
+  <header class="m3-project-head">
+    <div><p class="m3-eyebrow">{{ team }} <span aria-hidden="true">/</span> {% translate 'Versions de soumission' %}</p><h1>{{ project }} <span class="m3-title-version">v{{ submission.version }}</span></h1>
+      <div class="m3-project-meta"><span class="m3-status{% if submission.status == 'OFFICIAL' %} m3-status-official{% endif %}">{% if submission.status == 'OFFICIAL' %}{% icon 'check' 14 %}{% translate 'Officielle — figée' %}{% else %}{% icon 'edit' 14 %}{% translate 'Brouillon' %}{% endif %}</span><span>{% icon 'clock' 14 %}{{ submission.submitted_at|default:submission.created_at }}</span></div>
+    </div>
+    <a class="button secondary" href="{{ project.get_absolute_url }}">{% icon 'arrow-left' 16 %}{% translate 'Retour au tableau' %}</a>
+  </header>
+
+  <nav class="m3-version-switcher" aria-label="{% translate 'Choisir une version' %}">
+    {% for item in versions %}<a href="{% url 'projects:version' project.pk item.version %}"{% if item.pk == submission.pk %} aria-current="page"{% endif %}><span>v{{ item.version }}{% if item.pk == project.official_submission_id %}{% icon 'check' 13 %}{% endif %}</span><small>{{ item.deliverable_count }} {% translate 'livrables' %}</small></a>{% endfor %}
+  </nav>
+
+  <div class="m3-submission-layout">
+    <div class="m3-submission-main">
+      <section class="panel m3-deliverables-panel" aria-labelledby="deliverables-title">
+        <header class="m3-section-head"><h2 id="deliverables-title">{% icon 'code' 19 %}{% translate 'Livrables' %}<span class="m3-column-count">{{ deliverables|length }}</span></h2><span class="m3-section-caption">{% translate 'Enregistrés dans cette version' %}</span></header>
+        {% if submission.status == 'DRAFT' %}<p class="m3-draft-note">{% icon 'shield' 16 %}{% translate 'Vos livrables sont enregistrés. La soumission officielle se fait séparément.' %}</p>{% endif %}
+        {% include 'projects/deliverables.html' %}
+      </section>
+
+      {% if editable and submission.status == 'DRAFT' %}
+      <details class="panel m3-add-deliverable"{% if form.is_bound or not deliverables %} open{% endif %}>
+        <summary><span class="m3-add-summary-icon">{% icon 'add' 19 %}</span><span><strong>{% translate 'Ajouter un livrable' %}</strong><small>{% translate 'Code, démo, présentation ou vidéo' %}</small></span>{% icon 'chevron-down' 17 %}</summary>
+        <form method="post" enctype="multipart/form-data" novalidate data-deliverable-form data-optional="{% translate 'facultatif' %}">
+          {% csrf_token %}{% include 'shared/form_errors.html' %}
+          {% render_field form.kind %}
+          <div data-deliverable-url>{% render_field form.url %}</div>
+          <div data-deliverable-file>{% render_field form.file %}</div>
+          <div data-deliverable-commit>{% render_field form.commit %}</div>
+          <div class="m3-form-footer"><p class="muted">{% translate 'L’ajout enregistre le livrable dans ce brouillon uniquement.' %}</p><button type="submit">{% icon 'save' 16 %}{% translate 'Enregistrer le livrable' %}</button></div>
+        </form>
+      </details>
+      {% endif %}
+
+      <details class="panel m3-snapshot-details">
+        <summary><span>{% icon 'view' 18 %}{% translate 'Contenu enregistré' %}</span>{% icon 'chevron-down' 16 %}</summary>
+        <div class="m3-snapshot-content"><h2>{{ submission.snapshot.title }}</h2><div class="m3-info-grid"><div><h3>{% translate 'Problème' %}</h3>{{ submission.snapshot.problem|linebreaks }}</div><div><h3>{% translate 'Solution' %}</h3>{{ submission.snapshot.solution|linebreaks }}</div></div><div class="m3-stack"><span>{% translate 'Technologies' %}</span><strong>{{ submission.snapshot.stack }}</strong></div>{% if submission.snapshot.pitch %}<div class="m3-pitch"><h3>{% translate 'Pitch' %}</h3>{{ submission.snapshot.pitch|linebreaks }}</div>{% endif %}<p class="muted">{% translate 'Le dépôt officiel capture la fiche actuelle du projet et fige ses livrables.' %}</p></div>
+      </details>
+    </div>
+
+    <aside class="m3-submission-sidebar" aria-labelledby="submission-action-title">
+      <section class="panel m3-submit-panel">
+        <div class="m3-submit-icon">{% if submission.status == 'OFFICIAL' %}{% icon 'shield' 24 %}{% else %}{% icon 'upload' 24 %}{% endif %}</div>
+        <h2 id="submission-action-title">{% if submission.status == 'OFFICIAL' %}{% translate 'Version officielle' %}{% else %}{% translate 'Officialiser cette version' %}{% endif %}</h2>
+        <p class="muted">{% if submission.status == 'OFFICIAL' %}{% translate 'Le contenu et les livrables de cette version sont figés pour le jury.' %}{% else %}{% translate 'Ajouter un livrable ne soumet pas le projet. Cette étape fige la version pour le jury.' %}{% endif %}</p>
+        <div class="m3-deadline"><span>{% icon 'calendar' 16 %}{% translate 'Date limite' %}</span><strong>{{ event.submission_deadline }}</strong></div>
+        <div class="m3-repository-check{% if has_repository %} is-ready{% endif %}">{% if has_repository %}{% icon 'check' 17 %}{% translate 'Dépôt de code enregistré' %}{% else %}{% icon 'code' 17 %}{% translate 'Dépôt de code à ajouter' %}{% endif %}</div>
+        {% if editable and submission.status == 'DRAFT' %}
+          {% if captain %}<form method="post" action="{% url 'projects:submit' project.pk submission.version %}" class="m3-official-form">{% csrf_token %}{% for field in submit_form %}{% render_field field %}{% endfor %}<button type="submit"{% if not has_repository %} disabled{% endif %}>{% icon 'check' 17 %}{% translate 'Soumettre officiellement' %}</button></form>
+          {% else %}<p class="m3-sidebar-note">{% translate 'Seul le capitaine peut soumettre officiellement cette version.' %}</p>{% endif %}
+        {% endif %}
+      </section>
+      <section class="panel m3-requirements-panel"><h2>{% icon 'check' 17 %}{% translate 'Exigences du challenge' %}</h2>{{ submission.snapshot.requirements|linebreaks }}<p class="m3-sidebar-note">{% translate 'Chaque version possède ses propres livrables. Ils ne sont pas copiés automatiquement.' %}</p></section>
+    </aside>
+  </div>
+</div>
 {% endblock %}

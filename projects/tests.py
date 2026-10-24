@@ -23,6 +23,17 @@ from .validators import validate_link, validate_commit, inspect_upload
 
 
 class ValidationTests(SimpleTestCase):
+    def test_repository_form_requires_url_and_full_commit(self):
+        from .forms import DeliverableForm
+        form = DeliverableForm({'kind': 'REPOSITORY', 'url': 'https://github.com/example/project', 'commit': 'be25f45'})
+        self.assertFalse(form.is_valid())
+        self.assertIn('commit', form.errors)
+        self.assertTrue(form.fields['url'].required)
+        self.assertTrue(form.fields['commit'].required)
+        form = DeliverableForm({'kind': 'DEMO', 'url': 'https://example.com/demo'})
+        self.assertTrue(form.is_valid(), form.errors)
+        self.assertFalse(form.fields['commit'].required)
+
     def test_public_https_only(self):
         validate_link('https://github.com/example/project')
         for value in ['http://example.com', 'https://localhost', 'https://127.0.0.1/a', 'https://[::1]/', 'https://user:pass@example.com', 'https://example.com:8443/a', 'https://service.internal']:

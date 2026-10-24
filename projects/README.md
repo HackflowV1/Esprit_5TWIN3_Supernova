@@ -150,3 +150,18 @@ de chaque carte regroupe modifier/supprimer. Ajouter une étape depuis une liste
 préremplit sa progression (0 %, 1 % ou 100 %). Sur mobile, les listes défilent
 horizontalement. Les liens À propos, Versions et Activité rejoignent leurs
 sections. Les thèmes et couleurs partagés sont réutilisés sans les modifier.
+
+## Espace de soumission
+
+La page d’une version affiche d’abord ses livrables enregistrés, leur URL et leur
+commit complet dépliable. Le sélecteur de versions indique combien de livrables
+contient chacune. Le formulaire d’ajout et la soumission officielle sont séparés,
+avec une confirmation explicite après l’enregistrement d’un livrable en brouillon.
+Le dépôt de code exige un lien et un SHA complet ; les erreurs sont associées aux
+champs concernés. Le formulaire adapte ses champs au type avec JavaScript, tout
+en conservant la validation Django sans JavaScript. Le bouton officiel attend un
+dépôt enregistré et la confirmation du capitaine. Aucune connexion GitHub ni
+copie automatique entre versions n’est effectuée.
+
+Après cette amélioration, les 25 tests M3 passent, la syntaxe JavaScript est
+vérifiée, et les pages de version et livrables publics répondent HTTP 200.

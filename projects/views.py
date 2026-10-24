@@ -3,6 +3,7 @@ from django.contrib.auth.decorators import login_required
 from django.core.exceptions import PermissionDenied, ValidationError
 from django.core.paginator import Paginator
 from django.db import IntegrityError
+from django.db.models import Count
 from django.http import FileResponse, Http404
 from django.shortcuts import get_object_or_404, redirect, render
 from django.utils import timezone
@@ -131,15 +132,23 @@ def version_create(request, pk):
 def version(request, pk, version):
     project = _project(request, pk)
     submission = get_object_or_404(Submission, project=project, version=version)
-    form = DeliverableForm(request.POST if request.method == 'POST' else None, request.FILES if request.method == 'POST' else None)
+    deliverables = list(submission.deliverables.all())
+    saved_kinds = {record.kind for record in deliverables}
+    next_kind = next((kind for kind in Deliverable.Kind.values if kind not in saved_kinds), Deliverable.Kind.REPOSITORY)
+    form = DeliverableForm(request.POST if request.method == 'POST' else None, request.FILES if request.method == 'POST' else None,
+        initial={'kind': next_kind})
     if request.method == 'POST' and form.is_valid():
         try:
             services.save_deliverable(actor=request.user, submission=submission, **form.cleaned_data)
         except (ValidationError, IntegrityError) as exc:
             _error(form, exc)
         else:
+            messages.success(request, _('Livrable enregistré dans la version %(version)s. Cette version reste un brouillon.') % {'version': version})
             return redirect('projects:version', pk=pk, version=version)
-    return render(request, 'projects/version.html', {**_context(request, project), 'submission': submission, 'form': form, 'submit_form': SubmitForm(), 'deliverables': submission.deliverables.all()})
+    return render(request, 'projects/version.html', {**_context(request, project), 'submission': submission,
+        'form': form, 'submit_form': SubmitForm(), 'deliverables': deliverables,
+        'has_repository': any(record.kind == Deliverable.Kind.REPOSITORY for record in deliverables),
+        'versions': project.submissions.annotate(deliverable_count=Count('deliverables'))})
 
 
 @login_required
