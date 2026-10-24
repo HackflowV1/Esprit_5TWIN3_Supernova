@@ -1,0 +1,8 @@
+{% extends 'projects/shell.html' %}{% load i18n ui %}
+{% block title %}{% translate 'Mes projets' %} — HackFlow{% endblock %}
+{% block workspace %}
+<header class="page-head"><div><h1>{% translate 'Mes projets' %}</h1><p class="muted">{% translate 'De l’idée au dépôt officiel, gardez le cap avec votre équipe.' %}</p></div></header>
+{% for team in available_teams %}<section class="panel"><h2>{{ team }}</h2><p>{{ team.hackathon }}</p>{% if team.is_ready %}<a class="button" href="{% url 'projects:create' team.pk %}">{% icon 'add' %}{% translate 'Créer le projet' %}</a>{% else %}<p class="muted">{% translate 'Complétez votre équipe avant de créer un projet.' %}</p><a href="{{ team.get_absolute_url }}">{% translate 'Ouvrir l’équipe' %}</a>{% endif %}</section>{% endfor %}
+<div class="m3-grid">{% for project in projects %}<article class="panel"><span class="chip">{{ project.get_status_display }}</span><h2><a href="{{ project.get_absolute_url }}">{{ project }}</a></h2><p class="muted">{{ project.team }} · {{ project.team.hackathon }}</p><p>{{ project.solution|truncatewords:25 }}</p><p>{% translate 'Progression' %} · {{ project.progress }} %</p>{% if project.official_submission %}<p>{% translate 'Version officielle' %} · v{{ project.official_submission.version }}</p>{% endif %}</article>{% empty %}<section class="panel"><h2>{% translate 'Votre prochain projet commence ici' %}</h2><p>{% translate 'Rejoignez une équipe valide, puis créez sa fiche pendant le développement.' %}</p><a href="{% url 'teams:mine' %}">{% translate 'Mes inscriptions' %}</a></section>{% endfor %}</div>
+{% include 'projects/pagination.html' %}
+{% endblock %}

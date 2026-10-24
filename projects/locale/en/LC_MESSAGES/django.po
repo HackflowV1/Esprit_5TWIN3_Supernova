@@ -1,0 +1,504 @@
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: HackFlow M3\n"
+"Language: en\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+msgid "Accueil"
+msgstr "Home"
+
+msgid "Action inconnue."
+msgstr "Unknown action."
+
+msgid "Activité du projet"
+msgstr "Project activity"
+
+msgid "Activité récente"
+msgstr "Recent activity"
+
+msgid "Ajouter"
+msgstr "Add"
+
+msgid "Ajouter un livrable"
+msgstr "Add a deliverable"
+
+msgid ""
+"Ajoutez le dépôt avec son commit et confirmez les exigences du challenge."
+msgstr ""
+"Add the repository with its commit and confirm the challenge requirements."
+
+msgid "Annuler"
+msgstr "Cancel"
+
+msgid "Aucun livrable."
+msgstr "No deliverables yet."
+
+msgid "Aucun projet publié ne correspond à cette recherche."
+msgstr "No published projects match this search."
+
+msgid "Aucune version officielle désignée."
+msgstr "No official version selected."
+
+msgid "Aucune étape."
+msgstr "No milestones yet."
+
+msgid "Autoriser la publication des livrables"
+msgstr "Allow deliverables to be published"
+
+msgid "Brouillon"
+msgstr "Draft"
+
+msgid "Cette version est figée. Créez une nouvelle version."
+msgstr "This version is frozen. Create a new version."
+
+msgid "Cette édition est en consultation uniquement."
+msgstr "This event is read-only."
+
+msgid "Choisissez un challenge publié de cette édition."
+msgstr "Choose a published challenge from this event."
+
+msgid "Commit Git complet"
+msgstr "Full Git commit hash"
+
+msgid "Commit évalué"
+msgstr "Evaluated commit"
+
+msgid "Complétez votre équipe avant de créer un projet."
+msgstr "Complete your team before creating a project."
+
+msgid "Contenu enregistré"
+msgstr "Saved content"
+
+msgid "Créer le projet"
+msgstr "Create the project"
+
+msgid "Créer une version"
+msgstr "Create a version"
+
+msgid "Créez une version pour ajouter vos livrables."
+msgstr "Create a version to add your deliverables."
+
+msgid "Date limite"
+msgstr "Deadline"
+
+msgid "De l’idée au dépôt officiel, gardez le cap avec votre équipe."
+msgstr ""
+"From the first idea to the official submission, stay on track with your "
+"team."
+
+msgid ""
+"Découvrez les versions officielles partagées par les équipes et validées par"
+" les organisateurs."
+msgstr ""
+"Discover official submissions shared by teams and approved by organizers."
+
+msgid "Démo"
+msgstr "Demo"
+
+msgid "Dépôt de code"
+msgstr "Code repository"
+
+msgid "Dépôt officiel"
+msgstr "Official submission"
+
+msgid "Dépôt réouvert par dérogation"
+msgstr "Submissions reopened with an exception"
+
+msgid "Dérogation de dépôt jusqu’au"
+msgstr "Submission exception until"
+
+msgid "En cours"
+msgstr "In progress"
+
+msgid "En développement"
+msgstr "In development"
+
+msgid "Enregistrer"
+msgstr "Save"
+
+msgid "Exigences du challenge"
+msgstr "Challenge requirements"
+
+msgid "Fiche du projet modifiée"
+msgstr "Project content updated"
+
+msgid "Fichier"
+msgstr "File"
+
+msgid "Fil d’Ariane"
+msgstr "Breadcrumbs"
+
+msgid "Formats autorisés : PDF, ZIP et MP4, avec un contenu correspondant."
+msgstr "Allowed formats: PDF, ZIP and MP4, with matching file content."
+
+msgid "Fournissez un lien ou un fichier, exclusivement."
+msgstr "Provide either a link or a file, not both."
+
+msgid "Galerie des projets"
+msgstr "Project gallery"
+
+msgid "Historique des versions"
+msgstr "Version history"
+
+msgid "Idée"
+msgstr "Idea"
+
+msgid "Indiquez un hash Git complet de 40 ou 64 caractères."
+msgstr "Enter a full Git hash of 40 or 64 characters."
+
+msgid ""
+"Je confirme que cette version respecte toutes les exigences du challenge et "
+"que ses liens sont accessibles au jury."
+msgstr ""
+"I confirm this version meets all challenge requirements and its links are "
+"accessible to the jury."
+
+msgid "Justification"
+msgstr "Reason"
+
+msgid "La fiche officielle est figée. Demandez une réouverture."
+msgstr "The official project content is frozen. Request a reopening."
+
+msgid "La progression officielle est figée."
+msgstr "Official progress is frozen."
+
+msgid "La période de soumission est fermée."
+msgstr "The submission period is closed."
+
+msgid ""
+"La version officielle doit être une soumission officielle de ce projet."
+msgstr "The official version must be an official submission of this project."
+
+msgid "Le contenu et les livrables de cette version sont figés pour le jury."
+msgstr "This version’s content and deliverables are frozen for the jury."
+
+msgid ""
+"Le dépôt doit inclure un lien vers le code et le hash du commit évalué. "
+"Vérifiez aussi les livrables demandés par le challenge."
+msgstr ""
+"Include a code repository link and the evaluated commit hash. Also check the"
+" deliverables required by the challenge."
+
+msgid ""
+"Le dépôt officiel capture la fiche actuelle du projet et fige ses livrables."
+msgstr ""
+"The official submission captures the current project content and freezes its"
+" deliverables."
+
+msgid "Le développement et les dépôts sont fermés."
+msgstr "Development and submissions are closed."
+
+msgid "Le fichier doit peser entre 1 octet et 20 Mo."
+msgstr "The file must be between 1 byte and 20 MB."
+
+msgid "Les données ont changé. Actualisez et réessayez."
+msgstr "The data has changed. Refresh and try again."
+
+msgid "Les projets arrivent bientôt"
+msgstr "Projects are coming soon"
+
+msgid "Les étapes du projet"
+msgstr "Project milestones"
+
+msgid "Lien HTTPS"
+msgstr "HTTPS link"
+
+msgid "Livrable enregistré"
+msgstr "Deliverable saved"
+
+msgid "Livrable retiré"
+msgstr "Deliverable removed"
+
+msgid "Livrables"
+msgstr "Deliverables"
+
+msgid "L’échéance doit être comprise entre le début et la limite de dépôt."
+msgstr ""
+"The due date must fall between the event start and the submission deadline."
+
+msgid "L’équipe"
+msgstr "Team"
+
+msgid "L’équipe doit être valide au moment du dépôt."
+msgstr "The team must be valid when submitting."
+
+msgid "L’équipe et le challenge doivent appartenir au même hackathon."
+msgstr "The team and challenge must belong to the same hackathon."
+
+msgid "Mes inscriptions"
+msgstr "My registrations"
+
+msgid "Mes projets"
+msgstr "My projects"
+
+msgid "Modifier"
+msgstr "Edit"
+
+msgid "Modifier le projet"
+msgstr "Edit the project"
+
+msgid "Modifier un livrable"
+msgstr "Edit a deliverable"
+
+msgid "Navigation projets"
+msgstr "Project navigation"
+
+msgid "Nouvelle limite"
+msgstr "New deadline"
+
+msgid "Obligatoire pour un dépôt de code."
+msgstr "Required for a code repository."
+
+msgid "Officialiser cette version"
+msgstr "Make this version official"
+
+msgid "Officielle — figée"
+msgstr "Official — frozen"
+
+msgid "Ouvrir le lien"
+msgstr "Open link"
+
+msgid "Ouvrir l’équipe"
+msgstr "Open team"
+
+msgid ""
+"PDF, ZIP ou MP4, 20 Mo maximum. Les fichiers restent privés jusqu’à "
+"publication."
+msgstr "PDF, ZIP or MP4, up to 20 MB. Files remain private until publication."
+
+msgid "Pagination"
+msgstr "Pagination"
+
+msgid "Pitch"
+msgstr "Pitch"
+
+msgid "Planifier une étape"
+msgstr "Plan a milestone"
+
+msgid "Problème"
+msgstr "Problem"
+
+msgid "Progression"
+msgstr "Progress"
+
+msgid "Progression (%)"
+msgstr "Progress (%)"
+
+msgid "Progression moyenne"
+msgstr "Average progress"
+
+msgid "Projet créé"
+msgstr "Project created"
+
+msgid "Projet privé"
+msgstr "Private project"
+
+msgid "Précédent"
+msgstr "Previous"
+
+msgid "Présentation"
+msgstr "Presentation"
+
+msgid "Prêt à soumettre"
+msgstr "Ready to submit"
+
+msgid "Publication demandée"
+msgstr "Publication requested"
+
+msgid "Publier dans la galerie"
+msgstr "Publish in the gallery"
+
+msgid "Publié dans la galerie"
+msgstr "Published in the gallery"
+
+msgid "Rechercher"
+msgstr "Search"
+
+msgid "Rechercher un projet"
+msgstr "Search projects"
+
+msgid ""
+"Rejoignez une équipe valide, puis créez sa fiche pendant le développement."
+msgstr ""
+"Join a valid team, then create its project during the development phase."
+
+msgid "Retirer ce livrable"
+msgstr "Remove this deliverable"
+
+msgid "Retirer de la galerie"
+msgstr "Remove from the gallery"
+
+msgid "Retirer l’accord de publication"
+msgstr "Withdraw publication consent"
+
+msgid "Réouvrir avec justification"
+msgstr "Reopen with a reason"
+
+msgid "Réouvrir les dépôts avec dérogation"
+msgstr "Reopen submissions with an exception"
+
+msgid "Seul le capitaine actif peut officialiser le dépôt."
+msgstr "Only the active team captain can make a submission official."
+
+msgid "Solution"
+msgstr "Solution"
+
+msgid "Soumettre officiellement"
+msgstr "Submit officially"
+
+msgid "Suivant"
+msgstr "Next"
+
+msgid "Supprimer"
+msgstr "Delete"
+
+msgid "Technologies"
+msgstr "Technologies"
+
+msgid "Terminé"
+msgstr "Finished"
+
+msgid "Titre du projet"
+msgstr "Project title"
+
+msgid "Type"
+msgstr "Type"
+
+msgid "Télécharger"
+msgstr "Download"
+
+msgid "Un dépôt requiert un lien et le commit Git évalué."
+msgstr "A repository requires a link and the evaluated Git commit."
+
+msgid "Une justification et une limite future avant la fin sont requises."
+msgstr "Provide a reason and a future deadline no later than the event end."
+
+msgid "Une réouverture est requise avant une nouvelle version."
+msgstr "Reopening is required before creating a new version."
+
+msgid "Une réouverture par l’organisateur est requise."
+msgstr "An organizer must reopen submissions first."
+
+msgid "Une soumission officielle est requise."
+msgstr "An official submission is required."
+
+msgid "Une version officielle et l’accord de l’équipe sont requis."
+msgstr "An official version and the team’s consent are required."
+
+msgid "Une équipe valide est requise."
+msgstr "A valid team is required."
+
+msgid "Une étape à faire est à 0 %, une étape terminée à 100 %."
+msgstr ""
+"A planned milestone must be at 0%; a completed milestone must be at 100%."
+
+msgid "Utilisez un lien HTTPS public sans identifiants."
+msgstr "Use a public HTTPS link without credentials."
+
+msgid "Version créée"
+msgstr "Version created"
+
+msgid "Version officialisée"
+msgstr "Version made official"
+
+msgid "Version officielle"
+msgstr "Official version"
+
+msgid "Version officielle enregistrée et figée."
+msgstr "Official version saved and frozen."
+
+msgid "Vidéo"
+msgstr "Video"
+
+msgid "Visibilité"
+msgstr "Visibility"
+
+msgid "Visibilité modifiée"
+msgstr "Visibility updated"
+
+msgid "Votre prochain projet commence ici"
+msgstr "Your next project starts here"
+
+msgid "À faire"
+msgstr "To do"
+
+msgid "Échéance"
+msgstr "Due date"
+
+msgid "Étape"
+msgstr "Milestone"
+
+msgid "Étape enregistrée"
+msgstr "Milestone saved"
+
+msgid "Étape supprimée"
+msgstr "Milestone deleted"
+
+msgid "État"
+msgstr "State"
+
+msgid "État du projet"
+msgstr "Project state"
+
+msgid ""
+"L’état suit automatiquement la progression : 0 % à faire, 1–99 % en cours, "
+"100 % terminé."
+msgstr ""
+"State follows progress automatically: 0% to do, 1–99% in progress, 100% "
+"done."
+
+msgid "Ajouter une étape"
+msgstr "Add a milestone"
+
+msgid "Tableau du projet"
+msgstr "Project board"
+
+msgid "Sections du projet"
+msgstr "Project sections"
+
+msgid "À propos"
+msgstr "Overview"
+
+msgid "Versions"
+msgstr "Versions"
+
+msgid "Activité"
+msgstr "Activity"
+
+msgid "étapes terminées"
+msgstr "milestones completed"
+
+msgid "En retard"
+msgstr "Overdue"
+
+msgid "Aucune étape pour le moment"
+msgstr "No milestones yet"
+
+msgid "Une place pour votre prochaine avancée."
+msgstr "Room for your next step forward."
+
+msgid "À propos du projet"
+msgstr "About this project"
+
+#, python-format
+msgid "Ajouter une étape : %(state)s"
+msgstr "Add a milestone: %(state)s"
+
+#, python-format
+msgid "Actions pour %(title)s"
+msgstr "Actions for %(title)s"
+
+#, python-format
+msgid "Progression de %(title)s"
+msgstr "Progress for %(title)s"
+
+#, python-format
+msgid "Ouvrir la version %(version)s"
+msgstr "Open version %(version)s"
+
+msgid "Modifier une étape"
+msgstr "Edit a milestone"

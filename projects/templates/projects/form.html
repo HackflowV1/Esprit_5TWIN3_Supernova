@@ -1,0 +1,11 @@
+{% extends 'projects/shell.html' %}{% load i18n ui %}
+{% block title %}{{ title }} — HackFlow{% endblock %}
+{% block workspace %}
+<header class="page-head"><div><h1>{{ title }}</h1>{% if team %}<p class="muted">{{ team }} · {{ event }}</p>{% endif %}</div></header>
+<section class="panel m3-form">
+<form method="post" enctype="multipart/form-data" novalidate>{% csrf_token %}
+{% include 'shared/form_errors.html' %}
+{% for field in form %}{% render_field field %}{% endfor %}
+<div class="actions"><button type="submit">{% icon 'save' %}{% translate 'Enregistrer' %}</button><a class="button secondary" href="{% if project %}{{ project.get_absolute_url }}{% else %}{% url 'projects:mine' %}{% endif %}">{% translate 'Annuler' %}</a></div>
+</form></section>
+{% endblock %}
