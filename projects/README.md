@@ -122,6 +122,20 @@ Les tests utilisent exclusivement `test_hackflow_db`. Ils couvrent permissions,
 deadline exacte, dérogations, versions figées, fichiers privés, publication,
 CSRF, parcours des écrans et numérotation concurrente.
 
+Pour passer entre la configuration commune et `projects.settings_m3`, exécuter
+les tests sans `--keepdb` : leurs applications installées et leurs schémas de
+test diffèrent. Django recrée uniquement `test_hackflow_db`. Les tests M3 sont
+ignorés dans la configuration commune où l’application n’est pas activée.
+
+Revue de fusion du 24 octobre 2026 contre `origin/main` (`be25f45`) : fusion
+simulée dans un checkout isolé sans conflit, 417 tests avec M3 passent et la
+suite commune passe (385 tests, dont un module M3 ignoré). Les 207 fichiers
+déjà présents sur `origin/main` sont conservés à l’identique, à l’exception
+du seul ajout du bloc vide `project_navigation` dans `templates/base.html`.
+Le menu Mentorat de M4 est conservé. Les contrôles Django, des migrations,
+de syntaxe JavaScript et `git diff --check` passent. Cette revue ne fusionne
+ni ne pousse la branche et n’active pas M3 dans la configuration commune.
+
 Validation du 24 octobre 2026 : 124 tests de régression passent, dont 23 tests
 M3. Le contrôle Django ne signale aucune anomalie et aucune migration ne manque.
 Les deux serveurs répondent HTTP 200 : projet initial sur 8000, galerie M3 sur 8001.
