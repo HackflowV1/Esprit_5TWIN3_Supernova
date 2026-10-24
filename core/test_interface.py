@@ -39,6 +39,25 @@ class InterfaceTests(TestCase):
     def language(self, language):
         self.client.cookies[settings.LANGUAGE_COOKIE_NAME] = language
 
+    def test_profile_has_dedicated_accessibility_navigation_and_controls(self):
+        self.client.force_login(self.owner)
+        response = self.client.get(reverse('accounts:profile'))
+        self.assertContains(response, 'data-profile-link="accessibility"')
+        self.assertContains(response, 'id="accessibility" data-profile-panel')
+        self.assertNotContains(response, 'a11y-preview')
+        self.assertContains(response, 'data-a11y-setting="colors"')
+        self.assertNotContains(response, 'a11y-text-preview')
+        self.assertContains(response, 'data-a11y-reset')
+        self.assertContains(response, 'accessibility-init.js')
+        for route in ('profile-edit', 'skill-add', 'password'):
+            self.assertContains(self.client.get(reverse('accounts:' + route)), 'data-profile-nav')
+
+    def test_accessibility_controls_are_available_to_guests_and_admin_in_english(self):
+        self.language('en')
+        self.assertContains(self.client.get('/'), 'Interface colours')
+        self.assertContains(self.client.get('/admin/login/'), 'id="accessibility-dialog"')
+        self.assertContains(self.client.get('/admin/login/'), 'Enhanced keyboard focus')
+
     def test_first_visit_is_french_even_with_an_english_browser(self):
         response = self.client.get('/', HTTP_ACCEPT_LANGUAGE='en-US,en;q=0.9')
         self.assertContains(response, '<html lang="fr">')

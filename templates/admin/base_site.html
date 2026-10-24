@@ -1,12 +1,15 @@
 {% extends 'admin/base.html' %}{% load i18n static ui %}
 {% block title %}{{ title }} | HackFlow{% endblock %}
-{% block dark-mode-vars %}<script src="{% static 'js/theme.js' %}"></script>{% endblock %}
+{% block dark-mode-vars %}<script src="{% static 'js/theme.js' %}"></script><script src="{% static 'js/accessibility-init.js' %}"></script>{% endblock %}
+{% block extrabody %}{{ block.super }}{% include 'shared/accessibility_dialog.html' %}{% endblock %}
 {% block responsive %}
 {{ block.super }}
 <link rel="icon" href="{% static 'icons/favicon.svg' %}" type="image/svg+xml">
-<link rel="stylesheet" href="{% static 'css/admin.css' %}?v=8">
-<link rel="stylesheet" href="{% static 'css/nav-menus.css' %}?v=1">
-<script src="{% static 'js/base.js' %}?v=2" defer></script>
+<link rel="stylesheet" href="{% static 'css/palette.css' %}?v=a11y-3">
+<link rel="stylesheet" href="{% static 'css/admin.css' %}?v=a11y-3">
+<link rel="stylesheet" href="{% static 'css/nav-menus.css' %}?v=a11y-3">
+<link rel="stylesheet" href="{% static 'css/accessibility.css' %}?v=4">
+<script src="{% static 'js/accessibility.js' %}?v=2" defer></script><script src="{% static 'js/base.js' %}?v=a11y-3" defer></script>
 {% endblock %}
 {% block branding %}<div id="site-name"><a href="{% url 'admin:index' %}">HackFlow<span class="admin-caption">{% translate 'Administration' %}</span></a></div>{% endblock %}
 {% block usertools %}{% endblock %}

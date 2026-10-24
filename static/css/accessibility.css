@@ -1,0 +1,120 @@
+/* Preference overrides are shared with Django admin. No filters are applied to the page. */
+html[data-a11y-text="large"] {font-size:112.5%}
+html[data-a11y-text="extra-large"] {font-size:125%}
+html[data-a11y-contrast="true"] {
+  --brand-bg:#fff; --brand-surface:#fff; --brand-raised:#f0f0f0; --brand-active:#ddd;
+  --brand-ink:#111; --brand-muted:#303030; --brand-faint:#404040; --brand-line:#555; --brand-control:#444;
+  --brand-primary:#9b3107; --brand-primary-hover:#7c2705; --brand-on-primary:#fff; --brand-accent:#9b3107; --brand-focus:#111;
+}
+html[data-theme="dark"][data-a11y-contrast="true"] {
+  --brand-bg:#000; --brand-surface:#080808; --brand-raised:#191919; --brand-active:#333;
+  --brand-ink:#fff; --brand-muted:#eee; --brand-faint:#ddd; --brand-line:#aaa; --brand-control:#ddd;
+  --brand-primary:#ffc09b; --brand-primary-hover:#ffdbc5; --brand-on-primary:#000; --brand-accent:#ffc09b; --brand-focus:#fff;
+}
+html[data-a11y-contrast="true"] body {background-image:none!important}
+html[data-a11y-contrast="true"] :is(.button,button) {background-image:none!important; box-shadow:none}
+html[data-a11y-contrast="true"] .button,
+html[data-a11y-contrast="true"] button:not(.icon-button):not(.menu-action):not(.theme-toggle):not(.a11y-reset):not([data-a11y-close]) {background-color:var(--brand-primary); color:var(--brand-on-primary)}
+html[data-a11y-contrast="true"] :is(.button.secondary,button.secondary) {background-color:var(--brand-surface); color:var(--brand-ink); border-color:var(--brand-control)}
+html[data-a11y-colors="red-green"] {--brand-success:#075985; --brand-success-soft:#e0f2fe; --brand-danger:#9d174d; --brand-danger-soft:#fce7f3; --brand-warning:#854d0e; --brand-warning-soft:#fef9c3}
+html[data-theme="dark"][data-a11y-colors="red-green"] {--brand-success:#7dd3fc; --brand-success-soft:#082f49; --brand-danger:#f9a8d4; --brand-danger-soft:#500724; --brand-warning:#fde68a; --brand-warning-soft:#422006}
+html[data-a11y-colors="blue-yellow"] {--brand-success:#115e59; --brand-success-soft:#ccfbf1; --brand-danger:#9f1239; --brand-danger-soft:#ffe4e6; --brand-warning:#3f3f46; --brand-warning-soft:#f4f4f5}
+html[data-theme="dark"][data-a11y-colors="blue-yellow"] {--brand-success:#99f6e4; --brand-success-soft:#042f2e; --brand-danger:#fda4af; --brand-danger-soft:#4c0519; --brand-warning:#e4e4e7; --brand-warning-soft:#27272a}
+html[data-a11y-colors="monochrome"] {--brand-success:var(--brand-ink); --brand-danger:var(--brand-ink); --brand-warning:var(--brand-ink); --brand-success-soft:var(--brand-raised); --brand-danger-soft:var(--brand-raised); --brand-warning-soft:var(--brand-raised)}
+/* Each option changes the functional interface palette, not only the sample badges. */
+html[data-a11y-colors="red-green"] {
+  --brand-primary:#075985; --brand-primary-hover:#0c4a6e; --brand-accent:#075985;
+  --brand-on-primary:#fff; --brand-soft:#e0f2fe; --brand-soft-border:#07598555;
+  --brand-focus:#075985; --brand-primary-rgb:7,89,133; --brand-highlight:#7dd3fc;
+  --brand-close-highlight-start:#7dd3fc; --brand-close-highlight-end:#bae6fd;
+}
+html[data-theme="dark"][data-a11y-colors="red-green"] {
+  --brand-primary:#7dd3fc; --brand-primary-hover:#bae6fd; --brand-accent:#7dd3fc;
+  --brand-on-primary:#082f49; --brand-soft:#082f49; --brand-soft-border:#7dd3fc66;
+  --brand-focus:#7dd3fc; --brand-primary-rgb:125,211,252;
+}
+html[data-a11y-colors="blue-yellow"] {
+  --brand-primary:#0f766e; --brand-primary-hover:#115e59; --brand-accent:#115e59;
+  --brand-on-primary:#fff; --brand-soft:#ccfbf1; --brand-soft-border:#115e5955;
+  --brand-focus:#115e59; --brand-primary-rgb:15,118,110; --brand-highlight:#99f6e4;
+  --brand-close-highlight-start:#99f6e4; --brand-close-highlight-end:#ccfbf1;
+}
+html[data-theme="dark"][data-a11y-colors="blue-yellow"] {
+  --brand-primary:#99f6e4; --brand-primary-hover:#ccfbf1; --brand-accent:#99f6e4;
+  --brand-on-primary:#042f2e; --brand-soft:#042f2e; --brand-soft-border:#99f6e466;
+  --brand-focus:#99f6e4; --brand-primary-rgb:153,246,228;
+}
+html[data-a11y-colors="monochrome"] {
+  --brand-primary:#242729; --brand-primary-hover:#111418; --brand-accent:#242729;
+  --brand-on-primary:#fff; --brand-soft:#eef0f3; --brand-soft-border:#24272955;
+  --brand-focus:#111418; --brand-primary-rgb:36,39,41; --brand-highlight:#e5e7eb;
+  --brand-close-highlight-start:#e5e7eb; --brand-close-highlight-end:#fff;
+}
+html[data-theme="dark"][data-a11y-colors="monochrome"] {
+  --brand-primary:#f1f2f3; --brand-primary-hover:#fff; --brand-accent:#f1f2f3;
+  --brand-on-primary:#111418; --brand-soft:#272d38; --brand-soft-border:#f1f2f366;
+  --brand-focus:#fff; --brand-primary-rgb:241,242,243;
+}
+html[data-a11y-colors]:not([data-a11y-colors="standard"]) {
+  --brand-gradient-start:var(--brand-primary);
+  --brand-gradient-end:var(--brand-primary);
+  --brand-gradient-hover-start:var(--brand-primary-hover);
+}
+html[data-a11y-colors]:not([data-a11y-colors="standard"]) :is(.hf-avatar,.story-marker,.phase-item.is-current .phase-step-badge) {color:var(--brand-on-primary)}
+html[data-a11y-colors]:not([data-a11y-colors="standard"]) .site-header .signup-link {color:var(--brand-on-primary)!important}
+html[data-a11y-colors]:not([data-a11y-colors="standard"]) :is(.button.danger,button.danger) {color:#fff; background:var(--brand-danger)}
+html[data-theme="dark"][data-a11y-colors]:not([data-a11y-colors="standard"]) :is(.button.danger,button.danger) {color:#111}
+html[data-a11y-colors]:not([data-a11y-colors="standard"]) .theme-toggle .theme-toggle-sun {color:var(--brand-accent)!important; filter:none!important}
+html[data-a11y-colors]:not([data-a11y-colors="standard"]) img[src$="icon-yes.svg"],
+html[data-a11y-colors]:not([data-a11y-colors="standard"]) img[src$="icon-no.svg"] {filter:grayscale(1)}
+html[data-a11y-colors="monochrome"] :is(.ink-illustration,.admin-login-intro img) {filter:grayscale(1)!important}
+html[data-a11y-colors]:not([data-a11y-colors="standard"]) .badge {border:2px solid currentColor}
+html[data-a11y-colors]:not([data-a11y-colors="standard"]) :is(.badge--draft,.badge--finished,.badge--archived) {border-style:dashed}
+html[data-a11y-colors]:not([data-a11y-colors="standard"]) :is(.badge--published,.badge--ongoing,.status-pill--published,.status-pill--ongoing,.phase-status--open) {color:var(--brand-success); background:var(--brand-success-soft); border:2px solid currentColor}
+html[data-a11y-colors]:not([data-a11y-colors="standard"]) .status-pill .status-dot {background:currentColor}
+html[data-a11y-colors]:not([data-a11y-colors="standard"]) .phase-status--upcoming {color:var(--brand-warning); background:var(--brand-warning-soft); border:2px dashed currentColor}
+html[data-a11y-colors]:not([data-a11y-colors="standard"]) :is(.status-pill--draft,.status-pill--finished,.status-pill--archived,.phase-status--closed) {border:2px dashed currentColor}
+html[data-a11y-focus="true"] :focus-visible {outline:4px solid var(--brand-focus)!important; outline-offset:4px!important; box-shadow:0 0 0 7px var(--brand-bg)!important}
+html[data-a11y-spacing="true"] :is(button,input:not([type="hidden"]):not([type="checkbox"]):not([type="radio"]),select,.hf-control,.menu-action,.link-actions a,.profile-nav a) {min-height:48px!important}
+html[data-a11y-spacing="true"] :is(.row-item,td,th) {padding-block:18px!important}
+html[data-a11y-spacing="true"] :is(p,li) {line-height:1.85}
+html[data-a11y-motion="reduce"] {scroll-behavior:auto!important}
+html[data-a11y-motion="reduce"] *, html[data-a11y-motion="reduce"] *::before, html[data-a11y-motion="reduce"] *::after {animation:none!important; transition:none!important; scroll-behavior:auto!important}
+html[data-a11y-motion="reduce"] .landing .reveal-init {opacity:1!important; transform:none!important}
+@media (prefers-reduced-motion:reduce) {
+  html {scroll-behavior:auto!important}
+  *, *::before, *::after {animation:none!important; transition:none!important; scroll-behavior:auto!important}
+  .landing .reveal-init {opacity:1!important; transform:none!important}
+}
+.accessibility-dialog {
+  width:min(640px,calc(100% - 32px)); max-height:calc(100dvh - 32px); box-sizing:border-box;
+  overflow:auto; margin:auto; padding:24px; border:1px solid var(--brand-line); border-radius:12px;
+  background:var(--brand-surface); color:var(--brand-ink); font:1rem/1.6 var(--font, "Segoe UI",sans-serif);
+}
+.accessibility-dialog::backdrop {background:#0007}
+.a11y-dialog-head {display:flex; align-items:center; justify-content:space-between; gap:16px}
+.a11y-dialog-head h2 {margin:0; font-size:1.375rem; color:var(--brand-ink)}
+.a11y-dialog-head button {display:inline-flex; align-items:center; justify-content:center; flex-shrink:0; width:44px; min-height:44px; padding:8px; background:transparent; color:var(--brand-ink); border:1px solid var(--brand-control); border-radius:8px}
+.accessibility-controls .a11y-description {color:var(--brand-muted); font-size:.875rem; margin:16px 0}
+.accessibility-controls .a11y-setting {display:flex; align-items:center; justify-content:space-between; gap:24px; padding:20px 0; border-bottom:1px solid var(--brand-line); color:var(--brand-ink); font-size:.9375rem}
+.a11y-setting>span {flex:1; min-width:0}
+.a11y-setting strong {display:block; font-weight:600}
+.a11y-setting small {display:block; margin-top:4px; font-size:.8125rem; color:var(--brand-muted); line-height:1.6}
+.accessibility-controls .a11y-setting select {width:190px; max-width:100%; flex-shrink:0; min-height:44px; box-sizing:border-box; padding:10px; border:1px solid var(--brand-control); border-radius:8px; background:var(--brand-surface); color:var(--brand-ink); font:inherit}
+.accessibility-controls input[type="checkbox"] {appearance:auto; width:22px; height:22px; flex-shrink:0; accent-color:var(--brand-accent); margin:0 4px}
+.a11y-reset-row {display:flex; align-items:center; gap:12px; flex-wrap:wrap; margin-top:24px; font-size:.8125rem}
+.accessibility-controls button.a11y-reset {min-height:44px; padding:10px 14px; background:var(--brand-surface); color:var(--brand-ink); border:1px solid var(--brand-control); border-radius:8px; font:inherit}
+:is(#accessibility-dialog,#accessibility) button.a11y-reset,
+#accessibility-dialog [data-a11y-close] {background:var(--brand-surface); color:var(--brand-ink); border:1px solid var(--brand-control); box-shadow:none; transform:none}
+.a11y-storage-error {color:var(--brand-danger)}
+.a11y-keyboard-hints {display:flex; flex-wrap:wrap; gap:12px; padding:16px 0 0; font-size:.75rem; color:var(--brand-muted)}
+.a11y-keyboard-hints kbd {display:inline-block; padding:2px 5px; border:1px solid var(--brand-control); border-radius:4px; color:var(--brand-ink); background:var(--brand-raised)}
+@media (max-width:560px) {
+  .accessibility-dialog {padding:20px}
+  .accessibility-controls .a11y-setting {gap:16px; flex-wrap:wrap}
+  .a11y-setting>span {flex-basis:calc(100% - 50px)}
+  .accessibility-controls .a11y-setting select {width:100%}
+}
+@media (forced-colors:active) {
+  .accessibility-dialog,.a11y-setting select {border:1px solid CanvasText}
+}

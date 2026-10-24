@@ -1,148 +1,874 @@
-/* HackFlow: monochrome editorial illustrations, quiet shared app components. */
-.landing { font-size:16px; line-height:1.65; }
-.landing figure { margin:0; }
-.landing img { display:block; width:100%; height:auto; }
-.landing h1,.landing h2,.landing h3 { text-wrap:balance; }
-.landing h2 { font-size:36px; letter-spacing:-.04em; font-weight:550; line-height:1.15; }
-.landing h3 { font-size:21px; font-weight:550; line-height:1.3; }
-.landing .landing-axis {
-  display:grid;
-  grid-template-columns:minmax(0,42fr) minmax(0,58fr);
-  column-gap:40px;
-  align-items:start;
+/* HackFlow Modern Landing Page Styles */
+.landing {
+  font-size: 1rem;
+  line-height: 1.65;
+  color: var(--ink);
 }
-/* Text and art are separate: copy keeps normal theme contrast in both modes. */
+
+.landing figure { margin: 0; }
+.landing img { display: block; width: 100%; height: auto; }
+.landing h1, .landing h2, .landing h3 { text-wrap: balance; }
+
+.section-eyebrow {
+  display: inline-block;
+  font-size: 0.71875rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--brand-primary);
+  margin-bottom: 8px;
+}
+
+.landing h2 {
+  font-size: clamp(1.75rem, 3.5vw, 2.5rem);
+  letter-spacing: -0.035em;
+  font-weight: 700;
+  line-height: 1.18;
+  margin: 0 0 12px;
+}
+
+.landing h3 {
+  font-size: 1.25rem;
+  font-weight: 650;
+  letter-spacing: -0.02em;
+  line-height: 1.3;
+}
+
+/* ==========================================================================
+   1. HERO SECTION
+   ========================================================================== */
 .landing-hero {
-  display:grid;
-  grid-template-columns:minmax(0,1fr) minmax(0,1.15fr);
-  align-items:center;
-  gap:48px;
-  min-height:550px;
-  padding:32px 0 48px;
+  display: grid;
+  grid-template-columns: minmax(0, 1.05fr) minmax(0, 0.95fr);
+  align-items: center;
+  gap: 56px;
+  min-height: 560px;
+  padding: 40px 0 64px;
+  position: relative;
 }
-.hero-copy { min-width:0; }
+
+.landing-hero::before {
+  content: '';
+  position: absolute;
+  top: -20px;
+  right: -5%;
+  width: 520px;
+  height: 520px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(var(--brand-primary-rgb), 0.09) 0%, rgba(var(--brand-primary-rgb), 0.02) 45%, transparent 70%);
+  pointer-events: none;
+  z-index: -1;
+}
+
+:root[data-theme="dark"] .landing-hero::before {
+  background: radial-gradient(circle, rgba(var(--brand-primary-rgb), 0.12) 0%, rgba(var(--brand-primary-rgb), 0.03) 50%, transparent 70%);
+}
+
+.hero-copy {
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Hero Pill Badge */
+.hero-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  width: fit-content;
+  padding: 6px 14px;
+  background: var(--brand-soft);
+  border: 1px solid var(--brand-soft-border);
+  border-radius: 9999px;
+  font-size: 0.8125rem;
+  font-weight: 600;
+  color: var(--brand-primary);
+  margin-bottom: 22px;
+  box-shadow: 0 2px 8px rgba(var(--brand-primary-rgb), 0.08);
+}
+
+.badge-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--brand-primary);
+  box-shadow: 0 0 0 3px rgba(var(--brand-primary-rgb), 0.25);
+  animation: pulse-dot 2.2s infinite ease-in-out;
+}
+
+@keyframes pulse-dot {
+  0%, 100% { transform: scale(1); opacity: 1; }
+  50% { transform: scale(1.2); opacity: 0.8; }
+}
+
+.badge-divider {
+  opacity: 0.4;
+}
+
+.badge-sub {
+  color: var(--muted);
+  font-weight: 500;
+}
+
 .landing h1 {
-  font-size:clamp(44px,5vw,66px);
-  line-height:1.04;
-  letter-spacing:-.055em;
-  font-weight:550;
-  max-width:14ch;
-  margin:0 0 28px;
+  font-size: clamp(2.625rem, 5.2vw, 4rem);
+  line-height: 1.06;
+  letter-spacing: -0.045em;
+  font-weight: 750;
+  margin: 0 0 20px;
 }
-.hero-description { font-size:18px; line-height:1.65; max-width:43ch; }
-.landing .actions { margin-top:26px; gap:16px 24px; }
-.hero-links { display:flex; flex-wrap:wrap; gap:8px 20px; margin-top:28px; font-size:14px; }
-.hero-links a { display:inline-flex; align-items:center; min-height:44px; color:var(--muted); text-decoration:none; }
-.hero-links a:hover { color:var(--ink); text-decoration:underline; }
-.hero-illustration { width:100%; max-width:580px; justify-self:end; }
-.hero-illustration img { object-fit:contain; }
-.landing>section+section { margin-top:96px; }
-.landing .section-head { margin-bottom:28px; align-items:end; }
-.landing .section-head h2 { margin-bottom:12px; }
-.landing .section-head p { margin:0; max-width:46ch; }
-.landing .section-head>a { font-size:14px; min-height:44px; white-space:nowrap; }
-.landing .card p { font-size:15px; }
-.landing .card h3 { font-size:24px; }
-.landing .card-meta { font-size:13px; }
+
+.hero-highlight {
+  background: linear-gradient(135deg, var(--brand-primary) 0%, var(--brand-gradient-end) 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  display: inline-block;
+}
+
+.hero-description {
+  font-size: 1.125rem;
+  line-height: 1.6;
+  max-width: 44ch;
+  color: var(--muted);
+  margin-bottom: 28px;
+}
+
+.hero-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 14px;
+  align-items: center;
+  margin-bottom: 24px;
+}
+
+.hero-cta {
+  min-height: 48px !important;
+  padding: 0 24px !important;
+  font-size: 0.9375rem !important;
+  font-weight: 650 !important;
+  border-radius: 11px !important;
+  box-shadow: 0 4px 16px rgba(var(--brand-primary-rgb), 0.32), inset 0 1px 0 rgba(255, 255, 255, 0.25) !important;
+}
+
+.hero-cta:hover {
+  transform: translateY(-2px) !important;
+  box-shadow: 0 8px 24px rgba(var(--brand-primary-rgb), 0.42), inset 0 1px 0 rgba(255, 255, 255, 0.3) !important;
+}
+
+.hero-secondary {
+  min-height: 48px !important;
+  padding: 0 20px !important;
+  font-size: 0.90625rem !important;
+  font-weight: 600 !important;
+  border-radius: 11px !important;
+}
+
+/* Micro-perks ticker */
+.hero-perks {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 16px 22px;
+  margin-bottom: 24px;
+  font-size: 0.84375rem;
+  color: var(--muted);
+  font-weight: 500;
+}
+
+.perk-item {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+}
+
+.perk-bullet {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--brand-primary);
+  opacity: 0.8;
+}
+
+/* Fast in-page links */
+.hero-links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px 18px;
+  font-size: 0.84375rem;
+  padding-top: 14px;
+  border-top: 1px solid var(--line);
+}
+
+.hero-links a {
+  display: inline-flex;
+  align-items: center;
+  color: var(--muted);
+  text-decoration: none;
+  font-weight: 500;
+  transition: color 0.15s ease;
+}
+
+.hero-links a:hover {
+  color: var(--brand-primary);
+  text-decoration: underline;
+}
+
+/* Editorial Illustration */
+.hero-illustration {
+  width: 100%;
+  max-width: 560px;
+  justify-self: end;
+}
+
+.hero-illustration img {
+  display: block;
+  width: 100%;
+  height: auto;
+  filter: drop-shadow(0 12px 32px rgba(0, 0, 0, 0.08));
+  transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1), filter 0.35s ease;
+}
+
+:root[data-theme="dark"] .hero-illustration img {
+  filter: drop-shadow(0 14px 36px rgba(0, 0, 0, 0.45));
+}
+
+.hero-illustration:hover img {
+  transform: translateY(-4px) scale(1.01);
+}
+
+/* ==========================================================================
+   2. UPCOMING EDITIONS SECTION
+   ========================================================================== */
+.landing > section + section { margin-top: 100px; }
+
+.landing .section-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  margin-bottom: 32px;
+  gap: 20px;
+}
+
+.landing .section-head h2 { margin-bottom: 6px; }
+.landing .section-head p { margin: 0; color: var(--muted); max-width: 48ch; }
+
+.catalogue-link {
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: var(--brand-primary);
+  white-space: nowrap;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  transition: transform 0.15s ease;
+}
+
+.catalogue-link:hover {
+  transform: translateX(3px);
+  text-decoration: none;
+}
+
+.event-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+  gap: 24px;
+}
+
+.event-card {
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: 16px;
+  padding: 28px;
+  display: flex;
+  flex-direction: column;
+  transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.03);
+  position: relative;
+}
+
+.event-card:hover {
+  transform: translateY(-4px);
+  border-color: rgba(var(--brand-primary-rgb), 0.4);
+  box-shadow: 0 16px 36px -8px rgba(0, 0, 0, 0.08), 0 0 0 1px rgba(var(--brand-primary-rgb), 0.15);
+}
+
+.event-card .card-meta {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 0.8125rem;
+  color: var(--muted);
+  font-weight: 500;
+  margin-bottom: 14px;
+}
+
+.meta-date {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.event-card h3 {
+  font-size: 1.3125rem;
+  margin: 0 0 10px;
+}
+
+.event-card h3 a {
+  text-decoration: none;
+  color: var(--ink);
+  transition: color 0.15s ease;
+}
+
+.event-card h3 a:hover {
+  color: var(--brand-primary);
+}
+
+.event-card > p {
+  color: var(--muted);
+  font-size: 0.90625rem;
+  line-height: 1.6;
+  flex: 1;
+  margin: 0 0 20px;
+}
+
+.event-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+  padding-top: 16px;
+  border-top: 1px solid var(--line);
+  font-size: 0.84375rem;
+}
+
+.event-loc {
+  margin: 0;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  color: var(--muted);
+  font-size: 0.8125rem;
+}
+
+.card-link {
+  font-size: 0.84375rem;
+  font-weight: 600;
+  color: var(--brand-primary);
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  transition: transform 0.15s ease;
+}
+
+.card-link:hover {
+  transform: translateX(3px);
+  text-decoration: none;
+}
+
+.badge {
+  display: inline-flex;
+  align-items: center;
+  padding: 4px 10px;
+  border-radius: 9999px;
+  font-size: 0.75rem;
+  font-weight: 650;
+  text-transform: capitalize;
+}
+
+.badge--ongoing {
+  background: var(--brand-soft);
+  color: var(--brand-accent);
+  border: 1px solid var(--brand-soft-border);
+}
+
+.badge--published {
+  background: var(--brand-success-soft);
+  color: var(--brand-success);
+  border: 1px solid rgba(16, 185, 129, 0.25);
+}
+
+:root[data-theme="dark"] .badge--published {
+  color: var(--brand-success);
+}
+
+.badge--closed {
+  background: var(--raised);
+  color: var(--muted);
+}
+
+/* Empty edition state */
 .edition-empty {
-  grid-column:1/-1;
-  display:flex;
-  align-items:center;
-  justify-content:space-between;
-  gap:40px;
-  background:var(--raised);
-  padding:32px;
-  border-radius:var(--radius);
+  grid-column: 1 / -1;
+  display: flex;
+  align-items: center;
+  gap: 28px;
+  background: var(--surface);
+  border: 1px dashed var(--brand-soft-border);
+  border-radius: 16px;
+  padding: 36px;
 }
-.edition-empty>div { max-width:64ch; }
-.edition-empty .icon { margin-bottom:16px; color:var(--muted); }
-.edition-empty h3 { margin-bottom:12px; }
-.edition-empty p { margin:0; }
-.edition-empty>a { flex:none; font-size:14px; white-space:nowrap; }
-.edition-empty>a .icon { margin:0; }
-.role-intro h2 { margin-bottom:24px; }
-.role-intro>p { max-width:32ch; }
-.role-intro .role-note { font-size:14px; color:var(--muted); margin-top:32px; }
-.role-guide details { border-bottom:1px solid var(--line); }
-.role-guide details:first-child { border-top:1px solid var(--line); }
-.role-guide summary {
-  list-style:none;
-  display:flex;
-  align-items:center;
-  gap:14px;
-  min-height:64px;
-  padding:16px 4px;
-  font-size:18px;
-  font-weight:500;
-  line-height:1.4;
+
+.empty-icon-wrap {
+  width: 56px;
+  height: 56px;
+  border-radius: 14px;
+  background: var(--brand-soft);
+  color: var(--brand-primary);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex: none;
 }
-.role-guide summary::-webkit-details-marker { display:none; }
-.role-guide summary span { flex:1; }
-.role-guide summary>.icon:last-child { transition:rotate .2s; }
-.role-guide details[open] summary>.icon:last-child { rotate:45deg; }
-.role-guide details[open]>summary { margin-bottom:0; }
-.role-guide details>div { padding:0 34px 24px; }
-.role-guide .small-text { color:var(--muted); font-size:14px; }
-.role-guide .text-link { font-size:14px; min-height:44px; }
-.journey-layout { display:grid; grid-template-columns:minmax(0,1fr) minmax(0,1fr); gap:64px; align-items:center; }
-.journey-illustration { max-width:430px; }
-.landing .journey-stories { list-style:none; margin:0; padding:0; }
-.journey-stories li+li { margin-top:28px; }
-.journey-stories h3 { margin-bottom:10px; }
-.journey-stories p { font-size:16px; line-height:1.65; max-width:46ch; }
-.landing-faq>h2 { margin-bottom:32px; }
-.landing .faq-band { padding:32px; column-gap:40px; }
-.faq-band:nth-child(even) { background:var(--raised); border-radius:var(--radius); }
-.faq-band h3 { font-size:24px; max-width:22ch; margin:0; }
-.faq-band p { margin:0; font-size:16px; line-height:1.7; }
-.landing-close { background:var(--raised); padding:40px; border-radius:var(--radius); }
-.landing-close h2 { margin:0; }
-.landing-close p { max-width:45ch; }
-.image-credit { font-size:13px; color:var(--muted); margin:32px 0 0; }
-.landing .button { transition:background .15s,transform .15s; }
-.landing .button:active { transform:translateY(1px); }
-@keyframes landing-appear { from { transform:translateY(12px); } to { transform:translateY(0); } }
-.landing .reveal-in { animation:landing-appear .45s ease-out both; }
-@media(max-width:1000px) {
-  .landing-hero { gap:28px; min-height:490px; }
-  .landing h1 { font-size:52px; }
-  .landing h2 { font-size:30px; }
-  .landing .landing-axis { column-gap:28px; }
-  .hero-description { font-size:17px; }
-  .edition-empty { gap:28px; flex-wrap:wrap; }
-  .landing .faq-band { padding:28px; }
-  .landing-close { padding:32px; }
-  .journey-layout { gap:36px; }
+
+.empty-copy { flex: 1; }
+.empty-copy h3 { margin: 0 0 6px; font-size: 1.1875rem; }
+.empty-copy p { margin: 0; color: var(--muted); font-size: 0.90625rem; }
+
+/* ==========================================================================
+   3. ROLES ACCORDION SHOWCASE
+   ========================================================================== */
+.landing-axis {
+  display: grid;
+  grid-template-columns: minmax(0, 42fr) minmax(0, 58fr);
+  column-gap: 48px;
+  align-items: start;
 }
-@media(max-width:760px) {
-  .landing-hero { grid-template-columns:1fr; gap:20px; padding:16px 0 0; min-height:0; }
-  .landing h1 { font-size:48px; max-width:15ch; margin-bottom:24px; }
-  .hero-illustration { width:min(100%,420px); justify-self:center; }
-  .hero-links { margin-top:18px; }
-  .landing .landing-axis { grid-template-columns:1fr; gap:24px; }
-  .landing>section+section { margin-top:64px; }
-  .landing .section-head { align-items:start; gap:16px; }
-  .landing .section-head>a { white-space:normal; }
-  .landing h3 { font-size:21px; }
-  .edition-empty { padding:24px; gap:24px; }
-  .role-intro>p { max-width:46ch; }
-  .role-intro .role-note { margin:20px 0 0; }
-  .role-guide summary { font-size:17px; }
-  .journey-layout { grid-template-columns:1fr; gap:28px; }
-  .journey-illustration { width:min(100%,320px); justify-self:center; }
-  .landing .faq-band { padding:24px 20px; gap:14px; }
-  .faq-band h3 { font-size:22px; max-width:none; }
-  .landing-close { padding:28px 24px; }
-  .landing-close h2 { font-size:28px; }
-  .image-credit { margin-top:24px; }
+
+.landing-roles {
+  background: linear-gradient(135deg, var(--surface) 0%, var(--raised) 100%);
+  border: 1px solid var(--line);
+  padding: 48px;
+  border-radius: 24px;
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.04);
 }
-@media(max-width:420px) {
-  .landing h1 { font-size:44px; }
-  .landing .section-head h2 { font-size:28px; }
-  .landing .faq-band h3 { font-size:21px; }
-  .landing-close h2 { font-size:27px; }
-  .hero-links { gap:0 16px; font-size:13px; }
+
+.role-intro h2 { margin-bottom: 16px; }
+.role-intro > p { color: var(--muted); font-size: 1.03125rem; line-height: 1.6; }
+
+.role-note-card {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 14px 16px;
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  margin-top: 32px;
 }
-@media(prefers-reduced-motion:reduce) {
-  .landing *, .landing *::before, .landing *::after { animation:none!important; transition:none!important; }
+
+.role-note-card .icon {
+  color: var(--brand-primary);
+  flex: none;
+}
+
+.role-note {
+  margin: 0;
+  font-size: 0.84375rem;
+  color: var(--muted);
+  font-weight: 500;
+}
+
+.role-guide {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.role-card {
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  background: var(--surface);
+  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+  overflow: hidden;
+}
+
+.role-card:hover {
+  border-color: rgba(var(--brand-primary-rgb), 0.35);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+}
+
+.role-card[open] {
+  border-color: var(--brand-primary);
+  box-shadow: 0 6px 18px rgba(var(--brand-primary-rgb), 0.08);
+}
+
+.role-card summary {
+  list-style: none;
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 16px 18px;
+  cursor: pointer;
+  user-select: none;
+  font-size: 1rem;
+  font-weight: 600;
+  color: var(--ink);
+}
+
+.role-card summary::-webkit-details-marker { display: none; }
+
+.role-icon-box {
+  width: 36px;
+  height: 36px;
+  border-radius: 9px;
+  background: var(--brand-soft);
+  color: var(--brand-primary);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex: none;
+  transition: transform 0.2s ease;
+}
+
+.role-card:hover .role-icon-box {
+  transform: scale(1.05);
+}
+
+.role-title {
+  flex: 1;
+}
+
+.role-chevron {
+  color: var(--muted);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  transition: transform 0.25s ease, color 0.2s ease;
+}
+
+.role-card[open] .role-chevron {
+  transform: rotate(180deg);
+  color: var(--brand-primary);
+}
+
+.role-content {
+  padding: 0 20px 20px 68px;
+  color: var(--muted);
+  font-size: 0.9375rem;
+  line-height: 1.6;
+}
+
+.role-content p {
+  margin: 0 0 10px;
+}
+
+.role-content .small-text {
+  font-size: 0.8125rem;
+  color: var(--faint);
+  margin-bottom: 12px;
+}
+
+.role-link {
+  font-size: 0.875rem;
+  font-weight: 650;
+  color: var(--brand-primary);
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  text-decoration: none;
+  margin-top: 6px;
+}
+
+.role-link:hover {
+  text-decoration: underline;
+}
+
+/* ==========================================================================
+   4. JOURNEY SECTION
+   ========================================================================== */
+.journey-layout {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  gap: 64px;
+  align-items: center;
+  margin-top: 36px;
+}
+
+.journey-illustration {
+  width: 100%;
+  max-width: 440px;
+  justify-self: center;
+}
+
+.journey-illustration img {
+  display: block;
+  width: 100%;
+  height: auto;
+  filter: drop-shadow(0 12px 32px rgba(0, 0, 0, 0.08));
+  transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+:root[data-theme="dark"] .journey-illustration img {
+  filter: drop-shadow(0 14px 36px rgba(0, 0, 0, 0.45));
+}
+
+.journey-illustration:hover img {
+  transform: translateY(-4px) scale(1.01);
+}
+
+.journey-stories {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 28px;
+  position: relative;
+}
+
+.journey-stories::before {
+  content: '';
+  position: absolute;
+  top: 24px;
+  bottom: 24px;
+  left: 19px;
+  width: 2px;
+  background: var(--line);
+  z-index: 0;
+}
+
+.story-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 20px;
+  position: relative;
+  z-index: 1;
+}
+
+.story-marker {
+  width: 40px;
+  height: 40px;
+  border-radius: 11px;
+  background: linear-gradient(135deg, var(--brand-primary), var(--brand-gradient-end));
+  color: #fff;
+  font-weight: 750;
+  font-size: 0.875rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex: none;
+  box-shadow: 0 4px 12px rgba(var(--brand-primary-rgb), 0.28);
+}
+
+.story-body h3 {
+  font-size: 1.1875rem;
+  margin: 0 0 6px;
+}
+
+.story-body p {
+  font-size: 0.96875rem;
+  line-height: 1.6;
+  color: var(--muted);
+  margin: 0;
+}
+
+/* ==========================================================================
+   5. FAQ SECTION
+   ========================================================================== */
+.faq-header {
+  margin-bottom: 32px;
+}
+
+.faq-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.faq-band {
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: 16px;
+  padding: 28px 32px;
+  transition: all 0.2s ease;
+}
+
+.faq-band:hover {
+  border-color: rgba(var(--brand-primary-rgb), 0.3);
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.04);
+}
+
+.faq-band h3 {
+  font-size: 1.25rem;
+  margin: 0;
+}
+
+.faq-band p {
+  font-size: 0.96875rem;
+  line-height: 1.65;
+  color: var(--muted);
+  margin: 0;
+}
+
+/* ==========================================================================
+   6. CLOSING CTA BANNER
+   ========================================================================== */
+.landing-close {
+  position: relative;
+  background: linear-gradient(135deg, #13161c 0%, #1e222b 100%);
+  color: #ffffff;
+  padding: 64px 54px;
+  border-radius: 24px;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  box-shadow: 0 24px 50px -12px rgba(0, 0, 0, 0.25);
+  overflow: hidden;
+}
+
+.close-glow {
+  position: absolute;
+  top: -80px;
+  right: -80px;
+  width: 420px;
+  height: 420px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(var(--brand-primary-rgb), 0.4) 0%, rgba(var(--brand-primary-rgb), 0.05) 50%, transparent 70%);
+  pointer-events: none;
+}
+
+.close-content {
+  position: relative;
+  z-index: 1;
+  max-width: 60ch;
+}
+
+.close-eyebrow {
+  display: inline-block;
+  font-size: 0.75rem;
+  font-weight: 750;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--brand-highlight);
+  margin-bottom: 12px;
+}
+
+.landing-close h2 {
+  font-size: clamp(2rem, 4vw, 2.875rem);
+  color: #ffffff;
+  line-height: 1.15;
+  margin: 0 0 16px;
+}
+
+.close-highlight {
+  background: linear-gradient(135deg, var(--brand-close-highlight-start) 0%, var(--brand-close-highlight-end) 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.landing-close p {
+  color: #c2c9d6;
+  font-size: 1.0625rem;
+  line-height: 1.6;
+  margin-bottom: 28px;
+}
+
+.close-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 14px;
+}
+
+.close-cta {
+  min-height: 48px !important;
+  padding: 0 26px !important;
+  font-size: 0.9375rem !important;
+  font-weight: 650 !important;
+  border-radius: 11px !important;
+  box-shadow: 0 4px 18px rgba(var(--brand-primary-rgb), 0.4) !important;
+}
+
+.close-secondary {
+  min-height: 48px !important;
+  padding: 0 22px !important;
+  font-size: 0.9375rem !important;
+  font-weight: 600 !important;
+  border-radius: 11px !important;
+  background: rgba(255, 255, 255, 0.1) !important;
+  border: 1px solid rgba(255, 255, 255, 0.2) !important;
+  color: #ffffff !important;
+  backdrop-filter: blur(8px);
+}
+
+.close-secondary:hover {
+  background: rgba(255, 255, 255, 0.18) !important;
+  color: #ffffff !important;
+}
+
+.image-credit {
+  font-size: 0.8125rem;
+  color: var(--muted);
+  margin: 36px 0 0;
+  text-align: center;
+}
+
+/* ==========================================================================
+   7. SCROLL APPEARANCE ANIMATIONS
+   ========================================================================== */
+.landing .reveal-init {
+  opacity: 0;
+  transform: translateY(28px);
+  transition: opacity 0.75s cubic-bezier(0.16, 1, 0.3, 1), transform 0.75s cubic-bezier(0.16, 1, 0.3, 1);
+  will-change: opacity, transform;
+}
+
+.landing .reveal-in {
+  opacity: 1 !important;
+  transform: translateY(0) !important;
+}
+
+/* Staggered micro-delays for grid items */
+.event-grid .event-card:nth-child(2) { transition-delay: 0.12s; }
+.event-grid .event-card:nth-child(3) { transition-delay: 0.22s; }
+.role-guide .role-card:nth-child(2) { transition-delay: 0.08s; }
+.role-guide .role-card:nth-child(3) { transition-delay: 0.16s; }
+.role-guide .role-card:nth-child(4) { transition-delay: 0.24s; }
+.role-guide .role-card:nth-child(5) { transition-delay: 0.32s; }
+.journey-stories .story-item:nth-child(2) { transition-delay: 0.12s; }
+.journey-stories .story-item:nth-child(3) { transition-delay: 0.24s; }
+.faq-grid .faq-band:nth-child(2) { transition-delay: 0.08s; }
+.faq-grid .faq-band:nth-child(3) { transition-delay: 0.16s; }
+.faq-grid .faq-band:nth-child(4) { transition-delay: 0.24s; }
+
+/* ==========================================================================
+   8. RESPONSIVE BREAKPOINTS
+   ========================================================================== */
+@media (max-width: 1024px) {
+  .landing-hero { gap: 36px; min-height: 500px; }
+  .landing h1 { font-size: 3.125rem; }
+  .landing-axis { column-gap: 32px; }
+  .landing-roles { padding: 36px; }
+  .journey-layout { gap: 40px; }
+}
+
+@media (max-width: 768px) {
+  .landing-hero {
+    grid-template-columns: 1fr;
+    gap: 32px;
+    padding: 24px 0 32px;
+    min-height: 0;
+  }
+  .landing h1 { font-size: 2.625rem; margin-bottom: 18px; }
+  .hero-illustration { width: min(100%, 440px); justify-self: center; }
+  .landing-axis { grid-template-columns: 1fr; gap: 28px; }
+  .landing > section + section { margin-top: 72px; }
+  .landing-roles { padding: 28px 20px; }
+  .role-content { padding-left: 20px; }
+  .journey-layout { grid-template-columns: 1fr; gap: 32px; }
+  .journey-illustration { width: min(100%, 340px); justify-self: center; margin: 0 auto; }
+  .faq-band { padding: 22px; }
+  .landing-close { padding: 40px 24px; }
+}
+
+@media (max-width: 480px) {
+  .landing h1 { font-size: 2.25rem; }
+  .hero-actions { flex-direction: column; width: 100%; }
+  .hero-actions .button { width: 100%; }
+  .hero-links { gap: 8px 14px; font-size: 0.8125rem; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .landing *, .landing *::before, .landing *::after {
+    animation: none !important;
+    transition: none !important;
+  }
 }

@@ -5,8 +5,9 @@ composants : on ne recrée pas sa propre navbar, ses boutons ou son thème.
 
 ## L’esprit du design
 
-Une interface calme, lisible et simple, inspirée de Notion et d’Apple : couleurs
-neutres, typographie système, peu d’effets et des actions faciles à comprendre.
+Une interface calme, lisible et simple, inspirée de Notion et d’Apple : palette Signal orange & mist, typographie Plus Jakarta Sans (polices système en repli), peu d’effets et des actions
+faciles à comprendre. Les surfaces sont gris clair froid, les actions principales
+orange profond et les illustrations conservent leurs traits noirs avec des accents orange.
 La page d’accueil peut être plus visuelle ; les écrans de travail restent sobres.
 Références : [Taste Skill](https://www.tasteskill.dev/) et
 [Hugeicons](https://hugeicons.com/).
@@ -20,7 +21,7 @@ connecté affiche « indisponible », pas un faux zéro.
 L’administration Django utilise `templates/admin/` et `static/css/admin.css` pour
 garder les mêmes couleurs, contrôles et icônes. Son thème partage la préférence
 `hackflow-theme` avec l’application. La connexion utilise une illustration dédiée :
-`static/images/hackflow-admin-illustration.webp`. Garder les formulaires, permissions,
+`static/images/hackflow-admin-orange.webp`. Garder les formulaires, permissions,
 filtres et protections CSRF de Django ; personnaliser leur présentation.
 
 Les deux navbars réutilisent `shared/nav_language.html`, `shared/nav_account.html`
@@ -42,6 +43,15 @@ dans le profil.
 | Traduction anglaise | `locale/en/LC_MESSAGES/django.po` et `.mo` |
 
 ## Couleurs et dimensions
+
+La source commune est `static/css/palette.css`, chargée par l’application et
+l’administration. `base.css` et `admin.css` adaptent ses tokens à leurs composants.
+Clair : fond `#F8F9FB`, surfaces blanches, texte `#111418`, action `#F95721`
+avec texte foncé pour le contraste, fond secondaire orange `#FFF4EE`. Sombre :
+fond `#0D0F12`, surfaces `#15181E`, texte `#F4F5F7`, action `#FF6B35` avec texte foncé.
+L’orange accompagne une action importante, un lien ou un focus ; les titres restent
+en couleur de texte. Les états erreur/succès conservent leurs couleurs sémantiques.
+Ne pas employer les teintes d’illustration, plus vives, pour du petit texte.
 
 Toujours utiliser les variables CSS. Les mêmes noms fonctionnent dans les deux thèmes.
 
@@ -126,7 +136,7 @@ Ne pas remplacer une liste par un simple `<div>` cliquable.
 ## Français, anglais et thèmes
 
 Le français est la langue de départ, même si le navigateur est en anglais. Le menu
-« Langue et apparence » permet de choisir l’anglais ; Django conserve ce choix dans
+du globe permet de choisir directement l’anglais ; Django conserve ce choix dans
 le cookie `hackflow_language`. Les URL et les permissions restent identiques.
 
 Dans les templates : `{% translate 'Texte français' %}`. Pour une phrase avec des
@@ -149,9 +159,37 @@ Versionner `.po` **et** `.mo` : les traductions sont alors utilisables dès le c
 
 Les thèmes clair, sombre et système utilisent les mêmes variables. Le choix est
 enregistré dans `localStorage['hackflow-theme']`. Ne pas coder le thème page par page.
-L’administration Django garde son propre sélecteur de thème natif.
+L’administration et le site réutilisent le même sélecteur dans le menu du compte.
 
 ## Accessibilité et vérification rapide
+
+Le menu du compte (ou Préférences avant connexion) ouvre le panneau Accessibilité,
+disponible aussi dans l’administration. Le profil possède un onglet Accessibilité
+dédié, avec les mêmes contrôles. Les changements s’appliquent directement à l’interface.
+Les réglages s’appliquent immédiatement et se conservent uniquement dans
+`localStorage['hackflow-accessibility']` : aucune migration ni donnée de compte.
+
+- Couleurs de l’interface : habituelles, distinction rouge/vert, distinction bleu/jaune,
+  ou monochrome. Ces palettes adaptent les actions, liens, navigation, focus, dégradés et statuts
+  du site et de l’admin. Le monochrome désature aussi les illustrations décoratives.
+  Il s’agit de palettes alternatives, pas de filtres de simulation
+  ni d’une correction médicale. Conserver les libellés, icônes et motifs.
+- Contraste renforcé, texte normal/grand/très grand, animations système/réduites,
+  espacement confortable et repère clavier renforcé sont combinables.
+- La navigation clavier et les réglages système de mouvement réduit restent
+  disponibles sans activer un mode. Le reset ne change ni la langue ni le thème.
+- `accessibility-init.js` valide les valeurs et les applique avant les styles.
+  `accessibility.js` synchronise les contrôles, ouvre le dialogue natif, gère le
+  reset et la synchronisation entre onglets. Un stockage bloqué ne bloque pas la page.
+- `accessibility.css` utilise les tokens de marque, sans filtrer les illustrations.
+  Les tailles de texte partagées sont en rem pour permettre l’agrandissement.
+- Le profil réutilise `accounts/profile_shell.html` pour les formulaires associés.
+  Ses onglets utilisent les flèches/Début/Fin ; sans JS, toutes les sections restent
+  lisibles et les liens d’ancrage fonctionnent. Sur téléphone, la navigation se replie.
+
+Vérifications ciblées : `uv run python manage.py test core.test_interface --keepdb`
+et `node scripts/test_accessibility.cjs`, puis contrôle navigateur des préférences
+après rechargement, du retour du focus à Échap et des combinaisons à texte agrandi.
 
 - Contraste du texte courant : au moins 4,5:1 ; contrôles et focus : au moins 3:1.
 - Ne jamais donner une information uniquement par une couleur ou une icône.
@@ -165,12 +203,13 @@ L’administration Django garde son propre sélecteur de thème natif.
 
 Le hero présente le texte à gauche et une illustration à droite. Sur téléphone,
 le texte précède l’image. Garder le texte dans le HTML, jamais dans une image.
-Les visuels sont des illustrations éditoriales au trait, affichées en noir et blanc :
-utiliser la classe `ink-illustration`, qui retire toute couleur et inverse l’encre
-sur le thème sombre. Aucun filtre ne doit être appliqué au texte ou aux contrôles.
-Les deux fichiers locaux `hackflow-hero-illustration.webp` et
-`hackflow-project-illustration.webp` sont réutilisés sur l’accueil et les pages de
-connexion/inscription. Les anciennes photographies ne sont plus affichées.
+Les visuels sont des illustrations éditoriales au trait avec des accents orange.
+Utiliser la classe `ink-illustration` : aucun filtre de couleur. Sur le thème sombre, un fond papier gris clair permet
+de conserver les traits noirs, les visages et les vêtements orange sans les inverser.
+Aucun filtre ne doit être appliqué au texte ou aux contrôles.
+Les fichiers `hackflow-hero-orange.webp`, `hackflow-project-orange.webp` et
+`hackflow-admin-orange.webp` sont locaux, transparents et distincts. Les anciens
+visuels restent conservés mais ne sont plus affichés.
 
 Avant de partager une modification :
 

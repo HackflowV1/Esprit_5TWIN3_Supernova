@@ -4,7 +4,7 @@
 {% with page=request.resolver_match.url_name %}
 <div class="auth">
     <aside class="auth-side" aria-label="{% translate 'Pourquoi rejoindre HackFlow' %}">
-        <img class="auth-illustration ink-illustration" src="{% static 'images/hackflow-project-illustration.webp' %}" width="1254" height="1254" alt="" aria-hidden="true">
+        <img class="auth-illustration ink-illustration" src="{% static 'images/hackflow-project-orange.webp' %}" width="1254" height="1254" alt="" aria-hidden="true">
         <h2>{% if page == 'login' %}{% translate 'Retrouvez votre espace.' %}{% else %}{% translate 'Un compte, tous les hackathons.' %}{% endif %}</h2>
         <ul class="auth-points">
             <li>{% icon 'check' 17 %} {% translate 'Un seul compte, des rôles différents selon chaque événement.' %}</li>

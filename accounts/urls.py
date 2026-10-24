@@ -10,7 +10,7 @@ urlpatterns = [
     path('logout/', auth.LogoutView.as_view(), name='logout'),
     path('profile/', views.ProfileView.as_view(), name='profile'),
     path('profile/edit/', views.ProfileUpdateView.as_view(), name='profile-edit'),
-    path('password/', auth.PasswordChangeView.as_view(template_name='shared/form.html',
+    path('password/', auth.PasswordChangeView.as_view(template_name='accounts/profile_form.html',
         success_url=reverse_lazy('accounts:password-done'), extra_context={'title': _('Changer mon mot de passe')}), name='password'),
     path('password/done/', auth.PasswordChangeDoneView.as_view(template_name='accounts/password_done.html'), name='password-done'),
     path('skills/add/', views.SkillCreateView.as_view(), name='skill-add'),

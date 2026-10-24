@@ -1,0 +1,4 @@
+{% extends 'accounts/profile_shell.html' %}{% load i18n ui %}
+{% block profile_content %}<section class="panel"><h2>{% translate 'Retirer une compétence' %}</h2><p>{{ object }}</p>
+<form method="post">{% csrf_token %}<div class="form-actions"><button type="submit" class="danger">{% icon 'delete' %}{% translate 'Retirer' %}</button><a class="button secondary" href="{% url 'accounts:profile' %}#skills">{% translate 'Annuler' %}</a></div></form>
+</section>{% endblock %}
