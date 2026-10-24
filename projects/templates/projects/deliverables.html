@@ -1,0 +1,15 @@
+{% load i18n ui %}
+<div class="m3-assets">
+{% for record in deliverables %}
+  <article class="m3-asset-card">
+    <div class="m3-asset-heading"><span class="m3-asset-icon">{% if record.kind == 'REPOSITORY' %}{% icon 'code' 21 %}{% elif record.kind == 'VIDEO' %}{% icon 'monitor' 21 %}{% else %}{% icon 'link' 21 %}{% endif %}</span><div><h3>{{ record.get_kind_display }}</h3><span class="m3-asset-saved">{% icon 'check' 12 %}{% translate 'Enregistré' %}</span></div></div>
+    {% if record.url %}<a class="m3-asset-url" href="{{ record.url }}" target="_blank" rel="noopener noreferrer">{{ record.url }}</a>{% else %}<p class="m3-asset-filename">{{ record.metadata.original_name }}{% if record.metadata.size %} <span class="muted">· {{ record.metadata.size|filesizeformat }}</span>{% endif %}</p>{% endif %}
+    {% if record.commit %}<details class="m3-commit-details"><summary>{% translate 'Commit évalué' %}<code>{{ record.commit|slice:':7' }}</code>{% icon 'chevron-down' 13 %}</summary><code class="m3-commit">{{ record.commit }}</code></details>{% endif %}
+    <div class="m3-asset-actions">{% if record.url %}<a class="button secondary small" href="{{ record.url }}" target="_blank" rel="noopener noreferrer">{% icon 'link' 15 %}{% translate 'Ouvrir le lien' %}{% icon 'arrow-right' 14 %}</a>{% else %}<a class="button secondary small" href="{% url 'projects:download' record.pk %}">{% icon 'upload' 15 %}{% translate 'Télécharger' %}</a>{% endif %}
+      {% if editable and submission.status == 'DRAFT' %}<a class="m3-asset-edit" href="{% url 'projects:deliverable-edit' project.pk submission.version record.pk %}">{% icon 'edit' 14 %}{% translate 'Modifier' %}</a><form method="post" action="{% url 'projects:deliverable-delete' project.pk submission.version record.pk %}">{% csrf_token %}<button type="submit" class="m3-asset-remove">{% icon 'delete' 14 %}{% translate 'Retirer' %}</button></form>{% endif %}
+    </div>
+  </article>
+{% empty %}
+  <div class="m3-assets-empty">{% icon 'upload' 30 %}<h3>{% translate 'Aucun livrable dans cette version' %}</h3><p>{% translate 'Ajoutez votre dépôt, une présentation ou une démo. Consultez les autres versions avec les liens ci-dessus.' %}</p></div>
+{% endfor %}
+</div>

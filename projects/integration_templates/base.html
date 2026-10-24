@@ -1,0 +1,8 @@
+{% extends 'base.html' %}{% load i18n ui %}
+{% block project_navigation %}
+{% if user.is_authenticated %}
+<a href="{% url 'projects:mine' %}"{% if ui_app == 'projects' %} aria-current="page"{% endif %}>{% translate 'Mes projets' %}</a>
+{% else %}
+<a href="{% url 'projects:gallery' %}"{% if ui_app == 'projects' %} aria-current="page"{% endif %}>{% translate 'Galerie des projets' %}</a>
+{% endif %}
+{% endblock %}

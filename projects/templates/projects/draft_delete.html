@@ -1,0 +1,11 @@
+{% extends 'projects/shell.html' %}{% load i18n ui %}
+{% block title %}{% translate 'Supprimer le brouillon' %} — {{ project }}{% endblock %}
+{% block workspace %}
+<section class="panel m3-form">
+  <h1>{% blocktranslate with version=submission.version %}Supprimer le brouillon v{{ version }} ?{% endblocktranslate %}</h1>
+  <p>{{ project }} · {{ submission.deliverables.count }} {% translate 'livrables' %}</p>
+  <p>{% translate 'Ce brouillon sera retiré de la liste des versions. Vous pourrez le restaurer avec ses livrables depuis « Brouillons supprimés ».' %}</p>
+  <p class="muted">{% translate 'Votre version officielle restera inchangée.' %}</p>
+  <form method="post">{% csrf_token %}<div class="actions"><button type="submit" class="danger">{% icon 'delete' 16 %}{% translate 'Supprimer le brouillon' %}</button><a class="button secondary" href="{% url 'projects:version' project.pk submission.version %}">{% translate 'Annuler' %}</a></div></form>
+</section>
+{% endblock %}

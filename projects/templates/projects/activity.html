@@ -1,0 +1,5 @@
+{% load i18n ui %}
+  <section class="panel m3-activity" id="activity" aria-labelledby="activity-title">
+    <header class="m3-section-head"><h2 id="activity-title">{% icon 'clock' 19 %}{% translate 'Activité récente' %}</h2></header>
+    <ul class="m3-activity-list">{% for activity in activities %}<li><span class="m3-activity-avatar" aria-hidden="true">{{ activity.actor.username|default:'?'|slice:':1'|upper }}</span><div><p><strong>{{ activity.actor|default:'—' }}</strong> {{ activity.label }}</p><time>{{ activity.created_at }}</time>{% if activity.details.reason %}<p class="muted">{{ activity.details.reason }}</p>{% endif %}</div></li>{% endfor %}</ul>
+  </section>

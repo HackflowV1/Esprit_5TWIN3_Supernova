@@ -1,0 +1,11 @@
+{% extends 'base.html' %}{% load i18n static %}
+{% block extra_css %}<link rel="stylesheet" href="{% static 'css/projects.css' %}?v=frozen-7">{% endblock %}
+{% block breadcrumbs %}<nav class="breadcrumbs" aria-label="{% translate 'Fil d’Ariane' %}"><ol><li><a href="{% url 'core:home' %}">{% translate 'Accueil' %}</a></li>{% if ui_page == 'public' or ui_page == 'gallery' %}<li><a href="{% url 'projects:gallery' %}">{% translate 'Galerie des projets' %}</a></li>{% else %}<li><a href="{% url 'projects:mine' %}">{% translate 'Mes projets' %}</a></li>{% endif %}{% if project %}<li aria-current="page">{% if snapshot %}{{ snapshot.title }}{% else %}{{ project }}{% endif %}</li>{% endif %}</ol></nav>{% endblock %}
+{% block content %}
+<nav class="m3-nav" aria-label="{% translate 'Navigation projets' %}">
+{% if user.is_authenticated %}<a href="{% url 'projects:mine' %}"{% if ui_page == 'mine' %} aria-current="page"{% endif %}>{% translate 'Mes projets' %}</a>{% endif %}
+<a href="{% url 'projects:gallery' %}"{% if ui_page == 'gallery' or ui_page == 'public' %} aria-current="page"{% endif %}>{% translate 'Galerie des projets' %}</a>
+{% if project and ui_page != 'public' %}<a href="{{ project.get_absolute_url }}"{% if ui_page == 'detail' %} aria-current="page"{% endif %}>Project Tracker</a>{% endif %}
+</nav>
+{% block workspace %}{% endblock %}
+{% endblock %}

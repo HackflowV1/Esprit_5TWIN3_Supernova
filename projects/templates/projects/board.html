@@ -1,0 +1,56 @@
+{% load i18n ui %}
+  <section class="m3-board" id="board" aria-labelledby="board-title"{% if board_movable %} data-movable="true"{% endif %} data-saving="{% translate 'Enregistrement du déplacement…' %}" data-save-error="{% translate 'Impossible de confirmer le déplacement. Actualisez le tableau avant de réessayer.' %}">
+    <div class="m3-board-toolbar">
+      <h2 id="board-title">{% icon 'dashboard' 18 %}{% translate 'Tableau du projet' %}</h2>
+      <nav class="m3-board-links" aria-label="{% translate 'Sections du projet' %}">
+        <a href="#project-info">{% icon 'view' 15 %}{% translate 'À propos' %}</a>
+        <a href="#versions">{% icon 'history' 15 %}{% translate 'Versions' %}</a>
+        <a href="#activity">{% icon 'clock' 15 %}{% translate 'Activité' %}</a>
+      </nav>
+    </div>
+    <div class="m3-board-summary">
+      <div class="m3-board-completion"><span class="m3-completion-icon">{% icon 'check' 16 %}</span><span><strong>{{ completed_count }}/{{ milestone_count }}</strong> {% translate 'étapes terminées' %}</span></div>
+      <div class="m3-overall-progress"><label for="project-progress">{% translate 'Progression du tableau' %} <strong>{{ project.progress }} %</strong></label><progress id="project-progress" max="100" value="{{ project.progress }}">{{ project.progress }} %</progress></div>
+    </div>
+
+    {% if project.official_submission_id %}<div class="m3-board-frozen-note">{% icon 'shield' 15 %}<a href="{% url 'projects:version' project.pk project.official_submission.version %}">{% translate 'Version officielle' %} v{{ project.official_submission.version }} · {{ project.official_submission.snapshot.progress }} %</a><span>{% translate 'Valeur figée au dépôt, indépendante du tableau actuel.' %}</span></div>{% endif %}
+    {% if board_movable %}<div class="m3-board-interaction"><p role="status" aria-live="polite" data-board-status>{% translate 'Glissez une étape vers une autre colonne ou utilisez son menu. Le déplacement est enregistré automatiquement.' %}</p></div>{% endif %}
+    <div class="m3-kanban">
+      {% for column in columns %}
+      <section class="m3-column" data-state="{{ column.state }}" aria-labelledby="column-{{ column.state }}">
+        <header class="m3-column-head">
+          <h3 id="column-{{ column.state }}"><span class="m3-state-dot" aria-hidden="true"></span>{{ column.label }} <span class="m3-column-count">{{ column.items|length }}</span></h3>
+          {% if editable %}<a class="icon-button m3-column-add" href="{% url 'projects:milestone-add' project.pk %}?state={{ column.state }}" aria-label="{% blocktranslate with state=column.label %}Ajouter une étape : {{ state }}{% endblocktranslate %}">{% icon 'add' 17 %}</a>{% endif %}
+        </header>
+        <div class="m3-card-list">
+          {% for milestone in column.items %}
+          <article class="m3-milestone" aria-labelledby="milestone-{{ milestone.pk }}" data-milestone="{{ milestone.pk }}"{% if board_movable %} data-move-url="{% url 'projects:milestone-move' project.pk milestone.pk %}"{% endif %}>
+            <div class="m3-card-top">
+              <span class="m3-card-label">{{ column.label }}</span>
+              {% if editable or board_movable %}
+              <details class="m3-card-menu">
+                <summary aria-label="{% blocktranslate with title=milestone.title %}Actions pour {{ title }}{% endblocktranslate %}">{% icon 'menu' 16 %}</summary>
+                <div class="m3-card-menu-panel">
+                  {% if editable %}<a href="{% url 'projects:milestone-edit' project.pk milestone.pk %}">{% icon 'edit' 15 %}{% translate 'Modifier' %}</a>{% endif %}
+                  {% if board_movable %}<form method="post" action="{% url 'projects:milestone-move' project.pk milestone.pk %}" data-milestone-move>{% csrf_token %}{% for target in columns %}{% if target.state != column.state %}<button class="m3-menu-move" type="submit" name="state" value="{{ target.state }}">{% icon 'arrow-right' 14 %}{% blocktranslate with state=target.label %}Déplacer vers {{ state }}{% endblocktranslate %}</button>{% endif %}{% endfor %}</form>{% endif %}
+                  {% if editable %}<form method="post" action="{% url 'projects:milestone-delete' project.pk milestone.pk %}">{% csrf_token %}<button class="m3-menu-delete" type="submit">{% icon 'delete' 15 %}{% translate 'Supprimer' %}</button></form>{% endif %}
+                </div>
+              </details>
+              {% endif %}
+            </div>
+            <h4 id="milestone-{{ milestone.pk }}">{% if editable %}<a href="{% url 'projects:milestone-edit' project.pk milestone.pk %}">{{ milestone.title }}</a>{% else %}{{ milestone.title }}{% endif %}</h4>
+            <progress class="m3-card-progress" max="100" value="{{ milestone.progress }}" aria-label="{% blocktranslate with title=milestone.title %}Progression de {{ title }}{% endblocktranslate %}">{{ milestone.progress }} %</progress>
+            <div class="m3-card-footer">
+              <span class="m3-due{% if milestone.overdue %} is-overdue{% endif %}" title="{{ milestone.due_at }}">{% icon 'calendar' 14 %}<time datetime="{{ milestone.due_at|date:'c' }}">{{ milestone.due_at|date:'j M' }}</time>{% if milestone.overdue %}<span>{% translate 'En retard' %}</span>{% endif %}</span>
+              <span class="m3-card-percent">{% if milestone.state == 'DONE' %}{% icon 'check' 13 %}{% endif %}{{ milestone.progress }} %</span>
+            </div>
+          </article>
+          {% empty %}
+          <div class="m3-column-empty">{% icon 'code' 23 %}<p>{% translate 'Aucune étape pour le moment' %}</p><span>{% translate 'Une place pour votre prochaine avancée.' %}</span></div>
+          {% endfor %}
+        </div>
+        {% if editable %}<a class="m3-add-card" href="{% url 'projects:milestone-add' project.pk %}?state={{ column.state }}">{% icon 'add' 17 %}{% translate 'Ajouter une étape' %}</a>{% endif %}
+      </section>
+      {% endfor %}
+    </div>
+  </section>
