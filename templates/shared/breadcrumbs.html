@@ -8,8 +8,7 @@
 {% if team and ui_page != 'detail' %}<li><a href="{{ team.get_absolute_url }}">{{ team }}</a></li>{% endif %}
 <li aria-current="page">{% if ui_page == 'detail' %}{{ team }}{% else %}{{ page_title }}{% endif %}</li>
 {% elif ui_app == 'mentoring' %}
-{% if ui_page == 'hub' %}<li aria-current="page">{{ page_title }}</li>
-{% elif ui_page == 'support-list' %}<li aria-current="page">{{ page_title }}</li>
+{% if ui_page == 'support-list' %}<li aria-current="page">{{ page_title }}</li>
 {% elif ui_page == 'appointments' %}<li aria-current="page">{{ page_title }}</li>
 {% elif ui_page == 'session-detail' or ui_page == 'session-cancel' %}<li><a href="{% url 'mentoring:appointments' %}">{% translate 'Mes rendez-vous' %}</a></li>{% if ui_page == 'session-cancel' %}<li><a href="{{ session.get_absolute_url }}">{% translate 'Rendez-vous' %}</a></li>{% endif %}<li aria-current="page">{{ page_title }}</li>
 {% elif ui_page == 'support-new' or ui_page == 'support-detail' or ui_page == 'support-cancel' or ui_page == 'support-book' %}<li><a href="{% url 'mentoring:support-list' %}">{% translate 'Assistance' %}</a></li>{% if ui_page == 'support-cancel' or ui_page == 'support-book' %}<li><a href="{{ support_request.get_absolute_url }}">{{ support_request }}</a></li>{% endif %}<li aria-current="page">{% if ui_page == 'support-detail' %}{{ support_request }}{% else %}{{ page_title }}{% endif %}</li>

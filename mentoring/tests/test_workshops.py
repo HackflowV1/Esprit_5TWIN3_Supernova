@@ -132,14 +132,20 @@ class WorkshopServiceTests(WorkshopBase):
         entry = M4History.objects.get(object_type='Workshop', object_id=workshop.pk, action='workshop.published')
         self.assertEqual((entry.actor, entry.details['trainer']), (self.owner, self.trainer.pk))
 
-    def test_only_an_organizer_of_that_hackathon_can_publish(self):
-        for actor in (self.trainer, self.member, self.outsider):
+    def test_only_an_organizer_of_that_hackathon_or_the_trainer_himself_can_publish(self):
+        for actor in (self.member, self.outsider, self.rival):  # the rival is a mentor, but not the trainer
             with self.subTest(actor=actor.username), self.assertRaises(PermissionDenied):
                 self.create(actor=actor)
         other_owner = make_owner('other_owner')
         with self.assertRaises(PermissionDenied):
             self.create(actor=other_owner)
         self.assertFalse(Workshop.objects.exists())
+
+    def test_a_mentor_publishes_his_own_workshop(self):
+        workshop = self.create(actor=self.trainer)
+        self.assertEqual((workshop.trainer, workshop.status), (self.trainer, 'PUBLISHED'))
+        entry = M4History.objects.get(object_type='Workshop', object_id=workshop.pk, action='workshop.published')
+        self.assertEqual((entry.actor, entry.details['as_organizer']), (self.trainer, False))
 
     def test_the_trainer_must_be_a_mentor_of_that_hackathon(self):
         for trainer in (self.member, self.outsider):
@@ -164,9 +170,9 @@ class WorkshopServiceTests(WorkshopBase):
         workshop.refresh_from_db()
         self.assertEqual((workshop.title, workshop.capacity, workshop.start, workshop.trainer), ('Nouveau thème', 8, self.at(3), self.rival))
 
-    def test_the_trainer_and_participants_cannot_edit_or_cancel(self):
+    def test_participants_and_other_mentors_cannot_edit_or_cancel(self):
         workshop = self.make()
-        for actor in (self.trainer, self.member):
+        for actor in (self.rival, self.member, self.outsider):
             with self.subTest(actor=actor.username):
                 with self.assertRaises(PermissionDenied):
                     services.update_workshop(actor=actor, workshop=workshop, trainer=self.trainer, **self.data(title='Piraté'))
@@ -174,6 +180,17 @@ class WorkshopServiceTests(WorkshopBase):
                     services.cancel_workshop(actor=actor, workshop=workshop)
         workshop.refresh_from_db()
         self.assertEqual((workshop.title, workshop.status), ('Atelier API Django', 'PUBLISHED'))
+
+    def test_the_trainer_edits_and_cancels_his_own_workshop_but_cannot_hand_it_over(self):
+        workshop = self.make()
+        with self.assertRaises(PermissionDenied):
+            services.update_workshop(actor=self.trainer, workshop=workshop, trainer=self.rival, **self.data())
+        services.update_workshop(actor=self.trainer, workshop=workshop, trainer=self.trainer, **self.data(title='Nouveau titre'))
+        workshop.refresh_from_db()
+        self.assertEqual((workshop.title, workshop.trainer), ('Nouveau titre', self.trainer))
+        services.cancel_workshop(actor=self.trainer, workshop=workshop)
+        workshop.refresh_from_db()
+        self.assertEqual(workshop.status, 'CANCELLED')
 
     def test_update_cannot_create_an_overlap(self):
         self.make(start=self.at(1), end=self.at(2))
@@ -252,9 +269,9 @@ class WorkshopViewTests(WorkshopBase):
         self.assertContains(self.client.get(workshop.get_absolute_url()), 'Cet atelier a été annulé')
         self.assertNotContains(self.client.get(self.list_url), 'Atelier API Django')
 
-    def test_only_organizers_get_the_management_urls(self):
+    def test_participants_get_no_management_url(self):
         workshop = self.make()
-        for user in (self.member, self.trainer, self.outsider):
+        for user in (self.member, self.outsider):
             self.client.force_login(user)
             with self.subTest(user=user.username):
                 for name in ('edit', 'cancel'):
@@ -264,6 +281,22 @@ class WorkshopViewTests(WorkshopBase):
                 self.assertEqual(self.client.post(reverse('mentoring:workshop-cancel', args=[workshop.pk])).status_code, 403)
         self.assertEqual(Workshop.objects.count(), 1)
         self.assertNotContains(self.client.get(self.list_url), 'Publier un atelier')
+
+    def test_another_mentor_cannot_touch_the_workshop_of_a_colleague(self):
+        workshop = self.make()
+        self.client.force_login(self.rival)
+        for name in ('edit', 'cancel'):
+            self.assertEqual(self.client.get(reverse('mentoring:workshop-' + name, args=[workshop.pk])).status_code, 404)
+        self.assertEqual(self.client.post(reverse('mentoring:workshop-cancel', args=[workshop.pk])).status_code, 404)
+
+    def test_a_mentor_publishes_for_himself_from_the_list(self):
+        self.client.force_login(self.trainer)
+        self.assertContains(self.client.get(self.list_url), 'Publier un atelier')
+        self.assertEqual(self.client.get(self.add_url).status_code, 200)
+        self.assertEqual(self.post().status_code, 302)
+        self.assertEqual(Workshop.objects.get().trainer, self.trainer)
+        self.assertEqual(self.post(trainer=self.rival, title='Autre').status_code, 200)  # a mentor cannot pick a colleague
+        self.assertEqual(Workshop.objects.count(), 1)
 
     def test_another_organizer_cannot_manage_this_edition(self):
         workshop = self.make()
@@ -336,13 +369,16 @@ class WorkshopViewTests(WorkshopBase):
         workshop.refresh_from_db()
         self.assertEqual(workshop.title, 'Atelier API Django')
 
-    def test_the_trainer_sees_his_workshops_without_management_buttons(self):
+    def test_the_trainer_manages_his_workshop_but_a_colleague_does_not(self):
         workshop = self.make()
+        edit = reverse('mentoring:workshop-edit', args=[workshop.pk])
         self.client.force_login(self.trainer)
         page = self.client.get(self.list_url)
         self.assertContains(page, 'Les ateliers que j’anime')
-        self.assertNotContains(page, reverse('mentoring:workshop-edit', args=[workshop.pk]))
-        self.assertNotContains(self.client.get(workshop.get_absolute_url()), reverse('mentoring:workshop-edit', args=[workshop.pk]))
+        self.assertContains(page, edit)
+        self.assertContains(self.client.get(workshop.get_absolute_url()), edit)
+        self.client.force_login(self.rival)
+        self.assertNotContains(self.client.get(workshop.get_absolute_url()), edit)
 
     def test_navigation_links(self):
         hub = reverse('mentoring:hub')

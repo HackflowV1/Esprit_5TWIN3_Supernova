@@ -147,10 +147,10 @@ class MentorSpaceTests(TestCase):
 
     def test_mentor_tabs_are_shown_only_to_mentors(self):
         self.client.force_login(self.member)
-        page = self.client.get(reverse('mentoring:hub'))
+        page = self.client.get(reverse('mentoring:workshop-list'))
         self.assertNotContains(page, reverse('mentoring:expertise-list'))
         self.assertNotContains(page, reverse('mentoring:slot-list'))
         self.client.force_login(self.mentor)
-        page = self.client.get(reverse('mentoring:hub'))
+        page = self.client.get(reverse('mentoring:workshop-list'))
         self.assertContains(page, reverse('mentoring:expertise-list'))
         self.assertContains(page, reverse('mentoring:slot-list'))

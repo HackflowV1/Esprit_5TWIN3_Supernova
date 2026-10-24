@@ -16,7 +16,7 @@
 <h3 id="day-{{ group.day|date:'Ymd' }}">{{ group.day|date:'l j F Y'|capfirst }}</h3>
 <div class="grid">
 {% for workshop in group.workshops %}
-<article class="card">
+<article class="card m4-tone--{% if workshop.is_registered %}published{% elif workshop.seats_left == 0 %}withdrawn{% else %}ongoing{% endif %}">
 <p class="m4-eyebrow">{{ workshop.hackathon }}</p>
 <h4 class="m4-card-title"><a href="{{ workshop.get_absolute_url }}">{{ workshop.title }}</a></h4>
 <p class="m4-info">
@@ -41,6 +41,7 @@
 {% if can_create %}<a class="button" href="{% url 'mentoring:workshop-add' %}">{% icon 'add' %}{% translate 'Publier un atelier' %}</a>{% endif %}
 </div>
 {% endfor %}
+{% translate 'À venir' as pager_name %}{% include 'mentoring/_pager.html' with page=upcoming name=pager_name %}
 </section>
 
 {% if is_trainer %}
@@ -48,7 +49,7 @@
 <h2 id="mine-title">{% translate 'Les ateliers que j’anime' %}</h2>
 <ul class="m4-list">
 {% for workshop in led %}
-<li class="m4-item">
+<li class="m4-item m4-tone--{% if workshop.status == 'CANCELLED' %}withdrawn{% elif workshop.end <= now %}finished{% else %}published{% endif %}">
 <div class="m4-time"><a href="{{ workshop.get_absolute_url }}">{{ workshop.title }}</a><br><span class="muted"><time datetime="{{ workshop.start|date:'c' }}">{{ workshop.start|date:'d/m/Y H:i' }}</time></span></div>
 <div class="m4-info"><span>{{ workshop.hackathon }}</span>
 <span class="muted">{% blocktranslate count total=workshop.registered %}{{ total }} inscrit{% plural %}{{ total }} inscrits{% endblocktranslate %}</span>
@@ -56,10 +57,13 @@
 {% elif workshop.end <= now %}<span class="badge badge--finished">{% translate 'Passé' %}</span>
 {% else %}<span class="badge badge--published">{% translate 'Publié' %}</span>{% endif %}
 </div>
-<div class="m4-actions"><a class="button small secondary" href="{{ workshop.get_absolute_url }}">{% translate 'Ouvrir' %}<span class="visually-hidden"> {{ workshop.title }}</span></a></div>
+<div class="m4-actions"><a class="button small secondary" href="{{ workshop.get_absolute_url }}">{% translate 'Ouvrir' %}<span class="visually-hidden"> {{ workshop.title }}</span></a>
+{% if workshop.status == 'PUBLISHED' and workshop.start > now %}<a class="button small secondary" href="{% url 'mentoring:workshop-edit' workshop.pk %}">{% icon 'edit' %}{% translate 'Modifier' %}<span class="visually-hidden"> {{ workshop.title }}</span></a>
+<a class="link-danger" href="{% url 'mentoring:workshop-cancel' workshop.pk %}">{% translate 'Annuler' %}<span class="visually-hidden"> {{ workshop.title }}</span></a>{% endif %}</div>
 </li>
 {% empty %}<li class="m4-empty">{% translate 'Vous n’animez aucun atelier pour l’instant.' %}</li>{% endfor %}
 </ul>
+{% translate 'Les ateliers que j’anime' as pager_name %}{% include 'mentoring/_pager.html' with page=led name=pager_name %}
 </section>
 {% endif %}
 
@@ -85,6 +89,7 @@
 </li>
 {% empty %}<li class="m4-empty">{% translate 'Aucun atelier dans vos éditions pour l’instant.' %}</li>{% endfor %}
 </ul>
+{% translate 'Les ateliers de mes éditions' as pager_name %}{% include 'mentoring/_pager.html' with page=managed name=pager_name %}
 </section>
 {% endif %}
 {% endblock %}

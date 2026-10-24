@@ -254,6 +254,23 @@ class SupportRequest(ValidatedModel):
     def priority_badge(self):
         return self.priority.lower()
 
+    @property
+    def tone(self):
+        """The colour family of a row: a critical open request stands out, otherwise the status decides."""
+        if self.priority == self.Priority.CRITICAL and self.is_active:
+            return 'critical'
+        return self.status_badge
+
+    def flow_steps(self):
+        """The four steps of the help flow with their state (done / current / todo); none once cancelled."""
+        if self.status == self.Status.CANCELLED:
+            return []
+        done = {'OPEN': 1, 'BOOKED': 2, 'IN_PROGRESS': 3, 'RESOLVED': 4}[self.status]
+        labels = [_('Demande ouverte'), _('Rendez-vous réservé'), _('Séance terminée'), _('Problème résolu')]
+        return [{'number': number, 'label': label,
+                 'state': 'done' if number <= done else 'current' if number == done + 1 else 'todo'}
+                for number, label in enumerate(labels, 1)]
+
     def get_absolute_url(self):
         return reverse('mentoring:support-detail', kwargs={'pk': self.pk})
 
@@ -312,6 +329,10 @@ class MentoringSession(ValidatedModel):
     @property
     def status_badge(self):
         return {'BOOKED': 'ongoing', 'COMPLETED': 'published', 'CANCELLED': 'withdrawn'}[self.status]
+
+    @property
+    def tone(self):
+        return self.status_badge
 
     def get_absolute_url(self):
         return reverse('mentoring:session-detail', kwargs={'pk': self.pk})

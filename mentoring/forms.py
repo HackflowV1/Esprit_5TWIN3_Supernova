@@ -6,7 +6,7 @@ from accounts.models import AssignmentStatus, Role, Skill, User
 from hackathons.models import Hackathon
 from teams.models import Team
 from .models import MentorExpertise, MentorSlot, SupportRequest, Workshop
-from .services import mentor_open_hackathons, organizer_open_hackathons, requestable_teams, workshop_trainers
+from .services import mentor_open_hackathons, publishable_hackathons, requestable_teams, trainer_choices
 
 LEVELS = [(1, _('1 – Débutant')), (2, _('2 – Notions solides')), (3, _('3 – Intermédiaire')), (4, _('4 – Avancé')), (5, _('5 – Expert'))]
 DATETIME = forms.DateTimeInput(format='%Y-%m-%dT%H:%M', attrs={'type': 'datetime-local'})
@@ -70,13 +70,15 @@ class WorkshopForm(forms.Form):
 
     def __init__(self, *args, user, workshop=None, **kwargs):
         super().__init__(*args, **kwargs)
-        self.fields['hackathon'].queryset = organizer_open_hackathons(user)
-        self.fields['trainer'].queryset = workshop_trainers(user)
+        self.fields['hackathon'].queryset = publishable_hackathons(user)
+        self.fields['trainer'].queryset = trainer_choices(user)
+        if workshop is None and self.fields['trainer'].queryset.filter(pk=user.pk).exists():
+            self.fields['trainer'].initial = user.pk  # a mentor publishes for himself by default
         self.fields['trainer'].label_from_instance = lambda mentor: mentor.get_full_name() or mentor.username
         if workshop is not None:
             # A workshop never moves to another hackathon; its trainer must be one of that edition's mentors.
             self.fields['hackathon'].disabled = True
-            self.fields['trainer'].queryset = workshop_trainers(user).filter(
+            self.fields['trainer'].queryset = trainer_choices(user).filter(
                 role_assignments__hackathon=workshop.hackathon, role_assignments__role=Role.MENTOR,
                 role_assignments__status=AssignmentStatus.ACTIVE)
             self.initial = {name: getattr(workshop, name) for name in

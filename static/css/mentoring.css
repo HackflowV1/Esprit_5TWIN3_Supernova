@@ -111,13 +111,50 @@
 .m4-mentor .chips { margin: 0; }
 .m4-radios { border: 0; padding: 0; margin: 0 0 16px; }
 .m4-radios legend { font-weight: 600; margin-bottom: 8px; padding: 0; }
-.m4-radios label { display: flex; gap: 10px; align-items: center; padding: 6px 0; font-weight: 400; }
+.m4-radios > div { display: flex; flex-wrap: wrap; gap: 10px; }
+.m4-radios > div > div { flex: 1 1 150px; }
+.m4-radios.field label { display: flex; gap: 10px; align-items: center; margin: 0; padding: 12px 14px; min-height: 48px;
+  border: 1px solid var(--control); border-radius: var(--radius); background: var(--surface); font-weight: 500; cursor: pointer; }
+.m4-radios.field label:hover { border-color: var(--primary); }
+.m4-radios.field input[type="radio"] { flex: none; width: 20px; min-height: 20px; margin: 0; padding: 0; }
+.m4-radios.field label:has(input:checked) { border-color: var(--primary); background: var(--brand-soft); box-shadow: 0 0 0 2px var(--brand-soft-border); }
+.m4-radios.field label:has(input:focus-visible) { outline: 3px solid var(--primary); outline-offset: 2px; }
 .m4-inline { display: inline-flex; gap: 8px; }
 .m4-attend { grid-template-columns: minmax(0, 1.5fr) auto auto; }
+
+/* Colours that carry a meaning (always doubled by a written label): a stripe per state. */
+.m4-item[class*="m4-tone--"], .card[class*="m4-tone--"] { border-left: 5px solid var(--control); }
+.m4-tone--proposed { border-left-color: var(--warning) !important; }     /* open: to handle */
+.m4-tone--ongoing { border-left-color: var(--primary) !important; }      /* booked */
+.m4-tone--approved { border-left-color: var(--accent) !important; }      /* in progress */
+.m4-tone--published { border-left-color: var(--success) !important; }    /* done / confirmed */
+.m4-tone--critical { border-left-color: var(--danger) !important; background: var(--danger-soft); }
+.m4-prio--high { background: var(--warning-soft); }
+.m4-prio--critical { background: var(--danger-soft); }
+.m4-stats li:nth-child(1) { border-top: 4px solid var(--primary); }
+.m4-stats li:nth-child(2) { border-top: 4px solid var(--danger); }
+.m4-stats li:nth-child(3) { border-top: 4px solid var(--warning); }
+
+/* The help flow: four steps, the current one highlighted. */
+.m4-flow { list-style: none; margin: 0 0 28px; padding: 0; display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); }
+.m4-flow-step { position: relative; display: flex; flex-direction: column; align-items: center; gap: 8px; padding: 0 6px; text-align: center; color: var(--muted); }
+.m4-flow-step::before { content: ""; position: absolute; top: 17px; right: 50%; width: 100%; height: 3px; background: var(--line); }
+.m4-flow-step:first-child::before { display: none; }
+.m4-flow-dot { position: relative; z-index: 1; display: grid; place-items: center; width: 36px; height: 36px; border-radius: 50%; border: 2px solid var(--control); background: var(--surface); font-weight: 700; }
+.m4-flow-step--done, .m4-flow-step--current { color: var(--ink); }
+.m4-flow-step--done::before, .m4-flow-step--current::before { background: var(--success); }
+.m4-flow-step--done .m4-flow-dot { background: var(--success); border-color: var(--success); color: var(--surface); }
+.m4-flow-step--current .m4-flow-label { font-weight: 700; }
+.m4-flow-step--current .m4-flow-dot { border-color: var(--primary); background: var(--brand-soft); color: var(--accent); box-shadow: 0 0 0 4px var(--brand-soft-border); }
+.m4-flow-cancelled { display: flex; gap: 8px; align-items: center; padding: 12px 16px; margin: 0 0 24px; border-radius: var(--radius); background: var(--raised); color: var(--muted); font-weight: 600; }
+.m4-workspace .pagination { margin: 16px 0 0; }
 
 @media (max-width: 860px) {
   .m4-detail { grid-template-columns: minmax(0, 1fr); }
   .m4-item { grid-template-columns: minmax(0, 1fr); }
   .m4-request, .m4-pick, .m4-attend { grid-template-columns: minmax(0, 1fr); }
+  .m4-flow { grid-template-columns: minmax(0, 1fr); gap: 12px; }
+  .m4-flow-step { flex-direction: row; text-align: left; }
+  .m4-flow-step::before { display: none; }
   .m4-actions { justify-content: flex-start; }
 }

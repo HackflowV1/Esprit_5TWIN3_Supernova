@@ -2,6 +2,7 @@ from django.contrib import messages
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.messages.views import SuccessMessageMixin
 from django.core.exceptions import PermissionDenied, ValidationError
+from django.core.paginator import Paginator
 from django.db.models import Count, Q
 from django.shortcuts import get_object_or_404, redirect, render
 from django.urls import reverse, reverse_lazy
@@ -20,6 +21,21 @@ from .forms import (FeedbackForm, MentorExpertiseForm, SessionReportForm, SkillF
 from .models import (M4History, MentoringSession, MentorExpertise, MentorSlot, SupportRequest, Workshop,
     WorkshopRegistration)
 from .permissions import MentorRequiredMixin, is_mentor
+
+
+def paginate(request, items, per_page=10, param='page'):
+    """One page of a list; each list of a screen has its own query parameter so several can coexist.
+    The page carries ready-made `prev_url` / `next_url` that keep the other parameters of the address."""
+    page = Paginator(items, per_page).get_page(request.GET.get(param))
+
+    def url(number):
+        query = request.GET.copy()
+        query[param] = number
+        return '?' + query.urlencode()
+
+    page.prev_url = url(page.previous_page_number()) if page.has_previous() else None
+    page.next_url = url(page.next_page_number()) if page.has_next() else None
+    return page
 
 
 def group_by_day(items, attr='start'):
@@ -86,10 +102,11 @@ class SlotListView(MentorRequiredMixin, TemplateView):
         context = super().get_context_data(**kwargs)
         now = timezone.now()
         own = MentorSlot.objects.filter(mentor=self.request.user).select_related('hackathon').prefetch_related('sessions')
-        upcoming = list(own.filter(end__gt=now, withdrawn_at__isnull=True).order_by('start'))
-        context['days'] = [{'day': g['day'], 'slots': g['items']} for g in group_by_day(upcoming)]
-        context['upcoming_count'] = len(upcoming)
-        context['history'] = own.filter(Q(end__lte=now) | Q(withdrawn_at__isnull=False)).order_by('-start')[:15]
+        upcoming = paginate(self.request, own.filter(end__gt=now, withdrawn_at__isnull=True).order_by('start'), 15, 'page_up')
+        context['days'] = [{'day': g['day'], 'slots': g['items']} for g in group_by_day(list(upcoming))]
+        context['upcoming'] = upcoming
+        context['upcoming_count'] = upcoming.paginator.count
+        context['history'] = paginate(self.request, own.filter(Q(end__lte=now) | Q(withdrawn_at__isnull=False)).order_by('-start'), 10, 'page_past')
         context['can_create'] = services.mentor_open_hackathons(self.request.user).exists()
         return context
 
@@ -172,14 +189,14 @@ def error_text(exc):
     return str(exc) or _('Action non autorisée.')
 
 
-class OrganizerRequiredMixin(LoginRequiredMixin):
-    """Workshops are published and managed by the organizers of an edition."""
+class PublisherRequiredMixin(LoginRequiredMixin):
+    """Workshops are published by the mentor who leads them, or by an organizer of the edition."""
 
     def dispatch(self, request, *args, **kwargs):
         if not request.user.is_authenticated:
             return self.handle_no_permission()
-        if not services.organized_hackathons(request.user).exists():
-            raise PermissionDenied(_('Rôle organisateur requis.'))
+        if not (is_mentor(request.user) or services.organized_hackathons(request.user).exists()):
+            raise PermissionDenied(_('Seuls un mentor ou un organisateur peuvent gérer les ateliers.'))
         return super().dispatch(request, *args, **kwargs)
 
 
@@ -191,8 +208,8 @@ class WorkshopListView(LoginRequiredMixin, TemplateView):
         context = super().get_context_data(**kwargs)
         user, now = self.request.user, timezone.now()
         registered = Count('registrations', filter=Q(registrations__status=WorkshopRegistration.Status.REGISTERED), distinct=True)
-        upcoming = list(services.visible_workshops(user).annotate(registered=registered).filter(
-            status=Workshop.Status.PUBLISHED, end__gt=now).order_by('start'))
+        upcoming = paginate(self.request, services.visible_workshops(user).annotate(registered=registered).filter(
+            status=Workshop.Status.PUBLISHED, end__gt=now).order_by('start'), 12, 'page_up')
         mine = set(WorkshopRegistration.objects.filter(registration__user=user,
             status=WorkshopRegistration.Status.REGISTERED).values_list('workshop_id', flat=True))
         for workshop in upcoming:
@@ -200,11 +217,11 @@ class WorkshopListView(LoginRequiredMixin, TemplateView):
             workshop.is_registered = workshop.pk in mine
         organizer = services.organized_hackathons(user)
         context.update(
-            days=[{'day': g['day'], 'workshops': g['items']} for g in group_by_day(upcoming)],
-            upcoming_count=len(upcoming), is_trainer=is_mentor(user), now=now,
-            led=Workshop.objects.filter(trainer=user).select_related('hackathon').annotate(registered=registered).order_by('-start')[:20],
-            managed=Workshop.objects.filter(hackathon__in=organizer).select_related('hackathon', 'trainer').annotate(registered=registered).order_by('-start')[:30],
-            is_organizer=organizer.exists(), can_create=services.organizer_open_hackathons(user).exists())
+            days=[{'day': g['day'], 'workshops': g['items']} for g in group_by_day(list(upcoming))],
+            upcoming=upcoming, upcoming_count=upcoming.paginator.count, is_trainer=is_mentor(user), now=now,
+            led=paginate(self.request, Workshop.objects.filter(trainer=user).select_related('hackathon').annotate(registered=registered).order_by('-start'), 8, 'page_led'),
+            managed=paginate(self.request, Workshop.objects.filter(hackathon__in=organizer).select_related('hackathon', 'trainer').annotate(registered=registered).order_by('-start'), 8, 'page_managed'),
+            is_organizer=organizer.exists(), can_create=services.publishable_hackathons(user).exists())
         return context
 
 
@@ -232,7 +249,7 @@ class WorkshopDetailView(LoginRequiredMixin, DetailView):
             has_registration=bool(team_services.accepted_registration(user, event)),
             can_register=bool(team_services.accepted_registration(user, event)) and open_for_changes and not is_registered and free > 0,
             can_unregister=is_registered and workshop.start > now,
-            can_edit=is_organizer and open_for_changes,
+            can_edit=(is_organizer or is_trainer) and open_for_changes,
             show_participants=show_participants,
             attendance_open=show_participants and workshop.status == Workshop.Status.PUBLISHED and workshop.start <= now,
             rows=workshop.registrations.filter(status=WorkshopRegistration.Status.REGISTERED).select_related('registration__user').order_by('registration__user__username') if show_participants else [])
@@ -282,7 +299,7 @@ class WorkshopAttendanceView(WorkshopPostView):
         services.mark_attendance(actor=self.request.user, workshop_registration=row, attendance=self.request.POST.get('attendance', ''))
 
 
-class WorkshopFormMixin(OrganizerRequiredMixin, FormView):
+class WorkshopFormMixin(PublisherRequiredMixin, FormView):
     form_class = WorkshopForm
     template_name = 'shared/form.html'
 
@@ -325,18 +342,18 @@ class WorkshopUpdateView(WorkshopFormMixin):
 
     def get_workshop(self):
         if not hasattr(self, '_workshop'):
-            self._workshop = get_object_or_404(Workshop, pk=self.kwargs['pk'], hackathon__in=services.organized_hackathons(self.request.user))
+            self._workshop = get_object_or_404(services.manageable_workshops(self.request.user), pk=self.kwargs['pk'])
         return self._workshop
 
     def run(self, form):
         return services.update_workshop(actor=self.request.user, workshop=self.get_workshop(), **self.workshop_fields(form))
 
 
-class WorkshopCancelView(OrganizerRequiredMixin, View):
+class WorkshopCancelView(PublisherRequiredMixin, View):
     template_name = 'mentoring/workshop_cancel.html'
 
     def get_workshop(self):
-        return get_object_or_404(Workshop, pk=self.kwargs['pk'], hackathon__in=services.organized_hackathons(self.request.user))
+        return get_object_or_404(services.manageable_workshops(self.request.user), pk=self.kwargs['pk'])
 
     def get(self, request, *args, **kwargs):
         return render(request, self.template_name, {'workshop': self.get_workshop()})
@@ -359,9 +376,13 @@ class SupportListView(LoginRequiredMixin, TemplateView):
         context = super().get_context_data(**kwargs)
         user = self.request.user
         by_priority = {'rank': services.PRIORITY_RANK}
-        mine = list(services.team_requests(user).annotate(**by_priority).order_by('rank', '-created_at')[:50])
-        coached = list(services.coached_requests(user).annotate(**by_priority).order_by('rank', '-created_at')[:50])
-        insights = [services.support_insights(event) for event in services.organized_hackathons(user).order_by('-start_date')[:10]]
+        mine = paginate(self.request, services.team_requests(user).annotate(**by_priority).order_by('rank', '-created_at'), 8, 'page_mine')
+        coached = paginate(self.request, services.coached_requests(user).annotate(**by_priority).order_by('rank', '-created_at'), 8, 'page_coached')
+        insights = []
+        for event in services.organized_hackathons(user).order_by('-start_date')[:10]:
+            block = services.support_insights(event)
+            block['requests_page'] = paginate(self.request, block['requests'], 8, f'page_event{event.pk}')
+            insights.append(block)
         context.update(my_requests=mine, coached_requests=coached, insights=insights, is_trainer=is_mentor(user),
             can_ask=bool(services.requestable_teams(user)),
             has_team=Team.objects.filter(closed_at__isnull=True, memberships__ended_at__isnull=True,
@@ -478,10 +499,12 @@ class AppointmentsView(LoginRequiredMixin, TemplateView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         now = timezone.now()
-        sessions = list(services.visible_sessions(self.request.user).order_by('-slot__start')[:100])
+        sessions = list(services.visible_sessions(self.request.user).order_by('-slot__start')[:300])
         upcoming = sorted((s for s in sessions if s.status == MentoringSession.Status.BOOKED and s.slot.end > now),
             key=lambda s: s.slot.start)
-        context.update(upcoming=upcoming, past=[s for s in sessions if s not in upcoming], is_trainer=is_mentor(self.request.user))
+        past = [s for s in sessions if s not in upcoming]
+        context.update(upcoming=paginate(self.request, upcoming, 10, 'page_up'), past=paginate(self.request, past, 10, 'page_past'),
+            is_trainer=is_mentor(self.request.user))
         return context
 
 
@@ -565,27 +588,20 @@ class SessionCancelView(VisibleSessionMixin, View):
         return redirect(session)
 
 
-# -------------------------------------------------------------- hub (home)
-class MentoringHomeView(LoginRequiredMixin, TemplateView):
-    """One page that explains what the module is for, whatever the role, and what to do next."""
-    template_name = 'mentoring/home.html'
+# ------------------------------------------------------------- menu entry
+class MentoringEntryView(LoginRequiredMixin, View):
+    """The "Mentorat" menu entry opens the page of the user's own role: no intermediate page to read."""
 
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        user, now = self.request.user, timezone.now()
-        mentor = is_mentor(user)
-        context.update(
-            is_trainer=mentor,
-            can_ask=bool(services.requestable_teams(user)),
-            has_team=Team.objects.filter(closed_at__isnull=True, memberships__ended_at__isnull=True,
-                memberships__registration__user=user).exists(),
-            is_organizer=services.organized_hackathons(user).exists(),
-            can_publish_workshop=services.organizer_open_hackathons(user).exists(),
-            has_role=user.is_superuser or RoleAssignment.objects.filter(user=user, status=AssignmentStatus.ACTIVE).exists(),
-            active_requests=services.team_requests(user).filter(status__in=SupportRequest.ACTIVE_STATUSES).count(),
-            coached_count=services.coached_requests(user).count() if mentor else 0,
-            slot_count=MentorSlot.objects.published().filter(mentor=user, end__gt=now).count() if mentor else 0,
-            workshop_count=services.visible_workshops(user).filter(status=Workshop.Status.PUBLISHED, end__gt=now).count(),
-            appointment_count=services.visible_sessions(user).filter(status=MentoringSession.Status.BOOKED, slot__end__gt=now).count(),
-        )
-        return context
+    def get(self, request, *args, **kwargs):
+        user = request.user
+        in_team = Team.objects.filter(closed_at__isnull=True, memberships__ended_at__isnull=True,
+            memberships__registration__user=user).exists()
+        if in_team:
+            name = 'mentoring:support-list'
+        elif is_mentor(user):
+            name = 'mentoring:appointments'
+        elif services.organized_hackathons(user).exists():
+            name = 'mentoring:support-list'
+        else:
+            name = 'mentoring:workshop-list'
+        return redirect(name)

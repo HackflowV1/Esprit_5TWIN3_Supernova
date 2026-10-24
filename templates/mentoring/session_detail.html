@@ -11,6 +11,8 @@
 {% if can_cancel %}<a class="button secondary" href="{% url 'mentoring:session-cancel' session.pk %}">{% icon 'close' %}{% translate 'Annuler le rendez-vous' %}</a>{% endif %}
 </header>
 
+{% include 'mentoring/_flow.html' %}
+
 <div class="m4-detail">
 <div>
 {% if session.status == 'BOOKED' %}

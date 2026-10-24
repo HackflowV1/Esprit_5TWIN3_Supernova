@@ -9,9 +9,10 @@
 </header>
 
 <section aria-labelledby="upcoming-title">
-<h2 id="upcoming-title">{% translate 'À venir' %} <span class="m4-count">{{ upcoming|length }}</span></h2>
+<h2 id="upcoming-title">{% translate 'À venir' %} <span class="m4-count">{{ upcoming.paginator.count }}</span></h2>
 {% if upcoming %}
 <ul class="m4-list">{% for item in upcoming %}{% include 'mentoring/_session_row.html' %}{% endfor %}</ul>
+{% translate 'À venir' as pager_name %}{% include 'mentoring/_pager.html' with page=upcoming name=pager_name %}
 {% else %}
 <div class="m4-empty">
 <h3>{% translate 'Aucun rendez-vous à venir' %}</h3>
@@ -25,6 +26,7 @@
 <section aria-labelledby="past-title">
 <h2 id="past-title">{% translate 'Passés et annulés' %}</h2>
 <ul class="m4-list">{% for item in past %}{% include 'mentoring/_session_row.html' %}{% endfor %}</ul>
+{% translate 'Passés et annulés' as pager_name %}{% include 'mentoring/_pager.html' with page=past name=pager_name %}
 </section>
 {% endif %}
 {% endblock %}

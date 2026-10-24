@@ -23,7 +23,7 @@
 <h3 id="day-{{ group.day|date:'Ymd' }}">{{ group.day|date:'l j F Y'|capfirst }}</h3>
 <ul class="m4-list">
 {% for slot in group.slots %}
-<li class="m4-item">
+<li class="m4-item m4-tone--{% if slot.availability == 'BOOKED' %}ongoing{% else %}published{% endif %}">
 <div class="m4-time">
 <time datetime="{{ slot.start|date:'c' }}">{{ slot.start|date:'H:i' }}</time>
 <span aria-hidden="true">→</span><span class="visually-hidden"> {% translate 'jusqu’à' %} </span>
@@ -48,6 +48,7 @@
 {% if can_create %}<a class="button" href="{% url 'mentoring:slot-add' %}">{% icon 'add' %}{% translate 'Publier mon premier créneau' %}</a>{% endif %}
 </div>
 {% endfor %}
+{% translate 'À venir' as pager_name %}{% include 'mentoring/_pager.html' with page=upcoming name=pager_name %}
 </section>
 
 {% if history %}
@@ -61,6 +62,7 @@
 </li>
 {% endfor %}
 </ul>
+{% translate 'Passés et annulés' as pager_name %}{% include 'mentoring/_pager.html' with page=history name=pager_name %}
 </section>
 {% endif %}
 {% endblock %}

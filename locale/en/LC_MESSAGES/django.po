@@ -5103,3 +5103,41 @@ msgid "%(total)s rendez-vous à venir."
 msgid_plural "%(total)s rendez-vous à venir."
 msgstr[0] "%(total)s upcoming appointment."
 msgstr[1] "%(total)s upcoming appointments."
+
+# --- M4 : simplification du parcours (ateliers publiés par le mentor, étapes) ---
+
+#: mentoring/_flow.html
+msgid "Progression de la demande"
+msgstr "Request progress"
+
+#: mentoring/services.py
+msgid "Seul un organisateur peut confier l’atelier à un autre mentor."
+msgstr "Only an organizer can hand the workshop over to another mentor."
+
+#: mentoring/services.py
+msgid "Seul un organisateur, ou le formateur lui-même, peut publier cet atelier."
+msgstr "Only an organizer, or the trainer himself, can publish this workshop."
+
+#: mentoring/views.py
+msgid "Seuls un mentor ou un organisateur peuvent gérer les ateliers."
+msgstr "Only a mentor or an organizer can manage workshops."
+
+#: mentoring/services.py
+msgid "Seuls un organisateur ou le formateur peuvent annuler cet atelier."
+msgstr "Only an organizer or the trainer can cancel this workshop."
+
+#: mentoring/services.py
+msgid "Seuls un organisateur ou le formateur peuvent modifier cet atelier."
+msgstr "Only an organizer or the trainer can edit this workshop."
+
+#: mentoring/_flow.html
+msgid "terminé"
+msgstr "done"
+
+#: mentoring/_flow.html
+msgid "à venir"
+msgstr "upcoming"
+
+#: mentoring/_flow.html
+msgid "étape en cours"
+msgstr "current step"

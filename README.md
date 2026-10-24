@@ -86,7 +86,7 @@ l’événement et un partenariat confirmé. L’organisateur valide puis publie
 
 - M4 : assistance, mentorat et ateliers : demandes d'aide des équipes, expertises et créneaux
   des mentors, réservation sans double réservation, séance avec compte rendu, retour de l'équipe
-  et résolution, ateliers publiés par l'organisateur avec inscriptions individuelles, capacité
+  et résolution, ateliers publiés par le mentor ou l'organisateur avec inscriptions individuelles, capacité
   garantie et relevé de présence.
 
 Les domaines M3, M5 et les moteurs IA ne sont pas implémentés dans cette livraison.

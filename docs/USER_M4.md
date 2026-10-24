@@ -4,8 +4,11 @@
 
 Une équipe bloquée demande de l'aide, son capitaine réserve un mentor, le mentor anime la séance et écrit
 un compte rendu, l'équipe dit si le problème est résolu. À côté, des ateliers animés par des mentors.
-Le menu principal n'a qu'une entrée, **Mentorat** ; les onglets du module sont :
-Vue d'ensemble · Assistance · Mes rendez-vous · Ateliers · (mentor) Mes expertises · Mes créneaux.
+Le menu principal n'a qu'une entrée, **Mentorat**, qui ouvre directement la page de votre rôle (équipe : Assistance ;
+mentor : Mes rendez-vous ; sinon : Ateliers). Il n'y a pas de page d'ensemble. Les onglets du module n'affichent que
+ce qui vous concerne : Assistance (équipe ou organisateur) · Mes rendez-vous · Ateliers · (mentor) Mes expertises · Mes créneaux.
+Les longues listes sont paginées. Chaque demande affiche un fil en 4 étapes (Demande ouverte → Rendez-vous réservé →
+Séance terminée → Problème résolu) avec l'étape en cours ; les couleurs sont toujours doublées d'un texte.
 
 ## Qui fait quoi
 
@@ -13,8 +16,8 @@ Vue d'ensemble · Assistance · Mes rendez-vous · Ateliers · (mentor) Mes expe
 |---|---|
 | **Membre d'une équipe** | Ouvre une demande d'aide (même si l'équipe est incomplète), suit sa demande, donne son retour après la séance. |
 | **Capitaine** | Réserve et annule le rendez-vous au nom de l'équipe. |
-| **Mentor** | Déclare ses expertises, publie ses créneaux, écrit le compte rendu, peut annuler un rendez-vous avant son début. |
-| **Organisateur** | Publie les ateliers (en choisissant un mentor formateur), suit les blocages critiques et les compétences redemandées, peut intervenir sur une réservation (l'action est tracée). |
+| **Mentor** | Déclare ses expertises, publie ses créneaux, **publie, modifie et annule ses propres ateliers**, écrit le compte rendu, peut annuler un rendez-vous avant son début. |
+| **Organisateur** | Peut aussi publier ou gérer un atelier pour n'importe quel mentor de l'édition, suit les blocages critiques et les compétences redemandées, peut intervenir sur une réservation (l'action est tracée). |
 | **Participant** | S'inscrit individuellement aux ateliers (inscription M2 acceptée requise). |
 
 ## Le parcours d'aide

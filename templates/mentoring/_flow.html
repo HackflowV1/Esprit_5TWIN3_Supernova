@@ -1,0 +1,9 @@
+{% load i18n ui %}{% with steps=support_request.flow_steps %}
+{% if steps %}
+<ol class="m4-flow" aria-label="{% translate 'Progression de la demande' %}">
+{% for step in steps %}<li class="m4-flow-step m4-flow-step--{{ step.state }}"{% if step.state == 'current' %} aria-current="step"{% endif %}><span class="m4-flow-dot" aria-hidden="true">{% if step.state == 'done' %}✓{% else %}{{ step.number }}{% endif %}</span><span class="m4-flow-label">{{ step.label }}<span class="visually-hidden"> ({% if step.state == 'done' %}{% translate 'terminé' %}{% elif step.state == 'current' %}{% translate 'étape en cours' %}{% else %}{% translate 'à venir' %}{% endif %})</span></span></li>{% endfor %}
+</ol>
+{% else %}
+<p class="m4-flow-cancelled">{% icon 'close' 16 %}{% translate 'Cette demande a été annulée.' %}</p>
+{% endif %}
+{% endwith %}

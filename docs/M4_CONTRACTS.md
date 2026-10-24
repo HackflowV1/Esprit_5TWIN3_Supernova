@@ -30,7 +30,7 @@ accepte de *mentorer*, `UserSkill` ce qu'elle *sait*.
 | `cancel_session` | capitaine, mentor, organisateur | avant le début ; libère le créneau, rouvre la demande |
 | `complete_session`, `update_report` | mentor de la séance | après le début ; compte rendu obligatoire |
 | `give_feedback` | membre actif de l'équipe | séance terminée ; une seule fois ; note 1–5 ; résolu ou rouverte |
-| `create_workshop`, `update_workshop`, `cancel_workshop` | organisateur | formateur mentor de l'édition ; annulation libère les places |
+| `create_workshop`, `update_workshop`, `cancel_workshop` | formateur lui-même, ou organisateur | formateur mentor de l'édition (un mentor ne peut pas confier l'atelier à un collègue) ; annulation libère les places |
 | `register_to_workshop`, `cancel_workshop_registration` | participant inscrit | capacité sous verrou, conflits, avant le début |
 | `mark_attendance` | formateur ou organisateur | à partir du début |
 

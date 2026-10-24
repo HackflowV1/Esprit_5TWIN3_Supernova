@@ -6,6 +6,7 @@ from accounts.models import Role, Skill, User
 from accounts.services import set_role
 from hackathons.test_helpers import make_owner
 from ..models import MentorExpertise
+from .helpers import make_user
 from .test_slots import published_event
 
 
@@ -68,5 +69,5 @@ class WiringTests(TestCase):
         self.assertContains(page, 'class="breadcrumbs"')
         self.assertContains(page, '<h1', count=1)
         self.assertContains(page, f'href="{reverse("mentoring:workshop-list")}"')
-        self.client.force_login(self.mentor)
+        self.client.force_login(make_user('outsider'))
         self.assertEqual(self.client.get(reverse('mentoring:workshop-add')).status_code, 403)

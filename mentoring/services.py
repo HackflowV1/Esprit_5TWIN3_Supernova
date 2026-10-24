@@ -5,7 +5,7 @@ from django.utils import timezone
 from django.utils.translation import gettext_lazy as _
 
 from accounts.models import AssignmentStatus, Role, RoleAssignment, User
-from accounts.permissions import can_manage, require_organizer
+from accounts.permissions import can_manage
 from hackathons.models import EventPhase, Hackathon
 from hackathons.services import phase_is_open
 from teams import services as team_services
@@ -40,11 +40,24 @@ def organizer_open_hackathons(user):
     return organized_hackathons(user).filter(status__in=OPEN_STATUSES)
 
 
-def workshop_trainers(user):
-    """Active mentors of the open editions the user organizes: the people who can lead a workshop."""
-    return User.objects.filter(is_active=True, role_assignments__role=Role.MENTOR,
-        role_assignments__status=AssignmentStatus.ACTIVE,
-        role_assignments__hackathon__in=organizer_open_hackathons(user)).distinct().order_by('first_name', 'username')
+def publishable_hackathons(user):
+    """Open editions in which the user may publish a workshop: as organizer, or as a mentor for himself."""
+    return Hackathon.objects.filter(Q(pk__in=organizer_open_hackathons(user).values('pk'))
+        | Q(pk__in=mentor_open_hackathons(user).values('pk'))).distinct()
+
+
+def trainer_choices(user):
+    """Who can lead the workshop the user publishes: an organizer picks any mentor of his open editions,
+    a mentor can only pick himself."""
+    active_mentor = Q(role_assignments__role=Role.MENTOR, role_assignments__status=AssignmentStatus.ACTIVE)
+    own = Q(pk=user.pk, role_assignments__hackathon__in=mentor_open_hackathons(user)) & active_mentor
+    organized = Q(role_assignments__hackathon__in=organizer_open_hackathons(user)) & active_mentor
+    return User.objects.filter(is_active=True).filter(own | organized).distinct().order_by('first_name', 'username')
+
+
+def manageable_workshops(user):
+    """The workshops the user may edit or cancel: those of the editions he organizes, and his own."""
+    return Workshop.objects.filter(Q(hackathon__in=organized_hackathons(user)) | Q(trainer=user)).distinct()
 
 
 def visible_workshops(user):
@@ -146,13 +159,15 @@ def cancel_slot(*, actor, slot):
 
 
 # -------------------------------------------------------------- workshops
-def _open_workshop(workshop):
-    current = Workshop.objects.select_for_update(of=('self',)).get(pk=workshop.pk)
+def _lock_workshop(workshop):
+    return Workshop.objects.select_for_update(of=('self',)).get(pk=workshop.pk)
+
+
+def _ensure_open(current):
     if current.status != Workshop.Status.PUBLISHED:
         raise ValidationError(_('Cet atelier est déjà annulé.'))
     if current.start <= timezone.now():
         raise ValidationError(_('Un atelier déjà commencé ne peut plus être modifié ni annulé.'))
-    return current
 
 
 def _active_registrations(workshop):
@@ -161,27 +176,39 @@ def _active_registrations(workshop):
 
 @transaction.atomic
 def create_workshop(*, actor, hackathon, trainer, title, description, capacity, start, end, location, url):
-    """An organizer publishes a workshop led by one of the mentors of the edition."""
+    """A mentor publishes his own workshop; an organizer may publish one for any mentor of the edition."""
     _lock_users(actor.pk, trainer.pk)
     event = Hackathon.objects.select_for_update().get(pk=hackathon.pk)
-    require_organizer(actor, event)
+    as_organizer = can_manage(actor, event)
+    if not (as_organizer or actor.pk == trainer.pk):
+        raise PermissionDenied(_('Seul un organisateur, ou le formateur lui-même, peut publier cet atelier.'))
+    if event.status == Hackathon.Status.ARCHIVED:
+        raise ValidationError(ARCHIVED)
     _require_open_event(event, WORKSHOPS_CLOSED)
     if start <= timezone.now():
         raise ValidationError(_('L’atelier doit commencer dans le futur.'))
     workshop = Workshop(hackathon=event, trainer=trainer, title=title.strip(), description=description,
         capacity=capacity, start=start, end=end, location=location.strip(), url=url)
     workshop.save()
-    record(event=event, actor=actor, action='workshop.published', obj=workshop, title=workshop.title,
-        capacity=capacity, trainer=trainer.pk)
+    record(event=event, actor=actor, action='workshop.published', obj=workshop, title=workshop.title, capacity=capacity,
+        trainer=trainer.pk, as_organizer=as_organizer and actor.pk != trainer.pk)
     return workshop
 
 
 @transaction.atomic
 def update_workshop(*, actor, workshop, trainer, title, description, capacity, start, end, location, url):
+    """The trainer edits his own workshop; an organizer edits any and may hand it to another mentor."""
     _lock_users(actor.pk, trainer.pk, workshop.trainer_id)
     event = Hackathon.objects.select_for_update().get(pk=workshop.hackathon_id)
-    require_organizer(actor, event)
-    current = _open_workshop(workshop)
+    current = _lock_workshop(workshop)
+    as_organizer = can_manage(actor, event)
+    if not (as_organizer or current.trainer_id == actor.pk):
+        raise PermissionDenied(_('Seuls un organisateur ou le formateur peuvent modifier cet atelier.'))
+    if not as_organizer and trainer.pk != actor.pk:
+        raise PermissionDenied(_('Seul un organisateur peut confier l’atelier à un autre mentor.'))
+    if event.status == Hackathon.Status.ARCHIVED:
+        raise ValidationError(ARCHIVED)
+    _ensure_open(current)
     _require_open_event(event, WORKSHOPS_CLOSED)
     if start <= timezone.now():
         raise ValidationError(_('L’atelier doit commencer dans le futur.'))
@@ -197,21 +224,28 @@ def update_workshop(*, actor, workshop, trainer, title, description, capacity, s
     current.start, current.end, current.location, current.url = start, end, location.strip(), url
     current.save()
     record(event=event, actor=actor, action='workshop.updated', obj=current, before=before,
-        after={'title': current.title, 'capacity': capacity, 'trainer': trainer.pk, 'start': _iso(start), 'end': _iso(end)})
+        after={'title': current.title, 'capacity': capacity, 'trainer': trainer.pk, 'start': _iso(start), 'end': _iso(end)},
+        as_organizer=as_organizer and current.trainer_id != actor.pk)
     return current
 
 
 @transaction.atomic
 def cancel_workshop(*, actor, workshop):
-    """Cancelling a workshop also releases the seats of everyone registered (their rows are kept)."""
-    _lock_users(actor.pk)
+    """The trainer or an organizer cancels; every seat is released (the registration rows are kept)."""
+    _lock_users(actor.pk, workshop.trainer_id)
     event = Hackathon.objects.select_for_update().get(pk=workshop.hackathon_id)
-    require_organizer(actor, event)
-    current = _open_workshop(workshop)
+    current = _lock_workshop(workshop)
+    as_organizer = can_manage(actor, event)
+    if not (as_organizer or current.trainer_id == actor.pk):
+        raise PermissionDenied(_('Seuls un organisateur ou le formateur peuvent annuler cet atelier.'))
+    if event.status == Hackathon.Status.ARCHIVED:
+        raise ValidationError(ARCHIVED)
+    _ensure_open(current)
     released = _active_registrations(current).update(status=WorkshopRegistration.Status.CANCELLED, cancelled_at=timezone.now())
     current.status = Workshop.Status.CANCELLED
     current.save()
-    record(event=event, actor=actor, action='workshop.cancelled', obj=current, released_registrations=released)
+    record(event=event, actor=actor, action='workshop.cancelled', obj=current, released_registrations=released,
+        as_organizer=as_organizer and current.trainer_id != actor.pk)
     return current
 
 
@@ -627,5 +661,5 @@ def support_insights(event):
         'active_count': active.count(),
         'critical': list(active.filter(priority=SupportRequest.Priority.CRITICAL).select_related('team').order_by('created_at')[:10]),
         'recurring': list(recurring),
-        'requests': list(requests.select_related('team', 'skill').annotate(rank=PRIORITY_RANK).order_by('rank', '-created_at')[:50]),
+        'requests': requests.select_related('team', 'skill').annotate(rank=PRIORITY_RANK).order_by('rank', '-created_at'),
     }

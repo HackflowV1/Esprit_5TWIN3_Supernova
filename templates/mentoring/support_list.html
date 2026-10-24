@@ -11,9 +11,10 @@
 
 {% if has_team or my_requests %}
 <section aria-labelledby="mine-title">
-<h2 id="mine-title">{% translate 'Les demandes de mon équipe' %} <span class="m4-count">{{ my_requests|length }}</span></h2>
+<h2 id="mine-title">{% translate 'Les demandes de mon équipe' %} <span class="m4-count">{{ my_requests.paginator.count }}</span></h2>
 {% if my_requests %}
 <ul class="m4-list">{% for item in my_requests %}{% include 'mentoring/_request_row.html' %}{% endfor %}</ul>
+{% translate 'Les demandes de mon équipe' as pager_name %}{% include 'mentoring/_pager.html' with page=my_requests name=pager_name %}
 {% else %}
 <div class="m4-empty">
 <h3>{% translate 'Aucune demande pour l’instant' %}</h3>
@@ -30,9 +31,10 @@
 
 {% if is_trainer %}
 <section aria-labelledby="coached-title">
-<h2 id="coached-title">{% translate 'Les demandes que j’accompagne' %} <span class="m4-count">{{ coached_requests|length }}</span></h2>
+<h2 id="coached-title">{% translate 'Les demandes que j’accompagne' %} <span class="m4-count">{{ coached_requests.paginator.count }}</span></h2>
 {% if coached_requests %}
 <ul class="m4-list">{% for item in coached_requests %}{% include 'mentoring/_request_row.html' %}{% endfor %}</ul>
+{% translate 'Les demandes que j’accompagne' as pager_name %}{% include 'mentoring/_pager.html' with page=coached_requests name=pager_name %}
 {% else %}
 <div class="m4-empty"><h3>{% translate 'Aucune demande à accompagner' %}</h3><p>{% translate 'Les demandes apparaîtront ici quand une équipe réservera l’un de vos créneaux.' %}</p></div>
 {% endif %}
@@ -59,8 +61,9 @@
 {% endif %}
 
 <h3>{% translate 'Toutes les demandes' %}</h3>
-{% if block.requests %}
-<ul class="m4-list">{% for item in block.requests %}{% include 'mentoring/_request_row.html' %}{% endfor %}</ul>
+{% if block.requests_page %}
+<ul class="m4-list">{% for item in block.requests_page %}{% include 'mentoring/_request_row.html' %}{% endfor %}</ul>
+{% translate 'Toutes les demandes' as pager_name %}{% include 'mentoring/_pager.html' with page=block.requests_page name=pager_name %}
 {% else %}
 <p class="muted">{% translate 'Aucune demande pour cette édition.' %}</p>
 {% endif %}
