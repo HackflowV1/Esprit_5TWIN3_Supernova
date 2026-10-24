@@ -6,7 +6,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-<script src="{% static 'js/theme.js' %}"></script><link rel="stylesheet" href="{% static 'css/palette.css' %}?v=2"><link rel="stylesheet" href="{% static 'css/base.css' %}?v=orange-3"><link rel="stylesheet" href="{% static 'css/nav-menus.css' %}?v=2"><link rel="icon" href="{% static 'icons/favicon.svg' %}" type="image/svg+xml">{% block extra_css %}{% endblock %}
+<script src="{% static 'js/theme.js' %}"></script><link rel="stylesheet" href="{% static 'css/palette.css' %}?v=2"><link rel="stylesheet" href="{% static 'css/base.css' %}?v=orange-4"><link rel="stylesheet" href="{% static 'css/nav-menus.css' %}?v=2"><link rel="icon" href="{% static 'icons/favicon.svg' %}" type="image/svg+xml">{% block extra_css %}{% endblock %}
 </head><body>
 <a class="skip-link" href="#contenu">{% translate 'Aller au contenu principal' %}</a>
 <header class="site-header"><div class="header-inner">
@@ -17,10 +17,67 @@
 <a href="{% url 'hackathons:list' %}"{% if ui_app == 'hackathons' and ui_page != 'dashboard' and ui_page != 'compare' %} aria-current="page"{% endif %}>{% translate 'Hackathons' %}</a>
 {% if user.is_authenticated %}<a href="{% url 'hackathons:dashboard' %}"{% if ui_page == 'dashboard' or ui_page == 'compare' %} aria-current="page"{% endif %}>{% translate 'Control Tower' %}</a>{% endif %}</nav>
 <div class="header-tools">
+<button type="button" class="theme-toggle" data-theme-toggle aria-label="{% translate 'Changer de thème (clair/sombre)' %}" title="{% translate 'Changer de thème' %}">
+  <span class="theme-toggle-sun" aria-hidden="true">{% icon 'sun' 18 %}</span>
+  <span class="theme-toggle-moon" aria-hidden="true">{% icon 'moon' 18 %}</span>
+</button>
 {% include 'shared/nav_language.html' %}
 {% include 'shared/nav_account.html' %}
 {% if not user.is_authenticated %}<a class="login-link" href="{% url 'accounts:login' %}">{% translate 'Connexion' %}</a><a class="button small signup-link" href="{% url 'accounts:signup' %}">{% translate 'Créer un compte' %}</a>{% endif %}</div></div></header>
 <main id="contenu" tabindex="-1">{% block breadcrumbs %}{% include 'shared/breadcrumbs.html' %}{% endblock %}
 {% if messages %}<div class="messages" aria-live="polite">{% for message in messages %}<div class="message {{ message.tags }}" role="status">{% icon 'check' %}<span>{{ message }}</span><button class="icon-button" type="button" data-dismiss-message aria-label="{% translate 'Fermer le message' %}">{% icon 'close' 16 %}</button></div>{% endfor %}</div>{% endif %}{% block content %}{% endblock %}</main>
-<footer class="site-footer"><div class="footer-inner"><a class="brand footer-brand" href="{% url 'core:home' %}"><span class="brand-icon">{% icon 'code' 18 %}</span><span class="brand-label">Hack<span>Flow</span></span></a><p>{% translate 'Des équipes, des idées, des projets.' %}</p><nav aria-label="{% translate 'Liens de pied de page' %}"><a href="{% url 'hackathons:list' %}">{% translate 'Hackathons' %}</a><a href="{% url 'accounts:profile' %}">{% translate 'Mon espace' %}</a><a href="#contenu">{% translate 'Haut de page' %}</a></nav></div></footer>
-<script src="{% static 'js/base.js' %}?v=2" defer></script>{% block extra_js %}{% endblock %}</body></html>
+<footer class="site-footer">
+  <div class="footer-container">
+    <div class="footer-top">
+      <div class="footer-brand-col">
+        <a class="brand footer-brand" href="{% url 'core:home' %}">
+          <span class="brand-icon">{% icon 'code' 18 %}</span>
+          <span class="brand-label">Hack<span>Flow</span></span>
+        </a>
+        <p class="footer-mission">{% translate 'La plateforme moderne pour organiser les hackathons étudiants, former des équipes et propulser vos projets de l’idée au prototype.' %}</p>
+        <div class="footer-status-pill">
+          <span class="footer-status-dot"></span>
+          <span>{% translate 'Plateforme active · ESPRIT Student Edition' %}</span>
+        </div>
+      </div>
+      <div class="footer-col">
+        <h4>{% translate 'Navigation' %}</h4>
+        <nav aria-label="{% translate 'Navigation plateforme' %}">
+          <a href="{% url 'core:home' %}">{% translate 'Accueil' %}</a>
+          <a href="{% url 'hackathons:list' %}">{% translate 'Hackathons' %}</a>
+          {% if user.is_authenticated %}
+          <a href="{% url 'hackathons:dashboard' %}">{% translate 'Control Tower' %}</a>
+          {% endif %}
+          <a href="{% url 'accounts:profile' %}">{% translate 'Mon espace' %}</a>
+        </nav>
+      </div>
+      <div class="footer-col">
+        <h4>{% translate 'Écosystème' %}</h4>
+        <nav aria-label="{% translate 'Navigation écosystème' %}">
+          <a href="{% url 'core:home' %}#upcoming-title">{% translate 'Prochains hackathons' %}</a>
+          <a href="{% url 'core:home' %}#roles-title">{% translate 'Rôles & Parcours' %}</a>
+          <a href="{% url 'core:home' %}#journey-title">{% translate 'Méthodologie' %}</a>
+          <a href="{% url 'core:home' %}#faq-title">{% translate 'Questions fréquentes' %}</a>
+        </nav>
+      </div>
+      <div class="footer-col">
+        <h4>{% translate 'Ressources' %}</h4>
+        <nav aria-label="{% translate 'Liens ressources' %}">
+          <a href="https://github.com/HackflowV1/Esprit_5TWIN3_Supernova" target="_blank" rel="noopener noreferrer">GitHub</a>
+          <a href="#contenu">{% translate 'Haut de page' %}</a>
+        </nav>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <div class="footer-inner">
+        <p>{% translate 'Des équipes, des idées, des projets.' %}</p>
+        <nav aria-label="{% translate 'Liens de pied de page' %}">
+          <a href="{% url 'hackathons:list' %}">{% translate 'Hackathons' %}</a>
+          <a href="{% url 'accounts:profile' %}">{% translate 'Mon espace' %}</a>
+          <a href="#contenu">{% translate 'Haut de page' %}</a>
+        </nav>
+      </div>
+    </div>
+  </div>
+</footer>
+<script src="{% static 'js/base.js' %}?v=3" defer></script>{% block extra_js %}{% endblock %}</body></html>

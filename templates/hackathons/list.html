@@ -3,10 +3,13 @@
 {% block content %}
 <header class="page-banner">
     <div>
+        <span class="section-eyebrow">{% translate 'CATALOGUE DES ÉDITIONS' %}</span>
         <h1>{% translate 'Les hackathons' %}</h1>
         <p class="lead">{% translate 'Trouvez l’édition qui vous correspond, découvrez ses challenges et rejoignez l’aventure.' %}</p>
     </div>
-    {% if can_create %}<a class="button" href="{% url 'hackathons:create' %}">{% icon 'add' %}{% translate 'Créer un hackathon' %}</a>{% endif %}
+    {% if can_create %}
+    <a class="button" href="{% url 'hackathons:create' %}">{% icon 'add' %}{% translate 'Créer un hackathon' %}</a>
+    {% endif %}
 </header>
 
 <form method="get" class="filters" role="search" aria-label="{% translate 'Filtrer les hackathons' %}">
@@ -14,24 +17,31 @@
     <label>{% translate 'Statut' %}<select name="status"><option value="">{% translate 'Tous les statuts' %}</option>{% for value,label in statuses %}<option value="{{ value }}" {% if request.GET.status == value %}selected{% endif %}>{{ label }}</option>{% endfor %}</select></label>
     <label>{% translate 'Format' %}<select name="format"><option value="">{% translate 'Tous les formats' %}</option>{% for value,label in formats %}<option value="{{ value }}" {% if request.GET.format == value %}selected{% endif %}>{{ label }}</option>{% endfor %}</select></label>
     <button type="submit">{% icon 'search' %}{% translate 'Rechercher' %}</button>
-    {% if request.GET.q or request.GET.status or request.GET.format %}<a class="button secondary" href="{% url 'hackathons:list' %}">{% translate 'Réinitialiser' %}</a>{% endif %}
+    {% if request.GET.q or request.GET.status or request.GET.format %}
+    <a class="button secondary" href="{% url 'hackathons:list' %}">{% translate 'Réinitialiser' %}</a>
+    {% endif %}
 </form>
 
-{% if paginator %}<p class="results-count" role="status" aria-live="polite">{% blocktranslate count total=paginator.count %}{{ total }} hackathon trouvé{% plural %}{{ total }} hackathons trouvés{% endblocktranslate %}</p>{% endif %}
+{% if paginator %}
+<p class="results-count" role="status" aria-live="polite">{% blocktranslate count total=paginator.count %}{{ total }} hackathon trouvé{% plural %}{{ total }} hackathons trouvés{% endblocktranslate %}</p>
+{% endif %}
 
 <div class="grid event-grid">
     {% for event in events %}
     <article class="card card-link event-card">
         <div class="event-card-top">
-            <div class="date-chip" aria-hidden="true"><strong>{{ event.start_date|date:'d' }}</strong><span>{{ event.start_date|date:'M'|upper }}</span></div>
+            <div class="date-chip" aria-hidden="true">
+                <strong>{{ event.start_date|date:'d' }}</strong>
+                <span>{{ event.start_date|date:'M'|upper }}</span>
+            </div>
             <span class="badge badge--{{ event.status|lower }}">{{ event.get_status_display }}</span>
         </div>
         <h2><a href="{{ event.get_absolute_url }}">{{ event }}</a></h2>
         <p class="event-desc">{{ event.description|truncatewords:26 }}</p>
         <ul class="meta-list" aria-label="{% blocktranslate with v0=event %}Informations sur {{ v0 }}{% endblocktranslate %}">
-            <li>{% icon 'calendar' 17 %}<span><span class="visually-hidden">{% translate 'Début :' %} </span>{{ event.start_date|date:"SHORT_DATETIME_FORMAT" }}</span></li>
-            <li>{% icon 'globe' 17 %}<span>{{ event.get_format_display }}{% if event.location %} · {{ event.location }}{% endif %}</span></li>
-            <li>{% icon 'users' 17 %}<span>{{ event.capacity }} {% translate 'places · équipes de' %} {{ event.min_team_size }} {% translate 'à' %} {{ event.max_team_size }}</span></li>
+            <li>{% icon 'calendar' 16 %}<span><span class="visually-hidden">{% translate 'Début :' %} </span>{{ event.start_date|date:"SHORT_DATETIME_FORMAT" }}</span></li>
+            <li>{% icon 'globe' 16 %}<span>{{ event.get_format_display }}{% if event.location %} · {{ event.location }}{% endif %}</span></li>
+            <li>{% icon 'users' 16 %}<span>{{ event.capacity }} {% translate 'places · équipes de' %} {{ event.min_team_size }} {% translate 'à' %} {{ event.max_team_size }}</span></li>
         </ul>
         <span class="card-cta" aria-hidden="true">{% translate 'Voir les détails →' %}</span>
     </article>
@@ -44,5 +54,15 @@
     {% endfor %}
 </div>
 
-{% if is_paginated %}<nav class="pagination" aria-label="{% translate 'Pagination' %}">{% if page_obj.has_previous %}<a class="button small secondary" href="?q={{ request.GET.q|urlencode }}&status={{ request.GET.status|urlencode }}&format={{ request.GET.format|urlencode }}&page={{ page_obj.previous_page_number }}">{% translate 'Précédent' %}</a>{% endif %}<span>{% translate 'Page' %} {{ page_obj.number }} / {{ paginator.num_pages }}</span>{% if page_obj.has_next %}<a class="button small secondary" href="?q={{ request.GET.q|urlencode }}&status={{ request.GET.status|urlencode }}&format={{ request.GET.format|urlencode }}&page={{ page_obj.next_page_number }}">{% translate 'Suivant' %}</a>{% endif %}</nav>{% endif %}
+{% if is_paginated %}
+<nav class="pagination" aria-label="{% translate 'Pagination' %}">
+    {% if page_obj.has_previous %}
+    <a class="button small secondary" href="?q={{ request.GET.q|urlencode }}&status={{ request.GET.status|urlencode }}&format={{ request.GET.format|urlencode }}&page={{ page_obj.previous_page_number }}">{% translate 'Précédent' %}</a>
+    {% endif %}
+    <span>{% translate 'Page' %} {{ page_obj.number }} / {{ paginator.num_pages }}</span>
+    {% if page_obj.has_next %}
+    <a class="button small secondary" href="?q={{ request.GET.q|urlencode }}&status={{ request.GET.status|urlencode }}&format={{ request.GET.format|urlencode }}&page={{ page_obj.next_page_number }}">{% translate 'Suivant' %}</a>
+    {% endif %}
+</nav>
+{% endif %}
 {% endblock %}
