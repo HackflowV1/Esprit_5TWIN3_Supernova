@@ -67,3 +67,15 @@ rendez-vous ; l'organisatrice voit le pilotage ; « Atelier UI/UX en 1 heure » 
 La suggestion de mentors par le moteur commun `intelligence/` et l'envoi des blocages M4 vers la Control
 Tower de M1 ne sont pas livrés : le choix du mentor est manuel, et les indicateurs M4 sont visibles dans
 la page Assistance de l'organisateur.
+
+## Suggestion d'atelier par IA (Gemini)
+
+Dans « Publier un atelier », après avoir choisi le hackathon, le bouton **Suggérer un atelier** remplit le thème,
+la description et, si le début est déjà saisi, l'heure de fin. Rien n'est enregistré : le mentor relit, corrige et publie.
+
+- Données envoyées à Google : titre et description publics du hackathon, tracks, défis publiés, et les noms des
+  compétences les plus demandées (comptage anonyme). Jamais de nom, d'email ni le texte des demandes d'aide.
+- Activation : `GOOGLE_API_KEY` dans `.env` (jamais dans Git). Sans clé, le bouton n'apparaît pas. Modèles essayés
+  dans l'ordre : `GEMINI_MODELS` (par défaut `gemini-3.5-flash` avec réflexion minimale, puis `gemini-flash-lite-latest` et `gemini-3-flash-preview` si le précédent est surchargé).
+- Limites : 12 suggestions par heure et par utilisateur, délai maximal de 12 s par modèle, la latence mesurée est
+  renvoyée avec la réponse et écrite dans les journaux. Si Gemini est indisponible, le formulaire reste utilisable à la main.

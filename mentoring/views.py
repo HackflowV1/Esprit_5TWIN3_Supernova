@@ -1,9 +1,11 @@
 from django.contrib import messages
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.messages.views import SuccessMessageMixin
+from django.core.cache import cache
 from django.core.exceptions import PermissionDenied, ValidationError
 from django.core.paginator import Paginator
 from django.db.models import Count, Q
+from django.http import JsonResponse
 from django.shortcuts import get_object_or_404, redirect, render
 from django.urls import reverse, reverse_lazy
 from django.utils import timezone
@@ -13,9 +15,10 @@ from django.views.generic import CreateView, DeleteView, DetailView, FormView, T
 
 from accounts.models import AssignmentStatus, Role, RoleAssignment
 from accounts.permissions import can_manage
+from hackathons.models import Hackathon
 from teams import services as team_services
 from teams.models import Team
-from . import services
+from . import ai, services
 from .forms import (FeedbackForm, MentorExpertiseForm, SessionReportForm, SkillFilterForm, SlotForm, SupportRequestForm,
     WorkshopForm)
 from .models import (M4History, MentoringSession, MentorExpertise, MentorSlot, SupportRequest, Workshop,
@@ -301,7 +304,12 @@ class WorkshopAttendanceView(WorkshopPostView):
 
 class WorkshopFormMixin(PublisherRequiredMixin, FormView):
     form_class = WorkshopForm
-    template_name = 'shared/form.html'
+    template_name = 'mentoring/workshop_form.html'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context.update(ai_enabled=ai.is_configured() and self.get_workshop() is None, suggest_url=reverse('mentoring:workshop-suggest'))
+        return context
 
     def get_workshop(self):
         return None
@@ -326,6 +334,31 @@ class WorkshopFormMixin(PublisherRequiredMixin, FormView):
     def workshop_fields(self, form):
         data = form.cleaned_data
         return {name: data[name] for name in ('trainer', 'title', 'description', 'capacity', 'start', 'end', 'location', 'url')}
+
+
+SUGGESTIONS_PER_HOUR = 12
+
+
+class WorkshopSuggestView(PublisherRequiredMixin, View):
+    """Gemini proposes a theme and a description for the chosen hackathon; the form is filled, nothing is saved."""
+
+    def post(self, request, *args, **kwargs):
+        try:
+            hackathon = services.publishable_hackathons(request.user).get(pk=int(request.POST.get('hackathon', '')))
+        except (ValueError, Hackathon.DoesNotExist):
+            return JsonResponse({'error': str(_('Choisissez d’abord un hackathon.'))}, status=400)
+        key = f'm4-suggest-{request.user.pk}'
+        used = cache.get(key, 0)
+        if used >= SUGGESTIONS_PER_HOUR:
+            return JsonResponse({'error': str(_('Trop de suggestions pour le moment, réessayez dans une heure.'))}, status=429)
+        cache.set(key, used + 1, 3600)
+        try:
+            suggestion, latency_ms = ai.suggest_workshop(hackathon)
+        except ai.SuggestionUnavailable:
+            return JsonResponse({'error': str(ai.UNAVAILABLE)}, status=503)
+        suggestion['latency_ms'] = latency_ms
+        suggestion['message'] = str(_('Suggestion de l’IA : relisez et corrigez avant de publier.'))
+        return JsonResponse(suggestion)
 
 
 class WorkshopCreateView(WorkshopFormMixin):

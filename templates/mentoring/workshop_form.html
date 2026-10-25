@@ -1,0 +1,30 @@
+{% extends 'base.html' %}{% load static i18n ui %}
+{% block extra_css %}{{ block.super }}<link rel="stylesheet" href="{% static 'css/mentoring.css' %}?v=6">{% endblock %}
+{% block title %}{{ title|default:page_title }} {% translate '— HackFlow' %}{% endblock %}
+{% block content %}
+<div class="form-layout">
+<section class="panel form-panel" aria-labelledby="form-title">
+<h1 id="form-title">{{ title|default:page_title }}</h1>
+<form method="post" novalidate>{% csrf_token %}
+{% include 'shared/form_errors.html' %}
+{% render_field form.hackathon %}
+{% if ai_enabled %}
+<div class="m4-ai" id="ai-box" data-url="{{ suggest_url }}" data-busy="{% translate 'Gemini réfléchit…' %}" data-error="{% translate 'La suggestion est indisponible pour le moment. Remplissez le formulaire à la main.' %}" data-pick="{% translate 'Choisissez d’abord un hackathon.' %}">
+<div>
+<strong>{% icon 'award' %}{% translate 'Suggestion par IA' %}</strong>
+<p class="muted">{% translate 'On vous propose un thème et une description à partir du hackathon choisi. Relisez et corrigez avant de publier.' %}</p>
+</div>
+<button type="button" class="button secondary" id="ai-button">{% icon 'award' %}{% translate 'Suggérer un atelier' %}</button>
+<p class="muted" id="ai-status" role="status" aria-live="polite"></p>
+</div>
+{% endif %}
+{% for field in form %}{% if field.name != 'hackathon' %}{% render_field field %}{% endif %}{% endfor %}
+<div class="form-actions">
+<button type="submit">{% icon 'save' %}{{ button_label|default:_('Enregistrer') }}</button>
+<a class="button secondary" href="{{ cancel_url }}">{% icon 'close' %}{% translate 'Annuler' %}</a>
+</div>
+</form>
+</section>
+</div>
+{% endblock %}
+{% block extra_js %}{% if ai_enabled %}<script src="{% static 'js/workshop-suggest.js' %}?v=1" defer></script>{% endif %}{% endblock %}

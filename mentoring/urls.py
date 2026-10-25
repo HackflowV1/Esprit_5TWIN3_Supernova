@@ -24,6 +24,7 @@ urlpatterns = [
     path('sessions/<int:pk>/cancel/', views.SessionCancelView.as_view(), name='session-cancel'),
     path('workshops/', views.WorkshopListView.as_view(), name='workshop-list'),
     path('workshops/add/', views.WorkshopCreateView.as_view(), name='workshop-add'),
+    path('workshops/suggest/', views.WorkshopSuggestView.as_view(), name='workshop-suggest'),
     path('workshops/<int:pk>/', views.WorkshopDetailView.as_view(), name='workshop-detail'),
     path('workshops/<int:pk>/edit/', views.WorkshopUpdateView.as_view(), name='workshop-edit'),
     path('workshops/<int:pk>/cancel/', views.WorkshopCancelView.as_view(), name='workshop-cancel'),

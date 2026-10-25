@@ -122,6 +122,8 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 # AI services — environment variables prepared for future integration
 GOOGLE_API_KEY = os.environ.get('GOOGLE_API_KEY', '')
+# Fast model first, a second one when Google answers 'high demand' (503)
+GEMINI_MODELS = [m.strip() for m in os.environ.get('GEMINI_MODELS', 'gemini-3.5-flash,gemini-flash-lite-latest,gemini-3-flash-preview').split(',') if m.strip()]
 
 HACKFLOW_METRIC_PROVIDERS = {
     'M2': 'teams.services.metrics',

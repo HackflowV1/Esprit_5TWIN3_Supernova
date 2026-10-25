@@ -158,3 +158,10 @@
   .m4-flow-step::before { display: none; }
   .m4-actions { justify-content: flex-start; }
 }
+
+/* AI suggestion box of the workshop form */
+.m4-ai { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 8px 16px; align-items: center; margin: 0 0 20px; padding: 16px;
+  border: 1px solid var(--brand-soft-border); border-radius: var(--radius); background: var(--brand-soft); }
+.m4-ai p { margin: 4px 0 0; }
+.m4-ai #ai-status { grid-column: 1 / -1; min-height: 1.4em; font-weight: 600; }
+@media (max-width: 860px) { .m4-ai { grid-template-columns: minmax(0, 1fr); } }

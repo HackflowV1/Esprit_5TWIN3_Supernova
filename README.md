@@ -87,7 +87,8 @@ l’événement et un partenariat confirmé. L’organisateur valide puis publie
 - M4 : assistance, mentorat et ateliers : demandes d'aide des équipes, expertises et créneaux
   des mentors, réservation sans double réservation, séance avec compte rendu, retour de l'équipe
   et résolution, ateliers publiés par le mentor ou l'organisateur avec inscriptions individuelles, capacité
-  garantie et relevé de présence.
+  garantie et relevé de présence ; suggestion de thème et de description d'atelier par Gemini
+  (clé `GOOGLE_API_KEY` dans `.env`, facultative).
 
 Les domaines M3, M5 et les moteurs IA ne sont pas implémentés dans cette livraison.
 La suggestion de mentors (moteur commun `intelligence/`) n'est pas livrée : le choix du mentor est manuel.

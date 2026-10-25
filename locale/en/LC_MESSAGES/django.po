@@ -5167,3 +5167,37 @@ msgstr "A member of the team books the mentor."
 #: mentoring/appointments.html
 msgid "Un rendez-vous apparaît ici dès qu’un membre de votre équipe réserve un mentor pour une demande d’aide."
 msgstr "An appointment appears here as soon as a member of your team books a mentor for a help request."
+
+# --- M4 : suggestion d’atelier par Gemini ---
+
+#: mentoring/views.py mentoring/workshop_form.html
+msgid "Choisissez d’abord un hackathon."
+msgstr "Choose a hackathon first."
+
+#: mentoring/workshop_form.html
+msgid "On vous propose un thème et une description à partir du hackathon choisi. Relisez et corrigez avant de publier."
+msgstr "We suggest a theme and a description from the chosen hackathon. Review and correct before publishing."
+
+#: mentoring/workshop_form.html
+msgid "Gemini réfléchit…"
+msgstr "Gemini is thinking…"
+
+#: mentoring/ai.py mentoring/workshop_form.html
+msgid "La suggestion est indisponible pour le moment. Remplissez le formulaire à la main."
+msgstr "The suggestion is unavailable right now. Fill in the form by hand."
+
+#: mentoring/views.py
+msgid "Suggestion de l’IA : relisez et corrigez avant de publier."
+msgstr "AI suggestion: review and correct before publishing."
+
+#: mentoring/workshop_form.html
+msgid "Suggestion par IA"
+msgstr "AI suggestion"
+
+#: mentoring/workshop_form.html
+msgid "Suggérer un atelier"
+msgstr "Suggest a workshop"
+
+#: mentoring/views.py
+msgid "Trop de suggestions pour le moment, réessayez dans une heure."
+msgstr "Too many suggestions for now, try again in an hour."
