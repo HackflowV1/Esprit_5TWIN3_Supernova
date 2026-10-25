@@ -244,15 +244,13 @@ class CancelTests(CenterBase):
         self.assertContains(response, 'Cette demande a été annulée.')
         self.assertNotContains(response, 'Annuler la demande')
 
-    def test_a_member_who_is_neither_author_nor_captain_cannot_cancel(self):
+    def test_any_member_cancels_a_request_of_the_team(self):
         request = make_request(self.team, self.captain)
         self.client.force_login(self.member)
-        page = self.client.get(self.url('support-cancel', request), follow=True)
-        self.assertContains(page, 'ne peut pas être annulée par vous')
-        response = self.client.post(self.url('support-cancel', request), follow=True)
-        self.assertContains(response, 'Seuls l’auteur, le capitaine ou un organisateur')
+        self.assertEqual(self.client.get(self.url('support-cancel', request)).status_code, 200)
+        self.client.post(self.url('support-cancel', request))
         request.refresh_from_db()
-        self.assertEqual(request.status, 'OPEN')
+        self.assertEqual(request.status, 'CANCELLED')
 
     def test_a_booked_request_must_have_its_appointment_cancelled_first(self):
         request = self.mine()

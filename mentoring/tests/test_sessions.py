@@ -232,13 +232,6 @@ class SessionViewTests(LiveBase):
         self.assertEqual(SupportRequest.objects.get(pk=session.request_id).status, 'OPEN')
 
     def test_who_cannot_cancel_is_told_so_and_nothing_changes(self):
-        session = self.book()
-        self.client.force_login(self.member)
-        page = self.client.get(reverse('mentoring:session-cancel', args=[session.pk]), follow=True)
-        self.assertContains(page, 'ne peut pas être annulé par vous')
-        self.client.post(reverse('mentoring:session-cancel', args=[session.pk]))
-        session.refresh_from_db()
-        self.assertEqual(session.status, 'BOOKED')
         started = self.past_session(self.request(subject='Autre'))
         self.client.force_login(self.captain)
         self.assertContains(self.client.get(reverse('mentoring:session-cancel', args=[started.pk]), follow=True), 'ne peut pas être annulé')

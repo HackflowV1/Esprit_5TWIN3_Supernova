@@ -25,9 +25,9 @@ accepte de *mentorer*, `UserSkill` ce qu'elle *sait*.
 | Fonction | Qui | Règles principales |
 |---|---|---|
 | `create_slot`, `update_slot`, `cancel_slot` | mentor | rôle actif, édition ouverte, futur, pas de chevauchement ; seul un créneau libre se modifie |
-| `open_request`, `cancel_request` | membre actif / auteur, capitaine, organisateur | phase de développement ; seule une demande OPEN s'annule |
-| `book_session` | capitaine (ou organisateur, tracé) | demande OPEN, créneau libre et futur, mentor actif et hors équipe, pas de conflit équipe/atelier |
-| `cancel_session` | capitaine, mentor, organisateur | avant le début ; libère le créneau, rouvre la demande |
+| `open_request`, `cancel_request` | membre actif de l'équipe (annulation : aussi organisateur) | phase de développement ; seule une demande OPEN s'annule |
+| `book_session` | membre actif de l'équipe (ou organisateur, tracé) | demande OPEN, créneau libre et futur, mentor actif et hors équipe, pas de conflit équipe/atelier |
+| `cancel_session` | membre de l'équipe, mentor, organisateur | avant le début ; libère le créneau, rouvre la demande |
 | `complete_session`, `update_report` | mentor de la séance | après le début ; compte rendu obligatoire |
 | `give_feedback` | membre actif de l'équipe | séance terminée ; une seule fois ; note 1–5 ; résolu ou rouverte |
 | `create_workshop`, `update_workshop`, `cancel_workshop` | formateur lui-même, ou organisateur | formateur mentor de l'édition (un mentor ne peut pas confier l'atelier à un collègue) ; annulation libère les places |

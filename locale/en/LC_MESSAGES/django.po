@@ -5141,3 +5141,29 @@ msgstr "upcoming"
 #: mentoring/_flow.html
 msgid "étape en cours"
 msgstr "current step"
+
+# --- M4 : tout membre de l’équipe réserve et annule ---
+
+#: mentoring/services.py
+msgid "Seuls les membres de l’équipe (ou un organisateur) peuvent réserver un mentor."
+msgstr "Only the members of the team (or an organizer) can book a mentor."
+
+#: mentoring/services.py
+msgid "Seuls les membres de l’équipe ou un organisateur peuvent annuler cette demande."
+msgstr "Only the members of the team or an organizer can cancel this request."
+
+#: mentoring/services.py
+msgid "Seuls un membre de l’équipe, le mentor ou un organisateur peuvent annuler ce rendez-vous."
+msgstr "Only a member of the team, the mentor or an organizer can cancel this appointment."
+
+#: mentoring/support_book.html
+msgid "Tout membre de l’équipe peut réserver un mentor, et seulement pour une demande ouverte pendant la phase de développement."
+msgstr "Any member of the team can book a mentor, and only for an open request during the development phase."
+
+#: mentoring/support_detail.html
+msgid "Un membre de l’équipe réserve le mentor."
+msgstr "A member of the team books the mentor."
+
+#: mentoring/appointments.html
+msgid "Un rendez-vous apparaît ici dès qu’un membre de votre équipe réserve un mentor pour une demande d’aide."
+msgstr "An appointment appears here as soon as a member of your team books a mentor for a help request."

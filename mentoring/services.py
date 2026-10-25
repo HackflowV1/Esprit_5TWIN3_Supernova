@@ -354,41 +354,38 @@ def open_request(*, actor, team, subject, description, skill=None, priority=Supp
 
 @transaction.atomic
 def cancel_request(*, actor, request):
-    """An OPEN request may be cancelled by its author (still a member), the captain, or an organizer."""
+    """An OPEN request may be cancelled by any active member of the team, or an organizer."""
     _lock_actor(actor)
     event = Hackathon.objects.select_for_update().get(pk=request.hackathon_id)
     current = SupportRequest.objects.select_for_update(of=('self',)).select_related('team__captain').get(pk=request.pk)
     as_organizer = can_manage(actor, event)
-    allowed = (team_services.is_captain(actor, current.team)
-        or (current.author_id == actor.pk and _is_active_member(actor, current.team)) or as_organizer)
-    if not allowed:
-        raise PermissionDenied(_('Seuls l’auteur, le capitaine ou un organisateur peuvent annuler cette demande.'))
+    member = _is_active_member(actor, current.team)
+    if not (member or as_organizer):
+        raise PermissionDenied(_('Seuls les membres de l’équipe ou un organisateur peuvent annuler cette demande.'))
     if event.status == Hackathon.Status.ARCHIVED:
         raise ValidationError(ARCHIVED)
     if current.status != SupportRequest.Status.OPEN:
         raise ValidationError(_('Seule une demande ouverte peut être annulée. Annulez d’abord le rendez-vous.'))
     current.status = SupportRequest.Status.CANCELLED
     current.save()
-    record(event=event, actor=actor, action='request.cancelled', obj=current, as_organizer=as_organizer and not
-        team_services.is_captain(actor, current.team) and current.author_id != actor.pk)
+    record(event=event, actor=actor, action='request.cancelled', obj=current, as_organizer=as_organizer and not member)
     return current
 
 
 def can_cancel_request(user, request):
     if request.status != SupportRequest.Status.OPEN or request.hackathon.status == Hackathon.Status.ARCHIVED:
         return False
-    return bool(team_services.is_captain(user, request.team)
-        or (request.author_id == user.pk and _is_active_member(user, request.team)) or can_manage(user, request.hackathon))
+    return bool(_is_active_member(user, request.team) or can_manage(user, request.hackathon))
 
 
 # --------------------------------------------------------- booking a mentor
 def can_book(user, request):
-    """The captain books for the team; an organizer may step in (and is traced)."""
+    """Any active member books for the team; an organizer may step in (and is traced)."""
     if request.status != SupportRequest.Status.OPEN or request.hackathon.status not in OPEN_STATUSES:
         return False
     if not phase_is_open(request.hackathon, EventPhase.Kind.DEVELOPMENT):
         return False
-    return bool(team_services.is_captain(user, request.team) or can_manage(user, request.hackathon))
+    return bool(_is_active_member(user, request.team) or can_manage(user, request.hackathon))
 
 
 def bookable_slots(request, skill=None):
@@ -420,9 +417,9 @@ def book_session(*, actor, request, slot):
     current = SupportRequest.objects.select_for_update(of=('self',)).select_related('team__captain').get(pk=request.pk)
     slot = MentorSlot.objects.select_for_update(of=('self',)).select_related('mentor').get(pk=slot.pk)
     as_organizer = can_manage(actor, event)
-    captain = team_services.is_captain(actor, current.team)
-    if not (captain or as_organizer):
-        raise PermissionDenied(_('Seul le capitaine de l’équipe (ou un organisateur) peut réserver un mentor.'))
+    member = _is_active_member(actor, current.team)
+    if not (member or as_organizer):
+        raise PermissionDenied(_('Seuls les membres de l’équipe (ou un organisateur) peuvent réserver un mentor.'))
     if event.status == Hackathon.Status.ARCHIVED:
         raise ValidationError(ARCHIVED)
     if event.status not in OPEN_STATUSES or not phase_is_open(event, EventPhase.Kind.DEVELOPMENT):
@@ -448,13 +445,13 @@ def book_session(*, actor, request, slot):
     current.status = SupportRequest.Status.BOOKED
     current.save()
     record(event=event, actor=actor, action='session.booked', obj=session, request=current.pk, slot=slot.pk,
-        mentor=slot.mentor_id, start=_iso(slot.start), as_organizer=as_organizer and not captain)
+        mentor=slot.mentor_id, start=_iso(slot.start), as_organizer=as_organizer and not member)
     return session
 
 
 @transaction.atomic
 def cancel_session(*, actor, session):
-    """Before the start, the captain, the mentor or an organizer may cancel. The slot is free again and the
+    """Before the start, a member of the team, the mentor or an organizer may cancel. The slot is free again and the
     request goes back to OPEN; the cancelled session stays in the history."""
     ref = MentoringSession.objects.select_related('slot').get(pk=session.pk)
     _lock_users(actor.pk, ref.slot.mentor_id)
@@ -462,10 +459,10 @@ def cancel_session(*, actor, session):
     current = MentoringSession.objects.select_for_update(of=('self',)).select_related('request__team__captain', 'slot').get(pk=ref.pk)
     team_request = SupportRequest.objects.select_for_update(of=('self',)).get(pk=current.request_id)
     as_organizer = can_manage(actor, event)
-    captain = team_services.is_captain(actor, current.request.team)
+    member = _is_active_member(actor, current.request.team)
     mentor = current.slot.mentor_id == actor.pk
-    if not (captain or mentor or as_organizer):
-        raise PermissionDenied(_('Seuls le capitaine, le mentor ou un organisateur peuvent annuler ce rendez-vous.'))
+    if not (member or mentor or as_organizer):
+        raise PermissionDenied(_('Seuls un membre de l’équipe, le mentor ou un organisateur peuvent annuler ce rendez-vous.'))
     if event.status == Hackathon.Status.ARCHIVED:
         raise ValidationError(ARCHIVED)
     if current.status != MentoringSession.Status.BOOKED:
@@ -478,7 +475,7 @@ def cancel_session(*, actor, session):
         team_request.status = SupportRequest.Status.OPEN
         team_request.save()
     record(event=event, actor=actor, action='session.cancelled', obj=current, request=team_request.pk,
-        by='team' if captain else 'mentor' if mentor else 'organizer')
+        by='team' if member else 'mentor' if mentor else 'organizer')
     return current
 
 
@@ -573,7 +570,7 @@ def can_cancel_session(user, session):
         return False
     if session.slot.hackathon.status == Hackathon.Status.ARCHIVED:
         return False
-    return bool(team_services.is_captain(user, session.request.team) or session.slot.mentor_id == user.pk
+    return bool(_is_active_member(user, session.request.team) or session.slot.mentor_id == user.pk
         or can_manage(user, session.slot.hackathon))
 
 

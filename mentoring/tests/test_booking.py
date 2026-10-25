@@ -77,12 +77,17 @@ class BookSessionTests(LiveBase):
         entry = M4History.objects.get(action='session.booked', object_id=session.pk)
         self.assertEqual((entry.actor, entry.details['mentor'], entry.details['as_organizer']), (self.captain, self.mentor.pk, False))
 
-    def test_only_the_captain_or_an_organizer_may_book(self):
+    def test_only_a_member_of_the_team_or_an_organizer_may_book(self):
         request, slot = self.request(), self.slot()
-        for actor in (self.member, self.outsider, self.rival_captain, self.mentor):
+        for actor in (self.outsider, self.rival_captain, self.mentor):
             with self.subTest(actor=actor.username), self.assertRaises(PermissionDenied):
                 services.book_session(actor=actor, request=request, slot=slot)
         self.assertFalse(MentoringSession.objects.exists())
+
+    def test_a_simple_member_books_and_it_is_not_an_organizer_intervention(self):
+        session = services.book_session(actor=self.member, request=self.request(), slot=self.slot())
+        self.assertEqual(session.booked_by, self.member)
+        self.assertFalse(M4History.objects.get(action='session.booked', object_id=session.pk).details['as_organizer'])
 
     def test_an_organizer_may_step_in_and_is_traced(self):
         session = services.book_session(actor=self.owner, request=self.request(), slot=self.slot())
@@ -164,13 +169,19 @@ class CancelSessionTests(LiveBase):
                 self.assertEqual(MentorSlot.objects.get(pk=slot.pk).availability, 'AVAILABLE')
                 self.assertEqual(M4History.objects.filter(action='session.cancelled', object_id=session.pk).get().details['by'], who)
 
-    def test_a_simple_member_or_a_stranger_cannot_cancel(self):
+    def test_a_stranger_or_another_mentor_cannot_cancel(self):
         session = self.book()
-        for actor in (self.member, self.outsider, self.rival_captain, self.mentor2):
+        for actor in (self.outsider, self.rival_captain, self.mentor2):
             with self.subTest(actor=actor.username), self.assertRaises(PermissionDenied):
                 services.cancel_session(actor=actor, session=session)
         session.refresh_from_db()
         self.assertEqual(session.status, 'BOOKED')
+
+    def test_a_simple_member_can_cancel(self):
+        session = self.book()
+        services.cancel_session(actor=self.member, session=session)
+        session.refresh_from_db()
+        self.assertEqual(session.status, 'CANCELLED')
 
     def test_a_started_or_cancelled_appointment_cannot_be_cancelled(self):
         started = self.past_session()
@@ -249,14 +260,16 @@ class BookingViewTests(LiveBase):
         self.assertContains(page, '<time datetime=')
         self.assertContains(page, '<h1', count=1)
 
-    def test_a_simple_member_can_look_but_not_book(self):
+    def test_a_simple_member_can_book_but_an_outsider_cannot(self):
         request, slot = self.request(), self.slot()
-        self.client.force_login(self.member)
-        page = self.client.get(self.book_url(request))
-        self.assertContains(page, 'Vous ne pouvez pas réserver pour le moment.')
-        self.assertNotContains(page, self.slot_url(request, slot))
-        self.assertEqual(self.client.post(self.slot_url(request, slot), follow=True).redirect_chain[-1][0], self.book_url(request))
+        self.client.force_login(self.outsider)
+        self.assertEqual(self.client.get(self.book_url(request)).status_code, 404)
+        self.assertEqual(self.client.post(self.slot_url(request, slot)).status_code, 404)
         self.assertFalse(MentoringSession.objects.exists())
+        self.client.force_login(self.member)
+        self.assertContains(self.client.get(self.book_url(request)), self.slot_url(request, slot))
+        self.client.post(self.slot_url(request, slot))
+        self.assertEqual(MentoringSession.objects.get().booked_by, self.member)
 
     def test_booking_redirects_to_the_appointment(self):
         request, slot = self.request(), self.slot()
@@ -308,11 +321,9 @@ class BookingViewTests(LiveBase):
         MentorExpertise.objects.all().delete()
         self.assertContains(self.client.get(self.book_url(request), {'skill': self.django.pk}), 'Aucun mentor disponible n’a déclaré cette compétence')
 
-    def test_the_request_page_offers_the_booking_to_the_captain_only(self):
+    def test_the_request_page_offers_the_booking_to_every_member(self):
         request = self.request()
-        self.client.force_login(self.captain)
-        self.assertContains(self.client.get(request.get_absolute_url()), self.book_url(request))
-        self.client.force_login(self.member)
-        page = self.client.get(request.get_absolute_url())
-        self.assertNotContains(page, self.book_url(request))
-        self.assertContains(page, 'Le capitaine de l’équipe réserve le mentor.')
+        for user in (self.captain, self.member):
+            with self.subTest(user=user.username):
+                self.client.force_login(user)
+                self.assertContains(self.client.get(request.get_absolute_url()), self.book_url(request))

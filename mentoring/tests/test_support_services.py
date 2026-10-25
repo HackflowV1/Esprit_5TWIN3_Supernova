@@ -102,9 +102,10 @@ class CancelRequestTests(RequestBase):
         self.assertTrue(last.details['as_organizer'])
         self.assertFalse(M4History.objects.filter(action='request.cancelled', actor=self.member).first().details['as_organizer'])
 
-    def test_other_members_and_outsiders_cannot_cancel(self):
-        request = self.open(actor=self.captain)
-        for actor in (self.member, self.outsider, self.rival_captain, self.mentor):
+    def test_any_member_can_cancel_but_outsiders_cannot(self):
+        services.cancel_request(actor=self.member, request=self.open(actor=self.captain))
+        request = self.open(actor=self.captain, subject='Autre')
+        for actor in (self.outsider, self.rival_captain, self.mentor):
             with self.subTest(actor=actor.username), self.assertRaises(PermissionDenied):
                 services.cancel_request(actor=actor, request=request)
         request.refresh_from_db()
@@ -195,6 +196,6 @@ class TranslationTests(RequestBase):
             request = self.open()
             with self.assertRaises(PermissionDenied) as caught:
                 services.cancel_request(actor=self.outsider, request=request)
-            self.assertIn('Only the author, the captain or an organizer', str(caught.exception))
+            self.assertIn('Only the members of the team or an organizer', str(caught.exception))
         with translation.override('fr'):
             self.assertEqual(str(SupportRequest.Status.BOOKED.label), 'Rendez-vous réservé')

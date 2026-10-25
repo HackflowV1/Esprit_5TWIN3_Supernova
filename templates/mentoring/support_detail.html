@@ -25,7 +25,7 @@
 {% if support_request.status == 'OPEN' %}
 <p><strong>{% translate 'Choisir un mentor et un créneau.' %}</strong></p>
 {% if can_book %}<p><a class="button small" href="{% url 'mentoring:support-book' support_request.pk %}">{% translate 'Voir les créneaux disponibles' %}</a></p>
-{% else %}<p class="muted">{% translate 'Le capitaine de l’équipe réserve le mentor.' %}</p>{% endif %}
+{% else %}<p class="muted">{% translate 'Un membre de l’équipe réserve le mentor.' %}</p>{% endif %}
 {% elif support_request.status == 'BOOKED' %}
 <p><strong>{% translate 'Un rendez-vous est réservé : préparez vos questions.' %}</strong></p>
 {% if active_session %}<p><a class="button small" href="{{ active_session.get_absolute_url }}">{% translate 'Voir le rendez-vous' %}</a></p>{% endif %}
