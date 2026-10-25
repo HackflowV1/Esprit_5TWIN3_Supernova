@@ -2,7 +2,7 @@ from pathlib import Path
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.core.exceptions import PermissionDenied, ValidationError
-from django.http import FileResponse, Http404
+from django.http import FileResponse, Http404, JsonResponse
 from django.shortcuts import get_object_or_404, redirect, render
 from django.views.decorators.http import require_POST
 from accounts.models import Role, AssignmentStatus
@@ -12,6 +12,8 @@ from projects.models import Deliverable, Submission
 from .models import EvaluationCampaign, JuryAssignment, Evaluation, ResultPublication, Prize, ReviewHistory
 from .forms import (CriterionFormSet, CampaignForm, AssignmentForm, EvaluationForm, ReasonForm, PrizeForm, AwardForm)
 from . import services
+from .ai import analyze_disagreement, AnalysisUnavailable
+from .ai_storage import load_analysis, save_analysis
 
 
 def _event(request, slug, mutable=False):
@@ -190,7 +192,27 @@ def anomalies(request, slug):
             return redirect('evaluations:anomalies', slug=slug)
         except ValidationError as error:
             _error(request, error)
-    return render(request, 'evaluations/anomalies.html', _context(event, rows=[r for r in services.ranking(event) if r['divergent']], history=ReviewHistory.objects.filter(hackathon=event).select_related('actor', 'submission__project', 'assignment').order_by('-created_at'), form=form))
+    rows = [r for r in services.ranking(event) if r['divergent']]
+    for row in rows:
+        row['saved_analysis'] = load_analysis(event, row)
+    return render(request, 'evaluations/anomalies.html', _context(event, rows=rows, history=ReviewHistory.objects.filter(hackathon=event).select_related('actor', 'submission__project', 'assignment').order_by('-created_at'), form=form))
+
+
+@login_required
+@require_POST
+def analyze_divergence(request, slug, pk):
+    event = _event(request, slug)
+    row = next((r for r in services.ranking(event) if r['submission_id'] == pk), None)
+    if row is None:
+        raise Http404
+    try:
+        analysis = analyze_disagreement(event, row)
+        save_analysis(event, row, analysis)
+        return JsonResponse({'analysis': analysis})
+    except ValidationError as error:
+        return JsonResponse({'error': ' '.join(error.messages)}, status=400)
+    except AnalysisUnavailable as error:
+        return JsonResponse({'error': str(error)}, status=503)
 
 
 @login_required
