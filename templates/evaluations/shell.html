@@ -1,0 +1,8 @@
+{% extends 'base.html' %}{% load static %}
+{% block title %}Jury & résultats — HackFlow{% endblock %}
+{% block extra_css %}{{ block.super }}<link rel="stylesheet" href="{% static 'evaluations/workspace.css' %}">{% endblock %}
+{% block breadcrumbs %}<nav class="breadcrumbs" aria-label="Fil d’Ariane"><ol><li><a href="{% url 'core:home' %}">Accueil</a></li>{% if event %}<li><a href="{{ event.get_absolute_url }}">{{ event.title }}</a></li>{% endif %}<li aria-current="page">Jury &amp; résultats</li></ol></nav>{% endblock %}
+{% block content %}<div class="m5-workspace">
+<nav class="m5-nav" aria-label="Jury et résultats"><a href="{% url 'evaluations:hub' %}">Mon espace jury</a>{% if event %}<a href="{% url 'evaluations:results' event.slug %}">Résultats officiels</a>{% if private_workspace %}<a href="{% url 'evaluations:dashboard' event.slug %}">Pilotage</a><a href="{% url 'evaluations:rubric' event.slug %}">Grille</a><a href="{% url 'evaluations:assignments' event.slug %}">Affectations</a><a href="{% url 'evaluations:anomalies' event.slug %}">Vérifications</a><a href="{% url 'evaluations:ranking' event.slug %}">Classement</a><a href="{% url 'evaluations:prizes' event.slug %}">Prix</a>{% endif %}{% endif %}</nav>
+{% if event %}<p class="m5-eyebrow">{{ event.title }}</p>{% endif %}
+{% block workspace %}{% endblock %}</div>{% endblock %}

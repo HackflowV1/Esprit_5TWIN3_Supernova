@@ -38,6 +38,7 @@ INSTALLED_APPS = [
     'teams',
     'mentoring',
     'projects',
+    'evaluations',
 ]
 
 MIDDLEWARE = [

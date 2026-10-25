@@ -51,6 +51,7 @@
 
   <!-- In-Page Sticky Nav -->
   <nav class="section-nav" aria-label="{% translate 'Navigation de la page' %}">
+    <a href="{% url 'evaluations:results' event.slug %}" class="section-nav-link">{% icon 'award' 15 %} {% translate 'Résultats officiels' %}</a>
     <a href="#about-title" class="section-nav-link">{% icon 'info' 15 %} {% translate 'À propos' %}</a>
     <a href="#rules-title" class="section-nav-link">{% icon 'shield' 15 %} {% translate 'Règlement & Conditions' %}</a>
     <a href="#phases-title" class="section-nav-link">{% icon 'calendar' 15 %} {% translate 'Calendrier' %} <span class="nav-count">{{ phases|length }}</span></a>
