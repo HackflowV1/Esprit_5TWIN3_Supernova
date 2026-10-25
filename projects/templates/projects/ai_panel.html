@@ -1,0 +1,97 @@
+{% load i18n ui %}
+<div class="m3-ai-container" id="ai-panel-content">
+  <header class="m3-section-head m3-ai-head">
+    <div class="m3-ai-title-wrap">
+      <h2 id="ai-assistant-title">{% icon 'dashboard' 19 %} {% translate 'Assistant IA du projet' %}</h2>
+      {% if ai_analysis %}
+      <div class="m3-ai-meta">
+        <span class="m3-ai-model">{% icon 'code' 14 %} {{ ai_analysis.model }}</span>
+        <time datetime="{{ ai_analysis.created_at|date:'c' }}">{% icon 'clock' 14 %} {{ ai_analysis.created_at|date:'d/m/Y H:i' }}</time>
+        {% if ai_is_outdated %}
+        <span class="m3-ai-badge is-outdated" title="{% translate 'Le projet a été modifié depuis cette analyse' %}">
+          {% icon 'clock' 13 %} {% translate 'Analyse obsolète (projet modifié)' %}
+        </span>
+        {% else %}
+        <span class="m3-ai-badge is-fresh">
+          {% icon 'check' 13 %} {% translate 'Analyse à jour' %}
+        </span>
+        {% endif %}
+      </div>
+      {% endif %}
+    </div>
+
+    <form method="post" action="{% url 'projects:ai-analyze' project.pk %}" class="m3-ai-analyze-form" id="ai-analyze-form">
+      {% csrf_token %}
+      <button type="submit" class="button small secondary m3-ai-btn" id="ai-analyze-btn">
+        {% icon 'dashboard' 15 %}
+        {% if ai_analysis %}{% translate 'Relancer l’analyse' %}{% else %}{% translate 'Analyser mon projet' %}{% endif %}
+      </button>
+    </form>
+  </header>
+
+  <div class="m3-ai-status" id="ai-status" role="status" aria-live="polite" hidden></div>
+
+  {% if ai_analysis %}
+  <div class="m3-ai-body">
+    <div class="m3-ai-summary">
+      <h3>{% translate 'Résumé du projet' %}</h3>
+      <p class="m3-ai-prose">{{ ai_analysis.summary|linebreaks }}</p>
+    </div>
+
+    <div class="m3-ai-grid">
+      <div class="m3-ai-block m3-ai-suggestions">
+        <h3>{% icon 'award' 16 %} {% translate 'Axes d’amélioration recommandés (3)' %}</h3>
+        <ol class="m3-ai-steps">
+          {% for suggestion in ai_analysis.suggestions %}
+          <li><strong>#{{ forloop.counter }}</strong> <span>{{ suggestion }}</span></li>
+          {% endfor %}
+        </ol>
+      </div>
+
+      <div class="m3-ai-block m3-ai-questions">
+        <h3>{% icon 'help' 16 %} {% translate 'Points à clarifier & questions clés' %}</h3>
+        <ul class="m3-ai-bullets">
+          {% for question in ai_analysis.questions %}
+          <li>{{ question }}</li>
+          {% empty %}
+          <li class="muted">{% translate 'Aucun point d’ombre majeur détecté.' %}</li>
+          {% endfor %}
+        </ul>
+      </div>
+    </div>
+
+    <div class="m3-ai-pitch-card">
+      <div class="m3-ai-pitch-header">
+        <div>
+          <h3>{% icon 'award' 17 %} {% translate 'Proposition de pitch (format 60 secondes)' %}</h3>
+          <p class="m3-ai-pitch-hint">{% translate 'Calibré pour une présentation orale fluide d’environ une minute (~130–160 mots).' %}</p>
+        </div>
+        {% if editable and not project.official_submission_id %}
+        <form method="post" action="{% url 'projects:ai-apply-pitch' project.pk %}" class="m3-ai-apply-form" id="ai-apply-pitch-form">
+          {% csrf_token %}
+          <input type="hidden" name="pitch" value="{{ ai_analysis.pitch }}">
+          <button type="submit" class="button small m3-ai-apply-btn" id="ai-apply-pitch-btn">
+            {% icon 'check' 15 %} {% translate 'Appliquer ce pitch au projet' %}
+          </button>
+        </form>
+        {% elif project.official_submission_id %}
+        <span class="m3-ai-frozen-note">
+          {% icon 'shield' 14 %} {% translate 'Fiche officielle figée — modification désactivée' %}
+        </span>
+        {% endif %}
+      </div>
+      <blockquote class="m3-ai-pitch-text" id="ai-pitch-display">{{ ai_analysis.pitch|linebreaks }}</blockquote>
+    </div>
+
+    <footer class="m3-ai-footer">
+      <small>{% translate 'Généré par IA de façon consultative et factuelle. N’invente aucune fonctionnalité. L’application d’un pitch ne modifie jamais les versions officielles figées.' %}</small>
+    </footer>
+  </div>
+  {% else %}
+  <div class="m3-ai-empty">
+    <div class="m3-ai-empty-icon">{% icon 'dashboard' 32 %}</div>
+    <h3>{% translate 'Préparez votre projet et votre pitch' %}</h3>
+    <p>{% translate 'Cliquez sur « Analyser mon projet » pour obtenir un diagnostic factuel : synthèse claire, 3 suggestions concrètes d’amélioration, questions de cadrage et proposition de pitch pour votre soutenance.' %}</p>
+  </div>
+  {% endif %}
+</div>

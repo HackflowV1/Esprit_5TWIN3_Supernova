@@ -62,7 +62,7 @@ class ValidationTests(SimpleTestCase):
             inspect_upload(huge)
 
     def test_templates_compile(self):
-        for name in ['shell', 'form', 'mine', 'detail', 'version', 'gallery', 'public', 'deliverables', 'pagination']:
+        for name in ['shell', 'form', 'mine', 'detail', 'version', 'gallery', 'public', 'deliverables', 'pagination', 'ai_panel']:
             get_template(f'projects/{name}.html')
 
 
@@ -584,3 +584,4 @@ class DemoTests(TestCase):
         call_command('seed_m3_demo', stdout=StringIO())
         self.assertEqual(Project.objects.count(), 2)
         self.assertEqual(project.activities.count(), count)
+

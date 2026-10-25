@@ -1,6 +1,6 @@
 {% extends 'projects/shell.html' %}{% load i18n ui static %}
 {% block title %}{{ project }} — HackFlow{% endblock %}
-{% block extra_js %}<script src="{% static 'js/project-board.js' %}" defer></script>{% endblock %}
+{% block extra_js %}<script src="{% static 'js/project-board.js' %}" defer></script><script src="{% static 'js/project-ai.js' %}" defer></script>{% endblock %}
 {% block workspace %}
 <div class="m3-tracker">
   <header class="m3-project-head">
@@ -24,6 +24,12 @@
   {% if project.exception_until %}<p class="message">{% translate 'Dérogation de dépôt jusqu’au' %} {{ project.exception_until }}.</p>{% endif %}
 
   {% include 'projects/board.html' %}
+
+  {% if can_use_ai %}
+  <section class="panel m3-ai-panel" id="ai-assistant" aria-labelledby="ai-assistant-title">
+    {% include 'projects/ai_panel.html' %}
+  </section>
+  {% endif %}
 
   <div class="m3-detail-layout" id="project-info">
     <section class="panel m3-project-info" aria-labelledby="project-info-title">

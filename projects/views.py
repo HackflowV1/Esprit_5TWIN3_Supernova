@@ -14,6 +14,7 @@ from accounts.permissions import can_manage
 from teams import services as teams
 from teams.models import Team
 from . import services
+from .ai import AnalysisUnavailable
 from .forms import ProjectForm, MilestoneForm, DeliverableForm, SubmitForm, ReopenForm
 from .models import Project, Submission, Deliverable, Milestone
 
@@ -103,12 +104,19 @@ def _board_context(request, project):
     milestones = list(project.milestones.all())
     for item in milestones:
         item.overdue = item.state != Milestone.State.DONE and item.due_at < timezone.now()
+    can_use_ai = services.is_member(request.user, project)
+    ai_analysis = project.ai_analyses.first() if can_use_ai else None
+    ai_is_outdated = ai_analysis.is_outdated(project) if ai_analysis else False
     return {**_context(request, project),
         'columns': [{'state': state, 'label': label, 'items': [item for item in milestones if item.state == state]}
             for state, label in Milestone.State.choices],
         'milestone_count': len(milestones),
         'completed_count': sum(item.state == Milestone.State.DONE for item in milestones),
-        'submissions': project.submissions.exclude(status=Submission.Status.DISCARDED), 'activities': project.activities.select_related('actor')[:30]}
+        'submissions': project.submissions.exclude(status=Submission.Status.DISCARDED),
+        'activities': project.activities.select_related('actor')[:30],
+        'can_use_ai': can_use_ai,
+        'ai_analysis': ai_analysis,
+        'ai_is_outdated': ai_is_outdated}
 
 
 @login_required
@@ -368,3 +376,85 @@ def download(request, deliverable_pk):
     response['X-Content-Type-Options'] = 'nosniff'
     response['Cache-Control'] = 'private, no-store'
     return response
+
+
+@login_required
+@require_POST
+def ai_analyze(request, pk):
+    project = _project(request, pk)
+    if not services.is_member(request.user, project):
+        raise PermissionDenied
+    ajax = request.headers.get('X-Requested-With') == 'XMLHttpRequest' or 'application/json' in request.headers.get('Accept', '')
+    try:
+        analysis = services.generate_project_analysis(actor=request.user, project=project, language=request.LANGUAGE_CODE or 'fr')
+    except ValidationError as exc:
+        error = ' '.join(exc.messages) if isinstance(exc, ValidationError) else str(exc)
+        if ajax:
+            return JsonResponse({'error': error}, status=400)
+        messages.error(request, error)
+        return redirect(f"{project.get_absolute_url()}#ai-assistant")
+    except AnalysisUnavailable as exc:
+        if ajax:
+            return JsonResponse({'error': str(exc)}, status=503)
+        messages.error(request, str(exc))
+        return redirect(f"{project.get_absolute_url()}#ai-assistant")
+
+    if ajax:
+        context = {
+            'project': project,
+            'ai_analysis': analysis,
+            'ai_is_outdated': False,
+            'can_use_ai': True,
+            'editable': services.is_member(request.user, project) and services.editing_open(project),
+        }
+        return JsonResponse({
+            'success': True,
+            'message': _('Analyse générée avec succès.'),
+            'html': render_to_string('projects/ai_panel.html', context, request=request),
+            'analysis': {
+                'id': analysis.pk,
+                'summary': analysis.summary,
+                'suggestions': analysis.suggestions,
+                'questions': analysis.questions,
+                'pitch': analysis.pitch,
+                'model': analysis.model,
+                'created_at': analysis.created_at.strftime('%d/%m/%Y %H:%M'),
+                'creator': str(analysis.created_by) if analysis.created_by else '',
+            }
+        })
+    messages.success(request, _('Analyse générée avec succès.'))
+    return redirect(f"{project.get_absolute_url()}#ai-assistant")
+
+
+@login_required
+@require_POST
+def ai_apply_pitch(request, pk):
+    project = _project(request, pk)
+    if not services.is_member(request.user, project):
+        raise PermissionDenied
+    if not (services.is_member(request.user, project) and services.editing_open(project)) or project.official_submission_id:
+        error = _("Le projet est figé par une soumission officielle ou les modifications sont fermées.")
+        if request.headers.get('X-Requested-With') == 'XMLHttpRequest' or 'application/json' in request.headers.get('Accept', ''):
+            return JsonResponse({'error': error}, status=400)
+        messages.error(request, error)
+        return redirect(project)
+
+    pitch = request.POST.get('pitch')
+    if not pitch:
+        latest = project.ai_analyses.first()
+        pitch = latest.pitch if latest else ''
+    try:
+        saved = services.apply_ai_pitch(actor=request.user, project=project, pitch=pitch)
+    except (ValidationError, PermissionDenied) as exc:
+        error = ' '.join(exc.messages) if isinstance(exc, ValidationError) else str(exc)
+        if request.headers.get('X-Requested-With') == 'XMLHttpRequest' or 'application/json' in request.headers.get('Accept', ''):
+            return JsonResponse({'error': error}, status=400)
+        messages.error(request, error)
+        return redirect(project)
+
+    message = _("Le pitch a été appliqué à votre projet avec succès.")
+    if request.headers.get('X-Requested-With') == 'XMLHttpRequest' or 'application/json' in request.headers.get('Accept', ''):
+        return JsonResponse({'success': True, 'pitch': saved.pitch, 'message': message})
+    messages.success(request, message)
+    return redirect(f"{project.get_absolute_url()}#project-info")
+
