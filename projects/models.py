@@ -1,4 +1,5 @@
-"""M3 data. Business writes belong to projects.services."""
+import hashlib
+import json
 from pathlib import Path
 from uuid import uuid4
 from django.conf import settings
@@ -178,4 +179,62 @@ class ProjectActivity(models.Model):
             'REOPEN': _('Dépôt réouvert par dérogation'), 'PUBLICATION': _('Visibilité modifiée'),
             'DISCARD_VERSION': _('Brouillon supprimé'), 'RESTORE_VERSION': _('Brouillon restauré'),
             'MOVE_MILESTONE': _('Étape déplacée'),
+            'AI_ANALYSIS': _('Analyse IA du projet réalisée'),
+            'APPLY_AI_PITCH': _('Pitch IA appliqué au projet'),
         }.get(self.action, _('Activité du projet'))
+
+
+def compute_project_fingerprint(target):
+    """Compute deterministic SHA-256 fingerprint for project content analyzed by AI."""
+    if hasattr(target, 'problem'):  # Project model instance
+        challenge_id = target.challenge_id
+        challenge_obj = getattr(target, 'challenge', None)
+        requirements = (challenge_obj.deliverables or '').strip() if challenge_obj else ''
+        payload = {
+            'title': (target.title or '').strip(),
+            'problem': (target.problem or '').strip(),
+            'solution': (target.solution or '').strip(),
+            'stack': (target.stack or '').strip(),
+            'pitch': (target.pitch or '').strip(),
+            'challenge_id': challenge_id,
+            'requirements': requirements,
+        }
+    elif isinstance(target, dict):
+        payload = {
+            'title': str(target.get('title') or '').strip(),
+            'problem': str(target.get('problem') or '').strip(),
+            'solution': str(target.get('solution') or '').strip(),
+            'stack': str(target.get('stack') or '').strip(),
+            'pitch': str(target.get('pitch') or '').strip(),
+            'challenge_id': target.get('challenge_id'),
+            'requirements': str(target.get('requirements') or '').strip(),
+        }
+    else:
+        payload = {}
+    encoded = json.dumps(payload, sort_keys=True, ensure_ascii=False).encode('utf-8')
+    return hashlib.sha256(encoded).hexdigest()
+
+
+class ProjectAIAnalysis(models.Model):
+    project = models.ForeignKey(Project, on_delete=models.CASCADE, related_name='ai_analyses')
+    created_by = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.SET_NULL, null=True, related_name='+')
+    created_at = models.DateTimeField(auto_now_add=True)
+    provider = models.CharField(max_length=50, default='gemini')
+    model = models.CharField(max_length=100)
+    summary = models.TextField(_('Résumé du projet'), blank=True)
+    suggestions = models.JSONField(_('Suggestions d’amélioration'), default=list, blank=True)
+    questions = models.JSONField(_('Questions sur les points flous'), default=list, blank=True)
+    pitch = models.TextField(_('Proposition de pitch (60s)'), blank=True)
+    snapshot = models.JSONField(_('Instantané analysé'), default=dict, blank=True)
+    fingerprint = models.CharField(_('Empreinte du contenu'), max_length=64, db_index=True)
+
+    class Meta:
+        ordering = ['-created_at', '-pk']
+
+    def __str__(self):
+        return f'{self.project.title} · IA ({self.created_at:%Y-%m-%d %H:%M})'
+
+    def is_outdated(self, current_project=None):
+        target = current_project or self.project
+        return self.fingerprint != compute_project_fingerprint(target)
+

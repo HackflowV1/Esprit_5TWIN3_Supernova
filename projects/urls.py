@@ -23,4 +23,6 @@ urlpatterns = [
     path('<int:pk>/versions/<int:version>/files/<int:deliverable_pk>/edit/', views.deliverable_edit, name='deliverable-edit'),
     path('<int:pk>/reopen/', views.reopen, name='reopen'),
     path('<int:pk>/publication/<str:action>/', views.publication, name='publication'),
+    path('<int:pk>/ai-analyze/', views.ai_analyze, name='ai-analyze'),
+    path('<int:pk>/ai-apply-pitch/', views.ai_apply_pitch, name='ai-apply-pitch'),
 ]

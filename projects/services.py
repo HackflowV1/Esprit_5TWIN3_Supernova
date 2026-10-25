@@ -1,4 +1,5 @@
-"""M3 operations serialize with M2: actor, event, then project. No external AI calls."""
+from datetime import timedelta
+from django.core.cache import cache
 from django.core.exceptions import PermissionDenied, ValidationError
 from django.db import transaction
 from django.db.models import Max
@@ -10,7 +11,11 @@ from hackathons.models import Hackathon, Challenge, EventPhase
 from hackathons.services import phase_is_open
 from teams import services as teams
 from teams.models import Team
-from .models import Project, Milestone, Submission, Deliverable, ProjectActivity
+from . import ai
+from .models import (
+    Project, Milestone, Submission, Deliverable, ProjectActivity,
+    ProjectAIAnalysis, compute_project_fingerprint,
+)
 from .validators import validate_link, validate_commit, inspect_upload
 
 
@@ -329,3 +334,60 @@ def metrics(event):
     total = projects.count()
     official = projects.filter(official_submission__isnull=False).count()
     return {'projects': total, 'official_submissions': official, 'missing_submissions': total - official, 'published_projects': projects.filter(published=True).count()}
+
+
+def generate_project_analysis(*, actor, project, language='fr'):
+    """Generate and persist an AI project review and pitch proposal.
+
+    Only active team members can request generation. Throttled and concurrency-locked.
+    """
+    if not is_member(actor, project):
+        raise PermissionDenied(_("Seuls les membres de l’équipe peuvent générer une analyse."))
+
+    latest = project.ai_analyses.first()
+    if latest and (timezone.now() - latest.created_at).total_seconds() < 10:
+        raise ValidationError(_("Veuillez patienter quelques instants avant de relancer une analyse."))
+
+    lock_key = f'project_ai_lock_{project.pk}'
+    if not cache.add(lock_key, True, timeout=45):
+        raise ValidationError(_("Une analyse est déjà en cours pour ce projet."))
+
+    try:
+        data = copilot_input(actor=actor, project=project)
+        snapshot = data['content']
+        fingerprint = compute_project_fingerprint(snapshot)
+        result = ai.analyze_project(snapshot, language=language)
+        analysis = ProjectAIAnalysis.objects.create(
+            project=project,
+            created_by=actor,
+            provider=result.get('provider', 'gemini'),
+            model=result.get('model', 'gemini-2.5-flash'),
+            summary=result['summary'],
+            suggestions=result['suggestions'],
+            questions=result['questions'],
+            pitch=result['pitch'],
+            snapshot=snapshot,
+            fingerprint=fingerprint,
+        )
+        _log(project, actor, 'AI_ANALYSIS', model=analysis.model, analysis_id=analysis.pk)
+        return analysis
+    finally:
+        cache.delete(lock_key)
+
+
+def apply_ai_pitch(*, actor, project, pitch):
+    """Apply the suggested pitch to the live project.
+
+    Strictly forbids modifying frozen official submissions or closed editing.
+    """
+    if not is_member(actor, project):
+        raise PermissionDenied(_("Seuls les membres de l’équipe peuvent modifier le pitch."))
+    if not editing_open(project) or project.official_submission_id:
+        raise ValidationError(_("La fiche officielle est figée. Le pitch ne peut plus être modifié."))
+    pitch = (pitch or '').strip()
+    if not pitch:
+        raise ValidationError(_("Le texte du pitch ne peut pas être vide."))
+    saved = save_project(actor=actor, team=project.team, data={'pitch': pitch}, project=project)
+    _log(project, actor, 'APPLY_AI_PITCH')
+    return saved
+
