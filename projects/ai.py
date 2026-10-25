@@ -144,6 +144,8 @@ def analyze_project(snapshot, language='fr'):
                 text = (response.text or '').strip()
                 if not text:
                     raise AnalysisUnavailable(_("Gemini n’a retourné aucun contenu."))
+                if text.startswith('```'):
+                    text = text.removeprefix('```json').removeprefix('```').removesuffix('```').strip()
                 data = json.loads(text)
                 cleaned = clean_analysis(data)
                 latency_ms = round((time.perf_counter() - started) * 1000)
