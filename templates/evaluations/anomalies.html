@@ -1,2 +1,42 @@
 {% extends 'evaluations/shell.html' %}
-{% block workspace %}<h1>Divergences et vérifications</h1><p>Une alerte apparaît lorsque l’écart maximum entre totaux validés atteint le seuil de campagne. La résolution humaine ne modifie aucune note et devient caduque si les évaluations changent.</p>{% for row in rows %}<article class="m5-card"><h2>{{ row.project }} · {{ row.team }}</h2><p>Écart : {{ row.spread|floatformat:2 }} points sur 100. {% if row.resolved %}Vérifié.{% else %}À vérifier.{% endif %}</p>{% if not row.resolved %}<form method="post" class="m5-form" novalidate>{% csrf_token %}<input type="hidden" name="submission" value="{{ row.submission_id }}">{{ form.as_p }}<button class="button">Enregistrer la vérification</button></form>{% endif %}</article>{% empty %}<p>Aucune divergence détectée.</p>{% endfor %}<h2>Historique des contrôles</h2>{% for h in history %}<article class="m5-card"><p>{{ h.get_kind_display }} · {{ h.submission }} · {{ h.actor }} · {{ h.created_at }}</p><p>{{ h.reason|linebreaksbr }}</p></article>{% empty %}<p>Aucune vérification.</p>{% endfor %}{% endblock %}
+{% load ui %}
+{% block workspace %}
+<header class="m5-review-header">
+  <span class="m5-eyebrow">Contrôle des évaluations</span>
+  <h1>Divergences et vérifications</h1>
+  <p>Repérez les écarts de notation entre jurés et consignez vos vérifications.</p>
+</header>
+<div class="m5-review-layout">
+  <section aria-labelledby="alerts-title">
+    <div class="m5-section-heading"><h2 id="alerts-title">Écarts de notation</h2><span class="m5-count">{{ rows|length }}</span></div>
+    {% for row in rows %}
+    <article class="m5-card m5-review-card">
+      <div class="m5-review-card-heading"><div><h3>{{ row.project }}</h3><p class="m5-muted">{{ row.team }}</p></div><span class="m5-review-status {% if row.resolved %}is-resolved{% endif %}">{% if row.resolved %}Vérifié{% else %}À vérifier{% endif %}</span></div>
+      <p class="m5-spread"><strong>{{ row.spread|floatformat:2 }}</strong> points d’écart sur 100</p>
+      {% if not row.resolved %}<form method="post" class="m5-form" novalidate>{% csrf_token %}<input type="hidden" name="submission" value="{{ row.submission_id }}">{{ form.as_p }}<button class="button">Enregistrer la vérification</button></form>{% endif %}
+    </article>
+    {% empty %}
+    <div class="m5-card m5-empty-review">
+      <span class="m5-empty-icon">{% icon 'check' 28 %}</span>
+      <h3>Aucune divergence détectée</h3>
+      <p>Les écarts de notes qui atteignent le seuil de la campagne apparaîtront ici.</p>
+      <a class="button secondary" href="{% url 'evaluations:ranking' event.slug %}">Consulter le classement {% icon 'arrow-right' %}</a>
+    </div>
+    {% endfor %}
+  </section>
+  <aside class="m5-card m5-review-help" aria-labelledby="review-help-title">
+    <span class="m5-help-icon">{% icon 'compare' 24 %}</span>
+    <h2 id="review-help-title">Comment ça fonctionne ?</h2>
+    <p>Une divergence est la différence entre la meilleure et la moins bonne note validée d’un projet.</p>
+    <div class="m5-review-example"><span>Exemple de notes</span><strong>90 /100 · 60 /100</strong><span>Écart : <b>30 points</b></span></div>
+    <p>Une alerte apparaît lorsque cet écart atteint le seuil configuré dans la grille.</p>
+    <p class="m5-review-note">{% icon 'shield' %}<span>La vérification ne modifie aucune note. Elle doit être renouvelée si les évaluations changent.</span></p>
+  </aside>
+</div>
+<section class="m5-review-history" aria-labelledby="history-title">
+  <div class="m5-section-heading"><h2 id="history-title">Historique des contrôles</h2>{% icon 'history' 20 %}</div>
+  {% for h in history %}
+  <article class="m5-card m5-history-entry"><div class="m5-review-card-heading"><strong>{{ h.get_kind_display }} · {{ h.submission }}</strong><time datetime="{{ h.created_at|date:'c' }}">{{ h.created_at|date:'d/m/Y H:i' }}</time></div><p class="m5-muted">Vérifié par {{ h.actor }}</p><p>{{ h.reason|linebreaksbr }}</p></article>
+  {% empty %}<div class="m5-card m5-history-empty">{% icon 'history' 24 %}<div><h3>Aucun contrôle enregistré</h3><p>Vos vérifications et leurs justifications seront conservées ici.</p></div></div>{% endfor %}
+</section>
+{% endblock %}
