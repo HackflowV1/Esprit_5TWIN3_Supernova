@@ -80,8 +80,9 @@ html[data-theme="dark"] {
 body {font-size:0.9375rem; line-height:1.6; background:var(--body-bg)}
 body, input, select, textarea, button {font-family:var(--font-family-primary)}
 #container {min-width:0}
-#header {padding:16px 32px; gap:16px; flex-wrap:wrap; flex-direction:row; align-items:center; background:var(--body-bg); color:var(--body-fg)}
-#branding {margin:0}
+.main > .content {min-width:0}
+#header {box-sizing:border-box; padding:16px max(24px, calc((100% - 1216px) / 2)); gap:16px; flex-wrap:wrap; flex-direction:row; align-items:center; background:var(--body-bg); color:var(--body-fg)}
+#branding {margin:0; min-width:0; flex-shrink:0}
 #site-name {margin:0; line-height:1.4; font-size:1.375rem; font-weight:600; letter-spacing:-.5px}
 #site-name a {display:flex; align-items:center; gap:16px; color:var(--body-fg)}
 .admin-caption {margin:0; padding-left:16px; border-left:1px solid var(--hairline-color); color:var(--body-quiet-color); font-size:0.8125rem}
@@ -142,9 +143,39 @@ input[type=checkbox].action-select {margin:0}
 #nav-sidebar .current-model {background:var(--selected-bg)}
 #nav-sidebar .current-app .section:link, #nav-sidebar .current-app .section:visited {color:var(--body-fg)}
 .toggle-nav-sidebar {background:var(--darkened-bg); color:var(--body-fg); border-color:var(--hairline-color)}
-.dashboard #content {max-width:1280px; width:100%; box-sizing:border-box; margin:auto}
-.dashboard #content-main {width:calc(100% - 320px)}
-.dashboard #content-related {width:280px; margin-right:-320px; background:var(--darkened-bg); border-radius:8px}
+/* Keep Django's sidebar inside the dashboard instead of using negative float margins. */
+.dashboard #content {
+  display:grid;
+  grid-template-columns:minmax(0, 1fr) 280px;
+  align-items:start;
+  gap:24px;
+  max-width:1280px;
+  width:100%;
+  box-sizing:border-box;
+  margin:0 auto;
+}
+.dashboard #content:not(:has(#content-related)) {grid-template-columns:minmax(0, 1fr)}
+.dashboard #content > h1, .dashboard #content > h2 {grid-column:1 / -1; margin:0}
+.dashboard #content > br.clear {display:none}
+.dashboard #content-main {float:none; width:auto; min-width:0}
+.dashboard #content-related {
+  float:none;
+  width:auto;
+  min-width:0;
+  margin:0;
+  background:var(--surface);
+  border:1px solid var(--hairline-color);
+  border-radius:8px;
+  overflow-wrap:anywhere;
+}
+.dashboard #content-main .module:last-child {margin-bottom:0}
+.dashboard #content-main .module th, .dashboard #content-main .module td {padding:4px 16px; vertical-align:middle}
+.dashboard #content-main .module th a {display:flex; align-items:center; min-height:44px}
+.dashboard #content-main .module td {width:1%; padding-left:8px; padding-right:12px}
+.dashboard #content-main .module :is(.addlink, .changelink, .viewlink) {padding-right:0}
+.dashboard #content-related .module {margin-bottom:0}
+.dashboard #content-related .module h2 {font-size:1rem; margin-bottom:16px}
+.dashboard #content-related .actionlist li {margin-bottom:16px; line-height:1.5}
 #content-related .module {border:0; background:transparent}
 #content-related .module h2 {background:transparent}
 .errornote, ul.errorlist {border-radius:6px}
@@ -180,8 +211,8 @@ html[data-theme=dark] .admin-login-intro img {background:var(--brand-illustratio
 }
 @media (max-width:1024px) {
   #header, .login #header {padding:16px 24px}
-  .dashboard #content-main {width:100%}
-  .dashboard #content-related {width:100%; margin:24px 0 0; float:none; clear:both}
+  .dashboard #content {grid-template-columns:minmax(0, 1fr)}
+  .dashboard #content-related {margin:0; width:auto}
   .admin-login-layout {gap:32px}
 }
 @media (max-width:767px) {
@@ -189,6 +220,10 @@ html[data-theme=dark] .admin-login-intro img {background:var(--brand-illustratio
   #site-name a {gap:12px}
   .admin-caption {padding-left:12px}
   #content, .login #content {padding:24px 20px}
+  .dashboard #content {padding:24px 16px; gap:20px}
+  .dashboard #content-main .module th {padding-left:12px; padding-right:8px}
+  .dashboard #content-main .module td {padding-left:4px; padding-right:8px}
+  .dashboard #content-main .module :is(.addlink, .changelink, .viewlink) {font-size:0.8125rem; gap:4px}
   div.breadcrumbs {padding:12px 20px}
   .admin-login-layout {display:block; max-width:480px; margin:0 auto}
   .admin-login-intro {display:none}
