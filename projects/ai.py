@@ -159,6 +159,12 @@ def analyze_project(snapshot, language='fr'):
             logger.warning("Project AI analysis with model %s failed: %s", model, exc)
             continue
         except Exception as exc:
+            msg = str(exc)
+            if 'API_KEY_INVALID' in msg or 'API key not valid' in msg:
+                raise AnalysisUnavailable(_("La clé GOOGLE_API_KEY configurée dans votre fichier .env est invalide ou expirée. Veuillez vérifier votre clé sur Google AI Studio.")) from None
+            if 'RESOURCE_EXHAUSTED' in msg or getattr(exc, 'code', None) == 429:
+                last_error = AnalysisUnavailable(_("Le quota de votre clé Gemini est temporairement dépassé (429). Veuillez réessayer dans un instant."))
+                continue
             last_error = exc
             logger.warning("Project AI analysis with model %s failed: %s", model, exc.__class__.__name__)
             continue
