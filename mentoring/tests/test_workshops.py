@@ -318,7 +318,7 @@ class WorkshopViewTests(WorkshopBase):
 
     def test_form_errors_are_reported_and_nothing_is_saved(self):
         self.client.force_login(self.owner)
-        self.assertContains(self.post(location='', url=''), 'Indiquez une salle')
+        self.assertContains(self.post(location=''), 'obligatoire')
         self.make(start=self.at(1), end=self.at(2))
         self.assertContains(self.post(start=self.at(1, 30), end=self.at(2, 30)), 'déjà un autre atelier')
         self.assertEqual(self.post(capacity=0).status_code, 200)
@@ -421,3 +421,37 @@ class WorkshopConcurrencyTests(TransactionTestCase):
             result = list(executor.map(publish, [0, 30]))
         self.assertCountEqual(result, ['ok', 'rejected'])
         self.assertEqual(Workshop.objects.count(), 1)
+
+
+class WorkshopFormRoomOnlyTests(WorkshopBase):
+    def setUp(self):
+        self.client.force_login(self.owner)
+        self.add_url = reverse('mentoring:workshop-add')
+
+    def fields(self, **overrides):
+        data = self.data(hackathon=self.event.pk, trainer=self.trainer.pk, **overrides)
+        data['start'], data['end'] = local(data['start']), local(data['end'])
+        return data
+
+    def test_the_form_has_a_required_room_and_no_link_field(self):
+        page = self.client.get(self.add_url)
+        self.assertNotContains(page, 'id_url')
+        self.assertNotContains(page, 'Lien en ligne')
+        self.assertNotContains(page, 'facultatif</span></label>\n  <input type="text" name="location"')
+        form = page.context['form']
+        self.assertTrue(form.fields['location'].required)
+        self.assertNotIn('url', form.fields)
+
+    def test_publishing_with_a_room_creates_a_workshop_without_link(self):
+        response = self.client.post(self.add_url, self.fields())
+        self.assertEqual(response.status_code, 302)
+        workshop = Workshop.objects.get()
+        self.assertEqual((workshop.location, workshop.url), ('Salle A', ''))
+
+    def test_editing_keeps_the_online_link_of_an_older_workshop(self):
+        workshop = self.make(url='https://meet.example.test/ancien')
+        response = self.client.post(reverse('mentoring:workshop-edit', args=[workshop.pk]), self.fields(title='Nouveau titre'))
+        self.assertEqual(response.status_code, 302)
+        workshop.refresh_from_db()
+        self.assertEqual((workshop.title, workshop.url), ('Nouveau titre', 'https://meet.example.test/ancien'))
+        self.assertNotIn('url', self.client.get(reverse('mentoring:workshop-edit', args=[workshop.pk])).context['form'].initial)

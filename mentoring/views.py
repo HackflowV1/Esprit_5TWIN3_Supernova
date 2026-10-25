@@ -333,7 +333,10 @@ class WorkshopFormMixin(PublisherRequiredMixin, FormView):
 
     def workshop_fields(self, form):
         data = form.cleaned_data
-        return {name: data[name] for name in ('trainer', 'title', 'description', 'capacity', 'start', 'end', 'location', 'url')}
+        fields = {name: data[name] for name in ('trainer', 'title', 'description', 'capacity', 'start', 'end', 'location')}
+        workshop = self.get_workshop()
+        fields['url'] = workshop.url if workshop else ''  # the form only takes a room; an existing online link is kept
+        return fields
 
 
 SUGGESTIONS_PER_HOUR = 12

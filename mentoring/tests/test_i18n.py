@@ -61,7 +61,7 @@ class EnglishInterfaceTests(TestCase):
         self.assertEnglishPage(reverse('mentoring:expertise-delete', args=[self.expertise.pk]), 'Remove the expertise “Django”?')
         self.assertEnglishPage(reverse('mentoring:slot-cancel', args=[self.slot.pk]), 'Cancel this slot?', 'Keep the slot')
         self.english(self.owner)  # workshops are published by the organizer
-        self.assertEnglishPage(reverse('mentoring:workshop-add'), 'Publish a workshop', 'Workshop topic', 'Number of seats', 'Provide a room, a link, or both.', 'Choose a mentor')
+        self.assertEnglishPage(reverse('mentoring:workshop-add'), 'Publish a workshop', 'Workshop topic', 'Number of seats', 'Room or place where the workshop takes place.', 'Choose a mentor')
         self.assertEnglishPage(reverse('mentoring:workshop-cancel', args=[self.workshop.pk]), 'Cancel this workshop?', 'Yes, cancel the workshop')
 
     def test_participant_sees_english_workshops(self):
@@ -78,7 +78,7 @@ class EnglishInterfaceTests(TestCase):
         self.english(self.owner)
         response = self.client.post(reverse('mentoring:workshop-add'), {'hackathon': self.event.pk, 'trainer': self.mentor.pk, 'title': 'X', 'capacity': 5,
             'start': local(self.workshop.start + timedelta(days=1)), 'end': local(self.workshop.end + timedelta(days=1))})
-        self.assertContains(response, 'Provide a room, an online link, or both.')
+        self.assertContains(response, 'This field is required.')
 
     def test_french_stays_the_default(self):
         self.client.force_login(self.mentor)

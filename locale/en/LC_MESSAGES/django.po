@@ -5201,3 +5201,9 @@ msgstr "Suggest a workshop"
 #: mentoring/views.py
 msgid "Trop de suggestions pour le moment, réessayez dans une heure."
 msgstr "Too many suggestions for now, try again in an hour."
+
+# --- M4 : atelier : salle uniquement ---
+
+#: mentoring/forms.py
+msgid "Salle ou lieu où se déroule l’atelier."
+msgstr "Room or place where the workshop takes place."

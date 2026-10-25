@@ -65,8 +65,7 @@ class WorkshopForm(forms.Form):
     end = forms.DateTimeField(label=_('Fin'), widget=DATETIME,
         help_text=format_lazy(_('Durée : de {min} minutes à {max} heures, pendant la phase de développement.'),
             min=Workshop.MIN_MINUTES, max=Workshop.MAX_MINUTES // 60))
-    location = forms.CharField(label=_('Salle'), max_length=200, required=False, help_text=_('Salle ou lieu, si l’atelier est sur place.'))
-    url = forms.URLField(label=_('Lien en ligne'), required=False, help_text=_('Indiquez une salle, un lien, ou les deux.'))
+    location = forms.CharField(label=_('Salle'), max_length=200, help_text=_('Salle ou lieu où se déroule l’atelier.'))
 
     def __init__(self, *args, user, workshop=None, **kwargs):
         super().__init__(*args, **kwargs)
@@ -82,7 +81,7 @@ class WorkshopForm(forms.Form):
                 role_assignments__hackathon=workshop.hackathon, role_assignments__role=Role.MENTOR,
                 role_assignments__status=AssignmentStatus.ACTIVE)
             self.initial = {name: getattr(workshop, name) for name in
-                ('hackathon', 'trainer', 'title', 'description', 'capacity', 'start', 'end', 'location', 'url')}
+                ('hackathon', 'trainer', 'title', 'description', 'capacity', 'start', 'end', 'location')}
 
 
 class SupportRequestForm(forms.Form):
