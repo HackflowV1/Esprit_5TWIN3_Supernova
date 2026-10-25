@@ -36,3 +36,53 @@ class ScoringTests(SimpleTestCase):
     def test_all_templates_compile(self):
         for name in ['shell', 'hub', 'dashboard', 'table', 'rubric', 'assignments', 'evaluate', 'ranking', 'anomalies', 'review', 'prizes', 'results']:
             get_template('evaluations/' + name + '.html')
+
+    def test_invalid_score_has_one_inline_error_for_both_actions(self):
+        for action in ['draft', 'finalize']:
+            for value in ['21', '-1', 'abc', '1.234']:
+                with self.subTest(action=action, value=value):
+                    form = EvaluationForm({'action': action, 'score_1': value, 'score_2': '8'}, criteria=self.criteria)
+                    self.assertFalse(form.is_valid())
+                    self.assertEqual(len(form.errors['score_1']), 1)
+                    self.assertEqual(form['score_1'].value(), value)
+
+    def test_score_boundaries_are_accepted(self):
+        form = EvaluationForm({'action': 'finalize', 'score_1': '0', 'score_2': '10'}, criteria=self.criteria)
+        self.assertTrue(form.is_valid(), form.errors)
+
+    def test_evaluation_form_disables_browser_validation(self):
+        template = get_template('evaluations/evaluate.html')
+        self.assertIn('class="m5-form" novalidate', template.template.source)
+
+    def test_all_m5_forms_disable_native_validation(self):
+        from html.parser import HTMLParser
+        from pathlib import Path
+        from django.conf import settings
+
+        class FormParser(HTMLParser):
+            def handle_starttag(self, tag, attrs):
+                if tag == 'form':
+                    self_forms.append(dict(attrs))
+
+        for path in (settings.BASE_DIR / 'templates' / 'evaluations').glob('*.html'):
+            self_forms = []
+            FormParser().feed(path.read_text(encoding='utf-8'))
+            for attrs in self_forms:
+                with self.subTest(template=path.name):
+                    self.assertIn('novalidate', attrs)
+
+    def test_other_forms_reject_invalid_input_on_server(self):
+        from evaluations.forms import CriterionForm, CampaignForm, ReasonForm
+        for data in [
+            {'name': '', 'weight': '10', 'max_score': '5', 'display_order': '0'},
+            {'name': 'Impact', 'weight': '101', 'max_score': '5', 'display_order': '0'},
+            {'name': 'Impact', 'weight': '10', 'max_score': '0', 'display_order': '-1'},
+        ]:
+            with self.subTest(data=data):
+                self.assertFalse(CriterionForm(data).is_valid())
+        form = CampaignForm({'divergence_threshold': '101', 'minimum_jurors': '0'})
+        self.assertFalse(form.is_valid())
+        self.assertIn('divergence_threshold', form.errors)
+        self.assertIn('minimum_jurors', form.errors)
+        for reason in ['', '   ', 'x' * 2001]:
+            self.assertFalse(ReasonForm({'reason': reason}).is_valid())

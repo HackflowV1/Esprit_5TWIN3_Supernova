@@ -41,7 +41,7 @@ class EvaluationForm(forms.Form):
         self.criteria = list(criteria)
         scores = dict(evaluation.scores.values_list('criterion_id', 'score')) if evaluation else {}
         for c in self.criteria:
-            self.fields[f'score_{c.pk}'] = forms.DecimalField(label=f'{c.name} — {c.weight} % · /{c.max_score}', required=False, min_value=0, max_value=c.max_score, max_digits=7, decimal_places=2, initial=scores.get(c.pk), widget=forms.NumberInput(attrs={'data-weight': str(c.weight), 'data-maximum': str(c.max_score), 'step': '.01'}))
+            self.fields[f'score_{c.pk}'] = forms.DecimalField(label=f'{c.name} — {c.weight} % · /{c.max_score}', required=False, min_value=0, max_value=c.max_score, max_digits=7, decimal_places=2, error_messages={'min_value': 'La note doit être supérieure ou égale à 0.', 'max_value': f'La note doit être inférieure ou égale à {c.max_score}.', 'invalid': 'Saisissez une note valide.', 'max_decimal_places': 'La note doit comporter au maximum 2 décimales.'}, initial=scores.get(c.pk), widget=forms.NumberInput(attrs={'data-weight': str(c.weight), 'data-maximum': str(c.max_score), 'step': '.01'}))
         if evaluation:
             self.fields['comment'].initial = evaluation.comment
         self.order_fields([f'score_{c.pk}' for c in self.criteria] + ['comment'])
@@ -50,7 +50,7 @@ class EvaluationForm(forms.Form):
         data = super().clean()
         if self.data.get('action') == 'finalize':
             for c in self.criteria:
-                if data.get(f'score_{c.pk}') is None:
+                if f'score_{c.pk}' not in self.errors and data.get(f'score_{c.pk}') is None:
                     self.add_error(f'score_{c.pk}', 'Note requise pour valider définitivement.')
         return data
 

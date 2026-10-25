@@ -63,7 +63,9 @@ def rubric(request, slug):
     locked = Evaluation.objects.filter(assignment__hackathon=event).exists()
     formset = CriterionFormSet(request.POST if request.method == 'POST' else None, initial=list(event.evaluation_criteria.values('id', 'name', 'weight', 'max_score', 'display_order')))
     settings_form = CampaignForm(request.POST if request.method == 'POST' else None, instance=c)
-    if request.method == 'POST' and formset.is_valid() and settings_form.is_valid():
+    formset_valid = formset.is_valid() if request.method == 'POST' else False
+    settings_valid = settings_form.is_valid() if request.method == 'POST' else False
+    if formset_valid and settings_valid:
         try:
             services.configure_rubric(actor=request.user, event=event, rows=[r for r in formset.cleaned_data if r], threshold=settings_form.cleaned_data['divergence_threshold'], minimum_jurors=settings_form.cleaned_data['minimum_jurors'], validate=request.POST.get('action') == 'validate')
             messages.success(request, 'Grille enregistrée.')
@@ -94,7 +96,14 @@ def assignments(request, slug):
 def assignment_action(request, pk):
     assignment = get_object_or_404(JuryAssignment.objects.select_related('hackathon'), pk=pk)
     try:
-        services.change_assignment(actor=request.user, assignment=assignment, action=request.POST.get('action'), reason=request.POST.get('reason', ''))
+        action = request.POST.get('action')
+        reason = request.POST.get('reason', '')
+        if action in ('report', 'resolve'):
+            reason_form = ReasonForm(request.POST)
+            if not reason_form.is_valid():
+                raise ValidationError(list(reason_form.errors['reason']))
+            reason = reason_form.cleaned_data['reason']
+        services.change_assignment(actor=request.user, assignment=assignment, action=action, reason=reason)
         messages.success(request, 'Affectation mise à jour.')
     except ValidationError as error:
         _error(request, error)
