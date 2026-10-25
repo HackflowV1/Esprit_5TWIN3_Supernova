@@ -37,6 +37,7 @@ INSTALLED_APPS = [
     'hackathons',
     'teams',
     'mentoring',
+    'projects',
 ]
 
 MIDDLEWARE = [
@@ -55,7 +56,10 @@ ROOT_URLCONF = 'config.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [BASE_DIR / 'templates'],
+        'DIRS': [
+            BASE_DIR / 'projects' / 'integration_templates',
+            BASE_DIR / 'templates',
+        ],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -93,7 +97,10 @@ AUTH_PASSWORD_VALIDATORS = [
 # Internationalization
 LANGUAGE_CODE = 'fr'
 LANGUAGES = [('fr', 'Français'), ('en', 'English')]
-LOCALE_PATHS = [BASE_DIR / 'locale']
+LOCALE_PATHS = [
+    BASE_DIR / 'locale',
+    BASE_DIR / 'projects' / 'locale',
+]
 LANGUAGE_COOKIE_NAME = 'hackflow_language'
 LANGUAGE_COOKIE_SAMESITE = 'Lax'
 TIME_ZONE = 'Africa/Tunis'
@@ -115,4 +122,10 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 # AI services — environment variables prepared for future integration
 GOOGLE_API_KEY = os.environ.get('GOOGLE_API_KEY', '')
 
-HACKFLOW_METRIC_PROVIDERS = {'M2': 'teams.services.metrics'}
+HACKFLOW_METRIC_PROVIDERS = {
+    'M2': 'teams.services.metrics',
+    'M3': 'projects.services.metrics',
+}
+
+# Project uploads are kept separate from the shared media root.
+PROJECT_FILES_ROOT = BASE_DIR / 'projects' / 'private_files'

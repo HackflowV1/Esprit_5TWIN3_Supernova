@@ -419,6 +419,15 @@ pre {
   transition:background .25s,border-color .25s,box-shadow .25s;
 }
 
+.site-header::after {
+  content:"";
+  position:absolute;
+  inset:auto 0 -1px;
+  height:1px;
+  background:linear-gradient(90deg, transparent, rgba(var(--brand-primary-rgb), .35), transparent);
+  pointer-events:none;
+}
+
 :root[data-theme="dark"] .site-header {
   background:rgba(13, 15, 18, 0.85);
 }
@@ -434,8 +443,8 @@ pre {
   margin:auto;
   display:flex;
   align-items:center;
-  gap:24px;
-  min-height:64px;
+  gap:20px;
+  min-height:72px;
 }
 
 .brand {
@@ -488,11 +497,15 @@ pre {
 .site-nav {
   display:flex;
   align-items:center;
+  justify-content:center;
+  flex:1;
   gap:4px;
   background:var(--raised);
   padding:4px;
   border-radius:10px;
   border:1px solid rgba(0, 0, 0, 0.04);
+  max-width:max-content;
+  margin-inline:auto;
 }
 
 :root[data-theme="dark"] .site-nav {
@@ -501,7 +514,7 @@ pre {
 
 .site-nav>a {
   padding:6px 14px;
-  min-height:32px;
+  min-height:36px;
   display:inline-flex;
   align-items:center;
   text-decoration:none;
@@ -510,6 +523,14 @@ pre {
   font-weight:500;
   border-radius:7px;
   transition:all .15s ease;
+}
+
+.site-nav>a:focus-visible,
+.header-tools .hf-control:focus-visible,
+.header-tools .icon-button:focus-visible,
+.login-link:focus-visible {
+  outline:3px solid rgba(var(--brand-primary-rgb), .35);
+  outline-offset:2px;
 }
 
 .site-nav>a:hover {
@@ -2944,7 +2965,10 @@ details.panel {
     width:100%;
     display:flex;
     flex-wrap:wrap;
-    padding-top:8px
+    justify-content:stretch;
+    max-width:none;
+    margin:0;
+    padding:8px
   }
 
   .js .site-nav {
@@ -2956,7 +2980,7 @@ details.panel {
   }
 
   .site-nav a {
-    flex:1;
+    flex:1 1 calc(50% - 4px);
     justify-content:center
   }
 

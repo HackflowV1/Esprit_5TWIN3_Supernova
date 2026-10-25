@@ -158,6 +158,12 @@
   toggle.addEventListener('click', function () {
     setOpen(toggle.getAttribute('aria-expanded') !== 'true');
   });
+  nav.addEventListener('click', function (event) {
+    if (event.target.closest('a')) setOpen(false);
+  });
+  document.addEventListener('click', function (event) {
+    if (!nav.contains(event.target) && event.target !== toggle) setOpen(false);
+  });
   document.addEventListener('keydown', function (event) {
     if (event.key === 'Escape' && toggle.getAttribute('aria-expanded') === 'true') {
       setOpen(false);

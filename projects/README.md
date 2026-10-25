@@ -1,25 +1,20 @@
 # M3 — Projets, progression et soumissions
 
-Le travail M3 est contenu dans `projects/`. La seule extension partagée est un
-bloc de navigation vide dans `templates/base.html`, ajouté à la demande de
-l’utilisateur pour afficher Mes projets dans le menu. Aucun fichier métier
-existant de M1, M2, accounts, core ou config n’est modifié.
-Les modèles, services et templates existants sont réutilisés en lecture/import.
+Le travail M3 est contenu dans `projects/` et est activé dans la configuration
+commune pour tous les développeurs.
 
-## Lancer M3 sans modifier le travail des autres membres
+## Lancer M3
 
 Depuis la racine du projet, après configuration de PostgreSQL dans `.env` :
 
 ```bash
-uv run python manage.py check --settings=projects.settings_m3
-uv run python manage.py check_database --settings=projects.settings_m3 && uv run python manage.py migrate --settings=projects.settings_m3
-uv run python manage.py runserver 127.0.0.1:8001 --settings=projects.settings_m3
+uv run python manage.py check
+uv run python manage.py check_database && uv run python manage.py migrate
+uv run python manage.py runserver
 ```
 
 Ouvrir `/projects/` pour les projets privés et `/projects/gallery/` pour la galerie.
-Le paramètre `--settings=projects.settings_m3` active M3 explicitement ; le
-lancement habituel conserve la configuration des autres membres. Le port 8001
-permet de garder le serveur initial sur le port 8000.
+M3 est maintenant disponible avec le lancement habituel et utilise le port 8000.
 Les migrations ajoutent uniquement les tables M3, avec des relations vers les
 tables existantes. Aucune migration d’un autre membre n’est réécrite.
 
@@ -102,43 +97,40 @@ la solution, la stack et le pitch aux personnes autorisées. Aucun moteur IA ni
 transfert externe n’est effectué. Le moteur collectif reste une intégration future.
 
 `projects.services.metrics(event)` expose les compteurs M3 au fournisseur M1.
-Le fichier `settings_m3.py` l’active sans remplacer le fournisseur M2.
+La configuration commune conserve ce fournisseur avec celui de M2.
 
-La configuration M3 ajoute aussi `integration_templates/` devant les templates
+La configuration commune ajoute aussi `integration_templates/` devant les templates
 partagés. Son `base.html` hérite de la base existante et ajoute Mes projets au
 menu principal (Galerie pour les visiteurs). La base partagée possède seulement
 un bloc d’extension vide `project_navigation`, ajouté à la demande de l’utilisateur.
-Le serveur initial garde son menu habituel quand M3 n’est pas activé.
+M3 est disponible avec le serveur et les commandes Django habituels.
 
 ## Validation
 
 ```bash
-uv run python manage.py test projects --keepdb --noinput --settings=projects.settings_m3
-uv run python manage.py makemigrations --check --dry-run --settings=projects.settings_m3
-uv run python manage.py test --keepdb --noinput --settings=projects.settings_m3
+uv run python manage.py test projects --keepdb --noinput
+uv run python manage.py makemigrations --check --dry-run
+uv run python manage.py test --keepdb --noinput
 ```
 
 Les tests utilisent exclusivement `test_hackflow_db`. Ils couvrent permissions,
 deadline exacte, dérogations, versions figées, fichiers privés, publication,
 CSRF, parcours des écrans et numérotation concurrente.
 
-Pour passer entre la configuration commune et `projects.settings_m3`, exécuter
-les tests sans `--keepdb` : leurs applications installées et leurs schémas de
-test diffèrent. Django recrée uniquement `test_hackflow_db`. Les tests M3 sont
-ignorés dans la configuration commune où l’application n’est pas activée.
+Tous les tests utilisent désormais la configuration commune, qui inclut M3.
 
 Revue de fusion du 24 octobre 2026 contre `origin/main` (`be25f45`) : fusion
 simulée dans un checkout isolé sans conflit, 417 tests avec M3 passent et la
-suite commune passe (385 tests, dont un module M3 ignoré). Les 207 fichiers
+suite commune passe. Les 207 fichiers
 déjà présents sur `origin/main` sont conservés à l’identique, à l’exception
 du seul ajout du bloc vide `project_navigation` dans `templates/base.html`.
 Le menu Mentorat de M4 est conservé. Les contrôles Django, des migrations,
 de syntaxe JavaScript et `git diff --check` passent. Cette revue ne fusionne
-ni ne pousse la branche et n’active pas M3 dans la configuration commune.
+ni ne pousse la branche.
 
 Validation du 24 octobre 2026 : 124 tests de régression passent, dont 23 tests
 M3. Le contrôle Django ne signale aucune anomalie et aucune migration ne manque.
-Les deux serveurs répondent HTTP 200 : projet initial sur 8000, galerie M3 sur 8001.
+Les routes partagées et M3 répondent sur le serveur commun (port 8000).
 Après correction de l’édition du pourcentage : 24 tests M3 passent, dont un test
 du formulaire pour 4 %, 99 %, 100 %, retour à 0 % et refus des valeurs hors limites.
 
@@ -149,12 +141,8 @@ connexion de démonstration, le tracker, les versions et le chargement du CSS.
 La revue visuelle mobile/bureau reste à faire dans un navigateur : aucun
 navigateur n’était connecté aux outils de cette session.
 
-## Intégration collective ultérieure
-
-Après revue par l’équipe, le responsable de l’intégration pourra reprendre dans
-la configuration commune les ajouts explicites de `settings_m3.py` et la route
-de `urls_m3.py`, puis ajouter les liens de navigation souhaités. Ces fichiers
-communs sont volontairement laissés intacts dans cette livraison isolée.
+`projects.settings_m3` reste disponible comme alias de compatibilité pour les
+anciens scripts, mais il n’est plus nécessaire.
 
 ## Tableau de suivi
 
