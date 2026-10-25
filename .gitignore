@@ -40,3 +40,4 @@ Thumbs.db
 # uv
 .uv/
 .taste-skill/
+evaluations/.ai_results/

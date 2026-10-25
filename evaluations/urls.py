@@ -11,6 +11,7 @@ urlpatterns = [
     path('<slug:slug>/rubric/', views.rubric, name='rubric'),
     path('<slug:slug>/assignments/', views.assignments, name='assignments'),
     path('<slug:slug>/anomalies/', views.anomalies, name='anomalies'),
+    path('<slug:slug>/anomalies/<int:pk>/analyze/', views.analyze_divergence, name='analyze-divergence'),
     path('<slug:slug>/ranking/', views.ranking, name='ranking'),
     path('<slug:slug>/publish/<int:pk>/', views.publish, name='publish'),
     path('<slug:slug>/review/<int:pk>/', views.review, name='review'),
