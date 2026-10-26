@@ -345,7 +345,7 @@ def eligible_candidates(*, actor, team):
     return Registration.objects.filter(hackathon=team.hackathon, status=Registration.Status.ACCEPTED, user__is_active=True).exclude(
         pk__in=TeamMembership.objects.filter(ended_at__isnull=True).values('registration_id')).exclude(
         user_id__in=RoleAssignment.objects.filter(hackathon=team.hackathon, role=Role.JURY, status=AssignmentStatus.ACTIVE).values('user_id')
-    ).select_related('user').prefetch_related('user__user_skills__skill').distinct()
+    ).select_related('user', 'user__profile').prefetch_related('user__user_skills__skill').distinct()
 
 
 def skill_coverage(team):
@@ -362,14 +362,7 @@ def skill_coverage(team):
     return needs
 
 
-def recommendations(*, actor, team):
-    """Transparent rules, no AI claims, percentages, or automatic admissions."""
-    needs = [need for need in skill_coverage(team) if not need.covered_by]
-    result = []
-    for reg in eligible_candidates(actor=actor, team=team):
-        skills = {s.skill_id: s for s in reg.user.user_skills.all()}
-        matches = [dict(skill=need.skill.name, level=skills[need.skill_id].level, requested=need.level, meets=skills[need.skill_id].level >= need.level)
-            for need in needs if need.skill_id in skills]
-        score = sum(need.priority * min(skills[need.skill_id].level, need.level) for need in needs if need.skill_id in skills)
-        result.append({'registration': reg, 'matches': matches, 'score': score})
-    return sorted(result, key=lambda item: (-item['score'], item['registration'].user.username.casefold()))
+def recommendations(*, actor, team, background=True, mode='hybrid'):
+    from .matching import rank
+    return rank(team=team, candidates=eligible_candidates(actor=actor, team=team),
+        needs=skill_coverage(team), background=background, mode=mode)

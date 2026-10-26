@@ -44,13 +44,20 @@ L’acteur doit être inscrit accepté dans la même édition ou organisateur.
 Les candidats sont des comptes actifs, inscrits acceptés, sans équipe et sans
 conflit juré dans cette édition. Ne pas exposer leurs emails.
 
-Le classement initial utilise les besoins non couverts. Pour chaque compétence
-déclarée correspondante : `priority * min(candidate_level, requested_level)`.
-L’ordre décroît selon la somme, puis suit le nom d’utilisateur pour départager.
-La réponse contient les correspondances et niveaux explicables. Le score interne
-n’est ni un pourcentage, ni une prédiction IA. Aucun modèle ni service externe
-n’est branché : cette intégration attend le responsable du moteur partagé.
-Le recrutement manuel reste indépendant de ce futur moteur.
+Le moteur utilise les besoins non couverts. Le champ `score` conserve la somme V1
+`priority * min(candidate_level, requested_level)` pour compatibilité ; il n’est
+pas un pourcentage. Le classement hybride privilégie les compétences essentielles
+déclarées et leur niveau, puis la couverture pondérée et le contexte sémantique
+local de profils comparables. Les champs `matches`, `registration` et `score`
+restent disponibles. `matching_state` indique ready/warming/unavailable/disabled/no_needs.
+`context_signal` est un indice de contexte, jamais une compétence certifiée.
+Le mode `rules` garde le classement V1 pour la comparaison ; `keywords` est la
+référence textuelle. Le recrutement manuel reste indépendant du modèle.
+Voir `docs/M2_MATCHING.md` pour le contrat complet et les limites.
+
+L’annuaire d’idées et la fiche réduite sont publics pour les éditions visibles ;
+les profils, candidatures, messages et recommandations restent protégés. Les
+identifiants et transitions d’inscription/adhésion M3/M4 ne changent pas.
 
 ## Mutations et concurrence
 

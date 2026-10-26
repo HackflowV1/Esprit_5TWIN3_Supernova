@@ -5,6 +5,7 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.messages.views import SuccessMessageMixin
 from django.db import IntegrityError, transaction
 from django.urls import reverse_lazy
+from django.utils.http import url_has_allowed_host_and_scheme
 from django.views.generic import CreateView, UpdateView, TemplateView, DeleteView
 from .forms import SignupForm, ProfileForm, UserSkillForm
 from .models import Profile, UserSkill
@@ -16,6 +17,17 @@ class SignupView(SuccessMessageMixin, CreateView):
     success_url = reverse_lazy('accounts:profile')
     success_message = _('Votre compte a été créé.')
     extra_context = {'title': _('Créer mon compte'), 'button_label': _('Créer mon compte')}
+
+    def return_url(self):
+        target = self.request.POST.get('next') or self.request.GET.get('next', '')
+        return target if url_has_allowed_host_and_scheme(target, allowed_hosts={self.request.get_host()},
+            require_https=self.request.is_secure()) else ''
+
+    def get_success_url(self):
+        return self.return_url() or super().get_success_url()
+
+    def get_context_data(self, **kwargs):
+        return {**super().get_context_data(**kwargs), 'next': self.return_url()}
 
     def form_valid(self, form):
         try:

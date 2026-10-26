@@ -56,8 +56,15 @@ def mine(request):
 @require_http_methods(['GET', 'POST'])
 def register(request, slug):
     ctx = context(request, slug, private=False)
+    target_id = request.GET.get('team', '')
+    target = get_object_or_404(Team, pk=target_id, hackathon=ctx['event'], closed_at__isnull=True) if target_id.isdigit() else None
+    if target:
+        ctx['resume_team'] = target
+        if not ctx['formation_open'] or not target.recruiting or not target.places_left:
+            messages.info(request, _('Cette équipe ne recrute plus. Vous pouvez découvrir les autres équipes.'))
+            return redirect(target)
     if ctx['registration']:
-        return redirect('teams:list', slug=slug)
+        return redirect('teams:apply', slug=slug, pk=target.pk) if target else redirect('teams:list', slug=slug)
     form = RegistrationForm(request.POST if request.method == 'POST' else None)
     if request.method == 'POST' and form.is_valid():
         try:
@@ -65,6 +72,9 @@ def register(request, slug):
         except (ValidationError, IntegrityError) as exc:
             _error(form, exc)
         else:
+            if target:
+                messages.success(request, _('Inscription confirmée. Vous pouvez maintenant envoyer votre candidature.'))
+                return redirect('teams:apply', slug=slug, pk=target.pk)
             messages.success(request, _('Inscription confirmée ! Trouvez votre équipe ou créez la vôtre.'))
             return redirect('teams:list', slug=slug)
     return _form(request, form, ctx, _('Participer à ce hackathon'), button=_('Confirmer mon inscription'))
@@ -89,9 +99,8 @@ def cancel(request, slug, pk):
         'explanation': _('Le rôle participant sera retiré pour cette édition uniquement. Vous devez d’abord quitter votre équipe.'), 'subject': reg.user})
 
 
-@login_required
 def listing(request, slug):
-    ctx = context(request, slug)
+    ctx = context(request, slug, private=False)
     teams = services.teams_with_counts(ctx['event'])
     query = request.GET.get('q', '').strip()
     if query:
@@ -106,8 +115,12 @@ def listing(request, slug):
         'skills': Skill.objects.filter(teamskillneed__team__hackathon=ctx['event']).distinct()})
 
 
-@login_required
 def detail(request, slug, pk):
+    public_ctx = context(request, slug, private=False)
+    if not services.can_read(request.user, public_ctx['event']):
+        team = get_object_or_404(Team, pk=pk, hackathon=public_ctx['event'], closed_at__isnull=True)
+        return render(request, 'teams/preview.html', {**public_ctx, 'team': team,
+            'needs': team.skill_needs.select_related('skill')})
     ctx = team_context(request, slug, pk)
     team = ctx['team']
     members = services.active_members(team).prefetch_related('registration__user__user_skills__skill')
@@ -160,7 +173,17 @@ def edit(request, slug, pk):
 @login_required
 @require_http_methods(['GET', 'POST'])
 def apply(request, slug, pk):
+    public_ctx = context(request, slug, private=False)
+    target = get_object_or_404(Team, pk=pk, hackathon=public_ctx['event'], closed_at__isnull=True)
+    if not public_ctx['registration']:
+        return redirect(reverse('teams:register', kwargs={'slug': slug}) + f'?team={target.pk}')
     ctx = team_context(request, slug, pk)
+    if ctx['my_team'] or not ctx['formation_open'] or not target.recruiting or not target.places_left:
+        messages.info(request, _('Cette candidature n’est pas disponible : vérifiez votre équipe, les places et le calendrier.'))
+        return redirect(target)
+    if JoinRequest.objects.filter(team=target, registration=ctx['registration'], status=Decision.PENDING).exists():
+        messages.info(request, _('Votre candidature est déjà en attente.'))
+        return redirect('teams:inbox', slug=slug)
     form = MessageForm(request.POST if request.method == 'POST' else None)
     if request.method == 'POST' and form.is_valid():
         try:
@@ -280,6 +303,8 @@ def candidates(request, slug, pk):
     if not ctx['team_manager']:
         raise PermissionDenied
     candidates = services.recommendations(actor=request.user, team=ctx['team'])
+    matching_state = candidates[0]['matching_state'] if candidates else 'empty'
+    remaining_needs = [need for need in services.skill_coverage(ctx['team']) if not need.covered_by]
     pending_invitations = set(TeamInvitation.objects.filter(team=ctx['team'], status=Decision.PENDING, expires_at__gt=timezone.now()).values_list('registration_id', flat=True))
     pending_applications = set(JoinRequest.objects.filter(team=ctx['team'], status=Decision.PENDING).values_list('registration_id', flat=True))
     for candidate in candidates:
@@ -288,7 +313,8 @@ def candidates(request, slug, pk):
     query = request.GET.get('q', '').strip().casefold()
     if query:
         candidates = [c for c in candidates if query in c['registration'].user.get_full_name().casefold() or query in c['registration'].user.username.casefold() or any(query in s.skill.name.casefold() for s in c['registration'].user.user_skills.all())]
-    return render(request, 'teams/candidates.html', {**ctx, 'page_obj': Paginator(candidates, 12).get_page(request.GET.get('page'))})
+    return render(request, 'teams/candidates.html', {**ctx, 'page_obj': Paginator(candidates, 12).get_page(request.GET.get('page')),
+        'matching_state': matching_state, 'remaining_needs': remaining_needs})
 
 
 @login_required

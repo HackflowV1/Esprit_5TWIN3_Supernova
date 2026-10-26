@@ -274,6 +274,7 @@
         <p class="passport-timezone">{% translate 'Fin des inscriptions et heure limite de dépôt exclues · fuseau Africa/Tunis.' %}</p>
 
         <div class="passport-actions">
+          {% if not registration %}<a class="button secondary passport-btn" href="{% url 'teams:list' event.slug %}">{% icon 'users' %}{% translate 'Trouver une équipe' %}</a>{% endif %}
           {% if registration %}
           <p>{% icon 'check' 16 %} {% translate 'Votre inscription est confirmée.' %}</p>
           {% if my_team %}<a class="button passport-btn" href="{{ my_team.get_absolute_url }}">{% icon 'users' %}{% translate 'Mon équipe' %}</a>{% else %}<a class="button passport-btn" href="{% url 'teams:list' event.slug %}">{% icon 'users' %}{% translate 'Trouver mon équipe' %}</a>{% endif %}

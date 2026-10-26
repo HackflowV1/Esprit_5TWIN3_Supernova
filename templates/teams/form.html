@@ -3,6 +3,7 @@
 <div class="m2-columns">
 <section class="panel m2-form-panel">
 <h1>{{ title }}</h1>{% if team %}<p class="muted">{{ team }}</p>{% endif %}{% if hint %}<p class="muted">{{ hint }}</p>{% endif %}
+{% if resume_team %}<div class="m2-guide"><div><strong>{% blocktranslate with name=resume_team.name %}Votre choix : {{ name }}{% endblocktranslate %}</strong><p>{% translate '1. Confirmez votre inscription au hackathon. 2. Envoyez votre candidature à cette équipe.' %}</p></div></div>{% endif %}
 {% if ui_page == 'register' %}{% if not registration_open %}<p class="m2-notice">{% translate 'Les inscriptions sont fermées pour le moment. Consultez le calendrier de cette édition.' %}</p>{% endif %}<div class="m2-rules">
 <h2>{% translate 'Avant de rejoindre l’aventure' %}</h2>
 <h3>{% translate 'Règlement' %}</h3>{{ event.rules|linebreaks }}{% if event.participation_conditions %}<h3>{% translate 'Conditions de participation' %}</h3>{{ event.participation_conditions|linebreaks }}{% endif %}<p class="muted">{% translate 'Ces critères sont déclaratifs : l’organisateur reste votre contact en cas de doute.' %}</p>

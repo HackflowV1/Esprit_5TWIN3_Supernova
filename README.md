@@ -76,7 +76,8 @@ l’événement et un partenariat confirmé. L’organisateur valide puis publie
 - M1 : événements, recherche et filtres, calendrier, tracks, challenges,
   organisations sponsors, partenariats et workflow de validation.
 - M2 : inscriptions réelles, équipes, invitations/candidatures, capitaine,
-  compétences recherchées et suggestions explicables de coéquipiers.
+  annuaire d’idées consultable avant inscription, reprise de candidature,
+  compétences recherchées et recommandations locales multilingues de coéquipiers.
 - Cycle : brouillon → publié → en cours → terminé → archivé ; un événement publié
   dont la date de fin est passée peut aussi être terminé directement.
 - Control Tower : compteurs issus de la base, échéances, phases et alertes de configuration.
@@ -90,14 +91,26 @@ l’événement et un partenariat confirmé. L’organisateur valide puis publie
   garantie et relevé de présence ; suggestion de thème et de description d'atelier par Gemini
   (clé `GOOGLE_API_KEY` dans `.env`, facultative).
 
-Les domaines M3, M5 et les moteurs IA ne sont pas implémentés dans cette livraison.
-La suggestion de mentors (moteur commun `intelligence/`) n'est pas livrée : le choix du mentor est manuel.
-Leurs données apparaissent comme indisponibles tant que leurs fournisseurs ne sont pas connectés.
+Les modules et intégrations IA ont leurs propres guides : M3 dans `projects/README.md`,
+M4 dans `docs/USER_M4.md`, M5 dans `docs/M5.md`. Le moteur M2 local décrit ci-dessous
+est indépendant des services Gemini des autres modules.
 
 Pour essayer M2, lancer les migrations puis `uv run python manage.py seed_demo`
 en développement et ouvrir **Mes inscriptions** ou une édition ouverte. La phase
 **Constitution des équipes** doit être configurée pour autoriser le recrutement.
 Voir [le parcours M2](docs/USER_M2.md) et [les contrats M3/M4](docs/M2_CONTRACTS.md).
+
+Pour tester les recommandations M2, après `uv sync --locked` et les migrations :
+
+```powershell
+uv run --locked python manage.py seed_m2_matching_demo
+uv run --locked python manage.py prepare_m2_matching
+```
+
+Ouvrir **Team Lab · Trouvez vos coéquipiers**. Le premier téléchargement du modèle
+est explicite ; ensuite, le classement fonctionne localement, sans clé d’API.
+Les profils fictifs et comptes de test, le repli sans IA et l’évaluation humaine
+sont expliqués dans [le guide de recommandations M2](docs/M2_MATCHING.md).
 
 Pour essayer M4, après `migrate`, lancer en développement :
 

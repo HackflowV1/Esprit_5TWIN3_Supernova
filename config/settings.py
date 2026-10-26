@@ -132,3 +132,17 @@ HACKFLOW_METRIC_PROVIDERS = {
 
 # Project uploads are kept separate from the shared media root.
 PROJECT_FILES_ROOT = BASE_DIR / 'projects' / 'private_files'
+
+# M2: local-only inference. Download deliberately with prepare_m2_matching.
+M2_MATCHING_ENABLED = os.environ.get('M2_MATCHING_ENABLED', '1') == '1'
+M2_MODEL_NAME = 'sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2'
+M2_MODEL_CACHE = BASE_DIR / '.cache' / 'm2-model'
+CACHES = {
+    'default': {'BACKEND': 'django.core.cache.backends.locmem.LocMemCache'},
+    'm2_embeddings': {
+        'BACKEND': 'django.core.cache.backends.filebased.FileBasedCache',
+        'LOCATION': BASE_DIR / '.cache' / 'm2-embeddings',
+        'TIMEOUT': 60 * 60 * 24 * 7,
+        'OPTIONS': {'MAX_ENTRIES': 10000},
+    },
+}

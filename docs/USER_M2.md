@@ -2,12 +2,15 @@
 
 ## Le parcours simple
 
-1. Ouvrir un hackathon et cliquer **M’inscrire au hackathon**.
-2. Lire le règlement et les conditions, les accepter, puis confirmer.
+1. Ouvrir un hackathon et cliquer **Trouver une équipe**. On peut consulter les
+   idées, besoins et places avant de s’inscrire, puis choisir **Candidater**.
+2. Se connecter ou créer un compte, lire le règlement et les conditions, les
+   accepter, puis confirmer. Le choix de l’équipe est conservé pendant ce parcours.
 3. L’inscription est acceptée immédiatement si la période est ouverte, qu’il
    reste une place et que le compte n’a pas le rôle juré dans cette édition.
-4. La page **Les équipes** propose deux chemins : créer son équipe ou candidater
-   auprès d’une équipe qui recrute.
+4. Après confirmation, retrouver la candidature à l’équipe choisie et envoyer
+   son message. Consulter une équipe ou s’inscrire ne crée jamais une candidature.
+   On peut aussi s’inscrire directement puis créer sa propre équipe.
 5. Le créateur devient capitaine et premier membre. Il présente l’idée,
    déclare les compétences recherchées, invite des participants et traite
    les candidatures sur la fiche de l’équipe.
@@ -32,8 +35,11 @@ pas automatiquement une inscription.
   Le besoin reste enregistré : un départ peut le rendre à nouveau non couvert.
 - **Trouver des coéquipiers** : participants acceptés et sans équipe, classés
   selon les besoins non couverts. Chaque correspondance explique la compétence
-  et le niveau. Il s’agit de règles, pas d’un modèle IA ou d’un pourcentage de
-  compatibilité. On peut toujours inviter manuellement.
+  et le niveau. Un modèle multilingue local complète les compétences déclarées
+  avec le contexte des biographies et centres d’intérêt : les besoins essentiels
+  passent avant la similarité du texte. L’IA n’invente aucun niveau, ne recrute
+  personne et n’affiche pas de faux pourcentage. On peut toujours inviter manuellement.
+  Sans besoin manquant, l’annuaire reste consultable sans classement personnalisé.
 - **Nommer capitaine**, **Retirer** et **Quitter l’équipe** : confirmations avant
   mutation. Le capitaine doit transférer son rôle avant de partir si d’autres
   membres restent. Le dernier départ ferme l’équipe et conserve son historique.
@@ -54,8 +60,9 @@ nouveau toutes les conditions, y compris la dernière place disponible.
 - L’annulation retire le rôle participant de cette édition ; elle conserve les
   autres rôles. Le rôle participant d’un inscrit accepté ne peut pas être
   retiré directement depuis M1 : passer par l’annulation M2.
-- Les équipes et compétences des participants ne sont visibles qu’aux inscrits
-  acceptés de la même édition et à ses organisateurs. Aucun email/contact privé
+- Les idées d’équipes, besoins et places sont consultables publiquement dans les
+  éditions visibles. Les identités et compétences des membres restent réservées
+  aux inscrits acceptés de la même édition et à ses organisateurs. Aucun email/contact privé
   dans les annuaires. Les candidatures/messages sont réservés à leur auteur,
   au capitaine concerné et aux organisateurs.
 
@@ -81,6 +88,10 @@ uv run --locked python manage.py migrate
 uv run --locked python manage.py seed_demo
 # Ou, si les comptes et événements de démo existent déjà :
 uv run --locked python manage.py seed_m2_demo
+# Nouveau terrain de test indépendant : 28 participants, six équipes
+uv run --locked python manage.py seed_m2_matching_demo
+# Préparer une fois le modèle local et mettre les suggestions en cache
+uv run --locked python manage.py prepare_m2_matching
 ```
 
 Ces commandes sont destinées au développement. Elles ne déplacent pas les dates
@@ -93,6 +104,17 @@ ces états ; relancer la commande ne réinitialise pas le travail existant.
 
 Les comptes `ahmed`, `mariem`, `sami`, `ines` utilisent le mot de passe de démo
 annoncé par `seed_demo`. Aucun compte ni mot de passe existant n’est remplacé.
+
+Dans **Team Lab · Trouvez vos coéquipiers** (`/participation/m2-team-lab/teams/`),
+`m2.demo.01` dirige Passerelle ; `m2.demo.13` est une candidate encore disponible.
+Mot de passe des nouveaux comptes : `Demo-Team#2026`. Chaque compte est fictif.
+Le seed conserve les modifications, mots de passe et annulations existants.
+Les dates sont fixées à la création, jamais déplacées lors d’une relance.
+
+Le téléchargement du modèle se fait uniquement par commande explicite.
+Si le cache d’un profil change, le recalcul s’effectue en arrière-plan : le classement
+par compétences reste disponible et un lien permet d’actualiser. Sans modèle,
+l’application fonctionne aussi. Voir `docs/M2_MATCHING.md` pour les mesures et l’évaluation humaine.
 
 Les pages réutilisent les thèmes, palettes d’accessibilité, champs et menus
 communs, les icônes Hugeicons, le fil d’Ariane et les traductions FR/EN.

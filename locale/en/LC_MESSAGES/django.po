@@ -5211,3 +5211,128 @@ msgstr "Room or place where the workshop takes place."
 #: templates/base.html:13
 msgid "Fermer la navigation"
 msgstr "Close navigation"
+
+msgid ""
+"Inscription confirmée. Vous pouvez maintenant envoyer votre candidature."
+msgstr "Registration confirmed. You can now send your application."
+
+msgid ""
+"Cette candidature n’est pas disponible : vérifiez votre équipe, les places "
+"et le calendrier."
+msgstr ""
+"This application is unavailable: check your team, available places and the "
+"schedule."
+
+msgid "Votre candidature est déjà en attente."
+msgstr "Your application is already pending."
+
+msgid ""
+"Cette équipe ne recrute plus. Vous pouvez découvrir les autres équipes."
+msgstr "This team is no longer recruiting. You can explore other teams."
+
+msgid "Découvrez votre future équipe"
+msgstr "Meet your future team"
+
+msgid "Cette équipe vous parle ?"
+msgstr "Does this team interest you?"
+
+msgid ""
+"Découvrez les équipes librement. Pour candidater, confirmez votre "
+"inscription au hackathon, puis envoyez un message au capitaine."
+msgstr ""
+"Explore teams freely. To apply, confirm your hackathon registration, then "
+"send a message to the captain."
+
+msgid "Les profils des membres sont réservés aux participants inscrits."
+msgstr "Member profiles are only available to registered participants."
+
+msgid "Candidater dans cette équipe"
+msgstr "Apply to this team"
+
+msgid "Voir les autres équipes"
+msgstr "Explore other teams"
+
+msgid ""
+"Découvrez les idées et les talents recherchés, puis choisissez une équipe."
+msgstr "Explore ideas and the skills teams need, then choose your team."
+
+msgid "Explorez d’abord, inscrivez-vous ensuite."
+msgstr "Explore first, register next."
+
+msgid ""
+"Choisissez une équipe. Nous garderons votre choix pendant la connexion et la"
+" confirmation de votre inscription."
+msgstr ""
+"Choose a team. We will keep your choice while you sign in and confirm your "
+"registration."
+
+msgid "Je préfère créer mon équipe"
+msgstr "I would rather start my own team"
+
+msgid "Votre choix : %(name)s"
+msgstr "Your choice: %(name)s"
+
+msgid ""
+"1. Confirmez votre inscription au hackathon. 2. Envoyez votre candidature à "
+"cette équipe."
+msgstr ""
+"1. Confirm your hackathon registration. 2. Send your application to this "
+"team."
+
+msgid "Trouver une équipe"
+msgstr "Find a team"
+
+msgid ""
+"Les compétences essentielles et les niveaux déclarés passent en premier. "
+"L’IA multilingue rapproche ensuite le contexte des profils comparables de "
+"votre idée. Vous choisissez qui inviter."
+msgstr ""
+"Essential skills and declared levels come first. Multilingual AI then "
+"relates comparable profiles to your idea. You choose whom to invite."
+
+msgid "Ce qui manque à votre équipe"
+msgstr "What your team still needs"
+
+msgid ""
+"Vos besoins sont couverts ou restent à préciser. L’annuaire reste "
+"disponible, sans classement personnalisé."
+msgstr ""
+"Your needs are covered or still need to be defined. The directory remains "
+"available without personalized ranking."
+
+msgid "Compétences + contexte IA local"
+msgstr "Skills + local AI context"
+
+msgid ""
+"Le contexte se prépare en arrière-plan. Le classement par compétences est "
+"déjà disponible."
+msgstr ""
+"Context is being prepared in the background. The skill-based ranking is "
+"already available."
+
+msgid "Actualiser les suggestions"
+msgstr "Refresh suggestions"
+
+msgid ""
+"Classement par compétences ; le contexte IA est momentanément indisponible."
+msgstr "Skill-based ranking; AI context is temporarily unavailable."
+
+msgid "Comment lire ces suggestions ?"
+msgstr "How should I read these suggestions?"
+
+msgid ""
+"Un besoin est couvert quand un membre atteint le niveau souhaité. Les "
+"niveaux des candidats sont déclaratifs. La similarité des biographies et "
+"centres d’intérêt aide à départager des profils comparables ; elle ne prouve"
+" aucune compétence et ne décide jamais à votre place."
+msgstr ""
+"A need is covered when a member reaches the desired level. Candidate levels "
+"are self-reported. Similar biographies and interests help distinguish "
+"comparable profiles; they do not prove any skill and never make the decision"
+" for you."
+
+msgid "Contexte du profil proche de votre idée"
+msgstr "Profile context relates to your idea"
+
+msgid "indication IA, à confirmer ensemble"
+msgstr "AI indication, to discuss together"

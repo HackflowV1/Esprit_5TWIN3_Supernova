@@ -251,7 +251,7 @@ class ScreenTests(SetupMixin, TestCase):
     def test_privacy_cross_event_and_post_only_decisions(self):
         team = self.team()
         self.client.force_login(self.b)
-        self.assertEqual(self.client.get(team.get_absolute_url()).status_code, 403)
+        self.assertTemplateUsed(self.client.get(team.get_absolute_url()), 'teams/preview.html')
         self.reg(self.b)
         response = self.client.get(team.get_absolute_url())
         self.assertEqual(response.status_code, 200)

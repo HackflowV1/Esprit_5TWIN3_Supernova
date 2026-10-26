@@ -23,8 +23,8 @@
             <button type="submit" class="auth-submit">{{ button_label }}</button>
         </form>
         <p class="form-aside">
-            {% if page == 'login' %}{% translate 'Pas encore de compte ?' %} <a href="{% url 'accounts:signup' %}">{% icon 'add' %}{% translate 'Créer mon compte' %}</a>
-            {% else %}{% translate 'Déjà inscrit ?' %} <a href="{% url 'accounts:login' %}">{% translate 'Se connecter' %}</a>{% endif %}
+            {% if page == 'login' %}{% translate 'Pas encore de compte ?' %} <a href="{% url 'accounts:signup' %}{% if next %}?next={{ next|urlencode }}{% endif %}">{% icon 'add' %}{% translate 'Créer mon compte' %}</a>
+            {% else %}{% translate 'Déjà inscrit ?' %} <a href="{% url 'accounts:login' %}{% if next %}?next={{ next|urlencode }}{% endif %}">{% translate 'Se connecter' %}</a>{% endif %}
         </p>
     </section>
 </div>

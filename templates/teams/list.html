@@ -4,8 +4,9 @@
 <div>
 <p class="m2-eyebrow">{% translate 'À plusieurs, plus loin' %}</p>
 <h1>{% translate 'Trouvez votre équipe' %}</h1>
-<p class="muted">{% translate 'Une idée vous parle ? Découvrez les membres et proposez de les rejoindre.' %}</p>
+<p class="muted">{% translate 'Découvrez les idées et les talents recherchés, puis choisissez une équipe.' %}</p>
 </div>{% if registration and formation_open and not my_team %}<a class="button" href="{% url 'teams:create' event.slug %}">{% icon 'add' %}{% translate 'Créer mon équipe' %}</a>{% endif %}</header>
+{% if not registration and not organizer %}<div class="m2-guide">{% icon 'users' 24 %}<div><strong>{% translate 'Explorez d’abord, inscrivez-vous ensuite.' %}</strong><p>{% translate 'Choisissez une équipe. Nous garderons votre choix pendant la connexion et la confirmation de votre inscription.' %}</p></div>{% if registration_open %}<a href="{% url 'teams:register' event.slug %}">{% translate 'Je préfère créer mon équipe' %}</a>{% endif %}</div>{% endif %}
 {% if registration and not my_team %}<div class="m2-guide">
 <span class="m2-guide-icon">{% icon 'check' 22 %}</span>
 <div>

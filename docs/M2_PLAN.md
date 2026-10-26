@@ -1,5 +1,9 @@
 # Plan M2 — inscriptions, équipes et compétences
 
+Évolution du 26 octobre : parcours simplifié et IA locale implémentés selon
+`docs/M2_AI_PLAN.md`. Voir `docs/M2_MATCHING.md` pour l’état actuel du moteur.
+Le texte ci-dessous décrit la V1 initiale et ses décisions métier conservées.
+
 Statut : V1 implémentée sur `codex/module-2` (24 octobre 2026).
 
 Les propositions V1 ci-dessous ont été retenues pour cette implémentation à la

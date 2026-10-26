@@ -541,6 +541,32 @@
   font-size:.8rem
 }
 
+.m2-matching-summary {margin-block:16px;padding:16px 20px}
+.m2-matching-summary h2 {font-size:1.1rem;margin:0}
+.m2-summary-head {display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:8px}
+.m2-summary-head a {min-height:44px;display:inline-flex;align-items:center;font-size:.875rem}
+.m2-preview-actions {display:flex;flex-direction:column;align-items:start;gap:16px;margin-top:20px}
+.m2-matching-status {display:flex;align-items:center;flex-wrap:wrap;gap:8px;font-size:.875rem;margin:12px 0 4px}
+.m2-ranking-help {margin-top:4px}
+.m2-ranking-help summary {cursor:pointer;min-height:44px;display:flex;align-items:center;font-weight:600;gap:8px}
+.m2-ranking-help summary::before {content:'+';font-size:1.1rem}
+.m2-ranking-help[open] summary::before {content:'−'}
+.m2-ranking-help p {max-width:78ch;color:var(--muted);font-size:.9rem;line-height:1.7}
+.m2-context-signal {font-size:.85rem;line-height:1.6}
+.m2-candidate-search {padding:0;background:none;border:0;flex-wrap:nowrap;gap:12px;margin-block:20px}
+.m2-candidate-search>div {min-width:0}
+.m2-candidate-search button {min-width:44px;padding-inline:12px}
+@media(max-width:720px) {
+  body:has(.m2-workspace) .breadcrumbs ol {flex-wrap:nowrap;overflow-x:auto;padding-block:4px}
+  body:has(.m2-workspace) .breadcrumbs li {flex-shrink:0;white-space:nowrap}
+  .m2-nav {flex-wrap:nowrap;overflow-x:auto;scrollbar-width:thin;gap:0;margin-bottom:20px}
+  .m2-nav a {flex:0 0 auto;min-height:48px;white-space:nowrap;padding:10px 14px}
+  .m2-candidates .page-head {margin-bottom:16px;gap:12px}
+  .m2-candidates .m2-eyebrow {margin-bottom:4px}
+  .m2-candidates .m2-matching-summary {padding:12px 16px}
+  .m2-candidate-search>div {min-width:0}
+}
+
 /* Organizer registrations: full-width columns with overflow confined to the table. */
 .m2-table-scroll {max-width:100%;overflow-x:auto;border:1px solid var(--line);border-radius:var(--radius-sm)}
 .m2-registration-table {width:100%;min-width:620px;border-collapse:collapse;font-size:.9rem;line-height:1.5}
