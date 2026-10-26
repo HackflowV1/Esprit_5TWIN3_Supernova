@@ -1,5 +1,18 @@
 # Render classroom deployment
 
+Live URL: **https://hackflow-class-demo.onrender.com/**
+
+Verified on Render on 26 October 2026: sign-in, static assets, fresh PostgreSQL
+migrations/seeds, Horizon's semantic ranking (Lina and Yasmine ahead), and
+Passerelle's Figma mention / UI/UX inference. The skill-needs preview was left
+unconfirmed for the presentation. Render's free dashboard does not expose
+application RAM metrics; no exact hosted memory measurement is claimed.
+
+Online Sami demo links (new database IDs differ from the local database):
+
+- [Horizon teammate recommendations](https://hackflow-class-demo.onrender.com/participation/ai-challenge-2026/teams/2/candidates/)
+- [Passerelle skill-needs assistant](https://hackflow-class-demo.onrender.com/participation/campus-solidaire-2026/teams/3/needs/add/?mode=idea)
+
 This is a temporary demo: one Free web service and one Free PostgreSQL instance,
 both in Frankfurt. The free database expires after 30 days. No paid disk or service
 is configured. The web app sleeps after inactivity and uploads are ephemeral.
