@@ -16,6 +16,7 @@ class Command(BaseCommand):
         if not getattr(settings, 'RENDER_DEMO_MODE', False):
             raise CommandError('Requires the explicit Render demo settings.')
         if User.objects.filter(username='render.admin').exists():
+            call_command('seed_m5_mentoring_demo', stdout=self.stdout)
             self.stdout.write('Render demo already initialized; saved work preserved.')
             return
         password = os.environ.get('RENDER_DEMO_ADMIN_PASSWORD', '')
@@ -30,5 +31,6 @@ class Command(BaseCommand):
             call_command('seed_m2_skill_needs_demo', stdout=self.stdout)
             call_command('seed_m4_demo', stdout=self.stdout)
             call_command('seed_m3_demo', stdout=self.stdout)
+            call_command('seed_m5_mentoring_demo', stdout=self.stdout)
         User.objects.create_superuser('render.admin', email='render.admin@example.test', password=password)
         self.stdout.write(self.style.SUCCESS('Render classroom demo initialized. Admin password is stored only in Render environment settings.'))
