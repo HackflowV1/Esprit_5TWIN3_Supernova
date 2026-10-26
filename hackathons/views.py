@@ -1,10 +1,13 @@
+import time
+
 from django.utils.translation import gettext_lazy as _
 from django.contrib import messages
 from django.contrib.auth.mixins import LoginRequiredMixin
+from django.core.cache import cache
 from django.core.exceptions import PermissionDenied, ValidationError
 from django.db import IntegrityError, transaction
 from django.db.models import Q, ProtectedError
-from django.http import Http404
+from django.http import Http404, JsonResponse
 from django.shortcuts import get_object_or_404, redirect
 from django.urls import reverse
 from django.utils import timezone
@@ -16,8 +19,8 @@ from accounts.forms import RoleForm
 from accounts.services import set_role
 from accounts.permissions import can_manage, can_create_hackathon, has_role, require_organizer, is_member
 from .models import Hackathon, Track, Challenge, EventPhase, SponsorOrganization, Sponsorship
-from .forms import HackathonForm
-from . import services
+from .forms import HackathonForm, ChallengeSuggestionForm
+from . import services, ai
 
 
 def visible_events(user):
@@ -216,7 +219,49 @@ class ResourceMixin(OrganizerMixin):
 
 
 class ResourceCreateView(ResourceMixin, CreateView):
-    pass
+    def get_template_names(self):
+        if self.model == Challenge and not self.sponsor:
+            return ['hackathons/challenge_form.html']
+        return super().get_template_names()
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        if self.model == Challenge and not self.sponsor:
+            context['challenge_ai_enabled'] = ai.is_configured()
+            context['suggestion_form'] = ChallengeSuggestionForm(
+                initial={name: self.request.POST.get(name, '') for name in ('idea', 'audience', 'duration')},
+                event=self.get_event())
+        return context
+
+
+SUGGESTIONS_PER_HOUR = 10
+
+
+class ChallengeSuggestView(OrganizerMixin, View):
+    http_method_names = ['post']
+
+    def post(self, request, *args, **kwargs):
+        event = self.get_event()
+        form = ChallengeSuggestionForm(request.POST, event=event)
+        if not form.is_valid():
+            return JsonResponse({'error': str(_('Vérifiez le track, l’idée, le public et la durée.')),
+                                 'errors': form.errors.get_json_data()}, status=400)
+        if not ai.is_configured():
+            return JsonResponse({'error': str(_('L’assistant IA n’est pas configuré. Remplissez le formulaire à la main.'))}, status=503)
+        # Cache add/incr avoids lost updates within the configured local cache.
+        # A fixed window does not extend the limit on every attempt. Failures count too.
+        key = f'm1-challenge-suggest:{request.user.pk}:{int(time.time()) // 3600}'
+        cache.add(key, 0, timeout=3600)
+        if cache.incr(key) > SUGGESTIONS_PER_HOUR:
+            response = JsonResponse({'error': str(_('Trop de suggestions. Réessayez dans une heure.'))}, status=429)
+            response['Retry-After'] = '3600'
+            return response
+        try:
+            suggestion = ai.suggest_challenge(event=event, **form.cleaned_data,
+                                              language=request.LANGUAGE_CODE or 'fr')
+        except ai.SuggestionUnavailable as exc:
+            return JsonResponse({'error': str(exc)}, status=503)
+        return JsonResponse(suggestion)
 
 
 class ResourceUpdateView(ResourceMixin, UpdateView):

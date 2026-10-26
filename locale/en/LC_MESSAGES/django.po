@@ -5535,3 +5535,91 @@ msgstr ""
 
 msgid "Ajouter le besoin"
 msgstr "Add skill need"
+
+#: hackathons/ai.py hackathons/forms.py hackathons/views.py templates/hackathons/challenge_form.html
+msgid "Idée ou thème"
+msgstr "Idea or theme"
+
+#: hackathons/ai.py hackathons/forms.py hackathons/views.py templates/hackathons/challenge_form.html
+msgid "Requis uniquement pour demander une suggestion."
+msgstr "Required only when requesting a suggestion."
+
+#: hackathons/ai.py hackathons/forms.py hackathons/views.py templates/hackathons/challenge_form.html
+msgid "Public visé"
+msgstr "Target audience"
+
+#: hackathons/ai.py hackathons/forms.py hackathons/views.py templates/hackathons/challenge_form.html
+msgid "Durée envisagée"
+msgstr "Expected duration"
+
+#: hackathons/ai.py hackathons/forms.py hackathons/views.py templates/hackathons/challenge_form.html
+msgid "Par exemple : 24 heures. Cette indication ne modifie aucune date."
+msgstr "For example: 24 hours. This information does not change any dates."
+
+#: hackathons/ai.py hackathons/forms.py hackathons/views.py templates/hackathons/challenge_form.html
+msgid "La réponse IA est invalide. Vos champs sont conservés."
+msgstr "The AI response is invalid. Your fields have been kept."
+
+#: hackathons/ai.py hackathons/forms.py hackathons/views.py templates/hackathons/challenge_form.html
+msgid "L’assistant IA n’est pas configuré. Remplissez le formulaire à la main."
+msgstr "The AI assistant is not configured. Complete the form manually."
+
+#: hackathons/ai.py hackathons/forms.py hackathons/views.py templates/hackathons/challenge_form.html
+msgid "La suggestion est indisponible pour le moment. Vos champs sont conservés ; vous pouvez continuer à la main."
+msgstr "Suggestions are currently unavailable. Your fields have been kept; you can continue manually."
+
+#: hackathons/ai.py hackathons/forms.py hackathons/views.py templates/hackathons/challenge_form.html
+msgid "Vérifiez le track, l’idée, le public et la durée."
+msgstr "Check the track, idea, audience and duration."
+
+#: hackathons/ai.py hackathons/forms.py hackathons/views.py templates/hackathons/challenge_form.html
+msgid "Trop de suggestions. Réessayez dans une heure."
+msgstr "Too many suggestions. Try again in an hour."
+
+#: hackathons/ai.py hackathons/forms.py hackathons/views.py templates/hackathons/challenge_form.html
+msgid "Rédaction en cours…"
+msgstr "Drafting…"
+
+#: hackathons/ai.py hackathons/forms.py hackathons/views.py templates/hackathons/challenge_form.html
+msgid "Champs vides remplis. Relisez les propositions et sélectionnez les champs à remplacer."
+msgstr "Empty fields filled. Review the suggestions and select the fields to replace."
+
+#: hackathons/ai.py hackathons/forms.py hackathons/views.py templates/hackathons/challenge_form.html
+msgid "Propositions appliquées au formulaire. Relisez et modifiez avant d’enregistrer le brouillon."
+msgstr "Suggestions applied to the form. Review and edit before saving the draft."
+
+#: hackathons/ai.py hackathons/forms.py hackathons/views.py templates/hackathons/challenge_form.html
+msgid "Vos champs actuels sont conservés."
+msgstr "Your current fields have been kept."
+
+#: hackathons/ai.py hackathons/forms.py hackathons/views.py templates/hackathons/challenge_form.html
+msgid "Le contexte a changé. Relancez la suggestion pour ce track et cette idée."
+msgstr "The context has changed. Request a new suggestion for this track and idea."
+
+#: hackathons/ai.py hackathons/forms.py hackathons/views.py templates/hackathons/challenge_form.html
+msgid "Assistant de rédaction"
+msgstr "Drafting assistant"
+
+#: hackathons/ai.py hackathons/forms.py hackathons/views.py templates/hackathons/challenge_form.html
+msgid "L’IA propose uniquement du texte. Aucun challenge n’est enregistré automatiquement."
+msgstr "AI only suggests text. No challenge is saved automatically."
+
+#: hackathons/ai.py hackathons/forms.py hackathons/views.py templates/hackathons/challenge_form.html
+msgid "M'aider à rédiger avec l'IA"
+msgstr "Help me draft with AI"
+
+#: hackathons/ai.py hackathons/forms.py hackathons/views.py templates/hackathons/challenge_form.html
+msgid "Activez JavaScript pour utiliser l’assistant, ou remplissez les champs à la main."
+msgstr "Enable JavaScript to use the assistant, or complete the fields manually."
+
+#: hackathons/ai.py hackathons/forms.py hackathons/views.py templates/hackathons/challenge_form.html
+msgid "Les champs déjà renseignés restent inchangés. Cochez chaque remplacement souhaité, puis confirmez."
+msgstr "Existing fields stay unchanged. Select each replacement you want, then confirm."
+
+#: hackathons/ai.py hackathons/forms.py hackathons/views.py templates/hackathons/challenge_form.html
+msgid "Confirmer les remplacements sélectionnés"
+msgstr "Confirm selected replacements"
+
+#: hackathons/ai.py hackathons/forms.py hackathons/views.py templates/hackathons/challenge_form.html
+msgid "Garder mes champs actuels"
+msgstr "Keep my current fields"

@@ -3,6 +3,7 @@ from tempfile import TemporaryDirectory
 from pathlib import Path
 from unittest.mock import patch
 import json
+import os
 
 from django.core.management import call_command
 from django.core.exceptions import PermissionDenied,ValidationError
@@ -48,8 +49,11 @@ class PredictorTests(SimpleTestCase):
             with patch('teams.skill_suggestions.matching.vectors',return_value=(None,'warming')) as vectors:
                 self.assertEqual(skill_suggestions.suggest('Construire des vues avec Django et des modèles.')['state'],'warming')
                 vectors.assert_called_once()
+            previous=path.stat()
             wrong=example_artifact(); wrong['coefficients']=[[float('nan')]*384]
             path.write_text(json.dumps(wrong))
+            # Cache invalidation uses mtime; rapid Windows writes can share a timestamp.
+            os.utime(path,ns=(previous.st_atime_ns,previous.st_mtime_ns+1_000_000_000))
             self.assertIsNone(skill_suggestions.artifact())
 
 
