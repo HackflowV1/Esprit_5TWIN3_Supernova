@@ -1,0 +1,898 @@
+{
+  "evaluation_scope": "synthetic held-out only; no human validation; not measured real-world accuracy",
+  "dataset_sha256": "5bf0af75488e35cc1dd31078d97662a5b7f359dbf7c0711c52c5f30151fae091",
+  "splits": {
+    "train": {
+      "rows": 140,
+      "languages": {
+        "en": 140
+      },
+      "empty_labels": 18,
+      "support": {
+        "API REST": 14,
+        "Django": 16,
+        "Cybersécurité": 9,
+        "Data Science": 12,
+        "DevOps": 10,
+        "Figma": 10,
+        "UI/UX": 17,
+        "JavaScript": 10,
+        "Machine Learning": 11,
+        "Mobile": 15,
+        "PostgreSQL": 14,
+        "Python": 11,
+        "React": 14
+      }
+    },
+    "validation": {
+      "rows": 46,
+      "languages": {
+        "en": 46
+      },
+      "empty_labels": 6,
+      "support": {
+        "API REST": 6,
+        "Django": 5,
+        "Cybersécurité": 4,
+        "Data Science": 5,
+        "DevOps": 4,
+        "Figma": 4,
+        "UI/UX": 4,
+        "JavaScript": 4,
+        "Machine Learning": 4,
+        "Mobile": 5,
+        "PostgreSQL": 4,
+        "Python": 4,
+        "React": 5
+      }
+    },
+    "test": {
+      "rows": 39,
+      "languages": {
+        "en": 39
+      },
+      "empty_labels": 5,
+      "support": {
+        "API REST": 4,
+        "Django": 3,
+        "Cybersécurité": 3,
+        "Data Science": 3,
+        "DevOps": 4,
+        "Figma": 3,
+        "JavaScript": 3,
+        "Machine Learning": 3,
+        "Mobile": 3,
+        "PostgreSQL": 3,
+        "Python": 3,
+        "React": 3,
+        "UI/UX": 3
+      }
+    }
+  },
+  "threshold_selection": "per-label validation F0.5, floor .55, ties choose higher threshold; final test never used for tuning",
+  "models": {
+    "frozen_minilm_logistic": {
+      "exact_set_accuracy": 0.717948717948718,
+      "micro": {
+        "precision": 0.967741935483871,
+        "recall": 0.7317073170731707,
+        "f1": 0.8333333333333334
+      },
+      "macro": {
+        "precision": 0.8846153846153846,
+        "recall": 0.7243589743589743,
+        "f1": 0.7813186813186813
+      },
+      "per_skill": {
+        "API REST": {
+          "precision": 1.0,
+          "recall": 0.75,
+          "f1": 0.8571428571428571,
+          "support": 4
+        },
+        "Cybersécurité": {
+          "precision": 1.0,
+          "recall": 1.0,
+          "f1": 1.0,
+          "support": 3
+        },
+        "Data Science": {
+          "precision": 1.0,
+          "recall": 0.3333333333333333,
+          "f1": 0.5,
+          "support": 3
+        },
+        "DevOps": {
+          "precision": 1.0,
+          "recall": 1.0,
+          "f1": 1.0,
+          "support": 4
+        },
+        "Django": {
+          "precision": 1.0,
+          "recall": 1.0,
+          "f1": 1.0,
+          "support": 3
+        },
+        "Figma": {
+          "precision": 1.0,
+          "recall": 1.0,
+          "f1": 1.0,
+          "support": 3
+        },
+        "JavaScript": {
+          "precision": 1.0,
+          "recall": 0.6666666666666666,
+          "f1": 0.8,
+          "support": 3
+        },
+        "Machine Learning": {
+          "precision": 1.0,
+          "recall": 0.6666666666666666,
+          "f1": 0.8,
+          "support": 3
+        },
+        "Mobile": {
+          "precision": 1.0,
+          "recall": 0.6666666666666666,
+          "f1": 0.8,
+          "support": 3
+        },
+        "PostgreSQL": {
+          "precision": 1.0,
+          "recall": 1.0,
+          "f1": 1.0,
+          "support": 3
+        },
+        "Python": {
+          "precision": 0.0,
+          "recall": 0.0,
+          "f1": 0.0,
+          "support": 3
+        },
+        "React": {
+          "precision": 1.0,
+          "recall": 1.0,
+          "f1": 1.0,
+          "support": 3
+        },
+        "UI/UX": {
+          "precision": 0.5,
+          "recall": 0.3333333333333333,
+          "f1": 0.4,
+          "support": 3
+        }
+      },
+      "empty_description_cases": 5,
+      "false_suggestions_on_empty_cases": 0
+    },
+    "tfidf_logistic": {
+      "exact_set_accuracy": 0.6153846153846154,
+      "micro": {
+        "precision": 1.0,
+        "recall": 0.5853658536585366,
+        "f1": 0.7384615384615385
+      },
+      "macro": {
+        "precision": 0.9230769230769231,
+        "recall": 0.5705128205128205,
+        "f1": 0.665934065934066
+      },
+      "per_skill": {
+        "API REST": {
+          "precision": 1.0,
+          "recall": 1.0,
+          "f1": 1.0,
+          "support": 4
+        },
+        "Cybersécurité": {
+          "precision": 1.0,
+          "recall": 0.3333333333333333,
+          "f1": 0.5,
+          "support": 3
+        },
+        "Data Science": {
+          "precision": 0.0,
+          "recall": 0.0,
+          "f1": 0.0,
+          "support": 3
+        },
+        "DevOps": {
+          "precision": 1.0,
+          "recall": 0.75,
+          "f1": 0.8571428571428571,
+          "support": 4
+        },
+        "Django": {
+          "precision": 1.0,
+          "recall": 1.0,
+          "f1": 1.0,
+          "support": 3
+        },
+        "Figma": {
+          "precision": 1.0,
+          "recall": 1.0,
+          "f1": 1.0,
+          "support": 3
+        },
+        "JavaScript": {
+          "precision": 1.0,
+          "recall": 0.3333333333333333,
+          "f1": 0.5,
+          "support": 3
+        },
+        "Machine Learning": {
+          "precision": 1.0,
+          "recall": 0.3333333333333333,
+          "f1": 0.5,
+          "support": 3
+        },
+        "Mobile": {
+          "precision": 1.0,
+          "recall": 0.3333333333333333,
+          "f1": 0.5,
+          "support": 3
+        },
+        "PostgreSQL": {
+          "precision": 1.0,
+          "recall": 1.0,
+          "f1": 1.0,
+          "support": 3
+        },
+        "Python": {
+          "precision": 1.0,
+          "recall": 0.6666666666666666,
+          "f1": 0.8,
+          "support": 3
+        },
+        "React": {
+          "precision": 1.0,
+          "recall": 0.3333333333333333,
+          "f1": 0.5,
+          "support": 3
+        },
+        "UI/UX": {
+          "precision": 1.0,
+          "recall": 0.3333333333333333,
+          "f1": 0.5,
+          "support": 3
+        }
+      },
+      "empty_description_cases": 5,
+      "false_suggestions_on_empty_cases": 0
+    },
+    "keyword_alias": {
+      "exact_set_accuracy": 0.6153846153846154,
+      "micro": {
+        "precision": 1.0,
+        "recall": 0.6097560975609756,
+        "f1": 0.7575757575757576
+      },
+      "macro": {
+        "precision": 0.6153846153846154,
+        "recall": 0.6153846153846154,
+        "f1": 0.6153846153846154
+      },
+      "per_skill": {
+        "API REST": {
+          "precision": 1.0,
+          "recall": 1.0,
+          "f1": 1.0,
+          "support": 4
+        },
+        "Cybersécurité": {
+          "precision": 0.0,
+          "recall": 0.0,
+          "f1": 0.0,
+          "support": 3
+        },
+        "Data Science": {
+          "precision": 0.0,
+          "recall": 0.0,
+          "f1": 0.0,
+          "support": 3
+        },
+        "DevOps": {
+          "precision": 0.0,
+          "recall": 0.0,
+          "f1": 0.0,
+          "support": 4
+        },
+        "Django": {
+          "precision": 1.0,
+          "recall": 1.0,
+          "f1": 1.0,
+          "support": 3
+        },
+        "Figma": {
+          "precision": 1.0,
+          "recall": 1.0,
+          "f1": 1.0,
+          "support": 3
+        },
+        "JavaScript": {
+          "precision": 1.0,
+          "recall": 1.0,
+          "f1": 1.0,
+          "support": 3
+        },
+        "Machine Learning": {
+          "precision": 0.0,
+          "recall": 0.0,
+          "f1": 0.0,
+          "support": 3
+        },
+        "Mobile": {
+          "precision": 1.0,
+          "recall": 1.0,
+          "f1": 1.0,
+          "support": 3
+        },
+        "PostgreSQL": {
+          "precision": 1.0,
+          "recall": 1.0,
+          "f1": 1.0,
+          "support": 3
+        },
+        "Python": {
+          "precision": 1.0,
+          "recall": 1.0,
+          "f1": 1.0,
+          "support": 3
+        },
+        "React": {
+          "precision": 1.0,
+          "recall": 1.0,
+          "f1": 1.0,
+          "support": 3
+        },
+        "UI/UX": {
+          "precision": 0.0,
+          "recall": 0.0,
+          "f1": 0.0,
+          "support": 3
+        }
+      },
+      "empty_description_cases": 5,
+      "false_suggestions_on_empty_cases": 0
+    },
+    "hybrid_served": {
+      "exact_set_accuracy": 0.8461538461538461,
+      "micro": {
+        "precision": 0.972972972972973,
+        "recall": 0.8780487804878049,
+        "f1": 0.9230769230769231
+      },
+      "macro": {
+        "precision": 0.9615384615384616,
+        "recall": 0.8717948717948718,
+        "f1": 0.9000000000000001
+      },
+      "per_skill": {
+        "API REST": {
+          "precision": 1.0,
+          "recall": 1.0,
+          "f1": 1.0,
+          "support": 4
+        },
+        "Cybersécurité": {
+          "precision": 1.0,
+          "recall": 1.0,
+          "f1": 1.0,
+          "support": 3
+        },
+        "Data Science": {
+          "precision": 1.0,
+          "recall": 0.3333333333333333,
+          "f1": 0.5,
+          "support": 3
+        },
+        "DevOps": {
+          "precision": 1.0,
+          "recall": 1.0,
+          "f1": 1.0,
+          "support": 4
+        },
+        "Django": {
+          "precision": 1.0,
+          "recall": 1.0,
+          "f1": 1.0,
+          "support": 3
+        },
+        "Figma": {
+          "precision": 1.0,
+          "recall": 1.0,
+          "f1": 1.0,
+          "support": 3
+        },
+        "JavaScript": {
+          "precision": 1.0,
+          "recall": 1.0,
+          "f1": 1.0,
+          "support": 3
+        },
+        "Machine Learning": {
+          "precision": 1.0,
+          "recall": 0.6666666666666666,
+          "f1": 0.8,
+          "support": 3
+        },
+        "Mobile": {
+          "precision": 1.0,
+          "recall": 1.0,
+          "f1": 1.0,
+          "support": 3
+        },
+        "PostgreSQL": {
+          "precision": 1.0,
+          "recall": 1.0,
+          "f1": 1.0,
+          "support": 3
+        },
+        "Python": {
+          "precision": 1.0,
+          "recall": 1.0,
+          "f1": 1.0,
+          "support": 3
+        },
+        "React": {
+          "precision": 1.0,
+          "recall": 1.0,
+          "f1": 1.0,
+          "support": 3
+        },
+        "UI/UX": {
+          "precision": 0.5,
+          "recall": 0.3333333333333333,
+          "f1": 0.4,
+          "support": 3
+        }
+      },
+      "empty_description_cases": 5,
+      "false_suggestions_on_empty_cases": 0
+    }
+  },
+  "performance": {
+    "embedding_all_splits_seconds": 7.933,
+    "head_training_seconds": 0.077,
+    "head_warm_mean_ms": 0.291,
+    "head_warm_p95_ms": 0.48,
+    "training_process_rss_mb": 244.9,
+    "total_seconds": 8.412
+  },
+  "test_predictions": [
+    {
+      "id": "ft-001",
+      "expected": [
+        "API REST"
+      ],
+      "predicted": [
+        "API REST"
+      ],
+      "served": [
+        "API REST"
+      ]
+    },
+    {
+      "id": "ft-002",
+      "expected": [
+        "Django"
+      ],
+      "predicted": [
+        "Django"
+      ],
+      "served": [
+        "Django"
+      ]
+    },
+    {
+      "id": "ft-003",
+      "expected": [
+        "Cybersécurité"
+      ],
+      "predicted": [
+        "Cybersécurité"
+      ],
+      "served": [
+        "Cybersécurité"
+      ]
+    },
+    {
+      "id": "ft-004",
+      "expected": [
+        "Data Science"
+      ],
+      "predicted": [],
+      "served": []
+    },
+    {
+      "id": "ft-005",
+      "expected": [
+        "DevOps"
+      ],
+      "predicted": [
+        "DevOps"
+      ],
+      "served": [
+        "DevOps"
+      ]
+    },
+    {
+      "id": "ft-006",
+      "expected": [
+        "Figma"
+      ],
+      "predicted": [
+        "Figma"
+      ],
+      "served": [
+        "Figma"
+      ]
+    },
+    {
+      "id": "ft-007",
+      "expected": [
+        "JavaScript"
+      ],
+      "predicted": [
+        "JavaScript"
+      ],
+      "served": [
+        "JavaScript"
+      ]
+    },
+    {
+      "id": "ft-008",
+      "expected": [
+        "Machine Learning"
+      ],
+      "predicted": [
+        "Machine Learning"
+      ],
+      "served": [
+        "Machine Learning"
+      ]
+    },
+    {
+      "id": "ft-009",
+      "expected": [
+        "Mobile"
+      ],
+      "predicted": [
+        "Mobile"
+      ],
+      "served": [
+        "Mobile"
+      ]
+    },
+    {
+      "id": "ft-010",
+      "expected": [
+        "PostgreSQL"
+      ],
+      "predicted": [
+        "PostgreSQL"
+      ],
+      "served": [
+        "PostgreSQL"
+      ]
+    },
+    {
+      "id": "ft-011",
+      "expected": [
+        "Python"
+      ],
+      "predicted": [],
+      "served": [
+        "Python"
+      ]
+    },
+    {
+      "id": "ft-012",
+      "expected": [
+        "React"
+      ],
+      "predicted": [
+        "React"
+      ],
+      "served": [
+        "React"
+      ]
+    },
+    {
+      "id": "ft-013",
+      "expected": [
+        "UI/UX"
+      ],
+      "predicted": [],
+      "served": []
+    },
+    {
+      "id": "ft-014",
+      "expected": [
+        "API REST"
+      ],
+      "predicted": [
+        "API REST"
+      ],
+      "served": [
+        "API REST"
+      ]
+    },
+    {
+      "id": "ft-015",
+      "expected": [
+        "Django"
+      ],
+      "predicted": [
+        "Django"
+      ],
+      "served": [
+        "Django"
+      ]
+    },
+    {
+      "id": "ft-016",
+      "expected": [
+        "Cybersécurité"
+      ],
+      "predicted": [
+        "Cybersécurité"
+      ],
+      "served": [
+        "Cybersécurité"
+      ]
+    },
+    {
+      "id": "ft-017",
+      "expected": [
+        "Data Science"
+      ],
+      "predicted": [],
+      "served": []
+    },
+    {
+      "id": "ft-018",
+      "expected": [
+        "DevOps"
+      ],
+      "predicted": [
+        "DevOps"
+      ],
+      "served": [
+        "DevOps"
+      ]
+    },
+    {
+      "id": "ft-019",
+      "expected": [
+        "Figma"
+      ],
+      "predicted": [
+        "Figma",
+        "UI/UX"
+      ],
+      "served": [
+        "Figma",
+        "UI/UX"
+      ]
+    },
+    {
+      "id": "ft-020",
+      "expected": [
+        "JavaScript"
+      ],
+      "predicted": [],
+      "served": [
+        "JavaScript"
+      ]
+    },
+    {
+      "id": "ft-021",
+      "expected": [
+        "Machine Learning"
+      ],
+      "predicted": [
+        "Machine Learning"
+      ],
+      "served": [
+        "Machine Learning"
+      ]
+    },
+    {
+      "id": "ft-022",
+      "expected": [
+        "Mobile"
+      ],
+      "predicted": [
+        "Mobile"
+      ],
+      "served": [
+        "Mobile"
+      ]
+    },
+    {
+      "id": "ft-023",
+      "expected": [
+        "PostgreSQL"
+      ],
+      "predicted": [
+        "PostgreSQL"
+      ],
+      "served": [
+        "PostgreSQL"
+      ]
+    },
+    {
+      "id": "ft-024",
+      "expected": [
+        "Python"
+      ],
+      "predicted": [],
+      "served": [
+        "Python"
+      ]
+    },
+    {
+      "id": "ft-025",
+      "expected": [
+        "React"
+      ],
+      "predicted": [
+        "React"
+      ],
+      "served": [
+        "React"
+      ]
+    },
+    {
+      "id": "ft-026",
+      "expected": [
+        "UI/UX"
+      ],
+      "predicted": [],
+      "served": []
+    },
+    {
+      "id": "ft-027",
+      "expected": [
+        "API REST"
+      ],
+      "predicted": [],
+      "served": [
+        "API REST"
+      ]
+    },
+    {
+      "id": "ft-028",
+      "expected": [
+        "React",
+        "API REST",
+        "Django"
+      ],
+      "predicted": [
+        "API REST",
+        "Django",
+        "React"
+      ],
+      "served": [
+        "API REST",
+        "Django",
+        "React"
+      ]
+    },
+    {
+      "id": "ft-029",
+      "expected": [
+        "Cybersécurité"
+      ],
+      "predicted": [
+        "Cybersécurité"
+      ],
+      "served": [
+        "Cybersécurité"
+      ]
+    },
+    {
+      "id": "ft-030",
+      "expected": [
+        "Mobile",
+        "Figma",
+        "UI/UX"
+      ],
+      "predicted": [
+        "Figma",
+        "UI/UX"
+      ],
+      "served": [
+        "Figma",
+        "Mobile",
+        "UI/UX"
+      ]
+    },
+    {
+      "id": "ft-031",
+      "expected": [
+        "Python",
+        "Data Science",
+        "Machine Learning"
+      ],
+      "predicted": [
+        "Data Science"
+      ],
+      "served": [
+        "Data Science",
+        "Python"
+      ]
+    },
+    {
+      "id": "ft-032",
+      "expected": [
+        "PostgreSQL",
+        "DevOps"
+      ],
+      "predicted": [
+        "DevOps",
+        "PostgreSQL"
+      ],
+      "served": [
+        "DevOps",
+        "PostgreSQL"
+      ]
+    },
+    {
+      "id": "ft-033",
+      "expected": [
+        "JavaScript"
+      ],
+      "predicted": [
+        "JavaScript"
+      ],
+      "served": [
+        "JavaScript"
+      ]
+    },
+    {
+      "id": "ft-034",
+      "expected": [],
+      "predicted": [],
+      "served": []
+    },
+    {
+      "id": "ft-035",
+      "expected": [],
+      "predicted": [],
+      "served": []
+    },
+    {
+      "id": "ft-036",
+      "expected": [],
+      "predicted": [],
+      "served": []
+    },
+    {
+      "id": "ft-037",
+      "expected": [],
+      "predicted": [],
+      "served": []
+    },
+    {
+      "id": "ft-038",
+      "expected": [],
+      "predicted": [],
+      "served": []
+    },
+    {
+      "id": "ft-039",
+      "expected": [
+        "DevOps"
+      ],
+      "predicted": [
+        "DevOps"
+      ],
+      "served": [
+        "DevOps"
+      ]
+    }
+  ]
+}

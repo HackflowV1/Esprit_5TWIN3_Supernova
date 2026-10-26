@@ -7,6 +7,7 @@ import json
 from django.core.management import call_command
 from django.core.exceptions import PermissionDenied,ValidationError
 from django.test import SimpleTestCase,TestCase,Client,override_settings
+from django.conf import settings
 from django.urls import reverse
 from accounts.models import Skill
 from .tests import SetupMixin
@@ -14,7 +15,7 @@ from . import services,skill_suggestions
 
 
 def example_artifact():
-    return {'schema':1,'embedding_model':'sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2',
+    return {'schema':1,'embedding_model':settings.M2_MODEL_NAME,
         'dimension':384,'labels':['Django'],'coefficients':[[2.]+[0.]*383],
         'intercepts':[0.],'thresholds':[.7],'max_suggestions':5}
 

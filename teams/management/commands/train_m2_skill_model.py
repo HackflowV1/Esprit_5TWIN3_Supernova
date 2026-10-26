@@ -83,7 +83,7 @@ class Command(BaseCommand):
     help = 'Train and evaluate the M2 skill-needs classifier offline on explicit synthetic train/validation/test splits.'
 
     def add_arguments(self,parser):
-        parser.add_argument('--dataset',default=str(settings.BASE_DIR/'datasets'/'team_skill_needs'))
+        parser.add_argument('--dataset',default=str(settings.BASE_DIR/'datasets'/'team_skill_needs_en'))
         parser.add_argument('--output',default=str(settings.M2_SKILL_MODEL_PATH.parent))
 
     def handle(self,**options):
@@ -119,7 +119,8 @@ class Command(BaseCommand):
         model.fit(encoded['train'],targets['train'])
         training_seconds = perf_counter()-train_start
         thresholds = thresholds_for(targets['validation'],model.predict_proba(encoded['validation']))
-        artifact = {'schema':1,'version':'m2-skill-needs-pilot-1','embedding_model':settings.M2_MODEL_NAME,
+        artifact = {'schema':1,'version':'m2-skill-needs-pilot-2-en','embedding_model':settings.M2_MODEL_NAME,
+            'encoder_repository':'Xenova/all-MiniLM-L6-v2','encoder_revision':'751bff37182d3f1213fa05d7196b954e230abad9',
             'dimension':384,'normalization':'l2','labels':LABELS,'thresholds':thresholds,'max_suggestions':5,
             'coefficients':[est.coef_[0].tolist() for est in model.estimators_],
             'intercepts':[float(est.intercept_[0]) for est in model.estimators_],

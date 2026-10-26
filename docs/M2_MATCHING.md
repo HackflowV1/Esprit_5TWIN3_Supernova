@@ -1,5 +1,10 @@
 # M2 — recommandations locales de coéquipiers
 
+**Mise à jour budget 0 :** le moteur actuel est all-MiniLM-L6-v2 anglais, ONNX q8.
+Voir `docs/M2_ENGLISH_LOW_MEMORY.md`. Les descriptions et biographies IA sont en
+anglais ; l’interface reste bilingue. La section technique multilingue ci-dessous
+conserve la configuration du pilote historique.
+
 Pour la présentation dans l’événement normal avec Sami et Horizon, suivre
 **[le scénario Sami](M2_SAMI_DEMO.md)**. Team Lab reste un terrain de test complémentaire.
 

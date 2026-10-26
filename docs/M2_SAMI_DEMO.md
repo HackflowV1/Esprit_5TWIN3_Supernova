@@ -6,11 +6,14 @@ Après installation des dépendances et migrations habituelles :
 
 ```powershell
 uv run --locked python manage.py seed_demo
-uv run --locked python manage.py seed_m2_sami_showcase --configure-team
+uv run --locked python manage.py seed_m2_sami_showcase --configure-team --english
 uv run --locked python manage.py prepare_m2_matching
 ```
 
 Le scénario est dans **AI Challenge 2026 → Horizon**, en base PostgreSQL normale.
+Depuis le passage au modèle léger pour le budget 0, les textes IA du scénario
+sont en anglais ; l’interface reste bilingue. `--english` remplace explicitement
+les biographies et intérêts des cinq comptes fictifs du scénario uniquement.
 Compte : `sami` ; mot de passe initial de `seed_demo` : `Demo-Hack#2026`.
 Un mot de passe existant n’est jamais réinitialisé.
 
@@ -40,8 +43,8 @@ leurs biographies et centres d’intérêt diffèrent.
    équivalents et départagés par identifiant, sans modèle.
 3. Cliquer **Compétences + projet** : mêmes participants, mêmes compétences,
    mêmes règles de couverture ; seule la similarité sémantique est ajoutée.
-4. Montrer la progression calculée sur la carte de Yasmine, puis la biographie
-   anglaise de Lina et le besoin français de l’équipe.
+4. Montrer les progressions calculées de Lina et Yasmine. Leurs descriptions
+   correspondent à l’idée de redistribution alimentaire, contrairement à la finance et au sport.
 5. Montrer Nader : son idée est proche du projet, mais Data Science 2/5 ne remplace
    pas le niveau essentiel 4/5. L’IA n’invente pas une compétence.
 
@@ -50,9 +53,9 @@ Résultat observé sur la base locale le 26 octobre 2026 :
 | Candidat | Contexte | Compétences seules | Avec le projet |
 | --- | --- | --- | --- |
 | Amine Ben Salah | Finance | 1 | 3 |
-| Lina Trabelsi | Collecte de repas, profil en anglais | 2 | 2 |
+| Lina Trabelsi | Collecte de repas, profil en anglais | 2 | 1 |
 | Omar Gharbi | Sport | 3 | 4 |
-| Yasmine Kallel | Prévision des invendus et dons | 4 | 1 |
+| Yasmine Kallel | Prévision des invendus et dons | 4 | 2 |
 
 Les positions sont toujours calculées depuis les données actuelles. Aucun nom,
 identifiant de candidat ou ordre attendu n’entre dans le code du classement.
@@ -60,12 +63,12 @@ Les invitations restent manuelles et ne réservent aucune place.
 
 ## Variante interactive
 
-Modifier l’idée de l’équipe vers la prévision des rendements boursiers et le suivi
+Modifier l’idée de l’équipe en anglais vers la prévision des rendements boursiers et le suivi
 des portefeuilles financiers, puis rouvrir les suggestions. Actualiser si le contexte
 se prépare en arrière-plan. Amine doit alors devenir plus pertinent pour cette idée.
 Le test local de ce contexte a placé Amine premier ; l’idée réelle d’Horizon a été
 conservée pendant cette vérification. Pour retrouver le scénario initial : relancer
-le seed avec `--configure-team`, puis préparer le cache.
+le seed avec `--configure-team --english`, puis préparer le cache.
 
 Ce scénario contrôlé démontre l’effet du modèle. La qualité générale des recommandations
 se mesure séparément avec l’évaluation humaine de `docs/m2_human_review.csv`.

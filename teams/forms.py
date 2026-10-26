@@ -11,6 +11,7 @@ class TeamForm(forms.ModelForm):
     class Meta:
         model = Team
         fields = ['name', 'description', 'recruiting']
+        help_texts = {'description':_('Pour les suggestions IA par projet, rédigez cette description en anglais.')}
         widgets = {'description': forms.Textarea(attrs={'rows': 4, 'placeholder': _('Une idée, des envies, les profils que vous cherchez…')})}
 
 
@@ -38,7 +39,7 @@ class NeedForm(forms.ModelForm):
 class SkillDescriptionForm(forms.Form):
     text = forms.CharField(label=_('Le travail technique prévu'),min_length=15,max_length=1200,
         widget=forms.Textarea(attrs={'rows':4,'placeholder':_('Décrivez ce que vous allez construire et les outils envisagés…')}),
-        help_text=_('Les suggestions sont à confirmer. Une idée vague peut ne donner aucun résultat.'))
+        help_text=_('Décrivez le travail en anglais : le modèle léger est optimisé pour cette langue. Confirmez ensuite les suggestions utiles.'))
 
 
 class SuggestedNeedForm(forms.Form):

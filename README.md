@@ -77,7 +77,7 @@ l’événement et un partenariat confirmé. L’organisateur valide puis publie
   organisations sponsors, partenariats et workflow de validation.
 - M2 : inscriptions réelles, équipes, invitations/candidatures, capitaine,
   annuaire d’idées consultable avant inscription, reprise de candidature,
-  compétences recherchées et recommandations locales multilingues de coéquipiers.
+  compétences recherchées et recommandations locales de coéquipiers (textes IA en anglais).
 - Cycle : brouillon → publié → en cours → terminé → archivé ; un événement publié
   dont la date de fin est passée peut aussi être terminé directement.
 - Control Tower : compteurs issus de la base, échéances, phases et alertes de configuration.
@@ -114,6 +114,9 @@ uv run --locked python manage.py prepare_m2_matching
 
 Ouvrir **Team Lab · Trouvez vos coéquipiers**. Le premier téléchargement du modèle
 est explicite ; ensuite, le classement fonctionne localement, sans clé d’API.
+Le moteur commun utilise maintenant le petit MiniLM anglais ONNX pour limiter la
+RAM : [configuration et mesures actuelles](docs/M2_ENGLISH_LOW_MEMORY.md). Les textes
+IA sont en anglais ; l’interface reste FR/EN.
 Les profils fictifs et comptes de test, le repli sans IA et l’évaluation humaine
 sont expliqués dans [le guide de recommandations M2](docs/M2_MATCHING.md).
 

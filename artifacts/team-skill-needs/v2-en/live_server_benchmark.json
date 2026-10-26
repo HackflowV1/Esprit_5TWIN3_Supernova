@@ -1,0 +1,11 @@
+{
+  "measured_on": "2026-10-26 Africa/Tunis",
+  "scope": "Windows Django development server child after real browser requests to both M2 AI features; not a Render/Linux benchmark",
+  "source": "Get-NetTCPConnection port 8000 -> Get-Process WorkingSet64/PeakWorkingSet64",
+  "working_set_bytes": 188006400,
+  "peak_working_set_bytes": 191459328,
+  "working_set_mib": 179.30,
+  "peak_working_set_mib": 182.59,
+  "encoder": "English all-MiniLM-L6-v2 ONNX q8, one thread, one-text batches",
+  "render_deployment_tested": false
+}

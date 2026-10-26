@@ -16,7 +16,7 @@ from django.conf import settings
 from django.core.cache import caches
 
 logger = logging.getLogger(__name__)
-VERSION = 'm2-hybrid-2'
+VERSION = 'm2-hybrid-3-english-q8'
 _executor = ThreadPoolExecutor(max_workers=1, thread_name_prefix='m2-embeddings')
 _lock = Lock()
 _busy = False
@@ -45,9 +45,8 @@ def cache_key(text):
 
 @lru_cache(maxsize=1)
 def _model():
-    from fastembed import TextEmbedding
-    return TextEmbedding(model_name=settings.M2_MODEL_NAME, cache_dir=str(settings.M2_MODEL_CACHE),
-        local_files_only=True, threads=2, providers=['CPUExecutionProvider'])
+    from .encoder import Encoder
+    return Encoder(settings.M2_MODEL_CACHE)
 
 
 def _compute(texts):

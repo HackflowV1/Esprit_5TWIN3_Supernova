@@ -135,9 +135,9 @@ PROJECT_FILES_ROOT = BASE_DIR / 'projects' / 'private_files'
 
 # M2: local-only inference. Download deliberately with prepare_m2_matching.
 M2_MATCHING_ENABLED = os.environ.get('M2_MATCHING_ENABLED', '1') == '1'
-M2_MODEL_NAME = 'sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2'
+M2_MODEL_NAME = 'sentence-transformers/all-MiniLM-L6-v2'
 M2_MODEL_CACHE = Path(os.environ.get('M2_MODEL_CACHE', str(BASE_DIR / '.cache' / 'm2-model')))
-M2_SKILL_MODEL_PATH = Path(os.environ.get('M2_SKILL_MODEL_PATH', str(BASE_DIR / 'artifacts' / 'team-skill-needs' / 'v1' / 'classifier.json')))
+M2_SKILL_MODEL_PATH = Path(os.environ.get('M2_SKILL_MODEL_PATH', str(BASE_DIR / 'artifacts' / 'team-skill-needs' / 'v2-en' / 'classifier.json')))
 CACHES = {
     'default': {'BACKEND': 'django.core.cache.backends.locmem.LocMemCache'},
     'm2_embeddings': {

@@ -1,5 +1,12 @@
 # M2 — assistant de besoins et classifieur entraîné
 
+**Version actuelle : [anglais léger et budget 0](M2_ENGLISH_LOW_MEMORY.md).**
+Le responsable a accepté l’anglais pour les textes IA. Le moteur commun est
+désormais all-MiniLM-L6-v2 ONNX, le classifieur réentraîné est dans `v2-en/`.
+Les chiffres multilingues et détails `v1/` ci-dessous décrivent le pilote historique,
+pas la configuration courante. Voir le guide actuel pour les mesures de 170 Mo et
+les métriques anglaises. L’interface reste FR/EN.
+
 ## Utiliser l’assistant
 
 Sami → AI Challenge → Horizon → **Suggérer des besoins depuis notre idée**.

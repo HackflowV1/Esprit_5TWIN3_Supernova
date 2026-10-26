@@ -40,7 +40,7 @@ pas automatiquement une inscription.
   Le besoin reste enregistré : un départ peut le rendre à nouveau non couvert.
 - **Trouver des coéquipiers** : participants acceptés et sans équipe, classés
   selon les besoins non couverts. Chaque correspondance explique la compétence
-  et le niveau. Un modèle multilingue local complète les compétences déclarées
+  et le niveau. Un petit modèle anglais local complète les compétences déclarées
   avec le contexte des biographies et centres d’intérêt : les besoins essentiels
   passent avant la similarité du texte. L’IA n’invente aucun niveau, ne recrute
   personne et n’affiche pas de faux pourcentage. On peut toujours inviter manuellement.

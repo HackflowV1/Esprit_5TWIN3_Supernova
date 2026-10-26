@@ -5484,3 +5484,28 @@ msgstr "Suggest skill needs from our idea"
 
 msgid "si sélectionné"
 msgstr "if selected"
+
+msgid ""
+"Décrivez le travail en anglais : le modèle léger est optimisé pour cette "
+"langue. Confirmez ensuite les suggestions utiles."
+msgstr ""
+"Describe the work in English: the lightweight model is optimized for this "
+"language. Then confirm the useful suggestions."
+
+msgid ""
+"Pour les suggestions IA par projet, rédigez cette description en anglais."
+msgstr "For project-based AI suggestions, write this description in English."
+
+msgid ""
+"Le classement par projet est optimisé pour les descriptions et biographies "
+"en anglais."
+msgstr ""
+"Project-based ranking is optimized for English descriptions and biographies."
+
+msgid ""
+"Les compétences essentielles et les niveaux déclarés passent en premier. Le "
+"modèle anglais compare ensuite le contexte des profils équivalents. Vous "
+"choisissez qui inviter."
+msgstr ""
+"Essential skills and declared levels come first. The English model then "
+"compares the context of equivalent profiles. You choose whom to invite."

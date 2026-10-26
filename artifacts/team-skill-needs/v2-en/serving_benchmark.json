@@ -1,0 +1,14 @@
+{
+  "state": "ready",
+  "cold_first_inference_ms": 379.23,
+  "warm_cached_mean_ms": 0.55,
+  "warm_cached_p95_ms": 0.74,
+  "warm_model_uncached_text_mean_ms": 36.03,
+  "serving_process_rss_mb": 165.5,
+  "serving_process_peak_mb": 170.1,
+  "machine_ram_gb": 15.7,
+  "logical_cpu_count": 6,
+  "sklearn_imported": false,
+  "torch_imported": false,
+  "scope": "fresh Python + Django setup + URL/view imports + one local ONNX model; not HTTP concurrency or a Render deployment benchmark"
+}

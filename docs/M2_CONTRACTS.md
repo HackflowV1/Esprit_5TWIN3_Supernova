@@ -51,6 +51,8 @@ déclarées et leur niveau, puis la couverture pondérée et le contexte sémant
 local de profils comparables. Les champs `matches`, `registration` et `score`
 restent disponibles. `matching_state` indique ready/warming/unavailable/disabled/no_needs.
 `context_signal` est un indice de contexte, jamais une compétence certifiée.
+Le moteur courant est anglais all-MiniLM-L6-v2 ONNX q8 (budget mémoire), mutualisé
+entre recommandations et assistant de besoins. Voir `docs/M2_ENGLISH_LOW_MEMORY.md`.
 `recommendation_comparison(actor=..., team=..., mode='hybrid')` renvoie le classement
 choisi, la référence `skills` (même logique sans sémantique), et les besoins manquants.
 Le mode UI `skills` et l’état `no_context` complètent les états décrits ci-dessus.
