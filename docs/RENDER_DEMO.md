@@ -19,6 +19,11 @@ is configured. The web app sleeps after inactivity and uploads are ephemeral.
 
 `render.yaml` creates the resources and a generated Django secret/admin password.
 Deploy `main`, which includes the lightweight English M2 model and both AI features.
+Automatic deployment is configured as **On Commit** (`autoDeployTrigger: commit`).
+Pushes and merges to `main` should appear in Render's Deploys list automatically;
+the GitHub repository must remain connected to Render for push notifications.
+Use **Manual Deploy → Deploy latest commit** if a deployment was skipped or the
+GitHub integration needs reconnecting. A web-service restart alone keeps the old code.
 `build.sh` installs locked dependencies, downloads the 23 MB ONNX model, and
 collects static assets. `start.sh` migrates PostgreSQL, initializes fictional demo
 data once, and runs one Gunicorn worker with two threads. Training never runs on

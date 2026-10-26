@@ -16,7 +16,7 @@ services:
     buildCommand: bash build.sh
     startCommand: bash start.sh
     healthCheckPath: /healthz/
-    autoDeployTrigger: off
+    autoDeployTrigger: commit
     envVars:
       - key: DJANGO_SETTINGS_MODULE
         value: config.settings_render
