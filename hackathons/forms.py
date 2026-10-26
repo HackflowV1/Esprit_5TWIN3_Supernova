@@ -60,6 +60,27 @@ class ChallengeForm(FrenchModelForm):
         self.fields['sponsorship'].queryset = partnerships.distinct()
 
 
+class ChallengeSuggestionForm(forms.Form):
+    track = forms.ModelChoiceField(queryset=Track.objects.none(), label=_('Track'))
+    idea = forms.CharField(label=_('Idée ou thème'), max_length=1000,
+        widget=forms.Textarea(attrs={'rows': 3}), help_text=_('Requis uniquement pour demander une suggestion.'))
+    audience = forms.CharField(label=_('Public visé'), max_length=150, required=False)
+    duration = forms.CharField(label=_('Durée envisagée'), max_length=100, required=False,
+        help_text=_('Par exemple : 24 heures. Cette indication ne modifie aucune date.'))
+
+    def __init__(self, *args, event, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.fields['track'].queryset = event.tracks.filter(active=True)
+
+
+class GeneratedChallengeForm(forms.Form):
+    """Text-only suggestions: no model status, dates or permissions can enter here."""
+    title = forms.CharField(max_length=200)
+    problem = forms.CharField(max_length=4000)
+    objectives = forms.CharField(max_length=4000)
+    deliverables = forms.CharField(max_length=4000)
+
+
 class OrganizationForm(FrenchModelForm):
     class Meta:
         model = SponsorOrganization

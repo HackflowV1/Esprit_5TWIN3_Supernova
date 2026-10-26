@@ -1,0 +1,32 @@
+{% extends 'shared/form.html' %}{% load static i18n ui %}
+{% block extra_css %}{{ block.super }}{% if challenge_ai_enabled %}<link rel="stylesheet" href="{% static 'css/challenge-ai.css' %}?v=1">{% endif %}{% endblock %}
+{% block form_fields %}
+{% render_field form.track %}
+{% if challenge_ai_enabled %}
+<section class="panel challenge-ai" id="challenge-ai" aria-labelledby="challenge-ai-title"
+    data-url="{% url 'hackathons:challenge-suggest' event.slug %}"
+    data-busy="{% translate 'Rédaction en cours…' %}"
+    data-error="{% translate 'La suggestion est indisponible pour le moment. Vos champs sont conservés ; vous pouvez continuer à la main.' %}"
+    data-review="{% translate 'Champs vides remplis. Relisez les propositions et sélectionnez les champs à remplacer.' %}"
+    data-done="{% translate 'Propositions appliquées au formulaire. Relisez et modifiez avant d’enregistrer le brouillon.' %}"
+    data-kept="{% translate 'Vos champs actuels sont conservés.' %}"
+    data-changed="{% translate 'Le contexte a changé. Relancez la suggestion pour ce track et cette idée.' %}">
+    <h2 id="challenge-ai-title">{% translate 'Assistant de rédaction' %}</h2>
+    <p class="muted">{% translate 'L’IA propose uniquement du texte. Aucun challenge n’est enregistré automatiquement.' %}</p>
+    {% render_field suggestion_form.idea %}
+    {% render_field suggestion_form.audience %}
+    {% render_field suggestion_form.duration %}
+    <button type="button" class="button secondary" id="challenge-ai-button" hidden>{% icon 'edit' %}{% translate "M'aider à rédiger avec l'IA" %}</button>
+    <noscript><p>{% translate 'Activez JavaScript pour utiliser l’assistant, ou remplissez les champs à la main.' %}</p></noscript>
+    <p id="challenge-ai-status" role="status" aria-live="polite"></p>
+    <div id="challenge-ai-preview" hidden>
+        <p>{% translate 'Les champs déjà renseignés restent inchangés. Cochez chaque remplacement souhaité, puis confirmez.' %}</p>
+        <div id="challenge-ai-proposals"></div>
+        <button type="button" class="button secondary" id="challenge-ai-apply" disabled>{% translate 'Confirmer les remplacements sélectionnés' %}</button>
+        <button type="button" class="button secondary" id="challenge-ai-dismiss">{% translate 'Garder mes champs actuels' %}</button>
+    </div>
+</section>
+{% endif %}
+{% for field in form %}{% if field.name != 'track' %}{% render_field field %}{% endif %}{% endfor %}
+{% endblock %}
+{% block extra_js %}{{ block.super }}{% if challenge_ai_enabled %}<script src="{% static 'js/challenge-suggest.js' %}?v=1" defer></script>{% endif %}{% endblock %}

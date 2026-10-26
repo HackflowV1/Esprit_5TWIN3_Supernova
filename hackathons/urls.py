@@ -17,6 +17,7 @@ urlpatterns = [
     path('<slug:slug>/roles/', views.RoleManageView.as_view(), name='roles'),
     path('<slug:slug>/organizations/add/', views.OrganizationCreateView.as_view(form_class=OrganizationForm), name='organization-add'),
     path('<slug:slug>/propose/', views.SponsorProposalView.as_view(form_class=ChallengeForm), name='propose'),
+    path('<slug:slug>/challenge/suggest/', views.ChallengeSuggestView.as_view(), name='challenge-suggest'),
     path('<slug:slug>/challenges/<int:pk>/<str:action>/', views.ChallengeReviewView.as_view(), name='challenge-action'),
 ]
 

@@ -132,6 +132,31 @@ et ne réaliser aucune écriture. Un contrat invalide ou une erreur rend le modu
 
 ## Contribution aux deux moteurs IA
 
+### Assistant individuel de rédaction de challenge
+
+Dans **Pilotage → Ajouter un challenge**, l’organisateur choisit un track actif,
+décrit une idée et peut préciser le public et la durée. **M'aider à rédiger avec l'IA**
+demande à Gemini un titre, une problématique, des objectifs et des livrables en FR/EN.
+Seul ce contexte limité est envoyé, sans contacts, comptes ni projets privés.
+
+Les champs vides sont remplis. Pour les champs déjà renseignés, la proposition est
+affichée séparément : cocher chaque remplacement puis confirmer, ou garder les valeurs
+actuelles. Modifier un champ retire le consentement à son remplacement ; changer le
+track ou l’idée invalide les propositions en attente. **Enregistrer** utilise toujours
+le formulaire et le service existants : brouillon, historique, validation puis publication
+par l’organisateur. La génération seule ne réalise aucune écriture métier.
+
+Configuration : `GOOGLE_API_KEY` et premier modèle de `GEMINI_MODELS` (modèle de repli
+si liste vide : `gemini-2.5-flash`). Le serveur impose 20 secondes, une sortie JSON avec
+exactement quatre chaînes non vides (titre ≤ 200 caractères, autres champs ≤ 4000), et
+10 demandes par utilisateur et fenêtre horaire, y compris les échecs. Cette limite
+réutilise le cache local du projet ; un déploiement multi-processus devra employer un
+cache partagé pour une limite commune. Sans clé ou en cas d’erreur, le formulaire manuel
+reste utilisable. Les exceptions du fournisseur et les secrets ne sont jamais journalisés.
+
+Vérification : `python manage.py test hackathons.test_ai --keepdb` et
+`node scripts/test_challenge_suggest.cjs`. Aucun modèle ni migration ajouté.
+
 `intelligence_context(actor=..., event=...)` fournit un contrat versionné (v1) :
 calendrier, tracks actifs, capacité/tailles, conditions d’éligibilité et challenges publics
 validés avec leurs objectifs et livrables. L’appel exige un organisateur et ne transmet
