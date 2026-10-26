@@ -10,6 +10,7 @@ services:
   - type: web
     name: hackflow-class-demo
     runtime: python
+    branch: main
     plan: free
     region: frankfurt
     buildCommand: bash build.sh

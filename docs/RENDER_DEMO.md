@@ -18,7 +18,7 @@ both in Frankfurt. The free database expires after 30 days. No paid disk or serv
 is configured. The web app sleeps after inactivity and uploads are ephemeral.
 
 `render.yaml` creates the resources and a generated Django secret/admin password.
-Deploy the current feature branch containing the lightweight English M2 model.
+Deploy `main`, which includes the lightweight English M2 model and both AI features.
 `build.sh` installs locked dependencies, downloads the 23 MB ONNX model, and
 collects static assets. `start.sh` migrates PostgreSQL, initializes fictional demo
 data once, and runs one Gunicorn worker with two threads. Training never runs on
