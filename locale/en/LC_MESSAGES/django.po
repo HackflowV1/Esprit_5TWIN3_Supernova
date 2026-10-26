@@ -5509,3 +5509,29 @@ msgid ""
 msgstr ""
 "Essential skills and declared levels come first. The English model then "
 "compares the context of equivalent profiles. You choose whom to invite."
+
+msgid "Ajouter des talents recherchés"
+msgstr "Add skills your team needs"
+
+msgid ""
+"Choisissez une compétence ou partez de votre idée pour trouver les besoins "
+"de votre équipe."
+msgstr ""
+"Choose a skill or start from your idea to identify what your team needs."
+
+msgid "Méthode d’ajout"
+msgstr "How to add skills"
+
+msgid "Partir de notre idée"
+msgstr "Start from our idea"
+
+msgid "Une compétence précise en tête ?"
+msgstr "Have a specific skill in mind?"
+
+msgid ""
+"Indiquez le niveau souhaité et l’importance de ce talent pour votre projet."
+msgstr ""
+"Choose the desired level and how important this skill is to your project."
+
+msgid "Ajouter le besoin"
+msgstr "Add skill need"

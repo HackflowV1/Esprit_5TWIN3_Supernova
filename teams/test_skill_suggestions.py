@@ -55,6 +55,21 @@ class PredictorTests(SimpleTestCase):
 
 @override_settings(M2_MATCHING_ENABLED=False)
 class SuggestionFlowTests(SetupMixin,TestCase):
+    def test_add_page_contains_manual_and_idea_paths(self):
+        url = reverse('teams:need-add', args=[self.event.slug, self.target.pk])
+        response = self.client.get(url)
+        self.assertTemplateUsed(response, 'teams/need_add.html')
+        self.assertContains(response, '?mode=idea')
+        response = self.client.get(url + '?mode=idea')
+        self.assertTemplateUsed(response, 'teams/need_suggestions.html')
+        self.assertContains(response, 'm2-description-form')
+        with patch('teams.skill_suggestions.suggest', return_value={'state':'ready','suggestions':[{'label':'Django','source':'ml'},{'label':'React','source':'explicit'}]}):
+            response = self.client.post(url + '?mode=idea', {'action':'analyze','text':'Build a reliable web application for volunteers.'})
+        self.assertContains(response, 'needs-0-skill')
+        self.assertEqual(self.target.skill_needs.count(), 0)
+        self.assertRedirects(self.client.post(url + '?mode=idea', self.payload()), self.target.get_absolute_url())
+        self.assertEqual(self.target.skill_needs.count(), 1)
+
     def setUp(self):
         super().setUp()
         self.target=self.team()

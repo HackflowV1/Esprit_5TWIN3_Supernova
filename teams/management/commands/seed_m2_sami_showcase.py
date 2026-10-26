@@ -13,9 +13,6 @@ from hackathons.models import Hackathon, EventPhase
 from hackathons.services import phase_is_open
 
 PASSWORD = 'Demo-Horizon#2026'
-DESCRIPTION = ('Moins de gaspillage, plus de solidarité. Nous construisons un outil pour relier les commerces '
-    'aux associations : anticiper les surplus de produits frais et organiser les collectes de repas. '
-    'Nous cherchons une personne capable de prévoir les quantités à redistribuer et de rendre les données utiles aux bénévoles.')
 DESCRIPTION_EN = ('Less waste, more solidarity. We connect grocery stores with charities to forecast surplus fresh food '
     'and organize donated meal collections. We need to predict redistribution quantities and make the data useful for volunteers.')
 ENGLISH_PROFILES = {
@@ -34,22 +31,11 @@ SKILL_DESCRIPTIONS = {
     'Mobile':'Construire des interfaces et fonctionnalités utilisables sur téléphone.',
 }
 PEOPLE = [
-    ('horizon.amine', 'Amine', 'Ben Salah',
-     'Je construis des modèles pour analyser les rendements boursiers et suivre les portefeuilles financiers.',
-     'Finance quantitative, marchés et investissement.'),
-    ('horizon.lina', 'Lina', 'Trabelsi',
-     'I forecast perishable stock and coordinate meal donations between grocery stores and charities. '
-     'My goal is to make redistribution reliable for volunteers.',
-     'Community logistics, surplus forecasting and food rescue.'),
-    ('horizon.omar', 'Omar', 'Gharbi',
-     'J’analyse les performances des joueurs et les résultats des compétitions de football pour préparer les matchs.',
-     'Sport, statistiques de compétition et jeux vidéo.'),
-    ('horizon.yasmine', 'Yasmine', 'Kallel',
-     'J’aide les épiceries à estimer leurs invendus et les collectifs solidaires à planifier les tournées de dons alimentaires.',
-     'Économie circulaire, prévision des surplus et bénévolat.'),
-    ('horizon.nader', 'Nader', 'Hamdi',
-     'I am learning how to forecast grocery surpluses and help charities collect donated meals.',
-     'Food rescue and solidarity.'),
+    ('horizon.amine', 'Amine', 'Ben Salah'),
+    ('horizon.lina', 'Lina', 'Trabelsi'),
+    ('horizon.omar', 'Omar', 'Gharbi'),
+    ('horizon.yasmine', 'Yasmine', 'Kallel'),
+    ('horizon.nader', 'Nader', 'Hamdi'),
 ]
 
 
@@ -80,7 +66,9 @@ class Command(BaseCommand):
                 skill.description = SKILL_DESCRIPTIONS[name]
                 skill.save(update_fields=['description'])
         users = []
-        for username, first, last, bio, interests in PEOPLE:
+        for username, first, last in PEOPLE:
+            # New showcase profiles always use the English encoder's language.
+            bio, interests = ENGLISH_PROFILES[username]
             user, created = User.objects.get_or_create(username=username,defaults={'first_name':first,'last_name':last,'email':username+'@example.test'})
             if created:
                 user.set_password(PASSWORD)
@@ -100,12 +88,12 @@ class Command(BaseCommand):
                 raise CommandError('Sami’s registration was cancelled; it will not be reactivated by the seed.')
             services.register(actor=sami,event=event,accept_conditions=True)
         if team is None:
-            team = services.create_team(actor=sami,event=event,name='Horizon',description=DESCRIPTION_EN if options['english'] else DESCRIPTION)
+            team = services.create_team(actor=sami,event=event,name='Horizon',description=DESCRIPTION_EN)
             configure = True
         else:
             configure = options['configure_team']
         if configure:
-            services.update_team(actor=sami,team=team,name=team.name,description=DESCRIPTION_EN if options['english'] else DESCRIPTION,recruiting=team.recruiting)
+            services.update_team(actor=sami,team=team,name=team.name,description=DESCRIPTION_EN,recruiting=team.recruiting)
             need = TeamSkillNeed.objects.filter(team=team,skill=skill_map['Data Science']).first()
             services.save_need(actor=sami,team=team,skill=skill_map['Data Science'],level=4,priority=3,need=need)
         for user in users:

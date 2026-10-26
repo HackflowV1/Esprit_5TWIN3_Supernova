@@ -1,0 +1,39 @@
+databases:
+  - name: hackflow-demo-db
+    plan: free
+    region: frankfurt
+    databaseName: hackflow_db
+    user: hackflow
+    ipAllowList: []
+
+services:
+  - type: web
+    name: hackflow-class-demo
+    runtime: python
+    plan: free
+    region: frankfurt
+    buildCommand: bash build.sh
+    startCommand: bash start.sh
+    healthCheckPath: /healthz/
+    autoDeployTrigger: off
+    envVars:
+      - key: DJANGO_SETTINGS_MODULE
+        value: config.settings_render
+      - key: PYTHON_VERSION
+        value: 3.12.10
+      - key: DJANGO_SECRET_KEY
+        generateValue: true
+      - key: DJANGO_DEBUG
+        value: 'False'
+      - key: DATABASE_URL
+        fromDatabase:
+          name: hackflow-demo-db
+          property: connectionString
+      - key: RENDER_DEMO_ADMIN_PASSWORD
+        generateValue: true
+      - key: M2_MATCHING_ENABLED
+        value: '1'
+      - key: TOKENIZERS_PARALLELISM
+        value: 'false'
+      - key: OMP_NUM_THREADS
+        value: '1'

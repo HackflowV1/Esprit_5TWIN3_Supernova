@@ -554,6 +554,20 @@
 .m2-ranking-help p {max-width:78ch;color:var(--muted);font-size:.9rem;line-height:1.7}
 .m2-context-signal {font-size:.85rem;line-height:1.6}
 .m2-suggestion-description textarea {width:100%;min-height:130px}
+.m2-need-workspace {max-width:900px;margin-inline:auto}
+.m2-need-modes {display:flex;gap:24px;border-bottom:1px solid var(--line);margin-bottom:24px}
+.m2-need-modes a {display:inline-flex;align-items:center;gap:8px;min-height:52px;padding:12px 0;border-bottom:3px solid transparent;color:var(--muted);text-decoration:none;font-size:.9rem}
+.m2-need-modes a[aria-current] {color:var(--ink);border-bottom-color:var(--primary);font-weight:700}
+.m2-need-modes a:hover {color:var(--ink)}
+.m2-need-editor h2,.m2-suggestion-description h2 {font-size:1.15rem;margin-top:0}
+.m2-need-editor form,.m2-suggestion-description form {margin-top:24px}
+.m2-need-workspace .m2-suggested-need {margin-top:16px}
+.m2-need-workspace .m2-needs-selection .form-actions {margin-top:24px}
+@media(max-width:540px) {
+  .m2-need-modes {gap:16px}
+  .m2-need-modes a {flex:1;font-size:.8rem;gap:6px}
+  .m2-need-modes .icon {flex-shrink:0}
+}
 .m2-suggested-need {display:flex;align-items:start;justify-content:space-between;gap:24px}
 .m2-suggested-label {min-width:150px;min-height:44px;padding-top:8px}
 .m2-suggestion-origin {display:block;font-size:.8rem;margin-top:4px}

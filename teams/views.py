@@ -267,6 +267,8 @@ def member_action(request, slug, pk, member_pk, action):
 @login_required
 @require_http_methods(['GET', 'POST'])
 def need_edit(request, slug, pk, need_pk=None):
+    if need_pk is None and (request.GET.get('mode') == 'idea' or request.POST.get('action') in ('analyze', 'save')):
+        return suggest_needs(request, slug, pk)
     ctx = team_context(request, slug, pk)
     if not ctx['team_manager']:
         raise PermissionDenied
@@ -280,7 +282,9 @@ def need_edit(request, slug, pk, need_pk=None):
         else:
             messages.success(request, _('Besoin de compétence enregistré.'))
             return redirect(ctx['team'])
-    return _form(request, form, ctx, _('Modifier un besoin') if need else _('Ajouter un besoin de compétence'))
+    if need is None:
+        return render(request, 'teams/need_add.html', {**ctx, 'form': form, 'need_mode': 'manual'})
+    return _form(request, form, ctx, _('Modifier un besoin'))
 
 
 @login_required
@@ -348,7 +352,7 @@ def suggest_needs(request, slug, pk):
         sources = request.session.get(key,{}).get('sources',{})
         for f in selection:
             f.suggestion_source = sources.get(str(f.skill_label),'ml')
-    return render(request,'teams/need_suggestions.html',{**ctx,'description_form':description_form,
+    return render(request,'teams/need_suggestions.html',{**ctx,'need_mode':'idea','description_form':description_form,
         'selection':selection,'suggestion_state':state,'retry':retry,'auto_retry':state=='warming' and retry<=5})
 
 

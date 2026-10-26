@@ -14,6 +14,7 @@ Le scénario est dans **AI Challenge 2026 → Horizon**, en base PostgreSQL norm
 Depuis le passage au modèle léger pour le budget 0, les textes IA du scénario
 sont en anglais ; l’interface reste bilingue. `--english` remplace explicitement
 les biographies et intérêts des cinq comptes fictifs du scénario uniquement.
+Les nouveaux profils et les nouvelles idées du seed sont désormais en anglais par défaut.
 Compte : `sami` ; mot de passe initial de `seed_demo` : `Demo-Hack#2026`.
 Un mot de passe existant n’est jamais réinitialisé.
 

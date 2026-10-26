@@ -4,7 +4,7 @@ Configured for isolated HackFlow PostgreSQL development.
 """
 
 import os
-from .database import database_config
+from .database import database_config, render_database_config
 from pathlib import Path
 from dotenv import load_dotenv
 
@@ -79,7 +79,10 @@ WSGI_APPLICATION = 'config.wsgi.application'
 
 
 # Fail closed: no migration, test or server may target another project's database.
-DATABASES = {'default': database_config(os.environ.get('DATABASE_URL', 'postgresql://postgres@127.0.0.1:5432/hackflow_db'))}
+if os.environ.get('DJANGO_SETTINGS_MODULE') == 'config.settings_render':
+    DATABASES = {'default': render_database_config(os.environ.get('DATABASE_URL', ''))}
+else:
+    DATABASES = {'default': database_config(os.environ.get('DATABASE_URL', 'postgresql://postgres@127.0.0.1:5432/hackflow_db'))}
 
 # Custom user model
 AUTH_USER_MODEL = 'accounts.User'

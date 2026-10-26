@@ -1,7 +1,7 @@
-{% extends 'teams/shell.html' %}{% load i18n ui static %}
-{% block workspace %}
-<header class="page-head"><div><p class="m2-eyebrow">{{ team.name }}</p><h1>{% translate 'Quels talents pour cette idée ?' %}</h1><p class="muted">{% translate 'Décrivez le travail prévu. Gardez les suggestions utiles à votre équipe.' %}</p></div><a class="button secondary" href="{% url 'teams:need-add' event.slug team.pk %}">{% icon 'add' %}{% translate 'Ajouter manuellement' %}</a></header>
+{% extends 'teams/need_workspace.html' %}{% load i18n ui static %}
+{% block need_content %}
 <section class="panel m2-suggestion-description">
+<h2>{% translate 'Quels talents pour cette idée ?' %}</h2><p class="muted">{% translate 'Décrivez le travail prévu. Gardez les suggestions utiles à votre équipe.' %}</p>
 <form method="post" id="m2-description-form"{% if auto_retry %} data-auto-retry="true"{% endif %}>
 {% csrf_token %}<input type="hidden" name="action" value="analyze"><input type="hidden" name="retry" value="{{ retry }}">
 {% for field in description_form %}{% render_field field %}{% endfor %}

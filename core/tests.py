@@ -3,10 +3,23 @@ from django.core.management import call_command
 from django.test import override_settings
 from django.urls import reverse
 from django.core.exceptions import ImproperlyConfigured
-from config.database import database_config
+from config.database import database_config, render_database_config
 
 
 class DatabaseSafetyTests(SimpleTestCase):
+    def test_explicit_render_parser_accepts_only_hackflow_render_database(self):
+        result = render_database_config('postgresql://hackflow:test-password@dpg-demo-a/hackflow_db')
+        self.assertEqual(result['NAME'], 'hackflow_db')
+        self.assertEqual(result['OPTIONS']['sslmode'], 'require')
+        for value in (
+            'postgresql://hackflow:password@localhost/hackflow_db',
+            'postgresql://hackflow:password@dpg-demo-a/another_project',
+            'postgresql://hackflow:password@dpg-demo-a/hackflow_db?options=unsafe',
+            'postgresql://hackflow:password@dpg-demo-a/hackflow_db?sslmode=disable',
+        ):
+            with self.subTest(value=value), self.assertRaises(ImproperlyConfigured):
+                render_database_config(value)
+
     def test_only_hackflow_local_database_is_accepted(self):
         config = database_config('postgresql://postgres@127.0.0.1:5432/hackflow_db')
         self.assertEqual(config['NAME'], 'hackflow_db')

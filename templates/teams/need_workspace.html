@@ -1,0 +1,11 @@
+{% extends 'teams/shell.html' %}{% load i18n ui %}
+{% block workspace %}
+<div class="m2-need-workspace">
+<header class="page-head"><div><p class="m2-eyebrow">{{ team.name }}</p><h1>{% translate 'Ajouter des talents recherchés' %}</h1><p class="muted">{% translate 'Choisissez une compétence ou partez de votre idée pour trouver les besoins de votre équipe.' %}</p></div><a class="button secondary" href="{{ team.get_absolute_url }}">{% icon 'arrow-left' %}{% translate 'Mon équipe' %}</a></header>
+<nav class="m2-need-modes" aria-label="{% translate 'Méthode d’ajout' %}">
+<a href="{% url 'teams:need-add' event.slug team.pk %}"{% if need_mode == 'manual' %} aria-current="page"{% endif %}>{% icon 'add' %}<span>{% translate 'Choisir une compétence' %}</span></a>
+<a href="{% url 'teams:need-add' event.slug team.pk %}?mode=idea"{% if need_mode == 'idea' %} aria-current="page"{% endif %}>{% icon 'code' %}<span>{% translate 'Partir de notre idée' %}</span></a>
+</nav>
+{% block need_content %}{% endblock %}
+</div>
+{% endblock %}
