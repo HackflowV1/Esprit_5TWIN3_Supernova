@@ -100,7 +100,12 @@ en développement et ouvrir **Mes inscriptions** ou une édition ouverte. La pha
 **Constitution des équipes** doit être configurée pour autoriser le recrutement.
 Voir [le parcours M2](docs/USER_M2.md) et [les contrats M3/M4](docs/M2_CONTRACTS.md).
 
-Pour tester les recommandations M2, après `uv sync --locked` et les migrations :
+Deux scénarios permettent de tester M2, après `uv sync --locked` et les migrations.
+
+Pour la démonstration avec **Sami et Horizon dans AI Challenge**, suivre
+[le scénario de présentation](docs/M2_SAMI_DEMO.md). Le sélecteur compare les
+compétences seules avec le contexte du projet et affiche les changements réels de rang.
+Le seed ci-dessous est le terrain de test supplémentaire Team Lab :
 
 ```powershell
 uv run --locked python manage.py seed_m2_matching_demo

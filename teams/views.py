@@ -302,9 +302,9 @@ def candidates(request, slug, pk):
     ctx = team_context(request, slug, pk)
     if not ctx['team_manager']:
         raise PermissionDenied
-    candidates = services.recommendations(actor=request.user, team=ctx['team'])
+    ranking_mode = 'skills' if request.GET.get('ranking') == 'skills' else 'hybrid'
+    candidates, baseline, remaining_needs = services.recommendation_comparison(actor=request.user, team=ctx['team'], mode=ranking_mode)
     matching_state = candidates[0]['matching_state'] if candidates else 'empty'
-    remaining_needs = [need for need in services.skill_coverage(ctx['team']) if not need.covered_by]
     pending_invitations = set(TeamInvitation.objects.filter(team=ctx['team'], status=Decision.PENDING, expires_at__gt=timezone.now()).values_list('registration_id', flat=True))
     pending_applications = set(JoinRequest.objects.filter(team=ctx['team'], status=Decision.PENDING).values_list('registration_id', flat=True))
     for candidate in candidates:
@@ -312,9 +312,17 @@ def candidates(request, slug, pk):
         candidate['pending_application'] = candidate['registration'].pk in pending_applications
     query = request.GET.get('q', '').strip().casefold()
     if query:
-        candidates = [c for c in candidates if query in c['registration'].user.get_full_name().casefold() or query in c['registration'].user.username.casefold() or any(query in s.skill.name.casefold() for s in c['registration'].user.user_skills.all())]
+        def matches_query(c):
+            return query in c['registration'].user.get_full_name().casefold() or query in c['registration'].user.username.casefold() or any(query in s.skill.name.casefold() for s in c['registration'].user.user_skills.all())
+        candidates = [c for c in candidates if matches_query(c)]
+        baseline = [c for c in baseline if matches_query(c)]
+    positions = {c['registration'].pk: i for i, c in enumerate(baseline, 1)}
+    for position, candidate in enumerate(candidates, 1):
+        candidate['position'] = position
+        candidate['skills_position'] = positions[candidate['registration'].pk]
+        candidate['rank_gain'] = candidate['skills_position'] - position if matching_state == 'ready' else 0
     return render(request, 'teams/candidates.html', {**ctx, 'page_obj': Paginator(candidates, 12).get_page(request.GET.get('page')),
-        'matching_state': matching_state, 'remaining_needs': remaining_needs})
+        'matching_state': matching_state, 'remaining_needs': remaining_needs, 'ranking_mode': ranking_mode})
 
 
 @login_required

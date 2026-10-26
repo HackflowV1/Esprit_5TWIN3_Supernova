@@ -40,6 +40,8 @@ pas automatiquement une inscription.
   passent avant la similarité du texte. L’IA n’invente aucun niveau, ne recrute
   personne et n’affiche pas de faux pourcentage. On peut toujours inviter manuellement.
   Sans besoin manquant, l’annuaire reste consultable sans classement personnalisé.
+  **Compétences seules / Compétences + projet** permet de voir l’effet du contexte
+  sur les mêmes profils. Une progression de position n’apparaît que si elle est réelle.
 - **Nommer capitaine**, **Retirer** et **Quitter l’équipe** : confirmations avant
   mutation. Le capitaine doit transférer son rôle avant de partir si d’autres
   membres restent. Le dernier départ ferme l’équipe et conserve son historique.
@@ -82,6 +84,10 @@ d’annulation des inscriptions utilise les mêmes services ; la gestion d’une
 équipe renvoie vers son espace métier.
 
 ## Démonstration locale
+
+Pour une présentation avec **Sami → AI Challenge → Horizon**, voir
+`docs/M2_SAMI_DEMO.md` : cinq profils fictifs réalistes, même niveau pour quatre
+d’entre eux et comparaison visible dans le parcours normal de l’application.
 
 ```powershell
 uv run --locked python manage.py migrate

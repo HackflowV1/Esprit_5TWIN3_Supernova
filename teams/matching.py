@@ -16,7 +16,7 @@ from django.conf import settings
 from django.core.cache import caches
 
 logger = logging.getLogger(__name__)
-VERSION = 'm2-hybrid-1'
+VERSION = 'm2-hybrid-2'
 _executor = ThreadPoolExecutor(max_workers=1, thread_name_prefix='m2-embeddings')
 _lock = Lock()
 _busy = False
@@ -25,10 +25,13 @@ _retry_after = 0.0
 
 def profile_text(user):
     profile = getattr(user, 'profile', None)
+    # MiniLM truncates at 128 tokens. Keep project interests before potentially
+    # lengthy skill experience so contextual input is not pushed off the window.
     return ' '.join(filter(None, [
-        ', '.join(f'{s.skill.name}: {s.experience[:120]}' for s in user.user_skills.all()),
-        getattr(profile, 'biography', '')[:600], getattr(profile, 'interests', '')[:300],
-    ]))[:1400]
+        getattr(profile, 'biography', '')[:500], getattr(profile, 'interests', '')[:220],
+        ', '.join(s.skill.name for s in user.user_skills.all()),
+        '; '.join(s.experience[:80] for s in list(user.user_skills.all())[:3] if s.experience),
+    ]))[:1200]
 
 
 def team_text(team, needs):
@@ -109,9 +112,11 @@ def rank(*, team, candidates, needs, background=True, mode='hybrid'):
     """
     candidates = list(candidates)
     needs = [n for n in needs if not n.covered_by]
-    state = 'no_needs' if not needs else 'rules'
+    state = 'no_needs' if not needs else 'skills' if mode == 'skills' else 'rules'
     embeddings = None
-    if candidates and needs and mode == 'hybrid':
+    if candidates and needs and mode == 'hybrid' and not team.description.strip():
+        state = 'no_context'
+    elif candidates and needs and mode == 'hybrid':
         embeddings, state = vectors([team_text(team, needs)] + [profile_text(r.user) for r in candidates], background=background)
     results = []
     for index, reg in enumerate(candidates):

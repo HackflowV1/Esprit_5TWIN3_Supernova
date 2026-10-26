@@ -553,6 +553,23 @@
 .m2-ranking-help[open] summary::before {content:'−'}
 .m2-ranking-help p {max-width:78ch;color:var(--muted);font-size:.9rem;line-height:1.7}
 .m2-context-signal {font-size:.85rem;line-height:1.6}
+.m2-project-context {font-size:.9rem;line-height:1.65;margin:0 0 12px;padding-bottom:12px;border-bottom:1px solid var(--line);color:var(--muted)}
+.m2-project-context strong {color:var(--ink);margin-right:8px}
+.m2-project-context summary {cursor:pointer;min-height:44px;align-content:center}
+.m2-project-context p {margin:12px 0;max-width:85ch}
+.m2-project-context a {display:inline-flex;align-items:center;justify-content:center;min-width:44px;min-height:44px;vertical-align:middle}
+.m2-ranking-switch {display:inline-flex;gap:4px;padding:4px;margin-top:8px;max-width:100%;background:var(--raised);border:1px solid var(--line);border-radius:var(--radius-sm)}
+.m2-ranking-switch a {display:inline-flex;align-items:center;justify-content:center;gap:8px;min-height:44px;padding:8px 16px;font-size:.875rem;color:var(--muted);text-decoration:none;border-radius:var(--radius-sm)}
+.m2-ranking-switch a[aria-current] {background:var(--surface);color:var(--ink);font-weight:700;box-shadow:inset 0 0 0 1px var(--control)}
+.m2-ranking-switch a:hover {color:var(--ink)}
+.m2-position {font-size:.85rem;color:var(--muted);font-variant-numeric:tabular-nums;margin-left:auto}
+.m2-rank-change {color:var(--ink);font-size:.85rem;line-height:1.55;margin:0 0 12px;font-weight:600}
+.m2-position-comparison {display:block;color:var(--muted);font-size:.8rem;font-weight:400;font-variant-numeric:tabular-nums;margin-top:4px}
+@media(max-width:480px) {
+  .m2-ranking-switch {display:flex}
+  .m2-ranking-switch a {flex:1;min-width:0;padding-inline:8px;font-size:.82rem;gap:6px}
+  .m2-project-context {font-size:.85rem}
+}
 .m2-candidate-search {padding:0;background:none;border:0;flex-wrap:nowrap;gap:12px;margin-block:20px}
 .m2-candidate-search>div {min-width:0}
 .m2-candidate-search button {min-width:44px;padding-inline:12px}

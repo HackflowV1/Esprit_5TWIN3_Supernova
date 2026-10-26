@@ -51,6 +51,9 @@ déclarées et leur niveau, puis la couverture pondérée et le contexte sémant
 local de profils comparables. Les champs `matches`, `registration` et `score`
 restent disponibles. `matching_state` indique ready/warming/unavailable/disabled/no_needs.
 `context_signal` est un indice de contexte, jamais une compétence certifiée.
+`recommendation_comparison(actor=..., team=..., mode='hybrid')` renvoie le classement
+choisi, la référence `skills` (même logique sans sémantique), et les besoins manquants.
+Le mode UI `skills` et l’état `no_context` complètent les états décrits ci-dessus.
 Le mode `rules` garde le classement V1 pour la comparaison ; `keywords` est la
 référence textuelle. Le recrutement manuel reste indépendant du modèle.
 Voir `docs/M2_MATCHING.md` pour le contrat complet et les limites.

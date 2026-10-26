@@ -5,7 +5,7 @@ from unittest.mock import patch
 from django.core.management import call_command
 from django.test import TestCase, SimpleTestCase, override_settings
 from django.urls import reverse
-from accounts.models import User, Skill, Profile
+from accounts.models import User, Skill, Profile, UserSkill
 from hackathons.test_helpers import make_event
 from .tests import SetupMixin
 from .models import Registration, JoinRequest, Team
@@ -89,6 +89,31 @@ class TeamDiscoveryTests(SetupMixin, TestCase):
 
 
 class RankingTests(SimpleTestCase):
+    def test_skills_comparison_uses_same_formula_and_never_requests_embeddings(self):
+        team,needs,regs = evaluation.inputs(evaluation.CASES[0])
+        with patch('teams.matching.vectors') as vectors:
+            baseline = matching.rank(team=team,needs=needs,candidates=regs,mode='skills')
+            vectors.assert_not_called()
+        with patch('teams.matching.vectors',return_value=(None,'unavailable')):
+            fallback = matching.rank(team=team,needs=needs,candidates=regs)
+        self.assertEqual([r['registration'].pk for r in baseline],[r['registration'].pk for r in fallback])
+
+    def test_missing_project_context_does_not_claim_semantic_ranking(self):
+        team,needs,regs = evaluation.inputs(evaluation.CASES[0])
+        team.description = '   '
+        with patch('teams.matching.vectors') as vectors:
+            results = matching.rank(team=team,needs=needs,candidates=regs)
+            vectors.assert_not_called()
+        self.assertTrue(all(r['matching_state']=='no_context' for r in results))
+
+    def test_biography_is_not_truncated_away_by_long_skill_experiences(self):
+        team,needs,regs = evaluation.inputs(evaluation.CASES[0])
+        user = regs[0].user
+        user.profile.biography = 'Unique project context first.'
+        for skill in user.user_skills.all():
+            skill.experience = 'Extensive unrelated experience. ' * 80
+        self.assertTrue(matching.profile_text(user).startswith('Unique project context first.'))
+
     def test_semantic_context_can_reorder_equal_skills_but_cannot_invent_skills(self):
         team, needs, regs = evaluation.inputs(evaluation.CASES[0])
         # Deterministic vectors test ranking math, not model quality.
@@ -193,3 +218,73 @@ class MatchingSeedTests(TestCase):
         self.assertEqual(user.profile.biography,'My edited biography')
         self.assertEqual(Registration.objects.get(user=user,hackathon=event).status,'CANCELLED')
         self.assertEqual(event.teams.count(),6)
+
+
+@override_settings(M2_MATCHING_ENABLED=True)
+class ComparisonScreenTests(SetupMixin, TestCase):
+    def setUp(self):
+        super().setUp()
+        self.target = self.team()
+        self.reg(self.b)
+        self.reg(self.c)
+        skill = Skill.objects.create(name='Data Science',category='Data')
+        services.save_need(actor=self.a,team=self.target,skill=skill,level=3,priority=3)
+        for user in (self.b,self.c):
+            UserSkill.objects.create(user=user,skill=skill,level=3)
+        Profile.objects.update_or_create(user=self.b,defaults={'biography':'Sports analytics.'})
+        Profile.objects.update_or_create(user=self.c,defaults={'biography':'Community meal redistribution.'})
+        self.client.force_login(self.a)
+        self.url = reverse('teams:candidates',args=[self.event.slug,self.target.pk])
+
+    def embeddings(self,texts,**kwargs):
+        return [[1.,0.]] + [[1.,0.] if text.startswith('Community') else [0.,1.] for text in texts[1:]], 'ready'
+
+    def test_comparison_changes_only_context_and_displays_measured_movement(self):
+        with patch('teams.matching.vectors',side_effect=self.embeddings):
+            response = self.client.get(self.url)
+        rows = list(response.context['page_obj'])
+        self.assertEqual([r['registration'].user for r in rows],[self.c,self.b])
+        self.assertEqual((rows[0]['position'],rows[0]['skills_position'],rows[0]['rank_gain']),(1,2,1))
+        self.assertContains(response,'1 place gagnée avec le contexte')
+        self.assertNotContains(response,'Compétences en commun avec vos besoins')
+        with patch('teams.matching.vectors') as vectors:
+            response = self.client.get(self.url,{'ranking':'skills'})
+            vectors.assert_not_called()
+        self.assertEqual([r['registration'].user for r in response.context['page_obj']],[self.b,self.c])
+        self.assertNotContains(response,'place gagnée avec le contexte')
+        self.client.cookies['hackflow_language'] = 'en'
+        self.assertContains(self.client.get(self.url,{'ranking':'skills'}),'Skills only')
+
+    def test_filter_uses_same_population_for_both_positions(self):
+        with patch('teams.matching.vectors',side_effect=self.embeddings):
+            response = self.client.get(self.url,{'q':'carol','ranking':'hybrid'})
+        row = list(response.context['page_obj'])[0]
+        self.assertEqual((row['position'],row['skills_position'],row['rank_gain']),(1,1,0))
+        self.assertContains(response,'name="ranking" value="hybrid"')
+
+
+@override_settings(DEBUG=True,M2_MATCHING_ENABLED=False)
+class SamiShowcaseSeedTests(TestCase):
+    def test_sami_showcase_preserves_users_and_only_configures_team_explicitly(self):
+        call_command('seed_demo',stdout=StringIO())
+        sami = User.objects.get(username='sami')
+        horizon = Team.objects.get(name='Horizon',hackathon__slug='ai-challenge-2026')
+        original_members = list(horizon.memberships.values_list('registration_id','ended_at'))
+        call_command('seed_m2_sami_showcase',configure_team=True,stdout=StringIO())
+        need = horizon.skill_needs.get(skill__name='Data Science')
+        self.assertEqual((need.level,need.priority),(4,3))
+        self.assertEqual(list(horizon.memberships.values_list('registration_id','ended_at')),original_members)
+        self.assertTrue(sami.check_password('Demo-Hack#2026'))
+        four = list(User.objects.filter(username__in=['horizon.amine','horizon.lina','horizon.omar','horizon.yasmine']))
+        self.assertEqual(len(four),4)
+        declarations = [list(u.user_skills.order_by('skill__name').values_list('skill__name','level')) for u in four]
+        self.assertTrue(all(row==declarations[0] for row in declarations))
+        lina = User.objects.get(username='horizon.lina')
+        Profile.objects.filter(user=lina).update(biography='User edited biography')
+        services.cancel_registration(actor=lina,registration=Registration.objects.get(user=lina,hackathon=horizon.hackathon))
+        services.update_team(actor=sami,team=horizon,name=horizon.name,description='My edited project',recruiting=True)
+        call_command('seed_m2_sami_showcase',stdout=StringIO())
+        horizon.refresh_from_db()
+        self.assertEqual(horizon.description,'My edited project')
+        self.assertEqual(lina.profile.biography,'User edited biography')
+        self.assertEqual(Registration.objects.get(user=lina,hackathon=horizon.hackathon).status,'CANCELLED')

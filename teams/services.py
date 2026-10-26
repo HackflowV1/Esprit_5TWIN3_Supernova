@@ -366,3 +366,17 @@ def recommendations(*, actor, team, background=True, mode='hybrid'):
     from .matching import rank
     return rank(team=team, candidates=eligible_candidates(actor=actor, team=team),
         needs=skill_coverage(team), background=background, mode=mode)
+
+
+def recommendation_comparison(*, actor, team, mode='hybrid', background=True):
+    """Same people, needs and skill rules; only semantic context changes.
+
+    `rules` remains the V1 evaluation baseline. The UI uses `skills` to isolate
+    the model's contribution instead of comparing two different skill formulas.
+    """
+    from .matching import rank
+    candidates = list(eligible_candidates(actor=actor, team=team))
+    needs = skill_coverage(team)
+    baseline = rank(team=team, candidates=candidates, needs=needs, mode='skills')
+    selected = rank(team=team, candidates=candidates, needs=needs, mode='hybrid', background=background) if mode == 'hybrid' else baseline
+    return selected, baseline, [n for n in needs if not n.covered_by]

@@ -1,5 +1,8 @@
 # M2 — recommandations locales de coéquipiers
 
+Pour la présentation dans l’événement normal avec Sami et Horizon, suivre
+**[le scénario Sami](M2_SAMI_DEMO.md)**. Team Lab reste un terrain de test complémentaire.
+
 ## Démarrer
 
 ```powershell
@@ -32,6 +35,15 @@ Ce sont des exemples fictifs, pas une mesure de performance sur des personnes r�
    combiner 85 % de couverture et 15 % de similarité cosinus. Ces poids sont une
    règle de classement interne, pas des probabilités ou des métriques apprises.
 5. Départager de façon stable par identifiant. Aucun recrutement automatique.
+
+Le sélecteur **Compétences seules / Compétences + projet** conserve les mêmes
+candidats, besoins et règles de couverture. Le mode UI `skills` retire seulement
+le signal sémantique du classement hybride ; il n’est pas le mode historique
+`rules` utilisé pour l’évaluation V1. Les progressions affichées comparent les
+positions réelles sur le même filtre et ne paraissent que si le modèle est prêt.
+Sans idée décrite, état `no_context` et invitation à la préciser, sans prétendre
+adapter les profils au projet. Les biographies et centres d’intérêt passent avant
+les expériences longues pour ne pas être éliminés par la troncature du modèle.
 
 Le modèle préentraîné est `sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2`,
 exécuté localement par FastEmbed/ONNX, CPU deux threads, vecteurs 384 dimensions.

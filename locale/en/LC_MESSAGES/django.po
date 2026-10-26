@@ -5336,3 +5336,53 @@ msgstr "Profile context relates to your idea"
 
 msgid "indication IA, à confirmer ensemble"
 msgstr "AI indication, to discuss together"
+
+msgid "Les talents pour votre projet"
+msgstr "Find talent for your project"
+
+msgid "Votre projet"
+msgstr "Your project"
+
+msgid "Modifier l’idée du projet"
+msgstr "Edit the project idea"
+
+msgid ""
+"Compétences et niveaux uniquement. Les profils équivalents sont départagés "
+"par identifiant."
+msgstr "Skills and levels only. Equivalent profiles are ordered by username."
+
+msgid "Même sélection de participants, affinée selon le sens de votre projet."
+msgstr "The same participants, ranked with your project’s meaning in mind."
+
+msgid "Décrivez votre idée pour adapter les suggestions au projet."
+msgstr "Describe your idea to tailor suggestions to the project."
+
+msgid "Préciser notre idée"
+msgstr "Describe our idea"
+
+msgid "Méthode de classement"
+msgstr "Ranking method"
+
+msgid "Compétences seules"
+msgstr "Skills only"
+
+msgid "Compétences + projet"
+msgstr "Skills + project"
+
+msgid "Position"
+msgstr "Position"
+
+msgid "Compétences : #%(before)s → Projet : #%(after)s"
+msgstr "Skills: #%(before)s → Project: #%(after)s"
+
+msgid "%(places)s place gagnée avec le contexte"
+msgid_plural "%(places)s places gagnées avec le contexte"
+msgstr[0] "Up %(places)s place with context"
+msgstr[1] "Up %(places)s places with context"
+
+msgid "Compétences et niveaux uniquement."
+msgstr "Skills and levels only."
+
+
+msgid "Classement adapté à votre projet."
+msgstr "Ranked for your project."
