@@ -9,6 +9,7 @@ from django.urls import reverse
 from django.utils import timezone
 from django.utils.translation import gettext as _
 from django.views.decorators.http import require_http_methods, require_POST
+from django.forms import formset_factory
 from accounts.permissions import can_manage, require_organizer
 from hackathons.models import Hackathon, EventPhase
 from hackathons.views import visible_events
@@ -16,6 +17,7 @@ from hackathons.services import phase_is_open
 from . import services
 from .models import Registration, Team, TeamMembership, TeamInvitation, JoinRequest, TeamSkillNeed, Decision
 from .forms import RegistrationForm, TeamForm, MessageForm, InvitationForm, NeedForm
+from .forms import SkillDescriptionForm, SuggestedNeedForm
 
 
 def context(request, slug, *, private=True):
@@ -279,6 +281,75 @@ def need_edit(request, slug, pk, need_pk=None):
             messages.success(request, _('Besoin de compétence enregistré.'))
             return redirect(ctx['team'])
     return _form(request, form, ctx, _('Modifier un besoin') if need else _('Ajouter un besoin de compétence'))
+
+
+@login_required
+@require_http_methods(['GET','POST'])
+def suggest_needs(request, slug, pk):
+    from accounts.models import Skill
+    from .skill_suggestions import suggest
+    ctx = team_context(request,slug,pk)
+    if not ctx['team_manager']:
+        raise PermissionDenied
+    key = f'm2-need-preview-{ctx["team"].pk}'
+    selection = None
+    state = None
+    retry = 0
+    description_form = SkillDescriptionForm(initial={'text':ctx['team'].description})
+    action = request.POST.get('action','analyze')
+    FormSet = formset_factory(SuggestedNeedForm,extra=0,max_num=13,validate_max=True,absolute_max=13)
+    if request.method=='POST' and action=='save':
+        preview = request.session.get(key,{})
+        if preview.get('expires',0) < timezone.now().timestamp():
+            messages.info(request,_('Cette proposition a expiré. Analysez à nouveau votre description.'))
+            return redirect('teams:need-suggestions',slug=slug,pk=pk)
+        allowed = Skill.objects.filter(name__in=preview.get('labels',[]))
+        selection = FormSet(request.POST,prefix='needs',form_kwargs={'allowed_skills':allowed})
+        description_form = SkillDescriptionForm(initial={'text':preview.get('text','')})
+        state = 'ready'
+        if selection.is_valid():
+            proposals = [{'skill':f.cleaned_data['skill'],'level':f.cleaned_data['level'],'priority':f.cleaned_data['priority']}
+                for f in selection if f.cleaned_data.get('selected')]
+            if not proposals:
+                messages.info(request,_('Sélectionnez au moins une compétence à ajouter.'))
+            else:
+                try:
+                    count = services.save_suggested_needs(actor=request.user,team=ctx['team'],proposals=proposals)
+                except (ValidationError,IntegrityError) as exc:
+                    messages.error(request,' '.join(exc.messages) if isinstance(exc,ValidationError) else _('Actualisez la page et réessayez.'))
+                else:
+                    request.session.pop(key,None)
+                    messages.success(request,_('%(count)s besoin(s) ajouté(s). Les besoins existants sont conservés.') % {'count':count})
+                    return redirect(ctx['team'])
+    elif request.method=='POST':
+        request.session.pop(key,None)
+        description_form = SkillDescriptionForm(request.POST)
+        if description_form.is_valid():
+            result = suggest(description_form.cleaned_data['text'])
+            state = result['state']
+            if state=='ready':
+                proposed = [r['label'] for r in result['suggestions']]
+                existing = set(ctx['team'].skill_needs.values_list('skill__name',flat=True))
+                rows = list(Skill.objects.filter(name__in=proposed).exclude(name__in=existing))
+                order = {name:i for i,name in enumerate(proposed)}
+                rows.sort(key=lambda s:order[s.name])
+                request.session[key] = {'labels':[s.name for s in rows], 'text':description_form.cleaned_data['text'],
+                    'sources':{r['label']:r.get('source','ml') for r in result['suggestions']},
+                    'expires':timezone.now().timestamp()+1200}
+                selection = FormSet(initial=[{'skill':s.pk} for s in rows],prefix='needs',
+                    form_kwargs={'allowed_skills':Skill.objects.filter(pk__in=[s.pk for s in rows])})
+                ctx['already_declared'] = sorted(set(proposed)&existing)
+            elif state=='warming':
+                try:
+                    retry = min(5,max(0,int(request.POST.get('retry','0'))))+1
+                except ValueError:
+                    retry = 6
+    if selection is not None:
+        sources = request.session.get(key,{}).get('sources',{})
+        for f in selection:
+            f.suggestion_source = sources.get(str(f.skill_label),'ml')
+    return render(request,'teams/need_suggestions.html',{**ctx,'description_form':description_form,
+        'selection':selection,'suggestion_state':state,'retry':retry,'auto_retry':state=='warming' and retry<=5})
 
 
 @login_required

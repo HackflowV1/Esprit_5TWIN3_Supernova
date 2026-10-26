@@ -40,7 +40,7 @@ def metric_label(value):
 
 
 @register.inclusion_tag('shared/field.html')
-def render_field(field):
+def render_field(field, conditional=False):
     descriptions = []
     if field.help_text:
         descriptions.append(f'{field.auto_id}_helptext')
@@ -49,4 +49,4 @@ def render_field(field):
     attrs = {'aria-describedby': ' '.join(descriptions)} if descriptions else {}
     if field.errors:
         attrs['aria-invalid'] = 'true'
-    return {'field': field, 'widget': field.as_widget(attrs=attrs)}
+    return {'field': field, 'widget': field.as_widget(attrs=attrs), 'conditional': conditional}

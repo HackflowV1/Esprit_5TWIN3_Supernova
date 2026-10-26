@@ -54,6 +54,14 @@ restent disponibles. `matching_state` indique ready/warming/unavailable/disabled
 `recommendation_comparison(actor=..., team=..., mode='hybrid')` renvoie le classement
 choisi, la référence `skills` (même logique sans sémantique), et les besoins manquants.
 Le mode UI `skills` et l’état `no_context` complètent les états décrits ci-dessus.
+
+L’assistant de besoins utilise `teams.skill_suggestions.suggest(text)` pour une
+prévisualisation, jamais pour modifier un profil personnel. Après confirmation,
+`save_suggested_needs(actor=..., team=..., proposals=[{skill,level,priority}])`
+réutilise les mêmes verrous, permissions, phases et historique que `save_need`.
+Les besoins déjà présents sont ignorés, pas mis à jour implicitement.
+Le formulaire n’accepte que les labels de sa prévisualisation de session,
+valable 20 minutes. Les modèles sont en JSON et ONNX ; aucun pickle utilisateur chargé.
 Le mode `rules` garde le classement V1 pour la comparaison ; `keywords` est la
 référence textuelle. Le recrutement manuel reste indépendant du modèle.
 Voir `docs/M2_MATCHING.md` pour le contrat complet et les limites.

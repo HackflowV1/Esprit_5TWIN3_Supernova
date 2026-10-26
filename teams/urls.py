@@ -17,6 +17,7 @@ urlpatterns = [
     path('<slug:slug>/teams/<int:pk>/candidates/', views.candidates, name='candidates'),
     path('<slug:slug>/teams/<int:pk>/members/<int:member_pk>/<str:action>/', views.member_action, name='member-action'),
     path('<slug:slug>/teams/<int:pk>/needs/add/', views.need_edit, name='need-add'),
+    path('<slug:slug>/teams/<int:pk>/needs/suggestions/', views.suggest_needs, name='need-suggestions'),
     path('<slug:slug>/teams/<int:pk>/needs/<int:need_pk>/edit/', views.need_edit, name='need-edit'),
     path('<slug:slug>/teams/<int:pk>/needs/<int:need_pk>/delete/', views.need_delete, name='need-delete'),
     path('<slug:slug>/requests/<str:kind>/<int:pk>/<str:decision>/', views.decide, name='decide'),

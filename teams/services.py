@@ -380,3 +380,18 @@ def recommendation_comparison(*, actor, team, mode='hybrid', background=True):
     baseline = rank(team=team, candidates=candidates, needs=needs, mode='skills')
     selected = rank(team=team, candidates=candidates, needs=needs, mode='hybrid', background=background) if mode == 'hybrid' else baseline
     return selected, baseline, [n for n in needs if not n.covered_by]
+
+
+@transaction.atomic
+def save_suggested_needs(*, actor, team, proposals):
+    event,_users = _lock(actor,team.hackathon)
+    team = Team.objects.select_related('captain').get(pk=team.pk)
+    _captain(actor,team)
+    require_open_phase(event,EventPhase.Kind.TEAM_FORMATION)
+    added = 0
+    for proposal in proposals:
+        if team.skill_needs.filter(skill=proposal['skill']).exists():
+            continue  # Never replace an existing captain-authored need.
+        save_need(actor=actor,team=team,**proposal)
+        added += 1
+    return added

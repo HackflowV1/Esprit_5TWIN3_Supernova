@@ -553,6 +553,15 @@
 .m2-ranking-help[open] summary::before {content:'−'}
 .m2-ranking-help p {max-width:78ch;color:var(--muted);font-size:.9rem;line-height:1.7}
 .m2-context-signal {font-size:.85rem;line-height:1.6}
+.m2-suggestion-description textarea {width:100%;min-height:130px}
+.m2-suggested-need {display:flex;align-items:start;justify-content:space-between;gap:24px}
+.m2-suggested-label {min-width:150px;min-height:44px;padding-top:8px}
+.m2-suggestion-origin {display:block;font-size:.8rem;margin-top:4px}
+.m2-suggestion-fields {display:grid;grid-template-columns:1fr 1fr;gap:16px;flex:1;max-width:500px}
+@media(max-width:640px) {
+  .m2-suggested-need {flex-direction:column;gap:12px}
+  .m2-suggestion-fields {width:100%;max-width:none}
+}
 .m2-project-context {font-size:.9rem;line-height:1.65;margin:0 0 12px;padding-bottom:12px;border-bottom:1px solid var(--line);color:var(--muted)}
 .m2-project-context strong {color:var(--ink);margin-right:8px}
 .m2-project-context summary {cursor:pointer;min-height:44px;align-content:center}

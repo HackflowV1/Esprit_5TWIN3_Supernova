@@ -36,6 +36,7 @@ def interface(request):
             'manage': _('Inscriptions et équipes'), 'candidates': _('Trouver des coéquipiers'),
             'member-action': _('Composition de l’équipe'), 'need-add': _('Ajouter un besoin'),
             'need-edit': _('Modifier un besoin'), 'need-delete': _('Retirer un besoin'),
+            'need-suggestions': _('Suggérer des besoins'),
         }.get(page, _('Participation'))
     if app == 'mentoring':
         title = {

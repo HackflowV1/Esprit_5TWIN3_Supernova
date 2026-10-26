@@ -5386,3 +5386,101 @@ msgstr "Skills and levels only."
 
 msgid "Classement adapté à votre projet."
 msgstr "Ranked for your project."
+
+msgid "Le travail technique prévu"
+msgstr "The technical work you plan"
+
+msgid "Décrivez ce que vous allez construire et les outils envisagés…"
+msgstr "Describe what you will build and the tools you are considering…"
+
+msgid ""
+"Les suggestions sont à confirmer. Une idée vague peut ne donner aucun "
+"résultat."
+msgstr ""
+"Suggestions need your confirmation. A vague idea may produce no results."
+
+msgid "Ajouter ce besoin"
+msgstr "Add this need"
+
+msgid "Choisissez une valeur pour ce besoin."
+msgstr "Choose a value for this need."
+
+msgid "Cette proposition a expiré. Analysez à nouveau votre description."
+msgstr "This preview has expired. Analyze your description again."
+
+msgid "Sélectionnez au moins une compétence à ajouter."
+msgstr "Select at least one skill to add."
+
+msgid "Actualisez la page et réessayez."
+msgstr "Refresh the page and try again."
+
+msgid "%(count)s besoin(s) ajouté(s). Les besoins existants sont conservés."
+msgstr "%(count)s need(s) added. Existing needs were preserved."
+
+msgid "Suggérer des besoins"
+msgstr "Suggest skill needs"
+
+msgid "Quels talents pour cette idée ?"
+msgstr "Which skills could help this idea?"
+
+msgid ""
+"Décrivez le travail prévu. Gardez les suggestions utiles à votre équipe."
+msgstr "Describe the planned work. Keep the suggestions that help your team."
+
+msgid "Ajouter manuellement"
+msgstr "Add manually"
+
+msgid "Suggérer des compétences"
+msgstr "Suggest skills"
+
+msgid ""
+"Préparation des suggestions… Vous pouvez continuer à modifier votre "
+"description."
+msgstr "Preparing suggestions… You can keep editing your description."
+
+msgid ""
+"Les suggestions sont indisponibles pour le moment. Vous pouvez ajouter vos "
+"besoins manuellement."
+msgstr ""
+"Suggestions are unavailable right now. You can add skill needs manually."
+
+msgid "À vous de choisir"
+msgstr "Your choice"
+
+msgid ""
+"Ce sont des pistes, pas des obligations. Cochez une compétence, puis "
+"choisissez son niveau et sa priorité."
+msgstr ""
+"These are ideas, not requirements. Select a skill, then choose its level and"
+" priority."
+
+msgid "Déjà dans vos besoins :"
+msgstr "Already in your skill needs:"
+
+msgid "Mentionné dans votre texte"
+msgstr "Mentioned in your text"
+
+msgid "Suggestion du modèle ML"
+msgstr "Suggested by the ML model"
+
+msgid "Ajouter les besoins sélectionnés"
+msgstr "Add selected skill needs"
+
+msgid "Revenir à mon équipe"
+msgstr "Back to my team"
+
+msgid "Aucun nouveau besoin à proposer"
+msgstr "No new skill needs to suggest"
+
+msgid ""
+"Précisez le travail technique, ou ajoutez une compétence manuellement. Une "
+"idée générale ne suffit pas toujours."
+msgstr ""
+"Describe the technical work, or add a skill manually. A general idea is not "
+"always enough."
+
+msgid "Suggérer des besoins depuis notre idée"
+msgstr "Suggest skill needs from our idea"
+
+msgid "si sélectionné"
+msgstr "if selected"

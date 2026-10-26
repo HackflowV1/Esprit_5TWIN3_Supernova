@@ -33,3 +33,33 @@ class NeedForm(forms.ModelForm):
         model = TeamSkillNeed
         fields = ['skill', 'level', 'priority']
         labels = {'skill': _('Compétence recherchée')}
+
+
+class SkillDescriptionForm(forms.Form):
+    text = forms.CharField(label=_('Le travail technique prévu'),min_length=15,max_length=1200,
+        widget=forms.Textarea(attrs={'rows':4,'placeholder':_('Décrivez ce que vous allez construire et les outils envisagés…')}),
+        help_text=_('Les suggestions sont à confirmer. Une idée vague peut ne donner aucun résultat.'))
+
+
+class SuggestedNeedForm(forms.Form):
+    selected = forms.BooleanField(required=False,label=_('Ajouter ce besoin'))
+    skill = forms.ModelChoiceField(queryset=None,widget=forms.HiddenInput)
+    level = forms.TypedChoiceField(label=_('Niveau souhaité'),coerce=int,required=False,empty_value=None,choices=[('',_('Choisir'))]+[(i,str(i)+'/5') for i in range(1,6)])
+    priority = forms.TypedChoiceField(label=_('Priorité'),coerce=int,required=False,empty_value=None,choices=[('',_('Choisir')),(1,_('Utile')),(2,_('Importante')),(3,_('Essentielle'))])
+
+    def __init__(self,*args,allowed_skills,**kwargs):
+        super().__init__(*args,**kwargs)
+        self.fields['skill'].queryset = allowed_skills
+
+    @property
+    def skill_label(self):
+        value = str(self['skill'].value() or '')
+        return self.fields['skill'].queryset.filter(pk=int(value)).first() if value.isdigit() else _('Compétence')
+
+    def clean(self):
+        cleaned = super().clean()
+        if cleaned.get('selected'):
+            for name in ('level','priority'):
+                if not cleaned.get(name):
+                    self.add_error(name,_('Choisissez une valeur pour ce besoin.'))
+        return cleaned

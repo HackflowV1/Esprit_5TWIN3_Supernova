@@ -55,6 +55,7 @@
 <div class="m2-section-head">
 <h2>{% translate 'Les talents recherchés' %}</h2>{% if team_manager and formation_open and not team.closed_at %}<a class="button secondary small" href="{% url 'teams:need-add' event.slug team.pk %}">{% icon 'add' 16 %}{% translate 'Ajouter' %}</a>{% endif %}</div>
 <p class="muted">{% translate 'Les compétences qui compléteraient notre équipe.' %}</p>
+{% if team_manager and formation_open and not team.closed_at %}<a class="m2-subtle-link" href="{% url 'teams:need-suggestions' event.slug team.pk %}">{% icon 'code' 16 %}{% translate 'Suggérer des besoins depuis notre idée' %}</a>{% endif %}
 <ul class="m2-needs">{% for need in needs %}<li>
 <div>
 <strong>{{ need.skill }}</strong>

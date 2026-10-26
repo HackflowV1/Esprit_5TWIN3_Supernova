@@ -1,0 +1,24 @@
+{% extends 'teams/shell.html' %}{% load i18n ui static %}
+{% block workspace %}
+<header class="page-head"><div><p class="m2-eyebrow">{{ team.name }}</p><h1>{% translate 'Quels talents pour cette idée ?' %}</h1><p class="muted">{% translate 'Décrivez le travail prévu. Gardez les suggestions utiles à votre équipe.' %}</p></div><a class="button secondary" href="{% url 'teams:need-add' event.slug team.pk %}">{% icon 'add' %}{% translate 'Ajouter manuellement' %}</a></header>
+<section class="panel m2-suggestion-description">
+<form method="post" id="m2-description-form"{% if auto_retry %} data-auto-retry="true"{% endif %}>
+{% csrf_token %}<input type="hidden" name="action" value="analyze"><input type="hidden" name="retry" value="{{ retry }}">
+{% for field in description_form %}{% render_field field %}{% endfor %}
+<button type="submit">{% icon 'search' %}{% translate 'Suggérer des compétences' %}</button>
+</form>
+{% if suggestion_state == 'warming' %}<p class="m2-notice" role="status">{% icon 'clock' %}{% translate 'Préparation des suggestions… Vous pouvez continuer à modifier votre description.' %}</p>
+{% elif suggestion_state == 'untrained' or suggestion_state == 'unavailable' or suggestion_state == 'disabled' %}<p class="m2-notice" role="status">{% translate 'Les suggestions sont indisponibles pour le moment. Vous pouvez ajouter vos besoins manuellement.' %}</p>{% endif %}
+</section>
+{% if suggestion_state == 'ready' %}
+<section aria-labelledby="suggested-needs-title"><h2 id="suggested-needs-title">{% translate 'À vous de choisir' %}</h2><p class="muted">{% translate 'Ce sont des pistes, pas des obligations. Cochez une compétence, puis choisissez son niveau et sa priorité.' %}</p>
+{% if already_declared %}<p class="muted">{% translate 'Déjà dans vos besoins :' %} {{ already_declared|join:', ' }}</p>{% endif %}
+{% if selection.forms %}<form method="post" class="m2-needs-selection">{% csrf_token %}<input type="hidden" name="action" value="save">{{ selection.management_form }}{{ selection.non_form_errors }}
+{% for f in selection %}<div class="panel m2-suggested-need">{{ f.skill }}{{ f.skill.errors }}{{ f.non_field_errors }}
+<div><label class="m2-checkbox m2-suggested-label" for="{{ f.selected.id_for_label }}">{{ f.selected }}<strong>{{ f.skill_label }}</strong></label><span class="muted m2-suggestion-origin">{% if f.suggestion_source == 'explicit' %}{% translate 'Mentionné dans votre texte' %}{% else %}{% translate 'Suggestion du modèle ML' %}{% endif %}</span></div>
+<div class="m2-suggestion-fields">{% render_field f.level conditional=True %}{% render_field f.priority conditional=True %}</div></div>{% endfor %}
+<div class="form-actions"><button type="submit"{% if not formation_open %} disabled{% endif %}>{% icon 'check' %}{% translate 'Ajouter les besoins sélectionnés' %}</button><a href="{{ team.get_absolute_url }}">{% translate 'Revenir à mon équipe' %}</a></div></form>
+{% else %}<div class="m2-empty"><h3>{% translate 'Aucun nouveau besoin à proposer' %}</h3><p>{% translate 'Précisez le travail technique, ou ajoutez une compétence manuellement. Une idée générale ne suffit pas toujours.' %}</p><a class="button secondary" href="{% url 'teams:need-add' event.slug team.pk %}">{% translate 'Ajouter manuellement' %}</a></div>{% endif %}
+</section>{% endif %}
+{% endblock %}
+{% block extra_js %}{{ block.super }}<script src="{% static 'js/need-suggestions.js' %}" defer></script>{% endblock %}

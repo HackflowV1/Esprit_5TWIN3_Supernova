@@ -31,6 +31,11 @@ pas automatiquement une inscription.
 - **Les talents recherchés** : ajouter, modifier ou retirer une compétence,
   son niveau souhaité (1 à 5) et sa priorité. Les compétences personnelles
   restent gérées par leur propriétaire dans le profil.
+- **Suggérer des besoins depuis notre idée** : décrire le travail prévu, examiner
+  les suggestions, cocher celles à garder et choisir niveau/priorité. Les mentions
+  explicites et les suggestions du modèle sont distinguées. Les besoins existants
+  ne sont pas écrasés et aucune écriture n’a lieu avant confirmation. Voir
+  `docs/M2_SKILL_SUGGESTIONS.md` pour le modèle entraîné et ses limites.
 - Les besoins couverts affichent les membres qui atteignent le niveau demandé.
   Le besoin reste enregistré : un départ peut le rendre à nouveau non couvert.
 - **Trouver des coéquipiers** : participants acceptés et sans équipe, classés

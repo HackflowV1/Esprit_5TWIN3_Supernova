@@ -25,3 +25,7 @@ build-backend = "hatchling.build"
 dev = [
     "polib>=1.2.0",
 ]
+ml = [
+    "psutil>=6,<8",
+    "scikit-learn>=1.6,<2",
+]

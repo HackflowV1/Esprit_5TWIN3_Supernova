@@ -117,6 +117,12 @@ est explicite ; ensuite, le classement fonctionne localement, sans clé d’API.
 Les profils fictifs et comptes de test, le repli sans IA et l’évaluation humaine
 sont expliqués dans [le guide de recommandations M2](docs/M2_MATCHING.md).
 
+M2 propose aussi un [assistant de besoins entraîné](docs/M2_SKILL_SUGGESTIONS.md) :
+description technique → suggestions → confirmation des compétences/niveaux/priorités.
+Son petit classifieur JSON est livré ; MiniLM se prépare par la commande habituelle.
+L’entraînement reproductible utilise `uv run --locked --group ml python manage.py train_m2_skill_model`.
+Les métriques synthétiques et les limites de mémoire/déploiement sont documentées.
+
 Pour essayer M4, après `migrate`, lancer en développement :
 
 ```powershell
