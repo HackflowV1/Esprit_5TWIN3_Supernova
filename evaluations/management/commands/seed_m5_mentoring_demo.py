@@ -29,7 +29,12 @@ class Command(BaseCommand):
             return
         # Acquire every demo actor before the first event lock, as in M2/M3.
         teams = list(Team.objects.filter(hackathon=event, name__in=['Nova Live', 'Horizon Live']).select_related('captain__user').order_by('pk'))
-        ids = [owner.pk, juror.pk, *[t.captain.user_id for t in teams]]
+        second_juror, new_juror = User.objects.get_or_create(username='jury.demo.second', defaults={
+            'first_name':'Juré', 'last_name':'Démo 2', 'email':'jury.demo.second@example.test'})
+        if new_juror:
+            second_juror.set_password('Demo-Hack#2026')
+            second_juror.save()
+        ids = [owner.pk, juror.pk, second_juror.pk, *[t.captain.user_id for t in teams]]
         list(User.objects.select_for_update(no_key=True).filter(pk__in=ids).order_by('pk'))
         challenge = Challenge.objects.filter(track__hackathon=event, track__active=True, status='PUBLISHED').first()
         if not challenge:
@@ -70,4 +75,17 @@ class Command(BaseCommand):
                 services.save_evaluation(actor=juror, assignment=assignment,
                     scores={c.pk:(c.max_score*Decimal('0.85' if i == 0 else '0.70')).quantize(Decimal('0.01')) for c in criteria},
                     comment='Notes fictives de démonstration. À ne pas interpréter comme une évaluation réelle.', finalize=i == 0)
+        # Two independent, validated fictional evaluations are required by the
+        # existing divergence assistant. Never edit the first juror's locked work.
+        target = Project.objects.filter(team__hackathon=event, title='Campus Coach — démo jury',
+            official_submission__isnull=False).select_related('official_submission').first()
+        if target and campaign:
+            set_role(actor=owner, user=second_juror, hackathon=event, role=Role.JURY)
+            second_assignment = JuryAssignment.objects.filter(submission=target.official_submission, juror=second_juror).first()
+            if second_assignment is None:
+                second_assignment = services.assign(actor=owner, event=event, submission=target.official_submission, juror=second_juror)
+                services.save_evaluation(actor=second_juror, assignment=second_assignment,
+                    scores={c.pk:(c.max_score*Decimal('0.35')).quantize(Decimal('0.01')) for c in event.evaluation_criteria.all()},
+                    comment='Évaluation fictive volontairement différente pour tester l’analyse IA des divergences. Aucun jugement réel.',
+                    finalize=True)
         self.stdout.write(self.style.SUCCESS('Mentoring Lab jury demo ready: projects, official submissions, rubric and jury assignments. Existing work preserved.'))
