@@ -6,17 +6,17 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-<script src="{% static 'js/theme.js' %}"></script><script src="{% static 'js/accessibility-init.js' %}"></script><link rel="stylesheet" href="{% static 'css/palette.css' %}?v=m2-1"><link rel="stylesheet" href="{% static 'css/base.css' %}?v=m2-1"><link rel="stylesheet" href="{% static 'css/nav-menus.css' %}?v=m2-1"><link rel="icon" href="{% static 'icons/favicon.svg' %}" type="image/svg+xml">{% block extra_css %}{% endblock %}<link rel="stylesheet" href="{% static 'css/accessibility.css' %}?v=5">
+<script src="{% static 'js/theme.js' %}"></script><script src="{% static 'js/accessibility-init.js' %}"></script><link rel="stylesheet" href="{% static 'css/palette.css' %}?v=m2-1"><link rel="stylesheet" href="{% static 'css/base.css' %}?v=mobile-nav-2"><link rel="stylesheet" href="{% static 'css/nav-menus.css' %}?v=m2-1"><link rel="icon" href="{% static 'icons/favicon.svg' %}" type="image/svg+xml">{% block extra_css %}{% endblock %}<link rel="stylesheet" href="{% static 'css/accessibility.css' %}?v=5">
 </head><body>
 <a class="skip-link" href="#contenu">{% translate 'Aller au contenu principal' %}</a>
 <header class="site-header"><div class="header-inner">
 <a class="brand" href="{% url 'core:home' %}" aria-label="{% translate 'HackFlow, accueil' %}"><span class="brand-icon">{% icon 'code' 20 %}</span><span class="brand-label">Hack<span>Flow</span></span></a>
-<button type="button" class="nav-toggle icon-button" aria-expanded="false" aria-controls="site-nav" aria-label="{% translate 'Ouvrir la navigation' %}">{% icon 'menu' %}</button>
+<button type="button" class="nav-toggle icon-button" aria-expanded="false" aria-controls="site-nav" aria-label="{% translate 'Ouvrir la navigation' %}" data-open-label="{% translate 'Ouvrir la navigation' %}" data-close-label="{% translate 'Fermer la navigation' %}"><span class="nav-icon-open">{% icon 'menu' %}</span><span class="nav-icon-close">{% icon 'close' %}</span></button>
 <nav id="site-nav" class="site-nav" aria-label="{% translate 'Navigation principale' %}">
 <a href="{% url 'core:home' %}"{% if ui_page == 'home' %} aria-current="page"{% endif %}>{% translate 'Accueil' %}</a>
 {% block project_navigation %}{% endblock %}
 <a href="{% url 'hackathons:list' %}"{% if ui_app == 'hackathons' and ui_page != 'dashboard' and ui_page != 'compare' %} aria-current="page"{% endif %}>{% translate 'Hackathons' %}</a>
-{% if user.is_authenticated %}<a href="{% url 'evaluations:hub' %}"{% if ui_app == 'evaluations' %} aria-current="page"{% endif %}>Jury &amp; résultats</a><a href="{% url 'teams:mine' %}"{% if ui_app == 'teams' %} aria-current="page"{% endif %}>{% translate 'Mes inscriptions' %}</a><a href="{% url 'mentoring:hub' %}"{% if ui_app == 'mentoring' %} aria-current="page"{% endif %}>{% translate 'Mentorat' %}</a><a href="{% url 'hackathons:dashboard' %}"{% if ui_page == 'dashboard' or ui_page == 'compare' %} aria-current="page"{% endif %}>{% translate 'Control Tower' %}</a>{% endif %}</nav>
+{% if user.is_authenticated %}<a href="{% url 'evaluations:hub' %}"{% if ui_app == 'evaluations' %} aria-current="page"{% endif %}>Jury &amp; résultats</a><a href="{% url 'teams:mine' %}"{% if ui_app == 'teams' %} aria-current="page"{% endif %}>{% translate 'Mes inscriptions' %}</a><a href="{% url 'mentoring:hub' %}"{% if ui_app == 'mentoring' %} aria-current="page"{% endif %}>{% translate 'Mentorat' %}</a><a href="{% url 'hackathons:dashboard' %}"{% if ui_page == 'dashboard' or ui_page == 'compare' %} aria-current="page"{% endif %}>{% translate 'Control Tower' %}</a>{% else %}<div class="mobile-auth"><a class="button secondary" href="{% url 'accounts:login' %}">{% translate 'Connexion' %}</a><a class="button" href="{% url 'accounts:signup' %}">{% translate 'Créer un compte' %}</a></div>{% endif %}</nav>
 <div class="header-tools">
 <button type="button" class="icon-button theme-toggle" data-theme-toggle aria-label="{% translate 'Changer de thème (clair/sombre)' %}" title="{% translate 'Changer de thème' %}">
   <span class="theme-toggle-sun" aria-hidden="true">{% icon 'sun' 18 %}</span>
@@ -78,4 +78,4 @@
   </div>
 </footer>
 {% include 'shared/accessibility_dialog.html' %}
-<script src="{% static 'js/accessibility.js' %}?v=2" defer></script><script src="{% static 'js/base.js' %}?v=m2-1" defer></script>{% block extra_js %}{% endblock %}</body></html>
+<script src="{% static 'js/accessibility.js' %}?v=2" defer></script><script src="{% static 'js/base.js' %}?v=mobile-nav-2" defer></script>{% block extra_js %}{% endblock %}</body></html>

@@ -230,3 +230,14 @@ mon équipe, les invitations/candidatures et la gestion organisateur. Les liens
 occupent des sections de largeur égale ; l’actif a un fond doux, un texte renforcé
 et un soulignement orange. Ce sont des pages distinctes : utiliser `aria-current`,
 pas des rôles d’onglets JavaScript qui masqueraient du contenu.
+
+## Menu mobile
+
+Sous 1280 px, la navigation principale s’ouvre dans un dialogue natif en tiroir
+à droite, au-dessus du contenu. `base.js` déplace le même élément `site-nav`
+dans le tiroir puis le remet dans le header à la fermeture : aucun lien de module
+n’est dupliqué. Le fond est assombri, le scroll de la page bloqué, le focus reste
+dans le dialogue. Échap, la croix ou le fond ferment le menu et rendent le focus
+au bouton. Le passage au bureau referme le tiroir. Sans JavaScript, les liens
+restent visibles dans le header. Les animations respectent le mouvement réduit.
+Sur petit écran, l’apparence reste accessible dans le menu du compte.

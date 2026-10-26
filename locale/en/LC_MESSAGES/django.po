@@ -5207,3 +5207,7 @@ msgstr "Too many suggestions for now, try again in an hour."
 #: mentoring/forms.py
 msgid "Salle ou lieu où se déroule l’atelier."
 msgstr "Room or place where the workshop takes place."
+
+#: templates/base.html:13
+msgid "Fermer la navigation"
+msgstr "Close navigation"

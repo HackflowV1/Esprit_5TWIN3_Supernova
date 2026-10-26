@@ -541,3 +541,17 @@
   font-size:.8rem
 }
 
+/* Organizer registrations: full-width columns with overflow confined to the table. */
+.m2-table-scroll {max-width:100%;overflow-x:auto;border:1px solid var(--line);border-radius:var(--radius-sm)}
+.m2-registration-table {width:100%;min-width:620px;border-collapse:collapse;font-size:.9rem;line-height:1.5}
+.m2-registration-table th,.m2-registration-table td {padding:14px 20px;text-align:left;vertical-align:middle;border-bottom:1px solid var(--line)}
+.m2-registration-table thead th {padding-block:13px;background:var(--raised);color:var(--muted);font-size:.8rem;font-weight:600}
+.m2-registration-table tbody th {font-weight:600;overflow-wrap:anywhere}
+.m2-registration-table tbody tr:last-child>* {border-bottom:0}
+.m2-registration-table tbody tr:hover {background:var(--raised)}
+.m2-registration-table .chip {margin:0;white-space:nowrap}
+.m2-registration-table a {text-underline-offset:3px}
+.m2-registration-table a.m2-registration-cancel {display:inline-flex;align-items:center;gap:6px;min-height:44px;color:var(--danger);white-space:nowrap;text-decoration:none}
+.m2-registration-table a.m2-registration-cancel:hover {text-decoration:underline}
+@media(max-width:720px) {.m2-registration-table th,.m2-registration-table td {padding:12px 14px}}
+
